@@ -1,315 +1,418 @@
+
+Todd Lyman <mrtoddlyman@gmail.com>
+Wed, Jun 24, 12:10 PM (1 day ago)
+to me
+
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Lab — Experimental Spatial Innovation</title>
-
-    <script src="https://cdn.tailwindcss.com"></script>
-
-    <script src="https://unpkg.com/lucide@latest"></script>
-
+    <title>The Laboratory Theater of Florida | Thinking Theater</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600&family=Syne:wght@400;700;800&display=swap');
+        :root {
+            --bg-color: #0a0a0c;
+            --text-color: #f4f4f7;
+            --accent-glow: #ff3366; /* Stage spotlight pink */
+            --accent-muted: #8a2be2; /* Experimental purple */
+            --card-bg: rgba(25, 25, 30, 0.65);
+            --border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
         body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: #040406;
-        }
-        h1, h2, h3, .font-experimental {
-            font-family: 'Syne', sans-serif;
-        }
-
-        /* Custom futuristic scrollbar */
-        ::-webkit-scrollbar {
-            width: 4px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #040406;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #3f3f46;
-            border-radius: 2px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #a1a1aa;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            overflow-x: hidden;
+            line-height: 1.6;
         }
 
-        /* Animated grid overlay background */
-        .cyber-grid {
-            background-size: 40px 40px;
-            background-image: linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-                              linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+        /* Abstract Stage Light Atmosphere */
+        .stage-glow {
+            position: fixed;
+            top: -10%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80vw;
+            height: 60vh;
+            background: radial-gradient(circle, rgba(255, 51, 102, 0.15) 0%, rgba(138, 43, 226, 0.05) 50%, transparent 100%);
+            z-index: -1;
+            pointer-events: none;
+            filter: blur(60px);
+        }
+
+        header {
+            padding: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(10, 10, 12, 0.8);
+        }
+
+        .logo {
+            font-size: 1.25rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #fff;
+        }
+
+        .logo span {
+            color: var(--accent-glow);
+        }
+
+        .tagline {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: #888;
+            border-left: 2px solid var(--accent-glow);
+            padding-left: 10px;
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 6rem;
+            position: relative;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            letter-spacing: -1px;
+            background: linear-gradient(135deg, #fff 30%, #a5a5b0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            max-width: 700px;
+            margin: 0 auto 2.5rem auto;
+            color: #b0b0b8;
+        }
+
+        /* The Mood Lab Component */
+        .interactive-section {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 3rem;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            margin-bottom: 5rem;
+        }
+
+        .section-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: #888;
+            margin-bottom: 2.5rem;
+            font-size: 0.95rem;
+        }
+
+        .filter-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 3rem;
+        }
+
+        .filter-btn {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border-color);
+            color: #ccc;
+            padding: 10px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn:hover {
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            border-color: #666;
+        }
+
+        .filter-btn.active {
+            background: var(--accent-glow);
+            color: #fff;
+            border-color: var(--accent-glow);
+            box-shadow: 0 0 15px rgba(255, 51, 102, 0.4);
+        }
+
+        .shows-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 25px;
+        }
+
+        .show-card {
+            background: rgba(10, 10, 12, 0.5);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .show-card.hidden {
+            display: none;
+        }
+
+        .show-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-muted);
+            box-shadow: 0 10px 30px rgba(138, 43, 226, 0.15);
+        }
+
+        .show-dates {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent-glow);
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .show-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: #fff;
+        }
+
+        .show-author {
+            font-size: 0.9rem;
+            color: #888;
+            font-style: italic;
+            margin-bottom: 1.25rem;
+        }
+
+        .show-desc {
+            color: #c5c5cd;
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+            flex-grow: 1;
+        }
+
+        .show-tags {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+        }
+
+        .tag {
+            background: rgba(138, 43, 226, 0.15);
+            color: #d8b4fe;
+            font-size: 0.75rem;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        .ticket-btn {
+            background: transparent;
+            border: 1px solid #fff;
+            color: #fff;
+            padding: 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            text-align: center;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+        }
+
+        .ticket-btn:hover {
+            background: #fff;
+            color: var(--bg-color);
+        }
+
+        footer {
+            text-align: center;
+            padding: 4rem 2rem;
+            border-top: 1px solid var(--border-color);
+            color: #666;
+            font-size: 0.9rem;
         }
     </style>
 </head>
-<body class="text-zinc-200 min-h-screen overflow-x-hidden antialiased selection:bg-white selection:text-black">
+<body>
 
-    <div class="fixed inset-0 cyber-grid z-0 pointer-events-none"></div>
-    <div class="fixed top-[-10%] left-[-10%] w-[50%] h-[50%] bg-violet-600/10 blur-[120px] rounded-full z-0 pointer-events-none animate-pulse duration-[8000ms]"></div>
-    <div class="fixed bottom-[-10%] right-[-10%] w-[60%] h-[60%] bg-emerald-600/5 blur-[150px] rounded-full z-0 pointer-events-none"></div>
+    <div class="stage-glow"></div>
 
-    <header class="fixed top-0 left-0 w-full z-50 bg-black/40 backdrop-blur-xl border-b border-zinc-900/80 px-6 md:px-12 py-5 flex justify-between items-center">
-        <div class="flex items-center space-x-4 group cursor-pointer">
-            <div class="relative w-9 h-9 border border-zinc-700 bg-zinc-950 flex items-center justify-center overflow-hidden transition-all duration-500 group-hover:rotate-90">
-                <div class="absolute inset-0.5 bg-gradient-to-br from-violet-500 to-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                <span class="relative font-experimental font-extrabold tracking-tighter text-xl text-white group-hover:text-black transition-colors duration-300">L</span>
-            </div>
-            <span class="font-experimental font-bold text-sm tracking-[0.2em] uppercase text-zinc-400 group-hover:text-white transition-colors duration-300">The Lab &bull; Matrix</span>
-        </div>
-
-        <nav class="hidden md:flex space-x-12 text-xs uppercase tracking-[0.15em] font-medium text-zinc-500">
-            <a href="#productions" class="hover:text-white transition-colors relative after:absolute after:bottom-[-22px] after:left-0 after:w-0 after:h-[2px] after:bg-white hover:after:w-full after:transition-all">Simulations</a>
-            <a href="#" class="hover:text-white transition-colors relative after:absolute after:bottom-[-22px] after:left-0 after:w-0 after:h-[2px] after:bg-white hover:after:w-full after:transition-all">The Manifesto</a>
-            <a href="#" class="hover:text-white transition-colors relative after:absolute after:bottom-[-22px] after:left-0 after:w-0 after:h-[2px] after:bg-white hover:after:w-full after:transition-all">Portal Access</a>
-        </nav>
-
-        <div>
-            <a href="#productions" class="relative group inline-block overflow-hidden border border-zinc-800 px-5 py-2.5 bg-zinc-950 text-xs uppercase tracking-widest font-semibold transition-all duration-300">
-                <span class="absolute inset-0 bg-white translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out z-0"></span>
-                <span class="relative z-10 group-hover:text-black transition-colors duration-300">Enter Nexus</span>
-            </a>
-        </div>
+    <header>
+        <div class="logo">The <span>Lab</span> Theater</div>
+        <div class="tagline">Thinking Theater</div>
     </header>
 
-    <section class="relative min-h-screen flex flex-col justify-center px-6 md:px-16 pt-32 overflow-hidden z-10">
-        <div class="max-w-4xl space-y-8">
-            <div class="inline-flex items-center gap-3 px-3 py-1 bg-zinc-900/60 backdrop-blur-md border border-zinc-800/80 rounded-sm text-[10px] font-bold tracking-[0.2em] uppercase text-emerald-400">
-                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399] animate-ping"></span>
-                Active Frequency Phase 2026
-            </div>
+    <main>
+        <section class="hero">
+            <h1>Intentionally Innovative Live Theater.</h1>
+            <p>Welcome to Fort Myers' home for artistic risk, powerful ensemble works, and groundbreaking performance art that challenges the status quo.</p>
+        </section>
+
+        <!-- Dynamic Lab Section -->
+        <section class="interactive-section">
+            <h2 class="section-title">The Experimentation Board</h2>
+            <p class="section-subtitle">Isolate by mental wavelength. Select a psychological parameter to reveal our seasonal lineup.</p>
             
-            <h1 class="text-6xl md:text-8xl font-black text-white tracking-tighter leading-[0.9] uppercase">
-                Break <span class="text-transparent bg-clip-text bg-gradient-to-r from-zinc-600 via-zinc-200 to-zinc-700">The Fourth</span> Wall.
-            </h1>
-            
-            <p class="text-zinc-500 text-sm md:text-lg max-w-xl font-light leading-relaxed tracking-wide">
-                We design architecture for the raw, unpolished digital flesh. Southwest Florida's localized physical medium for extreme avant-garde theater configurations.
-            </p>
-            
-            <div class="flex flex-wrap gap-5 pt-4">
-                <button onclick="openPortal('https://www.purplepass.com/', 'Main Stage Master Engine')" class="group relative bg-zinc-100 text-black font-experimental font-extrabold px-8 py-4 text-sm uppercase tracking-wider overflow-hidden shadow-2xl transition-transform active:scale-95">
-                    <span class="absolute inset-0 bg-gradient-to-r from-violet-400 to-emerald-400 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-0"></span>
-                    <span class="relative z-10 flex items-center gap-3">
-                        Initialize Core Booking <i data-lucide="scan-face" class="w-4 h-4 group-hover:rotate-12 transition-transform"></i>
-                    </span>
-                </button>
-                <a href="#productions" class="border border-zinc-800 bg-zinc-950/40 backdrop-blur-sm hover:border-zinc-500 px-8 py-4 text-xs uppercase tracking-widest font-semibold transition-all flex items-center">
-                    Deconstruct Line-up
-                </a>
-            </div>
-        </div>
-
-        <div class="absolute bottom-12 right-6 md:right-16 bg-zinc-950/80 backdrop-blur-xl border border-zinc-800/80 p-6 shadow-3xl max-w-xs transition-all hover:border-violet-500/50 group">
-            <div class="flex justify-between items-start mb-4">
-                <div>
-                    <p class="text-[9px] uppercase font-bold tracking-[0.25em] text-zinc-500">Live Telemetry</p>
-                    <h4 class="font-experimental font-bold text-lg text-white mt-1 group-hover:text-violet-400 transition-colors">Jesus Christ Superstar</h4>
-                </div>
-                <span class="text-[10px] bg-violet-500/10 text-violet-400 px-2 py-0.5 border border-violet-500/20 font-mono">ST-01</span>
-            </div>
-            <p class="text-xs text-zinc-400 font-light leading-snug">Spatial Reconfiguration Matrix at 8:00 PM • Intimate Proximity Module.</p>
-            <div class="mt-4 pt-4 border-t border-zinc-900 flex justify-between items-center">
-                <span class="text-[10px] uppercase tracking-wider font-mono text-emerald-400">94% Occupancy</span>
-                <button onclick="openPortal('https://www.purplepass.com/', 'Jesus Christ Superstar Configuration')" class="text-xs text-white uppercase tracking-widest font-bold border-b border-white hover:text-zinc-400 hover:border-zinc-400 transition-all">Interface</button>
-            </div>
-        </div>
-    </section>
-
-    <section id="productions" class="py-32 px-6 md:px-16 border-t border-zinc-900 bg-gradient-to-b from-[#040406] to-black relative z-10">
-        <div class="max-w-7xl mx-auto">
-            <div class="flex flex-col md:flex-row md:items-end justify-between mb-20 gap-8">
-                <div class="space-y-2">
-                    <h2 class="text-4xl md:text-6xl font-black tracking-tight uppercase">The 2026 Grid</h2>
-                    <p class="text-zinc-500 text-xs uppercase tracking-widest">Filter structural instances below.</p>
-                </div>
-
-                <div class="flex bg-zinc-950 p-1 border border-zinc-900 text-[10px] font-bold tracking-widest uppercase">
-                    <button onclick="switchGrid('all')" id="tab-all" class="grid-tab px-5 py-2.5 bg-zinc-900 text-white transition-all">All Realities</button>
-                    <button onclick="switchGrid('mainstage')" id="tab-mainstage" class="grid-tab px-5 py-2.5 text-zinc-500 hover:text-zinc-200 transition-all">Mainstage Modular</button>
-                    <button onclick="switchGrid('lab')" id="tab-lab" class="grid-tab px-5 py-2.5 text-zinc-500 hover:text-zinc-200 transition-all">Lab Diagnostics</button>
-                </div>
+            <div class="filter-container">
+                <button class="filter-btn active" onclick="filterMood('all', this)">All Subplots</button>
+                <button class="filter-btn" onclick="filterMood('absurd', this)">Absurdism</button>
+                <button class="filter-btn" onclick="filterMood('dark', this)">Dark & Intense</button>
+                <button class="filter-btn" onclick="filterMood('satire', this)">Satire & Wit</button>
+                <button class="filter-btn" onclick="filterMood('provocative', this)">Socially Provocative</button>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="reality-grid">
-
-                <div class="grid-item group bg-zinc-950 border border-zinc-900/60 hover:border-zinc-700/80 transition-all duration-500" data-type="mainstage">
-                    <div class="relative aspect-[4/3] bg-zinc-900 overflow-hidden flex items-center justify-center">
-                        <div class="absolute inset-0 bg-gradient-to-t from-zinc-950 to-transparent opacity-80 z-10"></div>
-                        <div class="absolute inset-0 bg-gradient-to-br from-violet-600/10 to-transparent mix-blend-overlay group-hover:scale-110 transition-transform duration-700"></div>
-                        <span class="text-zinc-800 font-experimental font-black text-2xl tracking-widest uppercase opacity-40 select-none">MODULE 01</span>
-                        <span class="absolute top-4 left-4 z-20 bg-black text-[9px] text-zinc-400 font-mono border border-zinc-800 px-2 py-0.5 uppercase tracking-wider">Type: Rock Opera</span>
+            <div class="shows-grid" id="showsGrid">
+                <!-- Card 1 -->
+                <div class="show-card" data-mood="absurd">
+                    <div>
+                        <div class="show-dates">August 21 – Sept. 6</div>
+                        <h3 class="show-title">Waiting for Godot</h3>
+                        <p class="show-author">by Samuel Beckett</p>
+                        <p class="show-desc">On a barren road beside a single tree, two men wait for a mysterious figure who never arrives. A foundational masterpiece exploring meaning in an uncertain world.</p>
                     </div>
-                    <div class="p-8 space-y-6">
-                        <div>
-                            <span class="text-[10px] font-mono text-zinc-600 uppercase tracking-widest">Temporal Node: Autumn 2026</span>
-                            <h3 class="text-2xl font-bold text-white mt-1 group-hover:text-zinc-300 transition-colors">Jesus Christ Superstar</h3>
-                        </div>
-                        <p class="text-zinc-400 text-xs font-light leading-relaxed tracking-wide">
-                            Reinvented inside a raw spatial block configuration. Stripped down to expose grit, structure, and rhythmic friction.
-                        </p>
-                        <div class="pt-4 flex items-center justify-between border-t border-zinc-900">
-                            <span class="text-xs font-mono text-zinc-500">Valuation $25</span>
-                            <button onclick="openPortal('https://www.purplepass.com/', 'Jesus Christ Superstar Instance')" class="text-xs font-bold uppercase tracking-widest border border-zinc-800 px-4 py-2 group-hover:bg-white group-hover:text-black transition-all">
-                                Execute
-                            </button>
-                        </div>
+                    <div>
+                        <div class="show-tags"><span class="tag">Existential</span><span class="tag">Absurdism</span></div>
+                        <a href="#" class="ticket-btn">Examine Tickets</a>
                     </div>
                 </div>
 
-                <div class="grid-item group bg-zinc-950 border border-zinc-900/60 hover:border-zinc-700/80 transition-all duration-500" data-type="mainstage">
-                    <div class="relative aspect-[4/3] bg-zinc-900 overflow-hidden flex items-center justify-center">
-                        <div class="absolute inset-0 bg-gradient-to-t from-zinc-950 to-transparent opacity-80 z-10"></div>
-                        <div class="absolute inset-0 bg-gradient-to-br from-red-600/10 to-transparent mix-blend-overlay group-hover:scale-110 transition-transform duration-700"></div>
-                        <span class="text-zinc-800 font-experimental font-black text-2xl tracking-widest uppercase opacity-40 select-none">MODULE 02</span>
-                        <span class="absolute top-4 left-4 z-20 bg-black text-[9px] text-zinc-400 font-mono border border-zinc-800 px-2 py-0.5 uppercase tracking-wider">Type: Dark Drama</span>
+                <!-- Card 2 -->
+                <div class="show-card" data-mood="dark">
+                    <div>
+                        <div class="show-dates">October 8 – 25</div>
+                        <h3 class="show-title">The Pillowman</h3>
+                        <p class="show-author">by Martin McDonagh</p>
+                        <p class="show-desc">Brutal, witty, and unexpectedly moving, this Olivier Award-winning play is an intense psychological journey probing the dangerous boundaries of storytelling.</p>
                     </div>
-                    <div class="p-8 space-y-6">
-                        <div>
-                            <span class="text-[10px] font-mono text-zinc-600 uppercase tracking-widest">Temporal Node: Winter 2026</span>
-                            <h3 class="text-2xl font-bold text-white mt-1 group-hover:text-zinc-300 transition-colors">The Pillowman</h3>
-                        </div>
-                        <p class="text-zinc-400 text-xs font-light leading-relaxed tracking-wide">
-                            A visceral processing loop exploring boundaries of narrative design, fiction, and systemic interrogation.
-                        </p>
-                        <div class="pt-4 flex items-center justify-between border-t border-zinc-900">
-                            <span class="text-xs font-mono text-zinc-500">Valuation $25</span>
-                            <button onclick="openPortal('https://www.purplepass.com/', 'The Pillowman Instance')" class="text-xs font-bold uppercase tracking-widest border border-zinc-800 px-4 py-2 group-hover:bg-white group-hover:text-black transition-all">
-                                Execute
-                            </button>
-                        </div>
+                    <div>
+                        <div class="show-tags"><span class="tag">Psychological</span><span class="tag">Suspense</span></div>
+                        <a href="#" class="ticket-btn">Examine Tickets</a>
                     </div>
                 </div>
 
-                <div class="grid-item group bg-zinc-950 border border-zinc-900/60 hover:border-zinc-700/80 transition-all duration-500" data-type="lab">
-                    <div class="relative aspect-[4/3] bg-zinc-900 overflow-hidden flex items-center justify-center">
-                        <div class="absolute inset-0 bg-gradient-to-t from-zinc-950 to-transparent opacity-80 z-10"></div>
-                        <div class="absolute inset-0 bg-gradient-to-br from-emerald-600/10 to-transparent mix-blend-overlay group-hover:scale-110 transition-transform duration-700"></div>
-                        <span class="text-zinc-800 font-experimental font-black text-2xl tracking-widest uppercase opacity-40 select-none">MODULE 03</span>
-                        <span class="absolute top-4 left-4 z-20 bg-black text-[9px] text-zinc-400 font-mono border border-zinc-800 px-2 py-0.5 uppercase tracking-wider">Type: Staged Synthesis</span>
+                <!-- Card 3 -->
+                <div class="show-card" data-mood="satire">
+                    <div>
+                        <div class="show-dates">November 12 – 29</div>
+                        <h3 class="show-title">The Rivals</h3>
+                        <p class="show-author">by Richard Brinsley Sheridan</p>
+                        <p class="show-desc">High fashion, higher wigs, and absolute chaos. A hilarious storm of mistaken identities and spectacular misunderstandings packed with razor-sharp wit.</p>
                     </div>
-                    <div class="p-8 space-y-6">
-                        <div>
-                            <span class="text-[10px] font-mono text-zinc-600 uppercase tracking-widest">Temporal Node: Single Phase</span>
-                            <h3 class="text-2xl font-bold text-white mt-1 group-hover:text-zinc-300 transition-colors">The Lab New Play Festival</h3>
-                        </div>
-                        <p class="text-zinc-400 text-xs font-light leading-relaxed tracking-wide">
-                            Unprocessed original scripts compiled from nationwide writers, executed live by resident simulation artists.
-                        </p>
-                        <div class="pt-4 flex items-center justify-between border-t border-zinc-900">
-                            <span class="text-xs font-mono text-zinc-500">Valuation $15</span>
-                            <button onclick="openPortal('https://www.purplepass.com/', 'New Play Festival Instance')" class="text-xs font-bold uppercase tracking-widest border border-zinc-800 px-4 py-2 group-hover:bg-white group-hover:text-black transition-all">
-                                Execute
-                            </button>
-                        </div>
+                    <div>
+                        <div class="show-tags"><span class="tag">Farce</span><span class="tag">Classic Comedy</span></div>
+                        <a href="#" class="ticket-btn">Examine Tickets</a>
                     </div>
                 </div>
 
-            </div>
-        </div>
-    </section>
-
-    <div id="portal-drawer" class="fixed inset-0 z-50 pointer-events-none opacity-0 invisible transition-all duration-500">
-        <div id="portal-backdrop" class="absolute inset-0 bg-black/80 backdrop-blur-md cursor-crosshair transition-opacity duration-500" onclick="closePortal()"></div>
-        
-        <div id="portal-terminal" class="absolute top-0 right-0 h-full w-full max-w-2xl bg-zinc-950 border-l border-zinc-900 flex flex-col translate-x-full transition-transform duration-500 shadow-[0_0_50px_rgba(0,0,0,0.8)]">
-            
-            <div class="p-6 border-b border-zinc-900 flex justify-between items-center bg-zinc-900/20">
-                <div>
-                    <span class="text-[9px] font-mono text-zinc-500 uppercase tracking-[0.25em]">Secure Integration Platform // Purplepass</span>
-                    <h3 id="portal-node-title" class="text-xl font-bold text-white uppercase tracking-tight mt-1">Terminal Active</h3>
+                <!-- Card 4 -->
+                <div class="show-card" data-mood="satire">
+                    <div>
+                        <div class="show-dates">January 14 – 31</div>
+                        <h3 class="show-title">God of Carnage</h3>
+                        <p class="show-author">by Yasmina Reza</p>
+                        <p class="show-desc">A playground scuffle brings two sets of parents together. As the rum flows, polite masks slip away, exposing the primal, savage nature of polite society.</p>
+                    </div>
+                    <div>
+                        <div class="show-tags"><span class="tag">Dark Comedy</span><span class="tag">Visceral</span></div>
+                        <a href="#" class="ticket-btn">Examine Tickets</a>
+                    </div>
                 </div>
-                <button onclick="closePortal()" class="p-2 text-zinc-500 hover:text-white hover:bg-zinc-900 border border-zinc-900 rounded-sm transition-all">
-                    <i data-lucide="split" class="w-4 h-4 rotate-45"></i>
-                </button>
-            </div>
 
-            <div class="flex-1 w-full bg-black relative">
-                <div id="portal-indicator" class="absolute inset-0 flex flex-col items-center justify-center space-y-4 text-zinc-500">
-                    <div class="w-6 h-6 border-2 border-zinc-800 border-t-white rounded-full animate-spin"></div>
-                    <p class="text-[10px] font-mono uppercase tracking-widest">Multiplexing Secure Streams...</p>
+                <!-- Card 5 -->
+                <div class="show-card" data-mood="provocative">
+                    <div>
+                        <div class="show-dates">February 18 – March 7</div>
+                        <h3 class="show-title">Bare: A Pop Opera</h3>
+                        <p class="show-author">Jon Hartmere & Damon Intrabartlo</p>
+                        <p class="show-desc">Identity, faith, and the fragility of youth collide against the backdrop of a high school play. A driving pop-rock score focusing on the high stakes of standing in your truth.</p>
+                    </div>
+                    <div>
+                        <div class="show-tags"><span class="tag">Musical Drama</span><span class="tag">Contemporary</span></div>
+                        <a href="#" class="ticket-btn">Examine Tickets</a>
+                    </div>
                 </div>
-                <iframe id="portal-frame" src="" class="w-full h-full border-0 relative z-10 opacity-0 transition-opacity duration-300" allow="payment"></iframe>
-            </div>
 
-            <div class="p-5 border-t border-zinc-900 bg-zinc-950 text-center font-mono text-[9px] text-zinc-600">
-                Data Transmission Encrypted. Core processing verified by Purplepass secure architecture node.
+                <!-- Card 6 -->
+                <div class="show-card" data-mood="provocative">
+                    <div>
+                        <div class="show-dates">April 22 – May 9</div>
+                        <h3 class="show-title">Fences</h3>
+                        <p class="show-author">by August Wilson</p>
+                        <p class="show-desc">Set in 1957 Pittsburgh, this Pulitzer Prize-winning masterpiece follows a former Negro League baseball star as he battles the walls built to protect—and hurt—the ones we love.</p>
+                    </div>
+                    <div>
+                        <div class="show-tags"><span class="tag">Masterpiece</span><span class="tag">Generational</span></div>
+                        <a href="#" class="ticket-btn">Examine Tickets</a>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
+        </section>
+    </main>
 
-    <footer class="bg-black py-16 px-6 md:px-16 border-t border-zinc-900 text-zinc-600 font-mono text-[10px] uppercase tracking-widest relative z-10">
-        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
-            <p>&copy; 2026 The Laboratory Theater of Florida. Systems Intact.</p>
-            <div class="flex space-x-8">
-                <a href="#" class="hover:text-zinc-400 transition-colors">Privacy</a>
-                <a href="#" class="hover:text-zinc-400 transition-colors">Terms</a>
-                <a href="#" class="hover:text-zinc-400 transition-colors">Support Matrix</a>
-            </div>
-        </div>
+    <footer>
+        <p>1634 Woodford Ave, Fort Myers, FL 33901 | Box Office: 239.291.2905</p>
+        <p style="margin-top: 10px; font-size: 0.8rem;">&copy; 2026 The Laboratory Theater of Florida. Designed for deep thinking.</p>
     </footer>
 
     <script>
-        // Init vector assets
-        lucide.createIcons();
+        function filterMood(mood, button) {
+            // Manage Active Button Styling
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
 
-        const portalDrawer = document.getElementById('portal-drawer');
-        const portalBackdrop = document.getElementById('portal-backdrop');
-        const portalTerminal = document.getElementById('portal-terminal');
-        const portalFrame = document.getElementById('portal-frame');
-        const portalNodeTitle = document.getElementById('portal-node-title');
-        const portalIndicator = document.getElementById('portal-indicator');
-
-        function openPortal(url, identityString) {
-            portalNodeTitle.innerText = identityString;
-            
-            portalDrawer.classList.remove('opacity-0', 'invisible', 'pointer-events-none');
-            portalTerminal.classList.remove('translate-x-full');
-            
-            portalFrame.style.opacity = '0';
-            portalIndicator.style.display = 'flex';
-            portalFrame.src = url;
-
-            portalFrame.onload = function() {
-                portalIndicator.style.display = 'none';
-                portalFrame.style.opacity = '1';
-            };
-
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closePortal() {
-            portalTerminal.classList.add('translate-x-full');
-            setTimeout(() => {
-                portalDrawer.classList.add('opacity-0', 'invisible', 'pointer-events-none');
-                portalFrame.src = '';
-            }, 400);
-            document.body.style.overflow = '';
-        }
-
-        function switchGrid(groupType) {
-            const architecturalItems = document.querySelectorAll('.grid-item');
-            const interactionTabs = document.querySelectorAll('.grid-tab');
-
-            interactionTabs.forEach(tab => {
-                tab.classList.remove('bg-zinc-900', 'text-white');
-                tab.classList.add('text-zinc-500');
-            });
-
-            const specifiedTab = document.getElementById(`tab-${groupType}`);
-            if (specifiedTab) {
-                specifiedTab.classList.remove('text-zinc-500');
-                specifiedTab.classList.add('bg-zinc-900', 'text-white');
-            }
-
-            architecturalItems.forEach(item => {
-                if (groupType === 'all' || item.getAttribute('data-type') === groupType) {
-                    item.style.display = 'block';
+            // Filter Show Cards
+            document.querySelectorAll('.show-card').forEach(card => {
+                if (mood === 'all' || card.getAttribute('data-mood') === mood) {
+                    card.classList.remove('hidden');
                 } else {
-                    item.style.display = 'none';
+                    card.classList.add('hidden');
                 }
             });
         }
     </script>
 </body>
 </html>
+
