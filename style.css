@@ -79,3 +79,46 @@ main { max-width: 1200px; margin: 0 auto; padding: 4rem 2rem; }
 .filter-btn.active { background: var(--accent-glow); color: #fff; border-color: var(--accent-glow); box-shadow: 0 0 15px rgba(255, 51, 102, 0.4); }
 
 footer { text-align: center; padding: 4rem 2rem; border-top: 1px solid var(--border-color); color: #666; font-size: 0.9rem; }
+.now-playing {
+    padding: 6rem 2rem;
+    display: flex;
+    justify-content: center;
+    background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)); /* Dark overlay */
+    border-bottom: 2px solid var(--accent-glow);
+}
+
+.feature-card {
+    max-width: 800px;
+    text-align: center;
+}
+
+.badge {
+    background: var(--accent-glow);
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: bold;
+}
+
+.feature-card h1 {
+    font-size: 5rem;
+    margin: 1rem 0;
+}
+
+.btn-primary {
+    display: inline-block;
+    background: var(--accent-glow);
+    color: white;
+    padding: 15px 30px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    margin-top: 20px;
+    transition: transform 0.3s ease;
+}
+
+.btn-primary:hover {
+    transform: scale(1.05);
+}
