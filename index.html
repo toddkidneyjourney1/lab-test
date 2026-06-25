@@ -2,78 +2,66 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Laboratory Theater of Florida | Thinking Theater</title>
     <link rel="stylesheet" href="style.css">
+    <title>The Laboratory Theater of Florida | The Experimentation Board</title>
 </head>
 <body>
 
-    <div class="stage-glow"></div>
-
     <header>
-        <div class="logo">The <span>Lab</span> Theater</div>
-        <div class="tagline">Thinking Theater</div>
+        <h1>THE LAB THEATER</h1>
+        <p>THINKING THEATER</p>
     </header>
 
-    <main><main>
-    <!-- Feature Section: Now Playing -->
-    <section class="now-playing">
-        <div class="feature-card">
-            <span class="badge">Next Production</span>
-            <h1>Waiting for Godot</h1>
-            <p class="subtitle">By Samuel Beckett | Aug 21 – Sept 6</p>
-            <p class="description">A foundational masterpiece of the Theatre of the Absurd. Join us on a barren road for this hauntingly beautiful exploration of the human condition.</p>
-            <div class="cta-group">
-                <a href="https://www.purplepass.com/waiting" class="btn-primary" target="_blank">Tickets & Info</a>
-            </div>
-        </div>
-    </section>
+    <main>
+        <section class="experimentation-board">
+            <h2>The Experimentation Board</h2>
+            
+            <div class="card-grid">
+                <!-- Production Cards -->
+                <div class="card">
+                    <img src="assets/godot.jpg" alt="Waiting for Godot">
+                    <h3>Waiting for Godot</h3>
+                    <p>Aug 21 – Sept 6</p>
+                </div>
 
-    <!-- Existing Experimentation Board follows below -->
-</main>
-        <section class="hero">
-            <h1>Intentionally Innovative Live Theater.</h1>
-            <p>Welcome to Fort Myers' home for artistic risk, powerful ensemble works, and groundbreaking performance art that challenges the status quo.</p>
-        </section>
+                <div class="card">
+                    <img src="assets/pillowman.jpg" alt="The Pillowman">
+                    <h3>The Pillowman</h3>
+                    <p>Oct 8 – 25</p>
+                </div>
 
-      <section class="interactive-section">
-    <h2 class="section-title">The Experimentation Board</h2>
-    
-    <!-- Filter Buttons (Same as before) -->
-    <div class="filter-container">
-        <!-- ... your existing buttons ... -->
-    </div>
+                <div class="card">
+                    <img src="assets/rivals.jpg" alt="The Rivals">
+                    <h3>The Rivals</h3>
+                    <p>Nov 12 – 29</p>
+                </div>
 
-    <!-- New Grid for Plays -->
-    <div class="play-grid">
-        <article class="play-card" data-category="absurd">
-            <img src="path-to-your-image.jpg" alt="Waiting for Godot">
-            <h3>Waiting for Godot</h3>
-            <p>Aug 21 – Sept 6</p>
-        </article>
+                <div class="card">
+                    <img src="assets/carnage.jpg" alt="God of Carnage">
+                    <h3>God of Carnage</h3>
+                    <p>Jan 14 – 31</p>
+                </div>
 
-        <article class="play-card" data-category="dark">
-            <img src="path-to-your-image.jpg" alt="The Pillowman">
-            <h3>The Pillowman</h3>
-            <p>Oct 8 – 25</p>
-        </article>
-        
-        <!-- Repeat this block for each play -->
-    </div>
-</section>
-            <div class="filter-container">
-                <button class="filter-btn active" onclick="filterMood('all', this)">All Subplots</button>
-                <button class="filter-btn" onclick="filterMood('absurd', this)">Absurdism</button>
-                <button class="filter-btn" onclick="filterMood('dark', this)">Dark & Intense</button>
-                <button class="filter-btn" onclick="filterMood('satire', this)">Satire & Wit</button>
-                <button class="filter-btn" onclick="filterMood('provocative', this)">Socially Provocative</button>
+                <div class="card">
+                    <img src="assets/bare.jpg" alt="Bare the Musical">
+                    <h3>Bare the Musical</h3>
+                    <p>Feb 18 – Mar 7</p>
+                </div>
+
+                <div class="card">
+                    <img src="assets/midsummer.jpg" alt="A Midsummer Night's Dream">
+                    <h3>A Midsummer Night's Dream</h3>
+                    <p>Mar 25 – Apr 11</p>
+                </div>
+
+                <div class="card">
+                    <img src="assets/fences.jpg" alt="Fences">
+                    <h3>Fences</h3>
+                    <p>Apr 22 – May 9</p>
+                </div>
             </div>
         </section>
     </main>
-
-    <footer>
-        <p>&copy; 2026 The Laboratory Theater of Florida. Thinking Theater.</p>
-    </footer>
 
 </body>
 </html>
