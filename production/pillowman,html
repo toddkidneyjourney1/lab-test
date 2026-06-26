@@ -15,21 +15,22 @@
     </header>
 
     <main>
-        <article style="max-width: 800px; margin: 0 auto;">
+        <article style="max-width: 800px; margin: 0 auto; padding: 4rem 2rem;">
             <div class="show-dates" style="margin-bottom: 1rem;">October 8 – 25, 2026</div>
-            <h1 class="show-title" style="font-size: 3rem; margin-bottom: 1rem;">The Pillowman</h1>
-            <p class="show-author" style="font-style: italic; font-size: 1.2rem; margin-bottom: 2rem;">by Martin McDonagh</p>
+            <h1 style="font-size: 3rem; margin-bottom: 1rem;">The Pillowman</h1>
+            <p style="font-size: 1.25rem; font-style: italic; margin-bottom: 2rem;">by Martin McDonagh</p>
             
-            <div class="show-desc" style="font-size: 1.1rem; line-height: 1.8; margin-bottom: 3rem;">
-                <p>Brutal, witty, and unexpectedly moving, this Olivier Award-winning play is an intense psychological journey probing the dangerous boundaries of storytelling.</p>
-            </div>
+            <p style="margin-bottom: 2rem; color: #c5c5cd; line-height: 1.8;">
+                Brutal, witty, and unexpectedly moving, this Olivier Award-winning play is an intense psychological 
+                journey probing the dangerous boundaries of storytelling and the nature of artistic responsibility.
+            </p>
 
             <div class="show-tags" style="margin-bottom: 2rem;">
                 <span class="tag">Psychological</span> 
                 <span class="tag">Suspense</span>
             </div>
 
-            <a href="../index.html" class="ticket-btn" style="padding: 15px 30px; font-size: 1rem;">Back to Experimentation Board</a>
+            <a href="../index.html" class="ticket-btn" style="display: inline-block; padding: 1rem 2rem;">&larr; Back to Experimentation Board</a>
         </article>
     </main>
 
