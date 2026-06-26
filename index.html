@@ -4,44 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Laboratory Theater of Florida | Thinking Theater</title>
-    <style>
-        :root {
-            --bg-color: #0a0a0c;
-            --text-color: #f4f4f7;
-            --accent-glow: #ff3366;
-            --accent-muted: #8a2be2;
-            --card-bg: rgba(25, 25, 30, 0.65);
-            --border-color: rgba(255, 255, 255, 0.1);
-        }
-        body { background-color: var(--bg-color); color: var(--text-color); font-family: sans-serif; line-height: 1.6; }
-        
-        /* Layout */
-        main { max-width: 1200px; margin: 0 auto; padding: 4rem 2rem; }
-        .hero { text-align: center; margin-bottom: 6rem; }
-        .hero h1 { font-size: 4rem; font-weight: 900; background: linear-gradient(135deg, #fff 30%, #a5a5b0); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-
-        /* The Lab Component */
-        .interactive-section { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 3rem; backdrop-filter: blur(20px); }
-        .filter-container { display: flex; justify-content: center; gap: 10px; margin-bottom: 3rem; flex-wrap: wrap; }
-        .filter-btn { background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); color: #ccc; padding: 10px 20px; border-radius: 30px; cursor: pointer; }
-        .filter-btn.active { background: var(--accent-glow); color: #fff; }
-
-        .shows-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 25px; }
-        .show-card { background: rgba(10, 10, 12, 0.5); border: 1px solid var(--border-color); border-radius: 12px; padding: 2rem; transition: 0.3s; }
-        .show-card.hidden { display: none; }
-        .show-dates { color: var(--accent-glow); font-weight: 700; text-transform: uppercase; font-size: 0.8rem; margin-bottom: 0.75rem; }
-        .show-title { font-size: 1.5rem; margin-bottom: 0.5rem; }
-        .ticket-btn { display: inline-block; margin-top: 1rem; padding: 10px; border: 1px solid #fff; color: #fff; text-decoration: none; border-radius: 6px; }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div class="stage-glow"></div>
+    
+    <header>
+        <div class="logo">The <span>Lab</span> Theater</div>
+        <div class="tagline">Thinking Theater</div>
+    </header>
+
     <main>
         <section class="hero">
             <h1>Intentionally Innovative Live Theater.</h1>
+            <p>Welcome to Fort Myers' home for artistic risk, powerful ensemble works, and groundbreaking performance art that challenges the status quo.</p>
         </section>
 
         <section class="interactive-section">
-            <h2 style="text-align:center;">The Experimentation Board</h2>
+            <h2 class="section-title">The Experimentation Board</h2>
+            <p class="section-subtitle">Isolate by mental wavelength. Select a psychological parameter to reveal our seasonal lineup.</p>
+            
             <div class="filter-container">
                 <button class="filter-btn active" onclick="filterMood('all', this)">All Subplots</button>
                 <button class="filter-btn" onclick="filterMood('absurd', this)">Absurdism</button>
@@ -51,14 +33,41 @@
             </div>
 
             <div class="shows-grid" id="showsGrid">
-                <!-- Card Example -->
+                <!-- Waiting for Godot -->
                 <div class="show-card" data-mood="absurd">
-                    <div class="show-dates">August 21 – Sept. 6</div>
                     <h3 class="show-title">Waiting for Godot</h3>
-                    <p>by Samuel Beckett</p>
-                    <a href="#" class="ticket-btn">Examine Tickets</a>
+                    <a href="production/godot.html" class="ticket-btn">Examine Details</a>
                 </div>
-                <!-- Add other cards here following the same structure -->
+                <!-- The Pillowman -->
+                <div class="show-card" data-mood="dark">
+                    <h3 class="show-title">The Pillowman</h3>
+                    <a href="production/pillowman.html" class="ticket-btn">Examine Details</a>
+                </div>
+                <!-- The Rivals -->
+                <div class="show-card" data-mood="satire">
+                    <h3 class="show-title">The Rivals</h3>
+                    <a href="production/rivals.html" class="ticket-btn">Examine Details</a>
+                </div>
+                <!-- God of Carnage -->
+                <div class="show-card" data-mood="dark">
+                    <h3 class="show-title">God of Carnage</h3>
+                    <a href="production/carnage.html" class="ticket-btn">Examine Details</a>
+                </div>
+                <!-- Bare -->
+                <div class="show-card" data-mood="provocative">
+                    <h3 class="show-title">Bare: A Pop Opera</h3>
+                    <a href="production/bare.html" class="ticket-btn">Examine Details</a>
+                </div>
+                <!-- A Midsummer Night's Dream -->
+                <div class="show-card" data-mood="absurd">
+                    <h3 class="show-title">A Midsummer Night's Dream</h3>
+                    <a href="production/shakespeare.html" class="ticket-btn">Examine Details</a>
+                </div>
+                <!-- Fences -->
+                <div class="show-card" data-mood="provocative">
+                    <h3 class="show-title">Fences</h3>
+                    <a href="production/fences.html" class="ticket-btn">Examine Details</a>
+                </div>
             </div>
         </section>
     </main>
