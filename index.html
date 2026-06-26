@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Laboratory Theater of Florida | Thinking Theater</title>
-    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -21,6 +20,7 @@
             <p>Welcome to Fort Myers' home for artistic risk, powerful ensemble works, and groundbreaking performance art that challenges the status quo.</p>
         </section>
 
+        <!-- Dynamic Lab Section -->
         <section class="interactive-section">
             <h2 class="section-title">The Experimentation Board</h2>
             <p class="section-subtitle">Isolate by mental wavelength. Select a psychological parameter to reveal our seasonal lineup.</p>
@@ -34,51 +34,96 @@
             </div>
 
             <div class="shows-grid" id="showsGrid">
-                <!-- Waiting for Godot -->
+                <!-- Card 1 -->
                 <div class="show-card" data-mood="absurd">
-                    <h3 class="show-title">Waiting for Godot</h3>
-                    <a href="production/godot.html" class="ticket-btn">Examine Details</a>
+                    <div>
+                        <div class="show-dates">August 21 – Sept. 6</div>
+                        <h3 class="show-title">Waiting for Godot</h3>
+                        <p class="show-author">by Samuel Beckett</p>
+                        <p class="show-desc">On a barren road beside a single tree, two men wait for a mysterious figure who never arrives. A foundational masterpiece exploring meaning in an uncertain world.</p>
+                    </div>
+                    <div>
+                        <div class="show-tags"><span class="tag">Existential</span> <span class="tag">Absurdism</span></div>
+                        <a href="production/godot.html" class="ticket-btn">Examine Details</a>
+                    </div>
                 </div>
-                <!-- The Pillowman -->
+
+                <!-- Card 2 -->
                 <div class="show-card" data-mood="dark">
-                    <h3 class="show-title">The Pillowman</h3>
-                    <a href="production/pillowman.html" class="ticket-btn">Examine Details</a>
+                    <div>
+                        <div class="show-dates">October 8 – 25</div>
+                        <h3 class="show-title">The Pillowman</h3>
+                        <p class="show-author">by Martin McDonagh</p>
+                        <p class="show-desc">Brutal, witty, and unexpectedly moving, this Olivier Award-winning play is an intense psychological journey probing the dangerous boundaries of storytelling.</p>
+                    </div>
+                    <div>
+                        <div class="show-tags"><span class="tag">Psychological</span> <span class="tag">Suspense</span></div>
+                        <a href="production/pillowman.html" class="ticket-btn">Examine Details</a>
+                    </div>
                 </div>
-                <!-- The Rivals -->
+
+                <!-- Card 3 -->
                 <div class="show-card" data-mood="satire">
-                    <h3 class="show-title">The Rivals</h3>
-                    <a href="production/rivals.html" class="ticket-btn">Examine Details</a>
+                    <div>
+                        <div class="show-dates">November 12 – 29</div>
+                        <h3 class="show-title">The Rivals</h3>
+                        <p class="show-author">by Richard Brinsley Sheridan</p>
+                        <p class="show-desc">High fashion, higher wigs, and absolute chaos. A hilarious storm of mistaken identities and spectacular misunderstandings packed with razor-sharp wit.</p>
+                    </div>
+                    <div>
+                        <div class="show-tags"><span class="tag">Farce</span> <span class="tag">Classic Comedy</span></div>
+                        <a href="production/rivals.html" class="ticket-btn">Examine Details</a>
+                    </div>
                 </div>
-                <!-- God of Carnage -->
-                <div class="show-card" data-mood="dark">
-                    <h3 class="show-title">God of Carnage</h3>
-                    <a href="production/carnage.html" class="ticket-btn">Examine Details</a>
+
+                <!-- Card 4 -->
+                <div class="show-card" data-mood="satire">
+                    <div>
+                        <div class="show-dates">January 14 – 31</div>
+                        <h3 class="show-title">God of Carnage</h3>
+                        <p class="show-author">by Yasmina Reza</p>
+                        <p class="show-desc">A playground scuffle brings two sets of parents together. As the rum flows, polite masks slip away, exposing the primal, savage nature of polite society.</p>
+                    </div>
+                    <div>
+                        <div class="show-tags"><span class="tag">Dark Comedy</span> <span class="tag">Visceral</span></div>
+                        <a href="production/carnage.html" class="ticket-btn">Examine Details</a>
+                    </div>
                 </div>
-                <!-- Bare -->
+
+                <!-- Card 5 -->
                 <div class="show-card" data-mood="provocative">
-                    <h3 class="show-title">Bare: A Pop Opera</h3>
-                    <a href="production/bare.html" class="ticket-btn">Examine Details</a>
-                </div>
-                <!-- A Midsummer Night's Dream -->
-                <div class="show-card" data-mood="absurd">
-                    <h3 class="show-title">A Midsummer Night's Dream</h3>
-                    <a href="production/shakespeare.html" class="ticket-btn">Examine Details</a>
-                </div>
-                <!-- Fences -->
-                <div class="show-card" data-mood="provocative">
-                    <h3 class="show-title">Fences</h3>
-                    <a href="production/fences.html" class="ticket-btn">Examine Details</a>
+                    <div>
+                        <div class="show-dates">February 18 – March 7</div>
+                        <h3 class="show-title">Bare: A Pop Opera</h3>
+                        <p class="show-author">Jon Hartmere & Damon Intrabartolo</p>
+                        <p class="show-desc">Identity, faith, and the fragility of youth collide against the backdrop of a high school play. A driving pop-rock score focusing on the high stakes of standing in your truth.</p>
+                    </div>
+                    <div>
+                        <div class="show-tags"><span class="tag">Musical Drama</span> <span class="tag">Contemporary</span></div>
+                        <a href="production/bare.html" class="ticket-btn">Examine Details</a>
+                    </div>
                 </div>
             </div>
         </section>
     </main>
 
+    <footer>
+        <p>1634 Woodford Ave, Fort Myers, FL 33901 | Box Office: 239.291.2905</p>
+    </footer>
+
     <script>
-        function filterMood(mood, button) {
-            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-            button.classList.add('active');
+        function filterMood(mood, btn) {
+            // Update button active states
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            // Filter cards
             document.querySelectorAll('.show-card').forEach(card => {
-                card.style.display = (mood === 'all' || card.getAttribute('data-mood') === mood) ? 'flex' : 'none';
+                if (mood === 'all' || card.getAttribute('data-mood') === mood) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
             });
         }
     </script>
