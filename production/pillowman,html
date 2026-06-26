@@ -2,23 +2,39 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="../style.css"> <!-- Links to your shared CSS -->
-    <title>Show Title | The Lab Theater</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Pillowman | The Laboratory Theater of Florida</title>
+    <link rel="stylesheet" href="../style.css">
 </head>
 <body>
+    <div class="stage-glow"></div>
+    
     <header>
         <div class="logo">The <span>Lab</span> Theater</div>
+        <div class="tagline">Thinking Theater</div>
     </header>
-    
-    <main>
-        <h1>Show Title</h1>
-        <p class="show-dates">Dates of production</p>
-        
-        <section class="content">
-            <p>Insert show synopsis, cast, and creative notes here.</p>
-        </section>
 
-        <a href="../index.html" class="ticket-btn">Back to Board</a>
+    <main>
+        <article style="max-width: 800px; margin: 0 auto;">
+            <div class="show-dates" style="margin-bottom: 1rem;">October 8 – 25, 2026</div>
+            <h1 class="show-title" style="font-size: 3rem; margin-bottom: 1rem;">The Pillowman</h1>
+            <p class="show-author" style="font-style: italic; font-size: 1.2rem; margin-bottom: 2rem;">by Martin McDonagh</p>
+            
+            <div class="show-desc" style="font-size: 1.1rem; line-height: 1.8; margin-bottom: 3rem;">
+                <p>Brutal, witty, and unexpectedly moving, this Olivier Award-winning play is an intense psychological journey probing the dangerous boundaries of storytelling.</p>
+            </div>
+
+            <div class="show-tags" style="margin-bottom: 2rem;">
+                <span class="tag">Psychological</span> 
+                <span class="tag">Suspense</span>
+            </div>
+
+            <a href="../index.html" class="ticket-btn" style="padding: 15px 30px; font-size: 1rem;">Back to Experimentation Board</a>
+        </article>
     </main>
+
+    <footer>
+        <p>1634 Woodford Ave, Fort Myers, FL 33901 | Box Office: 239.291.2905</p>
+    </footer>
 </body>
 </html>
