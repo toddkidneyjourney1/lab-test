@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../style.css"> <!-- Links to your shared CSS -->
+    <title>Show Title | The Lab Theater</title>
+</head>
+<body>
+    <header>
+        <div class="logo">The <span>Lab</span> Theater</div>
+    </header>
+    
+    <main>
+        <h1>Show Title</h1>
+        <p class="show-dates">Dates of production</p>
+        
+        <section class="content">
+            <p>Insert show synopsis, cast, and creative notes here.</p>
+        </section>
+
+        <a href="../index.html" class="ticket-btn">Back to Board</a>
+    </main>
+</body>
+</html>
