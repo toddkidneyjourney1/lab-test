@@ -24,7 +24,6 @@ body {
 /* Universal Atmosphere */
 .stage-glow {
     position: fixed;
-    
     top: -10%;
     left: 50%;
     transform: translateX(-50%);
@@ -40,7 +39,7 @@ body {
 header {
     padding: 2rem;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
     text-align: center;
     border-bottom: 1px solid var(--border-color);
@@ -57,188 +56,49 @@ header {
     letter-spacing: 2px;
     text-transform: uppercase;
     color: #fff;
+    margin-bottom: 0.5rem;
 }
 
 .logo span {
     color: var(--accent-glow);
 }
 
-main {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 4rem 2rem;
-}
-
-/* Featured Production Layout */
-.featured-production {
-    display: flex;
-    justify-content: center;
-    padding: 4rem 2rem;
-    width: 100%;
-}
-
-.featured-card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    max-width: 600px;
-    background: var(--card-bg);
-    border: 1px solid var(--accent-glow);
-    border-radius: 16px;
-    padding: 3rem;
-}
-
-/* Updated Featured Image: Larger */
-.featured-image {
-    max-width: 500px;
-    width: 100%;
-    height: auto;
-    border-radius: 8px;
-    margin-bottom: 2rem;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-}
-
-/* Updated Featured Text: Smaller */
-.featured-content h2 {
-    font-size: 2rem;
-    margin-bottom: 0.5rem;
-}
-
-.featured-desc {
-    font-size: 0.9rem;
-    margin: 1rem 0;
-    color: #ccc;
-}
-
-.featured-meta {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-    margin-top: 1.5rem;
-}
-
-/* Buttons & Elements */
-.ticket-btn {
-    background: transparent;
-    border: 1px solid #fff;
-    color: #fff;
-    padding: 12px 24px;
-    border-radius: 6px;
-    cursor: pointer;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    transition: all 0.3s ease;
-}
-
-.ticket-btn:hover {
-    background: #fff;
-    color: var(--bg-color);
-}
-
-.back-btn {
-    display: inline-block;
-    padding: 8px 16px;
-    font-size: 0.85rem;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    color: #fff;
-    text-decoration: none;
-    border-radius: 4px;
+/* Minimalist Navigation */
+.main-menu {
     margin-top: 1rem;
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+}
+
+.main-menu a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 0.75rem;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.2rem;
+    opacity: 0.5;
     transition: all 0.3s ease;
 }
 
-.back-btn:hover {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: #fff;
+.main-menu a:hover {
+    opacity: 1;
+    color: var(--accent-glow);
 }
 
-/* Grid & Cards */
-.shows-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
-}
-
-.show-card {
-    background: var(--card-bg);
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
-    padding: 2rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    transition: all 0.4s ease;
-    text-align: center;
-    flex: 0 0 250px;
-    position: relative;
-    overflow: hidden;
-}
-
-.show-card:hover {
-    transform: translateY(-5px);
-    border-color: var(--accent-muted);
-}
-
-/* Footer */
-footer {
-    text-align: center;
-    padding: 2rem;
-    border-top: 1px solid var(--border-color);
-    color: #666;
-    font-size: 0.9rem;
-}
+/* Footer Styling */
 footer {
     background-color: #111;
     color: #ccc;
     text-align: center;
     padding: 2rem;
     margin-top: 3rem;
-    border-top: 1px solid #333;
+    border-top: 1px solid var(--border-color);
     font-size: 0.9rem;
 }
 
-footer p {
-    margin: 0.5rem 0;
-}
-
 footer a {
-    color: #e50914; /* Matches your theater's brand accent */
+    color: var(--accent-glow);
     text-decoration: none;
-}
-
-footer a:hover {
-    text-decoration: underline;
-}
-.support-content { padding: 3rem; max-width: 800px; margin: auto; }
-.support-options { display: flex; gap: 2rem; margin-top: 2rem; }
-.support-options .card { 
-    background: #1a1a1a; 
-    padding: 2rem; 
-    border-radius: 8px; 
-    border: 1px solid #333; 
-}
-.main-menu {
-    margin-top: 1rem;
-    display: flex;
-    justify-content: center;
-    gap: 2rem;
-}
-
-.main-menu a {
-    color: #fff;
-    text-decoration: none;
-    font-size: 1rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    opacity: 0.7;
-    transition: 0.3s;
-}
-
-.main-menu a:hover {
-    opacity: 1;
-    color: #e50914; /* Your brand accent color */
 }
