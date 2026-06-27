@@ -206,3 +206,27 @@ footer a {
     color: var(--accent-glow);
     text-decoration: none;
 }
+/* Styling for the cards */
+.show-item {
+    background: rgba(25, 25, 30, 0.65); /* Card background */
+    border: 1px solid rgba(255, 255, 255, 0.1); /* Subtle border */
+    border-radius: 8px; /* Rounded corners */
+    padding: 1.5rem; /* Space inside the card */
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+
+/* Ensure the images inside the cards still look good */
+.show-item img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+}
+
+/* Make cards pop slightly on hover */
+.show-item:hover {
+    border-color: #ff3366; /* Your accent glow color */
+    transform: translateY(-5px);
+}
