@@ -46,14 +46,26 @@ header {
 
 main { max-width: 1200px; margin: 0 auto; padding: 4rem 2rem; }
 
-/* Featured Production Image Constraint */
+/* Update the image constraint to be larger */
 .featured-image {
-    max-width: 300px; 
+    max-width: 500px; /* Increased from 300px */
     width: 100%;
     height: auto;
     border-radius: 8px;
-    margin-bottom: 1.5rem;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+}
+
+/* Add or update a rule to shrink the text container */
+.featured-content h2 {
+    font-size: 2rem; /* Reduced from 3rem */
+    margin-bottom: 0.5rem;
+}
+
+.featured-desc {
+    font-size: 0.9rem; /* Reduced from default */
+    margin: 1rem 0;
+    color: #ccc;
 }
 
 /* Buttons & Elements */
