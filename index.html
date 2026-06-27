@@ -12,31 +12,30 @@
         <div class="logo">The <span>Lab</span> Theater</div>
         <div class="tagline">Thinking Theater</div>
     </header>
-     <section class="hero">
-            <h1>Intentionally Innovative Live Theater.</h1>
-            <p>Welcome to Fort Myers' home for artistic risk, powerful ensemble works, and groundbreaking performance art that challenges the status quo.</p>
-        </section>
+
+    <section class="hero">
+        <h1>Intentionally Innovative Live Theater.</h1>
+        <p>Welcome to Fort Myers' home for artistic risk, powerful ensemble works, and groundbreaking performance art that challenges the status quo.</p>
+    </section>
+
     <!-- Featured Production -->
-<section class="featured-production">
-    <div class="featured-card">
-        <img src="assets/godot.jpg" alt="Waiting for Godot" class="featured-image">
-        <div class="featured-content">
-            <span class="badge">Next Production</span>
-            <h2>Waiting for Godot</h2>
-            <p class="featured-author">by Samuel Beckett</p>
-            <p class="featured-desc">A foundational masterpiece of the Theatre of the Absurd, exploring the human condition, hope, and the persistent search for meaning.</p>
-            <div class="featured-meta">
-                <span class="date">August 21 – Sept. 6, 2026</span>
-                <a href="production/godot.html" class="ticket-btn">Get Tickets</a>
+    <section class="featured-production">
+        <div class="featured-card">
+            <img src="assets/godot.jpg" alt="Waiting for Godot" class="featured-image">
+            <div class="featured-content">
+                <span class="badge">Next Production</span>
+                <h2>Waiting for Godot</h2>
+                <p class="featured-author">by Samuel Beckett</p>
+                <p class="featured-desc">A foundational masterpiece of the Theatre of the Absurd, exploring the human condition, hope, and the persistent search for meaning.</p>
+                <div class="featured-meta">
+                    <span class="date">August 21 – Sept. 6, 2026</span>
+                    <a href="production/godot.html" class="ticket-btn">Get Tickets</a>
+                </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
+
     <main>
-       
-
-      
-
         <!-- The Experimentation Board -->
         <section class="interactive-section">
             <h2 class="section-title">The Experimentation Board</h2>
@@ -52,17 +51,13 @@
 
             <div class="shows-grid" id="showsGrid">
                 <!-- Waiting for Godot -->
-                <!-- Example of one show card -->
-<div class="show-card">
-    <img src="assets/godot.jpg" alt="Waiting for Godot" class="card-image">
-    <div class="card-content">
-        <h3>Waiting for Godot</h3>
-        <p>by Samuel Beckett</p>
-        <!-- Rest of your card content -->
-        <a href="production/godot.html" class="examine-btn">Examine Details</a>
-    </div>
-</div>
-                    <div>
+                <div class="show-card" data-mood="absurd">
+                    <img src="assets/godot.jpg" alt="Waiting for Godot" class="card-image">
+                    <div class="card-content">
+                        <div class="show-dates">August 21 – Sept. 6, 2026</div>
+                        <h3 class="show-title">Waiting for Godot</h3>
+                        <p class="show-author">by Samuel Beckett</p>
+                        <p class="show-desc">A foundational masterpiece of the Theatre of the Absurd, exploring the human condition, hope, and the persistent search for meaning.</p>
                         <div class="show-tags"><span class="tag">Existential</span> <span class="tag">Absurdism</span></div>
                         <a href="production/godot.html" class="ticket-btn">Examine Details</a>
                     </div>
@@ -70,13 +65,12 @@
 
                 <!-- The Pillowman -->
                 <div class="show-card" data-mood="dark">
-                    <div>
+                    <img src="assets/pillowman.jpg" alt="The Pillowman" class="card-image">
+                    <div class="card-content">
                         <div class="show-dates">October 8 – 25, 2026</div>
                         <h3 class="show-title">The Pillowman</h3>
                         <p class="show-author">by Martin McDonagh</p>
                         <p class="show-desc">An intense psychological journey exploring the storytelling instinct as a fundamental—and sometimes dangerous—human necessity.</p>
-                    </div>
-                    <div>
                         <div class="show-tags"><span class="tag">Psychological</span> <span class="tag">Suspense</span></div>
                         <a href="production/pillowman.html" class="ticket-btn">Examine Details</a>
                     </div>
@@ -84,13 +78,12 @@
 
                 <!-- The Rivals -->
                 <div class="show-card" data-mood="satire">
-                    <div>
+                    <img src="assets/rivals.jpg" alt="The Rivals" class="card-image">
+                    <div class="card-content">
                         <div class="show-dates">November 12 – 29, 2026</div>
                         <h3 class="show-title">The Rivals</h3>
                         <p class="show-author">by Richard Brinsley Sheridan</p>
                         <p class="show-desc">A hilarious storm of mistaken identities, secret letters, and jealous lovers in this classic romantic farce.</p>
-                    </div>
-                    <div>
                         <div class="show-tags"><span class="tag">Farce</span> <span class="tag">Classic Comedy</span></div>
                         <a href="production/rivals.html" class="ticket-btn">Examine Details</a>
                     </div>
@@ -98,27 +91,25 @@
 
                 <!-- God of Carnage -->
                 <div class="show-card" data-mood="satire">
-                    <div>
+                    <img src="assets/godofcarnage.jpg" alt="God of Carnage" class="card-image">
+                    <div class="card-content">
                         <div class="show-dates">January 14 – 31, 2027</div>
                         <h3 class="show-title">God of Carnage</h3>
                         <p class="show-author">by Yasmina Reza</p>
                         <p class="show-desc">Polite masks slip away, revealing the primal, savage nature simmering just beneath the surface of bourgeois society.</p>
-                    </div>
-                    <div>
                         <div class="show-tags"><span class="tag">Dark Comedy</span> <span class="tag">Visceral</span></div>
-                        <a href="production/carnage.html" class="ticket-btn">Examine Details</a>
+                        <a href="production/god.html" class="ticket-btn">Examine Details</a>
                     </div>
                 </div>
 
-                <!-- Bare -->
+                <!-- Bare: A Pop Opera -->
                 <div class="show-card" data-mood="provocative">
-                    <div>
+                    <img src="assets/bare.jpg" alt="Bare: A Pop Opera" class="card-image">
+                    <div class="card-content">
                         <div class="show-dates">February 18 – March 7, 2027</div>
                         <h3 class="show-title">Bare: A Pop Opera</h3>
                         <p class="show-author">Jon Hartmere & Damon Intrabartolo</p>
                         <p class="show-desc">Identity, faith, and the fragility of youth collide in this driving pop-rock musical about standing in your truth.</p>
-                    </div>
-                    <div>
                         <div class="show-tags"><span class="tag">Musical Drama</span> <span class="tag">Contemporary</span></div>
                         <a href="production/bare.html" class="ticket-btn">Examine Details</a>
                     </div>
@@ -126,13 +117,12 @@
 
                 <!-- A Midsummer Night's Dream -->
                 <div class="show-card" data-mood="satire">
-                    <div>
+                    <img src="assets/midsummer.jpg" alt="A Midsummer Night's Dream" class="card-image">
+                    <div class="card-content">
                         <div class="show-dates">March 25 – April 11, 2027</div>
                         <h3 class="show-title">A Midsummer Night's Dream</h3>
                         <p class="show-author">by William Shakespeare</p>
                         <p class="show-desc">Mortals and fairies collide in a chaotic, magical night of mistaken identity and mismatched hearts.</p>
-                    </div>
-                    <div>
                         <div class="show-tags"><span class="tag">Classic</span> <span class="tag">Comedy</span></div>
                         <a href="production/shakespeare.html" class="ticket-btn">Examine Details</a>
                     </div>
@@ -140,13 +130,12 @@
 
                 <!-- Fences -->
                 <div class="show-card" data-mood="provocative">
-                    <div>
+                    <img src="assets/fences.jpg" alt="Fences" class="card-image">
+                    <div class="card-content">
                         <div class="show-dates">April 22 – May 9, 2027</div>
                         <h3 class="show-title">Fences</h3>
                         <p class="show-author">by August Wilson</p>
                         <p class="show-desc">A powerful exploration of race, family, and the burden of dreams deferred in 1950s Pittsburgh.</p>
-                    </div>
-                    <div>
                         <div class="show-tags"><span class="tag">Drama</span> <span class="tag">Classic</span></div>
                         <a href="production/fences.html" class="ticket-btn">Examine Details</a>
                     </div>
