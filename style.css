@@ -144,3 +144,19 @@ footer {
 .featured-content h2 { font-size: 3rem; margin-bottom: 0.5rem; }
 .featured-desc { margin: 1rem 0; color: #ccc; }
 .featured-meta { display: flex; flex-direction: column; align-items: center; gap: 1rem; margin-top: 1.5rem; }
+/* Ensure the grid container is a flexbox */
+.shows-grid {
+    display: flex;
+    flex-wrap: wrap; /* Allows them to wrap to the next line */
+    gap: 20px;       /* Adds space between the smaller cards */
+    justify-content: center;
+}
+
+/* Set a smaller, fixed width for the cards */
+.show-card {
+    flex: 0 0 250px; /* Forces cards to be 250px wide */
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    /* Remove or adjust existing heights if they are fixed */
+}
