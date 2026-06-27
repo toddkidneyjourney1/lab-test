@@ -1,8 +1,8 @@
 :root {
     --bg-color: #0a0a0c;
     --text-color: #f4f4f7;
-    --accent-glow: #ff3366; /* Stage spotlight pink */
-    --accent-muted: #8a2be2; /* Experimental purple */
+    --accent-glow: #ff3366;
+    --accent-muted: #8a2be2;
     --card-bg: rgba(25, 25, 30, 0.65);
     --border-color: rgba(255, 255, 255, 0.1);
 }
@@ -21,7 +21,7 @@ body {
     line-height: 1.6;
 }
 
-/* Abstract Stage Light Atmosphere */
+/* Stage Atmosphere */
 .stage-glow {
     position: fixed;
     top: -10%;
@@ -48,217 +48,29 @@ header {
     background: rgba(10, 10, 12, 0.8);
 }
 
-.logo {
-    font-size: 1.25rem;
-    font-weight: 800;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: #fff;
-}
+.logo { font-size: 1.25rem; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: #fff; }
+.logo span { color: var(--accent-glow); }
 
-.logo span {
-    color: var(--accent-glow);
-}
+main { max-width: 1200px; margin: 0 auto; padding: 4rem 2rem; }
 
-.tagline {
-    font-size: 0.85rem;
-    text-transform: uppercase;
-    letter-spacing: 3px;
-    color: #888;
-    border-left: 2px solid var(--accent-glow);
-    padding-left: 10px;
-}
+.hero { text-align: center; margin-bottom: 6rem; }
+.hero h1 { font-size: 4rem; font-weight: 900; margin-bottom: 1.5rem; background: linear-gradient(135deg, #fff 30%, #a5a5b0); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-main {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 4rem 2rem;
-}
+@media (max-width: 768px) { .hero h1 { font-size: 2.5rem; } }
 
-.hero {
-    text-align: center;
-    margin-bottom: 6rem;
-    position: relative;
-}
+/* Filters */
+.filter-container { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-bottom: 3rem; }
+.filter-btn { background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); color: #ccc; padding: 10px 20px; border-radius: 30px; cursor: pointer; font-weight: 600; transition: all 0.3s ease; }
+.filter-btn:hover { background: rgba(255,255,255,0.1); color: #fff; }
+.filter-btn.active { background: var(--accent-glow); color: #fff; border-color: var(--accent-glow); box-shadow: 0 0 15px rgba(255, 51, 102, 0.4); }
 
-.hero h1 {
-    font-size: 4rem;
-    font-weight: 900;
-    line-height: 1.1;
-    margin-bottom: 1.5rem;
-    letter-spacing: -1px;
-    background: linear-gradient(135deg, #fff 30%, #a5a5b0);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
+/* Grid */
+.shows-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 25px; }
+.show-card { background: rgba(10, 10, 12, 0.5); border: 1px solid var(--border-color); border-radius: 12px; padding: 2rem; display: flex; flex-direction: column; transition: all 0.4s ease; }
+.show-card.hidden { display: none; }
+.show-card:hover { transform: translateY(-5px); border-color: var(--accent-muted); }
 
-@media (max-width: 768px) {
-    .hero h1 { font-size: 2.5rem; }
-}
-
-.hero p {
-    font-size: 1.25rem;
-    max-width: 700px;
-    margin: 0 auto 2.5rem auto;
-    color: #b0b0b8;
-}
-
-/* The Mood Lab Component */
-.interactive-section {
-    background: var(--card-bg);
-    border: 1px solid var(--border-color);
-    border-radius: 16px;
-    padding: 3rem;
-    backdrop-filter: blur(20px);
-    box-shadow: 0 20px 40px rgba(0,0,0,0.5);
-    margin-bottom: 5rem;
-}
-
-.section-title {
-    font-size: 1.75rem;
-    font-weight: 700;
-    margin-bottom: 0.5rem;
-    text-align: center;
-}
-
-.section-subtitle {
-    text-align: center;
-    color: #888;
-    margin-bottom: 2.5rem;
-    font-size: 0.95rem;
-}
-
-.filter-container {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    flex-wrap: wrap;
-    margin-bottom: 3rem;
-}
-
-.filter-btn {
-    background: rgba(255,255,255,0.05);
-    border: 1px solid var(--border-color);
-    color: #ccc;
-    padding: 10px 20px;
-    border-radius: 30px;
-    cursor: pointer;
-    font-size: 0.9rem;
-    font-weight: 600;
-    transition: all 0.3s ease;
-}
-
-.filter-btn:hover {
-    background: rgba(255,255,255,0.1);
-    color: #fff;
-    border-color: #666;
-}
-
-.filter-btn.active {
-    background: var(--accent-glow);
-    color: #fff;
-    border-color: var(--accent-glow);
-    box-shadow: 0 0 15px rgba(255, 51, 102, 0.4);
-}
-
-.shows-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 25px;
-}
-
-.show-card {
-    background: rgba(10, 10, 12, 0.5);
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
-    padding: 2rem;
-    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    opacity: 1;
-    transform: translateY(0);
-}
-
-.show-card.hidden {
-    display: none;
-}
-
-.show-card:hover {
-    transform: translateY(-5px);
-    border-color: var(--accent-muted);
-    box-shadow: 0 10px 30px rgba(138, 43, 226, 0.15);
-}
-
-.show-dates {
-    font-size: 0.8rem;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    color: var(--accent-glow);
-    font-weight: 700;
-    margin-bottom: 0.75rem;
-}
-
-.show-title {
-    font-size: 1.5rem;
-    font-weight: 700;
-    margin-bottom: 0.5rem;
-    color: #fff;
-}
-
-.show-author {
-    font-size: 0.9rem;
-    color: #888;
-    font-style: italic;
-    margin-bottom: 1.25rem;
-}
-
-.show-desc {
-    color: #c5c5cd;
-    font-size: 0.95rem;
-    margin-bottom: 1.5rem;
-    flex-grow: 1;
-}
-
-.show-tags {
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-    margin-bottom: 1.5rem;
-}
-
-.tag {
-    background: rgba(138, 43, 226, 0.15);
-    color: #d8b4fe;
-    font-size: 0.75rem;
-    padding: 4px 10px;
-    border-radius: 4px;
-    font-weight: 600;
-}
-
-.ticket-btn {
-    background: transparent;
-    border: 1px solid #fff;
-    color: #fff;
-    padding: 12px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: 600;
-    text-align: center;
-    text-decoration: none;
-    font-size: 0.9rem;
-    transition: all 0.2s ease;
-}
-
-.ticket-btn:hover {
-    background: #fff;
-    color: var(--bg-color);
-}
-
-footer {
-    text-align: center;
-    padding: 4rem 2rem;
-    border-top: 1px solid var(--border-color);
-    color: #666;
-    font-size: 0.9rem;
-}
+.show-dates { font-size: 0.8rem; color: var(--accent-glow); font-weight: 700; margin-bottom: 0.75rem; text-transform: uppercase; }
+.show-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem; }
+.ticket-btn { background: transparent; border: 1px solid #fff; color: #fff; padding: 12px; border-radius: 6px; cursor: pointer; text-align: center; text-decoration: none; margin-top: 1rem; }
+.ticket-btn:hover { background: #fff; color: var(--bg-color); }
