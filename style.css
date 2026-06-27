@@ -237,3 +237,24 @@ footer {
 .featured-production .featured-card::before {
     display: none;
 }
+/* Center text in the header */
+header {
+    text-align: center;
+    justify-content: center; /* This centers the logo and content */
+}
+
+/* Center text in the hero section */
+.hero {
+    text-align: center;
+}
+
+/* Center text in the featured section card */
+.featured-card {
+    text-align: center;
+    align-items: center; /* Centers the content block */
+}
+
+/* Ensure show cards (in the grid) are centered */
+.show-card {
+    text-align: center;
+}
