@@ -192,3 +192,36 @@ footer {
 .featured-card::before {
     display: none; /* Prevents the background from appearing here */
 }
+/* 1. Ensure the show cards are ready to hold a background layer */
+.show-card {
+    position: relative;
+    overflow: hidden; /* Ensures background doesn't bleed outside rounded corners */
+}
+
+/* 2. Create the opaque image layer using ::before */
+.show-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* Replace with your actual image path */
+    background-image: url('assets/show-background.jpg'); 
+    background-size: cover;
+    background-position: center;
+    opacity: 0.2; /* Controls the opacity (0.1 is very light, 0.5 is darker) */
+    z-index: 0;   /* Keeps the image behind the card's text */
+    pointer-events: none; /* Prevents the image from interfering with clicks */
+}
+
+/* 3. Ensure your card text stays on top */
+.show-card > * {
+    position: relative;
+    z-index: 1;
+}
+
+/* 4. EXCLUDE the featured card */
+.featured-production .featured-card::before {
+    display: none;
+}
