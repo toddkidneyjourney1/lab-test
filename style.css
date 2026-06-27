@@ -213,3 +213,11 @@ footer a {
 footer a:hover {
     text-decoration: underline;
 }
+.support-content { padding: 3rem; max-width: 800px; margin: auto; }
+.support-options { display: flex; gap: 2rem; margin-top: 2rem; }
+.support-options .card { 
+    background: #1a1a1a; 
+    padding: 2rem; 
+    border-radius: 8px; 
+    border: 1px solid #333; 
+}
