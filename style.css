@@ -7,7 +7,11 @@
     --border-color: rgba(255, 255, 255, 0.1);
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
 
 body {
     background-color: var(--bg-color);
@@ -20,9 +24,11 @@ body {
 /* Universal Atmosphere */
 .stage-glow {
     position: fixed;
-    top: -10%; left: 50%;
+    top: -10%;
+    left: 50%;
     transform: translateX(-50%);
-    width: 80vw; height: 60vh;
+    width: 80vw;
+    height: 60vh;
     background: radial-gradient(circle, rgba(255, 51, 102, 0.15) 0%, rgba(138, 43, 226, 0.05) 50%, transparent 100%);
     z-index: -1;
     pointer-events: none;
@@ -33,22 +39,58 @@ body {
 header {
     padding: 2rem;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
+    text-align: center;
     border-bottom: 1px solid var(--border-color);
     backdrop-filter: blur(10px);
-    position: sticky; top: 0; z-index: 100;
+    position: sticky;
+    top: 0;
+    z-index: 100;
     background: rgba(10, 10, 12, 0.8);
 }
 
-.logo { font-size: 1.25rem; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: #fff; }
-.logo span { color: var(--accent-glow); }
+.logo {
+    font-size: 1.25rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #fff;
+}
 
-main { max-width: 1200px; margin: 0 auto; padding: 4rem 2rem; }
+.logo span {
+    color: var(--accent-glow);
+}
 
-/* Update the image constraint to be larger */
+main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 4rem 2rem;
+}
+
+/* Featured Production Layout */
+.featured-production {
+    display: flex;
+    justify-content: center;
+    padding: 4rem 2rem;
+    width: 100%;
+}
+
+.featured-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    max-width: 600px;
+    background: var(--card-bg);
+    border: 1px solid var(--accent-glow);
+    border-radius: 16px;
+    padding: 3rem;
+}
+
+/* Updated Featured Image: Larger */
 .featured-image {
-    max-width: 500px; /* Increased from 300px */
+    max-width: 500px;
     width: 100%;
     height: auto;
     border-radius: 8px;
@@ -56,16 +98,24 @@ main { max-width: 1200px; margin: 0 auto; padding: 4rem 2rem; }
     box-shadow: 0 4px 15px rgba(0,0,0,0.5);
 }
 
-/* Add or update a rule to shrink the text container */
+/* Updated Featured Text: Smaller */
 .featured-content h2 {
-    font-size: 2rem; /* Reduced from 3rem */
+    font-size: 2rem;
     margin-bottom: 0.5rem;
 }
 
 .featured-desc {
-    font-size: 0.9rem; /* Reduced from default */
+    font-size: 0.9rem;
     margin: 1rem 0;
     color: #ccc;
+}
+
+.featured-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
 }
 
 /* Buttons & Elements */
@@ -82,55 +132,15 @@ main { max-width: 1200px; margin: 0 auto; padding: 4rem 2rem; }
     transition: all 0.3s ease;
 }
 
-.ticket-btn:hover { background: #fff; color: var(--bg-color); }
-
-/* Card Styling for All Pages */
-.show-card {
-    background: var(--card-bg);
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
-    padding: 2rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    transition: all 0.4s ease;
-    height: 100%;
+.ticket-btn:hover {
+    background: #fff;
+    color: var(--bg-color);
 }
 
-.show-card:hover { transform: translateY(-5px); border-color: var(--accent-muted); }
-
-/* Footer */
-footer {
-    text-align: center;
-    padding: 2rem;
-    border-top: 1px solid var(--border-color);
-    color: #666;
-    font-size: 0.9rem;
-}
-/* Featured Production Layout */
-.featured-production {
-    display: flex;
-    justify-content: center;
-    padding: 4rem 2rem;
-    width: 100%;
-}
-
-.featured-card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    max-width: 600px; /* Limits width for better focus */
-    background: var(--card-bg);
-    border: 1px solid var(--accent-glow);
-    border-radius: 16px;
-    padding: 3rem;
-}
-/* Shrink the back button specifically */
 .back-btn {
     display: inline-block;
-    padding: 8px 16px; /* Smaller padding */
-    font-size: 0.85rem; /* Smaller text */
+    padding: 8px 16px;
+    font-size: 0.85rem;
     border: 1px solid rgba(255, 255, 255, 0.3);
     color: #fff;
     text-decoration: none;
@@ -143,118 +153,40 @@ footer {
     background: rgba(255, 255, 255, 0.1);
     border-color: #fff;
 }
-/* Constrained image size */
-.featured-image {
-    max-width: 300px;
-    width: 100%;
-    height: auto;
-    border-radius: 8px;
-    margin-bottom: 2rem;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-}
 
-.featured-content h2 { font-size: 3rem; margin-bottom: 0.5rem; }
-.featured-desc { margin: 1rem 0; color: #ccc; }
-.featured-meta { display: flex; flex-direction: column; align-items: center; gap: 1rem; margin-top: 1.5rem; }
-/* Ensure the grid container is a flexbox */
+/* Grid & Cards */
 .shows-grid {
     display: flex;
-    flex-wrap: wrap; /* Allows them to wrap to the next line */
-    gap: 20px;       /* Adds space between the smaller cards */
+    flex-wrap: wrap;
+    gap: 20px;
     justify-content: center;
 }
 
-/* Set a smaller, fixed width for the cards */
 .show-card {
-    flex: 0 0 250px; /* Forces cards to be 250px wide */
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 2rem;
     display: flex;
     flex-direction: column;
-    padding: 15px;
-    /* Remove or adjust existing heights if they are fixed */
-}
-/* Ensure the cards are positioned to hold the pseudo-element */
-.show-card {
-    position: relative;
-    overflow: hidden; /* Keeps the background inside the rounded corners */
-}
-
-/* The opaque background layer */
-.show-card::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: url('your-image-path.jpg'); /* Replace with your image */
-    background-size: cover;
-    background-position: center;
-    opacity: 0.2; /* Adjust opacity (0.0 to 1.0) */
-    z-index: 0; /* Behind the text */
-    pointer-events: none; /* Let clicks pass through to the card */
-}
-
-/* Ensure card content sits on top of the background */
-.show-card > * {
-    position: relative;
-    z-index: 1;
-}
-
-/* Specifically ensure the featured card stays clean */
-.featured-card::before {
-    display: none; /* Prevents the background from appearing here */
-}
-/* 1. Ensure the show cards are ready to hold a background layer */
-.show-card {
-    position: relative;
-    overflow: hidden; /* Ensures background doesn't bleed outside rounded corners */
-}
-
-/* 2. Create the opaque image layer using ::before */
-.show-card::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    /* Replace with your actual image path */
-    background-image: url('assets/show-background.jpg'); 
-    background-size: cover;
-    background-position: center;
-    opacity: 0.2; /* Controls the opacity (0.1 is very light, 0.5 is darker) */
-    z-index: 0;   /* Keeps the image behind the card's text */
-    pointer-events: none; /* Prevents the image from interfering with clicks */
-}
-
-/* 3. Ensure your card text stays on top */
-.show-card > * {
-    position: relative;
-    z-index: 1;
-}
-
-/* 4. EXCLUDE the featured card */
-.featured-production .featured-card::before {
-    display: none;
-}
-/* Center text in the header */
-header {
+    justify-content: space-between;
+    transition: all 0.4s ease;
     text-align: center;
-    justify-content: center; /* This centers the logo and content */
+    flex: 0 0 250px;
+    position: relative;
+    overflow: hidden;
 }
 
-/* Center text in the hero section */
-.hero {
-    text-align: center;
+.show-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--accent-muted);
 }
 
-/* Center text in the featured section card */
-.featured-card {
+/* Footer */
+footer {
     text-align: center;
-    align-items: center; /* Centers the content block */
-}
-
-/* Ensure show cards (in the grid) are centered */
-.show-card {
-    text-align: center;
+    padding: 2rem;
+    border-top: 1px solid var(--border-color);
+    color: #666;
+    font-size: 0.9rem;
 }
