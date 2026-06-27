@@ -46,6 +46,16 @@ header {
 
 main { max-width: 1200px; margin: 0 auto; padding: 4rem 2rem; }
 
+/* Featured Production Image Constraint */
+.featured-image {
+    max-width: 300px; 
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
 /* Buttons & Elements */
 .ticket-btn {
     background: transparent;
@@ -72,6 +82,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 4rem 2rem; }
     flex-direction: column;
     justify-content: space-between;
     transition: all 0.4s ease;
+    height: 100%;
 }
 
 .show-card:hover { transform: translateY(-5px); border-color: var(--accent-muted); }
