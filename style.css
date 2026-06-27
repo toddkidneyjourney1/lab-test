@@ -221,3 +221,24 @@ footer a:hover {
     border-radius: 8px; 
     border: 1px solid #333; 
 }
+.main-menu {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+}
+
+.main-menu a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.7;
+    transition: 0.3s;
+}
+
+.main-menu a:hover {
+    opacity: 1;
+    color: #e50914; /* Your brand accent color */
+}
