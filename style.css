@@ -149,14 +149,3 @@ main { max-width: 800px; margin: 0 auto; padding: 0 1rem; }
     border-radius: 50px; 
     display: inline-block; 
 }
-/* Ensure the submenu items look like the main links */
-details ul {
-    list-style: none;
-    padding-left: 20px;
-}
-
-details summary {
-    cursor: pointer;
-    padding: 1rem;
-    font-weight: bold;
-}
