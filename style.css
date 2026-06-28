@@ -2,11 +2,10 @@
 
 :root {
     --bg-color: #0a0a0c;
-    --text-color: #f4f4f7;
-    --accent-glow: #ff3366; /* Stage spotlight pink */
-    --accent-muted: #8a2be2; /* Experimental purple */
-    --card-bg: rgba(25, 25, 30, 0.65);
-    --border-color: rgba(255, 255, 255, 0.1);
+    --text-color: #333; /* Dark text for paper aesthetic */
+    --accent-glow: #ff3366;
+    --accent-muted: #8a2be2;
+    --border-color: #ddd;
 }
 
 * {
@@ -17,257 +16,88 @@
 
 body {
     background-color: var(--bg-color);
-    color: var(--text-color);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    overflow-x: hidden;
+    color: #f4f4f7;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     line-height: 1.6;
 }
 
-/* Abstract Stage Light Atmosphere */
-.stage-glow {
-    position: fixed;
-    top: -10%;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 80vw;
-    height: 60vh;
-    background: radial-gradient(circle, rgba(255, 51, 102, 0.15) 0%, rgba(138, 43, 226, 0.05) 50%, transparent 100%);
-    z-index: -1;
-    pointer-events: none;
-    filter: blur(60px);
-}
-
+/* Header */
 header {
     padding: 2rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid var(--border-color);
-    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(10, 10, 12, 0.95);
     position: sticky;
     top: 0;
     z-index: 100;
-    background: rgba(10, 10, 12, 0.8);
 }
 
-.logo {
-    font-size: 1.25rem;
-    font-weight: 800;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: #fff;
+.logo { font-size: 1.25rem; font-weight: 800; text-transform: uppercase; color: #fff; }
+.logo span { color: var(--accent-glow); }
+.hamburger { cursor: pointer; font-size: 1.5rem; color: #fff; }
+
+/* Main Content */
+main { max-width: 1200px; margin: 0 auto; padding: 4rem 2rem; }
+
+/* Hero Banner */
+.hero { text-align: center; margin-bottom: 6rem; color: #fff; }
+.hero h1 { font-size: 4rem; font-weight: 900; margin-bottom: 1.5rem; }
+.hero img { width: 100%; max-height: 400px; object-fit: cover; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+.hero-ticket-btn { 
+    display: inline-block; padding: 1rem 2.5rem; background: var(--accent-glow); 
+    color: white; text-decoration: none; border-radius: 50px; font-weight: 800; 
+    text-transform: uppercase; margin-top: 2rem; transition: transform 0.3s ease;
 }
+.hero-ticket-btn:hover { transform: scale(1.05); }
 
-.logo span {
-    color: var(--accent-glow);
-}
-
-/* Hamburger Menu Placeholder */
-.hamburger {
-    cursor: pointer;
-    font-size: 1.5rem;
-    color: #fff;
-}
-
-main {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 4rem 2rem;
-}
-
-.hero {
-    text-align: center;
-    margin-bottom: 6rem;
-    position: relative;
-}
-
-.hero h1 {
-    font-size: 4rem;
-    font-weight: 900;
-    line-height: 1.1;
-    margin-bottom: 1.5rem;
-    letter-spacing: -1px;
-    background: linear-gradient(135deg, #fff 30%, #a5a5b0);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-<style>
-    /* Hero Banner Enhancements */
-    .hero {
-        text-align: center;
-        padding: 4rem 1rem;
-        background: linear-gradient(to bottom, rgba(255, 51, 102, 0.05), transparent);
-        margin-bottom: 4rem;
-        border-radius: 16px;
-    }
-    
-    .hero-container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 2rem;
-        max-width: 800px;
-        margin: 0 auto;
-    }
-
-    .hero img {
-        width: 100%;
-        max-height: 400px;
-        object-fit: cover;
-        border-radius: 12px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    }
-
-    .hero-teaser {
-        font-size: 1.2rem;
-        color: #c5c5cd;
-        margin-bottom: 1.5rem;
-    }
-
-    .hero-ticket-btn {
-        display: inline-block;
-        padding: 1rem 2.5rem;
-        background: var(--accent-glow);
-        color: white;
-        text-decoration: none;
-        border-radius: 50px;
-        font-weight: 800;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .hero-ticket-btn:hover {
-        transform: scale(1.05);
-        box-shadow: 0 0 20px var(--accent-glow);
-    }
-</style>
-
-<main>
-    <section class="hero">
-        <div class="hero-container">
-            <h1>Next Production: Waiting for Godot</h1>
-            <img src="assets/godot.jpg" alt="Waiting for Godot">
-            <p class="hero-teaser">
-                On a barren road, two men wait for a mysterious figure who never arrives. 
-                Experience this existential masterpiece exploring meaning in an uncertain world.
-            </p>
-            <a href="https://www.purplepass.com/waiting" class="hero-ticket-btn" target="_blank">Secure Your Seat</a>
-        </div>
-    </section>
-
-    <!-- Shows Grid remains as before -->
-</main>
-
-@media (max-width: 768px) {
-    .hero h1 { font-size: 2.5rem; }
-}
-
+/* Clipboard Label Cards */
 .shows-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 25px;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    gap: 1.5rem;
 }
 
 .show-card {
-    background: rgba(10, 10, 12, 0.5);
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
-    padding: 2rem;
-    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-
-.show-card:hover {
-    transform: translateY(-5px);
-    border-color: var(--accent-muted);
-    box-shadow: 0 10px 30px rgba(138, 43, 226, 0.15);
-}
-
-.show-dates {
-    font-size: 0.8rem;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    color: var(--accent-glow);
-    font-weight: 700;
-    margin-bottom: 0.75rem;
-}
-
-.show-title {
-    font-size: 1.5rem;
-    font-weight: 700;
-    margin-bottom: 0.5rem;
-    color: #fff;
-}
-
-.ticket-btn {
-    background: transparent;
-    border: 1px solid #fff;
-    color: #fff;
-    padding: 12px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: 600;
-    text-align: center;
-    text-decoration: none;
-    font-size: 0.9rem;
-    transition: all 0.2s ease;
-    margin-top: 1.5rem;
-}
-
-.ticket-btn:hover {
     background: #fff;
-    color: var(--bg-color);
-}
-
-footer {
-    text-align: center;
-    padding: 4rem 2rem;
-    border-top: 1px solid var(--border-color);
-    color: #666;
-    font-size: 0.9rem;
-}
-.show-card {
-    background: #fff; /* Paper color */
-    color: #333; /* Darker text for readability on white */
-    border: 1px solid #ddd;
-    border-radius: 2px; /* Less rounded corners for a paper look */
-    padding: 2rem;
-    position: relative;
-    transform: rotate(-1deg); /* Slight natural tilt */
-    transition: transform 0.3s ease;
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
     box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
 }
 
-.show-card:hover {
-    transform: rotate(0deg) scale(1.02); /* Straighten on hover */
-    z-index: 10;
+.show-card:hover { transform: translateY(-5px); }
+
+.show-card img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 2px;
 }
 
-/* The "Pin" */
-.show-card::before {
-    content: '';
-    position: absolute;
-    top: -10px;
-    left: 50%;
-    width: 20px;
-    height: 20px;
-    background: radial-gradient(circle, #ff3366 40%, #ccc 60%);
-    border-radius: 50%;
-    transform: translateX(-50%);
-    box-shadow: 1px 1px 2px rgba(0,0,0,0.3);
-}
+.card-content { flex: 1; display: flex; flex-direction: column; }
+.card-content h3 { font-size: 1.1rem; margin-bottom: 0.25rem; }
 
-/* Adjust button to match paper aesthetic */
 .ticket-btn {
+    display: inline-block;
+    padding: 0.4rem 0.8rem;
     background: #333;
-    border: none;
     color: #fff;
-    margin-top: 1.5rem;
+    text-decoration: none;
+    font-size: 0.8rem;
+    border-radius: 2px;
+    margin-top: 0.5rem;
+    width: fit-content;
+    text-align: center;
 }
 
-.ticket-btn:hover {
-    background: var(--accent-glow);
-}
+.ticket-btn:hover { background: var(--accent-glow); }
+
+footer { text-align: center; padding: 4rem 2rem; color: #666; font-size: 0.9rem; }
