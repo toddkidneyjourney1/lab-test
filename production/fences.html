@@ -5,6 +5,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fences | The Lab Theater</title>
     <link rel="stylesheet" href="../style.css">
+    <style>
+        /* Ensuring layout matches your specific needs */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .nav-link {
+            text-align: right;
+        }
+        .btn-primary {
+            display: inline-block;
+            margin-top: 20px;
+        }
+        .bottom-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+        }
+        .btn-back {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #ccc;
+            color: #000;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -17,16 +47,20 @@
         <article class="production-details">
             <h1>Fences</h1>
             <p class="meta">April 22 – May 9, 2027</p>
-            
             <img src="../assets/fences.jpg" alt="Fences" class="feature-img">
-            
             <div class="content">
                 <p>by August Wilson</p>
                 <p>In collaboration with Theatre Conspiracy. A powerful examination of race, family, and the limitations placed upon one man's dreams in 1950s Pittsburgh.</p>
             </div>
-
-            <a href="https://www.purplepass.com/events/fences" class="btn-primary">Secure Your Seat</a>
-            <a href="../index.html" class="btn-secondary">Back to the Slab</a>
+            
+            <div class="bottom-nav">
+                <a href="https://www.purplepass.com/events/fences" class="btn-primary">
+                    Hold on to your seat
+                </a>
+                <a href="../index.html" class="btn-back">
+                    Back to The Lab
+                </a>
+            </div>
         </article>
     </main>
 </body>
