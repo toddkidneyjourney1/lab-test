@@ -4,12 +4,44 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Pillowman | The Lab Theater</title>
-    <link rel="stylesheet" href="../style.css">
+    <style>
+        body {
+            font-family: sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .logo span { color: red; font-weight: bold; }
+        .tagline { font-size: 0.8em; margin: 0; }
+        .production-details { max-width: 800px; margin: 0 auto; }
+        .feature-img { max-width: 100%; height: auto; display: block; margin-bottom: 20px; }
+        .nav-link { text-align: right; margin-top: 20px; }
+        .btn-primary {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #000;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
     <header>
         <div class="logo">THE <span>LAB</span>
             <p class="tagline">Intentionally innovative live theater</p>
+        </div>
+        <div class="nav-link">
+            <a href="../index.html">Back to The Lab</a>
         </div>
     </header>
 
@@ -17,18 +49,16 @@
         <article class="production-details">
             <h1>The Pillowman</h1>
             <p class="meta">October 8 – 25, 2026</p>
-            
             <img src="../assets/pillowman.jpg" alt="The Pillowman" class="feature-img">
-            
             <div class="content">
                 <p>by Martin McDonagh</p>
                 <p>An intense psychological journey exploring the storytelling instinct as a fundamental—and sometimes dangerous—human necessity.</p>
             </div>
-
-           <!-- Example of how to update your link -->
-<a href="https://www.purplepass.com/events/376583-the-pillowman-oct-8th-2026" class="your-button-class">
-  Secure Your Seat
-</a>
+            
+            <a href="https://www.purplepass.com/events/376583-the-pillowman-oct-8th-2026" class="btn-primary">
+                Hold on to your seat
+            </a>
+        </article>
     </main>
 </body>
 </html>
