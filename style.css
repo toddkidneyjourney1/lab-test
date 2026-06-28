@@ -54,12 +54,19 @@ main { max-width: 800px; margin: 0 auto; padding: 0 1rem; }
     background: var(--card-bg); 
     border-radius: 8px;
     height: 70px; 
+    text-decoration: none; 
+    color: var(--text);
+    transition: background 0.2s;
+}
+
+.show-item:hover {
+    background: #25252a;
 }
 
 .show-item img { 
-    width: 100px;      /* Full width for the image */
-    height: 50px;      /* Consistent ~1 inch height */
-    object-fit: contain; /* Shows full image without cropping */
+    width: 100px;
+    height: 50px;
+    object-fit: contain;
     background-color: #000;
     border-radius: 4px; 
 }
@@ -67,7 +74,7 @@ main { max-width: 800px; margin: 0 auto; padding: 0 1rem; }
 .show-details { 
     flex: 1; 
     display: flex; 
-    flex-direction: column; /* Stacks title and date */
+    flex-direction: column;
     justify-content: center;
     padding-left: 0.5rem;
 }
@@ -84,14 +91,4 @@ main { max-width: 800px; margin: 0 auto; padding: 0 1rem; }
     border-radius: 50px; 
     display: inline-block; 
     margin-top: 1rem; 
-}
-
-.btn-secondary { 
-    border: 1px solid var(--text); 
-    color: var(--text); 
-    padding: 0.4rem 0.8rem; 
-    text-decoration: none; 
-    border-radius: 4px; 
-    font-size: 0.8rem; 
-    white-space: nowrap;
 }
