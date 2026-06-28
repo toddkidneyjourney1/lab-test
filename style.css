@@ -100,3 +100,31 @@ main { max-width: 800px; margin: 0 auto; padding: 0 1rem; }
     display: inline-block; 
     margin-top: 1rem; 
 }
+/* Hamburger Menu Setup */
+.nav-toggle { display: none; }
+.nav-toggle-label { 
+    position: absolute; top: 2rem; right: 2rem; 
+    cursor: pointer; z-index: 100; 
+}
+.nav-toggle-label span, 
+.nav-toggle-label span::before, 
+.nav-toggle-label span::after {
+    display: block; background: var(--text); height: 2px; width: 25px;
+    position: relative; transition: all 0.2s;
+}
+.nav-toggle-label span::before { content: ''; top: -8px; }
+.nav-toggle-label span::after { content: ''; bottom: -6px; }
+
+/* Hamburger Navigation Panel */
+.hamburger-menu {
+    position: fixed; top: 0; right: -100%; height: 100%; width: 250px;
+    background: var(--card-bg); display: flex; flex-direction: column;
+    padding: 5rem 2rem; transition: right 0.3s ease-in-out; z-index: 50;
+}
+.hamburger-menu a { color: var(--text); text-decoration: none; padding: 1rem 0; font-size: 1.2rem; }
+
+/* Triggering the Menu */
+.nav-toggle:checked ~ .hamburger-menu { right: 0; }
+.nav-toggle:checked ~ .nav-toggle-label span { background: transparent; }
+.nav-toggle:checked ~ .nav-toggle-label span::before { transform: rotate(45deg); top: 0; }
+.nav-toggle:checked ~ .nav-toggle-label span::after { transform: rotate(-45deg); top: -2px; }
