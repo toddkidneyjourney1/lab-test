@@ -1,11 +1,10 @@
 /* style.css */
 :root {
     --bg-color: #0a0a0c;
-    --text-color: #333; /* Dark text for paper aesthetic */
+    --text-color: #f4f4f7;
     --accent-glow: #ff3366;
-    --accent-muted: #8a2be2;
-    --border-color: #ddd;
-    --card-bg: #1a1a1d; /* Defined card background */
+    --card-bg: rgba(25, 25, 30, 0.65);
+    --border-color: rgba(255, 255, 255, 0.1);
 }
 
 * {
@@ -16,29 +15,27 @@
 
 body {
     background-color: var(--bg-color);
-    color: #f4f4f7;
+    color: var(--text-color);
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     line-height: 1.6;
 }
 
-/* Header */
 header {
-    padding: 2rem;
-    display: flex;
-    justify-content: space-between;
+    padding: 1.5rem 2rem;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
     align-items: center;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    background: rgba(10, 10, 12, 0.95);
+    border-bottom: 1px solid var(--border-color);
     position: sticky;
     top: 0;
-    z-index: 100;
+    background: rgba(10, 10, 12, 0.95);
+    z-index: 1000;
 }
 
 .logo {
-    font-size: 1.25rem;
+    font-size: 1.5rem;
     font-weight: 800;
     text-transform: uppercase;
-    color: #fff;
 }
 
 .logo span {
@@ -48,27 +45,20 @@ header {
 .hamburger {
     cursor: pointer;
     font-size: 1.5rem;
-    color: #fff;
+    justify-self: end;
 }
 
-/* Main Content */
 main {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 4rem 2rem;
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 0 1rem;
 }
 
 /* Hero Banner */
 .hero {
     text-align: center;
-    margin-bottom: 6rem;
-    color: #fff;
-}
-
-.hero h1 {
-    font-size: 4rem;
-    font-weight: 900;
-    margin-bottom: 1.5rem;
+    padding: 4rem 1rem;
+    margin-bottom: 4rem;
 }
 
 .hero img {
@@ -88,43 +78,63 @@ main {
     border-radius: 50px;
     font-weight: 800;
     text-transform: uppercase;
-    margin-top: 2rem;
     transition: transform 0.3s ease;
+    margin-top: 2rem;
 }
 
-.hero-ticket-btn:hover {
-    transform: scale(1.05);
-}
-
-/* Updated Shows Grid for Stacked View */
+/* Updated Shows Grid for Compact, Full-Width Stack */
 .shows-grid {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
-    max-width: 800px; /* Matches hero-container width */
-    margin: 0 auto;
+    gap: 1rem;
+    width: 100%;
 }
 
 .show-card {
     background: var(--card-bg);
     border: 1px solid var(--border-color);
-    border-radius: 16px; /* Rounded corners */
-    padding: 1.5rem;
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+    height: 100px; /* Forces the ~1-inch height */
+    width: 100%;   /* Stretches to fill container */
 }
 
 .show-card img {
-    width: 100%;
-    height: 300px; /* Adjusted height for stack */
+    width: 80px;
+    height: 80px;
     object-fit: cover;
-    border-radius: 12px; /* Matches hero image border-radius */
-    margin-bottom: 1rem;
+    border-radius: 6px;
+}
+
+.show-card h3 {
+    flex-grow: 1;
+    font-size: 1rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.ticket-btn {
+    padding: 0.5rem 1rem;
+    border: 1px solid #fff;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.ticket-btn:hover {
+    background: #fff;
+    color: #000;
 }
 
 footer {
     text-align: center;
-    padding: 4rem 2rem;
-    color: #666;
-    font-size: 0.9rem;
+    padding: 2rem;
 }
