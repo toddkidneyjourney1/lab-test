@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,6 +5,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>A Midsummer Night's Dream | The Lab Theater</title>
     <link rel="stylesheet" href="../style.css">
+    <style>
+        /* Ensuring layout matches your specific needs */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .nav-link {
+            text-align: right;
+        }
+        .btn-primary {
+            display: inline-block;
+            margin-top: 20px;
+        }
+        .bottom-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+        }
+        .btn-back {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #ccc;
+            color: #000;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -18,16 +47,20 @@
         <article class="production-details">
             <h1>A Midsummer Night's Dream</h1>
             <p class="meta">March 25 – April 11, 2027</p>
-            
-            <img src="../assets/shakespeare.jpg" alt="A Midsummer Night's Dream" class="feature-img">
-            
+            <img src="../assets/willyshakes.jpg" alt="A Midsummer Night's Dream" class="feature-img">
             <div class="content">
                 <p>by William Shakespeare</p>
-                <p>Shakespeare's enchanting comedy of magic, mischief, and misplaced affections, set within an ethereal forest where reality and fantasy collide.</p>
+                <p>Shakespeare’s beloved comedy of magic, mayhem, and tangled romances in an enchanted forest.</p>
             </div>
-
-            <a href="https://www.purplepass.com/events/willyshakes" class="btn-primary">Secure Your Seat</a>
-            <a href="../index.html" class="btn-secondary">Back to the Slab</a>
+            
+            <div class="bottom-nav">
+                <a href="https://www.purplepass.com/willyshakes" class="btn-primary">
+                    Hold on to your seat
+                </a>
+                <a href="../index.html" class="btn-back">
+                    Back to The Lab
+                </a>
+            </div>
         </article>
     </main>
 </body>
