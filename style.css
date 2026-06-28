@@ -42,13 +42,13 @@ main { max-width: 800px; margin: 0 auto; padding: 0 1rem; }
 .hero h1 { font-size: 2.5rem; margin: 0.5rem 0; }
 .tag { color: var(--accent); text-transform: uppercase; font-size: 0.8rem; font-weight: 700; }
 
-/* Hero Image: Updated to fill the hero block while maintaining shape */
+/* Hero Image: Updated to show the full image */
 .hero img { 
     width: 250px;           
     height: 125px;          
-    object-fit: cover;      
+    object-fit: contain;    /* Ensures the full image is visible */
+    background-color: #000; /* Fills empty space with black */
     border-radius: 8px;     
-    background-color: #000;
 }
 
 /* Season Lineup */
