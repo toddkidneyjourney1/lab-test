@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+v<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -8,29 +8,47 @@
 </head>
 <body>
 
-  <!-- Include your shared Navigation Component here -->
+  <!-- Navigation Component -->
+  <input type="checkbox" id="nav-toggle" class="nav-toggle">
+  <label for="nav-toggle" class="nav-toggle-label"><span></span></label>
+  <nav class="hamburger-menu">
+    <a href="index.html">Home</a>
+    <a href="volunteers.html">Volunteer Portal</a>
+    <a href="company.html">Company Portal</a>
+    <a href="about.html">About Us</a>
+    <a href="support.html">Support Us</a>
+    <a href="sponsors.html">Our Amazing Sponsors</a>
+  </nav>
 
   <main class="about-page">
-    <section class="history">
+    <!-- History & Mission -->
+    <section class="intro-section">
       <h1>Our History</h1>
-      <p>The Laboratory Theater of Florida is a 501(c)(3) nonprofit theater company dedicated to bringing intentionally innovative live theater to the Fort Myers community. Founded on the principle that theater should be a catalyst for conversation, we focus on cutting-edge works that challenge, inspire, and engage our audiences.</p>
+      <p>The Laboratory Theater of Florida began in 2008 as a dream of founders Annette Trossbach, Nicole Rizley, and Louise Wigglesworth. We are a 501(c)(3) nonprofit theater company dedicated to bringing intentionally innovative live theater to the Fort Myers community. We focus on cutting-edge works that challenge, inspire, and engage our audiences.</p>
+      
+      <h2>Our Mission</h2>
+      <p>To provide a space for artists to take risks and for our community to experience the power of live performance in an intimate, thought-provoking setting.</p>
     </section>
 
-    <section class="archive">
-      <h2>Show Archive</h2>
-      <p>Explore our past productions and the legacy of creativity at The Lab.</p>
-      
-      <div class="archive-grid">
-        <a href="#" class="button">2025 – 2026 Season</a>
-        <a href="#" class="button">2024 – 2025 Season</a>
-        <a href="#" class="button">2023 – 2024 Season</a>
-        <a href="#" class="button">Full Performance History</a>
+    <!-- Leadership Links -->
+    <section class="leadership-section">
+      <h2>Leadership & Governance</h2>
+      <div class="portal-grid">
+        <a href="team.html" class="button">Meet Our Team</a>
+        <a href="board.html" class="button">Board of Directors</a>
       </div>
     </section>
 
-    <section class="mission">
-      <h2>Our Mission</h2>
-      <p>To provide a space for artists to take risks and for our community to experience the power of live performance in an intimate, thought-provoking setting.</p>
+    <!-- Show Archive -->
+    <section class="archive-section">
+      <h2>Show Archive</h2>
+      <p>Explore our past productions and the legacy of creativity at The Lab.</p>
+      <div class="archive-grid">
+        <a href="#" class="button secondary">2025 – 2026 Season</a>
+        <a href="#" class="button secondary">2024 – 2025 Season</a>
+        <a href="#" class="button secondary">2023 – 2024 Season</a>
+        <a href="#" class="button secondary">Full Performance History</a>
+      </div>
     </section>
   </main>
 
