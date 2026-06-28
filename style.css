@@ -186,25 +186,28 @@ main { max-width: 800px; margin: 0 auto; padding: 0 1rem; }
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-/* Force images to be uniform and round */
-.team-card img {
-  width: 150px;
-  height: 150px;
-  object-fit: cover;
-  border-radius: 50%; /* Makes them circular */
-  margin-bottom: 15px;
-  border: 3px solid #e74c3c; /* Lab theater signature color */
+.team-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  background: #f9f9f9;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  color: #2c3e50; /* This ensures the text inside is dark */
 }
 
 .team-card h3 {
   margin: 10px 0 5px 0;
   font-size: 1.1rem;
+  color: #2c3e50; /* Explicitly dark */
 }
 
-..team-card h3 {
-  margin-top: 0;
-  color: #2c3e50; /* Ensure this is a dark, readable color */
-}
+.team-card p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #555; /* Dark gray */
 }
 /* Secondary Button (Optional) */
 .button.secondary {
