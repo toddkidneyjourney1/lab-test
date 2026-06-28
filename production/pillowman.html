@@ -6,18 +6,31 @@
     <title>The Pillowman | The Lab Theater</title>
     <link rel="stylesheet" href="../style.css">
     <style>
-        /* Ensuring layout matches your specific needs */
-        header {
+        /* Container for the bottom links to align them opposite each other */
+        .bottom-nav {
             display: flex;
             justify-content: space-between;
             align-items: center;
-        }
-        .nav-link {
-            text-align: right;
+            margin-top: 30px;
         }
         .btn-primary {
             display: inline-block;
-            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #000;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        /* Style the back link to look like a button */
+        .btn-back {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #ccc;
+            color: #000;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -25,9 +38,6 @@
     <header>
         <div class="logo">THE <span>LAB</span>
             <p class="tagline">Intentionally innovative live theater</p>
-        </div>
-        <div class="nav-link">
-            <a href="../index.html">Back to The Lab</a>
         </div>
     </header>
 
@@ -41,9 +51,14 @@
                 <p>An intense psychological journey exploring the storytelling instinct as a fundamental—and sometimes dangerous—human necessity.</p>
             </div>
             
-            <a href="https://www.purplepass.com/events/376583-the-pillowman-oct-8th-2026" class="btn-primary">
-                Hold on to your seat
-            </a>
+            <div class="bottom-nav">
+                <a href="https://www.purplepass.com/events/376583-the-pillowman-oct-8th-2026" class="btn-primary">
+                    Hold on to your seat
+                </a>
+                <a href="../index.html" class="btn-back">
+                    Back to The Lab
+                </a>
+            </div>
         </article>
     </main>
 </body>
