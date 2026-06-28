@@ -43,18 +43,17 @@ body {
     visibility: hidden; /* Prevent interaction when closed */
 }
 
-#menu-list.open {
-    clip-path: circle(150% at 100% 0%);
-    visibility: visible;
+#menu-list {
+    /* ... existing styles ... */
+    pointer-events: none; /* Add this line */
+    transition: clip-path 0.5s ease-in-out;
+    clip-path: circle(0% at 100% 0%);
 }
 
-/* 3. Navigation Links Styling */
-#menu-list li { margin: 1.5rem 0; }
-
-#menu-list a {
-    color: #fff;
-    text-decoration: none;
-    font-size: 1.5rem;
+#menu-list.open {
+    pointer-events: auto; /* Add this line */
+    clip-path: circle(150% at 100% 0%);
+}
 }
 
 /* Special Highlight for Events */
