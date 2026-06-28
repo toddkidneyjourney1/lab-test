@@ -5,6 +5,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bare: A Pop Opera | The Lab Theater</title>
     <link rel="stylesheet" href="../style.css">
+    <style>
+        /* Ensuring layout matches your specific needs */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .nav-link {
+            text-align: right;
+        }
+        .btn-primary {
+            display: inline-block;
+            margin-top: 20px;
+        }
+        .bottom-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+        }
+        .btn-back {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #ccc;
+            color: #000;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -17,16 +47,20 @@
         <article class="production-details">
             <h1>Bare: A Pop Opera</h1>
             <p class="meta">February 18 – March 7, 2027</p>
-            
             <img src="../assets/bare.jpg" alt="Bare: A Pop Opera" class="feature-img">
-            
             <div class="content">
-                <p>Music by Damon Intrabartolo, Lyrics by Jon Hartmere, Book by Jon Hartmere & Damon Intrabartolo</p>
-                <p>A gripping, contemporary pop opera exploring identity, sexuality, and the search for belonging within the walls of a Catholic boarding school.</p>
+                <p>Music by Damon Intrabartlo, Lyrics by Jon Hartmere, Book by Jon Hartmere & Damon Intrabartlo</p>
+                <p>A pulse-pounding, contemporary rock musical about the struggle to find one's identity within the rigid confines of a Catholic boarding school.</p>
             </div>
-
-            <a href="https://www.purplepass.com/events/bare" class="btn-primary">Secure Your Seat</a>
-            <a href="../index.html" class="btn-secondary">Back to the Slab</a>
+            
+            <div class="bottom-nav">
+                <a href="https://www.purplepass.com/bare" class="btn-primary">
+                    Hold on to your seat
+                </a>
+                <a href="../index.html" class="btn-back">
+                    Back to The Lab
+                </a>
+            </div>
         </article>
     </main>
 </body>
