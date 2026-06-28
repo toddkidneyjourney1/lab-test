@@ -229,3 +229,45 @@ footer {
     color: #666;
     font-size: 0.9rem;
 }
+.show-card {
+    background: #fff; /* Paper color */
+    color: #333; /* Darker text for readability on white */
+    border: 1px solid #ddd;
+    border-radius: 2px; /* Less rounded corners for a paper look */
+    padding: 2rem;
+    position: relative;
+    transform: rotate(-1deg); /* Slight natural tilt */
+    transition: transform 0.3s ease;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+}
+
+.show-card:hover {
+    transform: rotate(0deg) scale(1.02); /* Straighten on hover */
+    z-index: 10;
+}
+
+/* The "Pin" */
+.show-card::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    background: radial-gradient(circle, #ff3366 40%, #ccc 60%);
+    border-radius: 50%;
+    transform: translateX(-50%);
+    box-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+}
+
+/* Adjust button to match paper aesthetic */
+.ticket-btn {
+    background: #333;
+    border: none;
+    color: #fff;
+    margin-top: 1.5rem;
+}
+
+.ticket-btn:hover {
+    background: var(--accent-glow);
+}
