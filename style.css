@@ -149,3 +149,24 @@ main { max-width: 800px; margin: 0 auto; padding: 0 1rem; }
     border-radius: 50px; 
     display: inline-block; 
 }
+/* Pill Button Style */
+.button {
+  display: inline-block;
+  padding: 10px 25px; /* Adjust padding for desired pill size */
+  background-color: #2c3e50;
+  color: white;
+  text-decoration: none;
+  border-radius: 50px; /* This creates the pill shape */
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+  margin: 5px;
+}
+
+.button:hover {
+  background-color: #e74c3c; /* Color change on hover */
+}
+
+/* Secondary Button (Optional) */
+.button.secondary {
+  background-color: #95a5a6;
+}
