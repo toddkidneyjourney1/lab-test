@@ -201,10 +201,10 @@ main { max-width: 800px; margin: 0 auto; padding: 0 1rem; }
   font-size: 1.1rem;
 }
 
-.team-card p {
-  margin: 0;
-  font-size: 0.9rem;
-  color: #555;
+..team-card h3 {
+  margin-top: 0;
+  color: #2c3e50; /* Ensure this is a dark, readable color */
+}
 }
 /* Secondary Button (Optional) */
 .button.secondary {
