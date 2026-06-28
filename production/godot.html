@@ -5,6 +5,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Waiting for Godot | The Lab Theater</title>
     <link rel="stylesheet" href="../style.css">
+    <style>
+        /* Ensuring layout matches your specific needs */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .nav-link {
+            text-align: right;
+        }
+        .btn-primary {
+            display: inline-block;
+            margin-top: 20px;
+        }
+        .bottom-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+        }
+        .btn-back {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #ccc;
+            color: #000;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -17,16 +47,20 @@
         <article class="production-details">
             <h1>Waiting for Godot</h1>
             <p class="meta">August 21 – September 6, 2026</p>
-            
             <img src="../assets/godot.jpg" alt="Waiting for Godot" class="feature-img">
-            
             <div class="content">
                 <p>by Samuel Beckett</p>
-                <p>On a barren road beside a single tree, two men wait for a mysterious figure who never arrives. A foundational masterpiece of the Theatre of the Absurd, exploring the human condition, hope, and the persistent search for meaning.</p>
+                <p>A masterpiece of absurdism, exploring the human condition through the eyes of two men waiting for someone who may never arrive.</p>
             </div>
-
-            <a href="https://www.purplepass.com/events/375339-waiting-for-godot-aug-20th-2026" class="btn-primary">Secure Your Seat</a>
-            <a href="../index.html" class="btn-secondary">Back to the Slab</a>
+            
+            <div class="bottom-nav">
+                <a href="https://www.purplepass.com/waiting" class="btn-primary">
+                    Hold on to your seat
+                </a>
+                <a href="../index.html" class="btn-back">
+                    Back to The Lab
+                </a>
+            </div>
         </article>
     </main>
 </body>
