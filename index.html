@@ -3,146 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Laboratory Theater of Florida | Thinking Theater</title>
-    <style>
-        :root {
-            --bg-color: #0a0a0c;
-            --text-color: #f4f4f7;
-            --accent-glow: #ff3366;
-            --card-bg: rgba(25, 25, 30, 0.65);
-            --border-color: rgba(255, 255, 255, 0.1);
-        }
-
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            line-height: 1.6;
-        }
-
-        header {
-            padding: 1.5rem 2rem;
-            display: grid;
-            grid-template-columns: 1fr auto 1fr;
-            align-items: center;
-            border-bottom: 1px solid var(--border-color);
-            position: sticky;
-            top: 0;
-            background: rgba(10, 10, 12, 0.95);
-            z-index: 1000;
-        }
-
-        .logo { font-size: 1.5rem; font-weight: 800; text-transform: uppercase; }
-        .logo span { color: var(--accent-glow); }
-        .hamburger { cursor: pointer; font-size: 1.5rem; justify-self: end; }
-
-        main { max-width: 800px; margin: 2rem auto; padding: 0 1rem; }
-
-        /* Hero Banner */
-        .hero { text-align: center; padding: 4rem 1rem; margin-bottom: 4rem; }
-        .hero img { 
-            width: 100%; 
-            max-height: 400px; 
-            object-fit: cover; 
-            border-radius: 12px; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
-        }
-
-        .hero-ticket-btn {
-            display: inline-block; padding: 1rem 2.5rem; 
-            background: var(--accent-glow); color: white; 
-            text-decoration: none; border-radius: 50px; 
-            font-weight: 800; text-transform: uppercase; 
-            transition: transform 0.3s ease; margin-top: 2rem;
-        }
-
-        /* Stacked Shows Section */
-        .shows-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 2rem;
-        }
-
-        .show-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 16px; /* Rounded card shape */
-            padding: 1.5rem;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .show-card img {
-            width: 100%;
-            height: 300px; /* Consistent height */
-            object-fit: cover;
-            border-radius: 12px; /* Rounded image corners */
-            margin-bottom: 1rem;
-        }
-
-        .ticket-btn {
-            display: block; text-align: center; padding: 0.8rem;
-            border: 1px solid #fff; color: white; 
-            text-decoration: none; border-radius: 8px; 
-            font-weight: bold; margin-top: 1rem;
-        }
-
-        .ticket-btn:hover { background: #fff; color: #000; }
-    </style>
+    <title>The Laboratory Theater of Florida</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header>
-        <div class="logo">The <span>Lab</span></div>
-        <div class="center-nav"></div>
-        <div class="hamburger">☰</div>
+        <div class="logo">THE <span>LAB</span></div>
+        <nav class="nav-links">
+            <a href="#">Box Office</a>
+            <a href="#">Support Us</a>
+        </nav>
     </header>
 
     <main>
+        <!-- Featured Hero Section -->
         <section class="hero">
-            <h1>Next Production: Waiting for Godot</h1>
+            <div class="hero-content">
+                <span class="tag">Next Production</span>
+                <h1>Waiting for Godot</h1>
+                <p>On a barren road, two men wait for a mysterious figure who never arrives.</p>
+                <a href="https://www.purplepass.com/waiting" class="btn-primary">Secure Your Seat</a>
+            </div>
             <img src="assets/godot.jpg" alt="Waiting for Godot">
-            <p>On a barren road, two men wait for a mysterious figure who never arrives.</p>
-            <a href="https://www.purplepass.com/waiting" class="hero-ticket-btn" target="_blank">Secure Your Seat</a>
         </section>
 
-        <section class="shows-grid">
-            <div class="show-card">
-                <img src="assets/godot.jpg" alt="Waiting for Godot">
-                <h3>Waiting for Godot</h3>
-                <a href="https://www.purplepass.com/waiting" class="ticket-btn" target="_blank">Get Tickets</a>
+        <!-- Season Lineup -->
+        <section class="shows-list">
+            <h2>Season Lineup</h2>
+            <div class="show-item">
+                <img src="assets/godot.jpg" alt="Show">
+                <div class="show-details">
+                    <h3>Waiting for Godot</h3>
+                    <p>Aug 21 – Sept 6</p>
+                </div>
+                <a href="https://www.purplepass.com/waiting" class="btn-secondary">Tickets</a>
             </div>
-            <div class="show-card">
-                <img src="assets/pillowman.jpg" alt="The Pillowman">
-                <h3>The Pillowman</h3>
-                <a href="https://www.purplepass.com/pillowman" class="ticket-btn" target="_blank">Get Tickets</a>
-            </div>
-            <div class="show-card">
-                <img src="assets/rivals.jpg" alt="The Rivals">
-                <h3>The Rivals</h3>
-                <a href="https://www.purplepass.com/rivals" class="ticket-btn" target="_blank">Get Tickets</a>
-            </div>
-            <div class="show-card">
-                <img src="assets/godofcarnage.jpg" alt="God of Carnage">
-                <h3>God of Carnage</h3>
-                <a href="https://www.purplepass.com/godofcarnage" class="ticket-btn" target="_blank">Get Tickets</a>
-            </div>
-            <div class="show-card">
-                <img src="assets/bare.jpg" alt="Bare: A Pop Opera">
-                <h3>Bare: A Pop Opera</h3>
-                <a href="https://www.purplepass.com/bare" class="ticket-btn" target="_blank">Get Tickets</a>
-            </div>
-            <div class="show-card">
-                <img src="assets/fences.jpg" alt="Fences">
-                <h3>Fences</h3>
-                <a href="https://www.purplepass.com/fences" class="ticket-btn" target="_blank">Get Tickets</a>
-            </div>
+            <!-- Repeat for other shows -->
         </section>
     </main>
-
-    <footer>
-        <p style="text-align: center; padding: 2rem;">&copy; 2026 The Laboratory Theater of Florida</p>
-    </footer>
 </body>
 </html>
