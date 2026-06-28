@@ -1,4 +1,14 @@
-/* --- Global Styles --- */
+/* style.css */
+
+:root {
+    --bg-color: #0a0a0c;
+    --text-color: #f4f4f7;
+    --accent-glow: #ff3366; /* Stage spotlight pink */
+    --accent-muted: #8a2be2; /* Experimental purple */
+    --card-bg: rgba(25, 25, 30, 0.65);
+    --border-color: rgba(255, 255, 255, 0.1);
+}
+
 * {
     box-sizing: border-box;
     margin: 0;
@@ -6,87 +16,149 @@
 }
 
 body {
-    background-color: #0a0a0c;
-    color: #f4f4f7;
+    background-color: var(--bg-color);
+    color: var(--text-color);
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    overflow-x: hidden;
     line-height: 1.6;
 }
 
-/* --- Header & Navigation --- */
+/* Abstract Stage Light Atmosphere */
+.stage-glow {
+    position: fixed;
+    top: -10%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80vw;
+    height: 60vh;
+    background: radial-gradient(circle, rgba(255, 51, 102, 0.15) 0%, rgba(138, 43, 226, 0.05) 50%, transparent 100%);
+    z-index: -1;
+    pointer-events: none;
+    filter: blur(60px);
+}
+
 header {
     padding: 2rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid var(--border-color);
+    backdrop-filter: blur(10px);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(10, 10, 12, 0.8);
 }
 
 .logo {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     font-weight: 800;
     letter-spacing: 2px;
     text-transform: uppercase;
+    color: #fff;
 }
 
 .logo span {
-    color: #ff3366;
+    color: var(--accent-glow);
 }
 
-.main-menu {
-    display: flex;
-    gap: 2rem;
-}
-
-.main-menu a {
+/* Hamburger Menu Placeholder */
+.hamburger {
+    cursor: pointer;
+    font-size: 1.5rem;
     color: #fff;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 0.9rem;
 }
 
-/* --- Content & Cards --- */
 main {
-    max-width: 800px;
-    margin: 2rem auto;
-    padding: 0 1rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 4rem 2rem;
+}
+
+.hero {
+    text-align: center;
+    margin-bottom: 6rem;
+    position: relative;
+}
+
+.hero h1 {
+    font-size: 4rem;
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+    letter-spacing: -1px;
+    background: linear-gradient(135deg, #fff 30%, #a5a5b0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+@media (max-width: 768px) {
+    .hero h1 { font-size: 2.5rem; }
+}
+
+.shows-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 25px;
 }
 
 .show-card {
-    background: rgba(25, 25, 30, 0.65);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 8px;
-    padding: 1.5rem;
-    margin-bottom: 2rem;
+    background: rgba(10, 10, 12, 0.5);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 2rem;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
-.show-card img {
-    max-width: 100%;
-    border-radius: 4px;
-    margin-bottom: 1rem;
+.show-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--accent-muted);
+    box-shadow: 0 10px 30px rgba(138, 43, 226, 0.15);
 }
 
-/* --- Footer --- */
+.show-dates {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--accent-glow);
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+}
+
+.show-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: #fff;
+}
+
+.ticket-btn {
+    background: transparent;
+    border: 1px solid #fff;
+    color: #fff;
+    padding: 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    text-align: center;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+    margin-top: 1.5rem;
+}
+
+.ticket-btn:hover {
+    background: #fff;
+    color: var(--bg-color);
+}
+
 footer {
     text-align: center;
-    padding: 2rem;
-    color: #ccc;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
-main {
-    display: grid;
-    /* This creates as many 300px columns as fit on the screen */
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 1rem;
-    padding: 1rem;
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-
-
-.show-card img {
-    width: 100%;
-    height: 200px; /* Forces a consistent image size */
-    object-fit: cover; /* Prevents stretching */
-    border-radius: 4px;
+    padding: 4rem 2rem;
+    border-top: 1px solid var(--border-color);
+    color: #666;
+    font-size: 0.9rem;
 }
