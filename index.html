@@ -9,16 +9,17 @@
             --bg-color: #0a0a0c;
             --text-color: #f4f4f7;
             --accent-glow: #ff3366;
-            --accent-muted: #8a2be2;
             --card-bg: rgba(25, 25, 30, 0.65);
             --border-color: rgba(255, 255, 255, 0.1);
         }
+
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { 
-            background-color: var(--bg-color); 
-            color: var(--text-color); 
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
-            line-height: 1.6; 
+        
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            line-height: 1.6;
         }
 
         header {
@@ -32,50 +33,66 @@
             background: rgba(10, 10, 12, 0.95);
             z-index: 1000;
         }
+
         .logo { font-size: 1.5rem; font-weight: 800; text-transform: uppercase; }
         .logo span { color: var(--accent-glow); }
         .hamburger { cursor: pointer; font-size: 1.5rem; justify-self: end; }
 
-        main { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; }
-        
+        main { max-width: 800px; margin: 2rem auto; padding: 0 1rem; }
+
         /* Hero Banner */
         .hero { text-align: center; padding: 4rem 1rem; margin-bottom: 4rem; }
-        .hero-container { display: flex; flex-direction: column; align-items: center; gap: 2rem; max-width: 800px; margin: 0 auto; }
-        .hero img { width: 100%; max-height: 400px; object-fit: cover; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .hero-ticket-btn { 
-            display: inline-block; padding: 1rem 2.5rem; background: var(--accent-glow); 
-            color: white; text-decoration: none; border-radius: 50px; font-weight: 800; 
-            text-transform: uppercase; transition: transform 0.3s ease;
+        .hero img { 
+            width: 100%; 
+            max-height: 400px; 
+            object-fit: cover; 
+            border-radius: 12px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
         }
-        .hero-ticket-btn:hover { transform: scale(1.05); }
 
-        .shows-grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
-            gap: 2rem; 
+        .hero-ticket-btn {
+            display: inline-block; padding: 1rem 2.5rem; 
+            background: var(--accent-glow); color: white; 
+            text-decoration: none; border-radius: 50px; 
+            font-weight: 800; text-transform: uppercase; 
+            transition: transform 0.3s ease; margin-top: 2rem;
         }
-        .show-card { 
-            background: var(--card-bg); 
-            border: 1px solid var(--border-color); 
-            border-radius: 8px; 
-            padding: 1.5rem; 
-            display: flex; 
+
+        /* Stacked Shows Section */
+        .shows-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .show-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px; /* Rounded card shape */
+            padding: 1.5rem;
+            display: flex;
             flex-direction: column;
         }
-        .show-card img { 
-            width: 100%; height: 200px; object-fit: cover; 
-            border-radius: 4px; margin-bottom: 1rem; 
+
+        .show-card img {
+            width: 100%;
+            height: 300px; /* Consistent height */
+            object-fit: cover;
+            border-radius: 12px; /* Rounded image corners */
+            margin-bottom: 1rem;
         }
-        .ticket-btn { 
-            display: block; text-align: center; padding: 0.8rem; margin-top: auto; 
-            border: 1px solid #fff; color: white; text-decoration: none; 
-            border-radius: 4px; font-weight: bold; margin-top: 1rem;
+
+        .ticket-btn {
+            display: block; text-align: center; padding: 0.8rem;
+            border: 1px solid #fff; color: white; 
+            text-decoration: none; border-radius: 8px; 
+            font-weight: bold; margin-top: 1rem;
         }
+
         .ticket-btn:hover { background: #fff; color: #000; }
     </style>
 </head>
 <body>
-
     <header>
         <div class="logo">The <span>Lab</span></div>
         <div class="center-nav"></div>
@@ -84,16 +101,13 @@
 
     <main>
         <section class="hero">
-            <div class="hero-container">
-                <h1>Next Production: Waiting for Godot</h1>
-                <img src="assets/godot.jpg" alt="Waiting for Godot">
-                <p>On a barren road, two men wait for a mysterious figure who never arrives.</p>
-                <a href="https://www.purplepass.com/waiting" class="hero-ticket-btn" target="_blank">Secure Your Seat</a>
-            </div>
+            <h1>Next Production: Waiting for Godot</h1>
+            <img src="assets/godot.jpg" alt="Waiting for Godot">
+            <p>On a barren road, two men wait for a mysterious figure who never arrives.</p>
+            <a href="https://www.purplepass.com/waiting" class="hero-ticket-btn" target="_blank">Secure Your Seat</a>
         </section>
 
-        <div class="shows-grid">
-            <!-- Show Cards -->
+        <section class="shows-grid">
             <div class="show-card">
                 <img src="assets/godot.jpg" alt="Waiting for Godot">
                 <h3>Waiting for Godot</h3>
@@ -124,19 +138,11 @@
                 <h3>Fences</h3>
                 <a href="https://www.purplepass.com/fences" class="ticket-btn" target="_blank">Get Tickets</a>
             </div>
-        </div>
+        </section>
     </main>
 
     <footer>
         <p style="text-align: center; padding: 2rem;">&copy; 2026 The Laboratory Theater of Florida</p>
     </footer>
-
-    <script>
-        const hamburger = document.querySelector('.hamburger');
-        hamburger.addEventListener('click', () => {
-            alert('Menu functionality coming soon!');
-        });
-    </script>
-
 </body>
 </html>
