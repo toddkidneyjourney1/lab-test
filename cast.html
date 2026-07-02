@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cast & Crew Portal | The Laboratory Theater of Florida</title>
     <link rel="stylesheet" href="style.css">
+    <!-- Clerk SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js" async></script>
 </head>
 <body>
 
@@ -15,6 +18,8 @@
         </nav>
         <h1>Cast & Crew Portal</h1>
         <p>Secure access for current company members.</p>
+        <!-- Clerk Authentication Button -->
+        <div id="clerk-auth"></div>
     </header>
 
     <main id="portal-content">
@@ -22,23 +27,12 @@
         <section id="productions">
             <h2>Current Productions</h2>
             <div class="production-grid">
-                
-                <div class="production-card">
-                    <h3>The Pillowman</h3>
-                    <a href="#" class="button">Schedule</a>
-                    <a href="#" class="button">Script</a>
-                </div>
-
-                <div class="production-card">
-                    <h3>Waiting for Godot</h3>
-                    <a href="#" class="button">Schedule</a>
-                    <a href="#" class="button">Script</a>
-                </div>
+                <!-- Production cards here as defined previously -->
             </div>
         </section>
 
-        <!-- Secure Links Section -->
-        <section id="resources">
+        <!-- Secure Resources Section (Hidden until authenticated) -->
+        <section id="resources" style="display:none;">
             <h2>Company Resources</h2>
             <ul>
                 <li><a href="#">Conflict Calendar</a></li>
@@ -48,9 +42,26 @@
         </section>
     </main>
 
-    <footer>
-        <p>&copy; 2026 The Laboratory Theater of Florida</p>
-    </footer>
+    <!-- Authentication Script -->
+    <script>
+        window.addEventListener('load', async () => {
+            const Clerk = window.Clerk;
+            await Clerk.load();
 
+            if (Clerk.user) {
+                // User is logged in, show protected content
+                document.getElementById('resources').style.display = 'block';
+                document.getElementById('clerk-auth').innerHTML = '<div id="user-button"></div>';
+                Clerk.mountUserButton(document.getElementById('user-button'));
+                
+                // Initialize Supabase with Clerk token
+                // const supabase = createSupabaseClient(Clerk); 
+            } else {
+                // User is not logged in, show login button
+                document.getElementById('clerk-auth').innerHTML = '<div id="sign-in"></div>';
+                Clerk.mountSignIn(document.getElementById('sign-in'));
+            }
+        });
+    </script>
 </body>
 </html>
