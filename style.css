@@ -232,3 +232,25 @@ main { max-width: 800px; margin: 0 auto; padding: 0 1rem; }
     border: 1px solid #333;
     text-align: center;
 }
+/* Container for your production cards */
+.experiment-grid {
+    display: grid;
+    /* This creates a 3-column layout on desktops that shrinks to 1 column on mobile */
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+/* Styling the individual cards */
+.experiment-card {
+    border: 1px solid #ff0000; /* Lab-brand red border */
+    padding: 15px;
+    background-color: #1a1a1a; /* Dark background */
+    transition: transform 0.2s ease-in-out;
+}
+
+/* Hover effect to make it feel more interactive */
+.experiment-card:hover {
+    transform: scale(1.02);
+    border-color: #ffffff; /* Subtle color shift on hover */
+}
