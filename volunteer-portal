@@ -45,7 +45,7 @@
     <script>
         // Supabase Initialization with Clerk
         const supabaseUrl = 'https://izytzrxrgnahyvgwqhgd.supabase.co';
-        const supabaseKey = 'YOUR_PUBLISHABLE_KEY_HERE'; 
+        const supabaseKey = 'sb_publishable_wo-PDCkLxkuGLsar5by1Sw_ShjHgZDC'; 
 
         const supabase = supabase.createClient(supabaseUrl, supabaseKey, {
             global: {
