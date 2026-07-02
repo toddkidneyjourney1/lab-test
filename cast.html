@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cast & Crew Portal | The Laboratory Theater of Florida</title>
+    <title>Volunteer Portal | The Laboratory Theater of Florida</title>
     <link rel="stylesheet" href="style.css">
-    <!-- Clerk SDK for Authentication -->
     <script src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js" async></script>
 </head>
 <body>
@@ -14,66 +13,66 @@
         <nav>
             <a href="index.html" class="button">Home</a>
         </nav>
-        <h1>Cast & Crew Portal</h1>
-        <p>Secure access for company members.</p>
-        <!-- Clerk Mount Point -->
+        <h1>Volunteer Portal</h1>
         <div id="clerk-auth"></div>
     </header>
 
     <main id="portal-content" style="display:none;">
-        <section id="productions">
-            <h2>Current Productions</h2>
-            <div class="production-grid">
-                <!-- Example Production Card -->
-                <article class="production-card">
-                    <h3>The Pillowman</h3>
-                    <a href="#" class="button">Rehearsal Schedule</a>
-                    <a href="#" class="button">Script Drafts</a>
-                    <a href="#" class="button">Character Breakdown</a>
-                </article>
-
-                <article class="production-card">
-                    <h3>Waiting for Godot</h3>
-                    <a href="#" class="button">Rehearsal Schedule</a>
-                    <a href="#" class="button">Script Drafts</a>
-                    <a href="#" class="button">Character Breakdown</a>
-                </article>
-                <!-- Add additional production cards here -->
+        <section id="shifts">
+            <h2>Available Shifts</h2>
+            <div id="shift-container" class="production-grid">
+                <p>Loading available shifts...</p>
             </div>
-        </section>
-
-        <section id="resources">
-            <h2>Company Links</h2>
-            <ul>
-                <li><a href="#">Conflict Calendar</a></li>
-                <li><a href="#">Costume Measurement Form</a></li>
-                <li><a href="#">Contact Sheet</a></li>
-            </ul>
-        </section>
-
-        <section id="support">
-            <h2>Support the Lab</h2>
-            <p>Help us grow by sharing our audition notices and show announcements!</p>
-            <a href="#" class="button">Social Media Kit</a>
+            
+            <div style="margin-top: 40px;">
+                <iframe src="https://docs.google.com/forms/d/e/1FAIpQLScyg_GztWg2sliQxQ8Etdq_RKIjIjrVHyjSx9IqMI_vPk_RbQ/viewform?embedded=true" 
+                        width="640" height="837" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
+            </div>
         </section>
     </main>
 
     <script>
-        // Clerk Authentication Logic
         window.addEventListener('load', async () => {
             const Clerk = window.Clerk;
             await Clerk.load();
-
+            
             if (Clerk.user) {
-                // Show content if logged in
                 document.getElementById('portal-content').style.display = 'block';
-                Clerk.mountUserButton(document.getElementById('clerk-auth'));
+                document.getElementById('clerk-auth').innerHTML = '<div id="user-button"></div>';
+                Clerk.mountUserButton(document.getElementById('user-button'));
+                loadShifts();
             } else {
-                // Show sign-in if logged out
-                Clerk.mountSignIn(document.getElementById('clerk-auth'));
+                document.getElementById('clerk-auth').innerHTML = '<div id="sign-in"></div>';
+                Clerk.mountSignIn(document.getElementById('sign-in'));
             }
         });
-    </script>
 
+        function loadShifts() {
+            const container = document.getElementById('shift-container');
+            
+            const seasonShows = [
+                { title: "Waiting for Godot", dates: "Aug 21 – Sept 6, 2026" },
+                { title: "The Pillowman", dates: "Oct 9 – Oct 25, 2026" },
+                { title: "The Rivals", dates: "Nov 13 – Nov 29, 2026" },
+                { title: "God of Carnage", dates: "Jan 15 – Jan 31, 2027" },
+                { title: "Bare: A Pop Opera", dates: "Feb 15 – Mar 7, 2027" },
+                { title: "A Midsummer Night's Dream", dates: "Mar 26 – Apr 11, 2027" },
+                { title: "Fences", dates: "Apr 23 – May 9, 2027" }
+            ];
+
+            container.innerHTML = '';
+            
+            seasonShows.forEach(show => {
+                const card = document.createElement('div');
+                card.className = 'production-card';
+                card.innerHTML = `
+                    <h3>${show.title}</h3>
+                    <p>${show.dates}</p>
+                    <button class="button">View Volunteer Shifts</button>
+                `;
+                container.appendChild(card);
+            });
+        }
+    </script>
 </body>
 </html>
