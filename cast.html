@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Volunteer Portal | The Laboratory Theater of Florida</title>
+    <title>Cast & Crew Portal | The Laboratory Theater of Florida</title>
     <link rel="stylesheet" href="style.css">
+    <!-- Clerk SDK for Authentication -->
     <script src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js" async></script>
 </head>
 <body>
@@ -13,48 +14,66 @@
         <nav>
             <a href="index.html" class="button">Home</a>
         </nav>
-        <h1>Volunteer Portal</h1>
+        <h1>Cast & Crew Portal</h1>
+        <p>Secure access for company members.</p>
+        <!-- Clerk Mount Point -->
         <div id="clerk-auth"></div>
     </header>
 
     <main id="portal-content" style="display:none;">
-        <section id="shifts">
-            <h2>Available Shifts</h2>
-            <div id="shift-container" class="production-grid">
-                <!-- Shifts will be injected here by JavaScript -->
-                <p>Loading available shifts...</p>
+        <section id="productions">
+            <h2>Current Productions</h2>
+            <div class="production-grid">
+                <!-- Example Production Card -->
+                <article class="production-card">
+                    <h3>The Pillowman</h3>
+                    <a href="#" class="button">Rehearsal Schedule</a>
+                    <a href="#" class="button">Script Drafts</a>
+                    <a href="#" class="button">Character Breakdown</a>
+                </article>
+
+                <article class="production-card">
+                    <h3>Waiting for Godot</h3>
+                    <a href="#" class="button">Rehearsal Schedule</a>
+                    <a href="#" class="button">Script Drafts</a>
+                    <a href="#" class="button">Character Breakdown</a>
+                </article>
+                <!-- Add additional production cards here -->
             </div>
+        </section>
+
+        <section id="resources">
+            <h2>Company Links</h2>
+            <ul>
+                <li><a href="#">Conflict Calendar</a></li>
+                <li><a href="#">Costume Measurement Form</a></li>
+                <li><a href="#">Contact Sheet</a></li>
+            </ul>
+        </section>
+
+        <section id="support">
+            <h2>Support the Lab</h2>
+            <p>Help us grow by sharing our audition notices and show announcements!</p>
+            <a href="#" class="button">Social Media Kit</a>
         </section>
     </main>
 
     <script>
-        // Clerk Auth Logic
+        // Clerk Authentication Logic
         window.addEventListener('load', async () => {
             const Clerk = window.Clerk;
             await Clerk.load();
 
             if (Clerk.user) {
+                // Show content if logged in
                 document.getElementById('portal-content').style.display = 'block';
-                document.getElementById('clerk-auth').innerHTML = '<div id="user-button"></div>';
-                Clerk.mountUserButton(document.getElementById('user-button'));
-                loadShifts(); // Call function to load data
+                Clerk.mountUserButton(document.getElementById('clerk-auth'));
             } else {
-                document.getElementById('clerk-auth').innerHTML = '<div id="sign-in"></div>';
-                Clerk.mountSignIn(document.getElementById('sign-in'));
+                // Show sign-in if logged out
+                Clerk.mountSignIn(document.getElementById('clerk-auth'));
             }
         });
-
-        function loadShifts() {
-            // This is where we will fetch the data from your spreadsheet/database
-            const container = document.getElementById('shift-container');
-            container.innerHTML = `
-                <div class="production-card">
-                    <h3>Usher</h3>
-                    <p>July 15, 2026 | 6:00 PM</p>
-                    <button class="button">Sign Up</button>
-                </div>
-            `;
-        }
     </script>
+
 </body>
 </html>
