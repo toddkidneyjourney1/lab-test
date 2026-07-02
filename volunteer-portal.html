@@ -5,66 +5,56 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Volunteer Portal | The Laboratory Theater of Florida</title>
     <link rel="stylesheet" href="style.css">
-    
-    <!-- Load Supabase -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    
-    <!-- Load Clerk with your specific Public Key -->
-    <script 
-      async 
-      crossorigin="anonymous" 
-      src="https://js.clerk.com/v4/clerk-portal.js" 
-      data-clerk-publishable-key="pk_test_bGVhcm5pbmctbWFzdG9kb24tMzUuY2xlcmsuYWNjb3VudHMuZGV2JA">
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js" async></script>
 </head>
 <body>
 
-    <section class="volunteer-portal">
+    <header>
+        <nav>
+            <a href="index.html" class="button">Home</a>
+        </nav>
         <h1>Volunteer Portal</h1>
-        <p>Welcome to the Lab Theater family! Our volunteers are the heartbeat of our productions.</p>
+        <div id="clerk-auth"></div>
+    </header>
 
-        <div id="app">
-            <!-- Clerk components will render here -->
-            <div id="clerk-container">
-                <script>
-                    window.addEventListener('load', async () => {
-                        await Clerk.load();
-
-                        if (Clerk.user) {
-                            // User is signed in
-                            document.getElementById('app').innerHTML = `
-                                <h2>Welcome, ${Clerk.user.firstName}!</h2>
-                                <p>You are logged in.</p>
-                                <button onclick="Clerk.signOut()">Sign Out</button>
-                            `;
-                        } else {
-                            // User is not signed in
-                            document.getElementById('app').innerHTML = `<div id="sign-in"></div>`;
-                            Clerk.mountSignIn(document.getElementById('sign-in'));
-                        }
-                    });
-                </script>
+    <main id="portal-content" style="display:none;">
+        <section id="shifts">
+            <h2>Available Shifts</h2>
+            <div id="shift-container" class="production-grid">
+                <!-- Shifts will be injected here by JavaScript -->
+                <p>Loading available shifts...</p>
             </div>
-        </div>
-    </section>
+        </section>
+    </main>
 
     <script>
-        // Supabase Initialization
-        const supabaseUrl = 'https://izytzrxrgnahyvgwqhgd.supabase.co';
-        const supabaseKey = 'sb_publishable_wo-PDCkLxkuGLsar5by1Sw_ShjHgZDC'; 
+        // Clerk Auth Logic
+        window.addEventListener('load', async () => {
+            const Clerk = window.Clerk;
+            await Clerk.load();
 
-        const supabase = supabase.createClient(supabaseUrl, supabaseKey, {
-            global: {
-                fetch: async (url, options = {}) => {
-                    const clerkToken = await Clerk.session.getToken({ template: 'supabase' });
-                    options.headers = new Headers(options.headers);
-                    options.headers.set('Authorization', `Bearer ${clerkToken}`);
-                    return fetch(url, options);
-                },
-            },
+            if (Clerk.user) {
+                document.getElementById('portal-content').style.display = 'block';
+                document.getElementById('clerk-auth').innerHTML = '<div id="user-button"></div>';
+                Clerk.mountUserButton(document.getElementById('user-button'));
+                loadShifts(); // Call function to load data
+            } else {
+                document.getElementById('clerk-auth').innerHTML = '<div id="sign-in"></div>';
+                Clerk.mountSignIn(document.getElementById('sign-in'));
+            }
         });
 
-        console.log("Supabase client initialized with Clerk integration.");
+        function loadShifts() {
+            // This is where we will fetch the data from your spreadsheet/database
+            const container = document.getElementById('shift-container');
+            container.innerHTML = `
+                <div class="production-card">
+                    <h3>Usher</h3>
+                    <p>July 15, 2026 | 6:00 PM</p>
+                    <button class="button">Sign Up</button>
+                </div>
+            `;
+        }
     </script>
 </body>
 </html>
