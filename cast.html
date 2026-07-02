@@ -5,44 +5,77 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cast & Crew Portal | The Laboratory Theater of Florida</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* Hamburger Menu Styling */
+        .menu-btn {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 5px;
+            padding: 10px;
+        }
+        .menu-btn span {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background: #fff;
+        }
+        @media (max-width: 600px) {
+            .menu-btn { display: flex; }
+            nav ul { display: none; }
+        }
+    </style>
 </head>
 <body>
 
     <header>
         <nav>
-            <a href="index.html" class="button">Home</a>
+            <div class="menu-btn">
+                <span></span><span></span><span></span>
+            </div>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+            </ul>
         </nav>
         <h1>Cast & Crew Portal</h1>
     </header>
 
     <main>
-        <table>
-            <thead>
-                <tr>
-                    <th>Show Title</th>
-                    <th>Dates</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Hair</td>
-                    <td>08/08/25 - 09/07/25</td>
-                </tr>
-                <tr>
-                    <td>Grey House</td>
-                    <td>10/03/25 - 11/02/25</td>
-                </tr>
-                <tr>
-                    <td>Clownbar Christmas</td>
-                    <td>12/04/25 - 12/21/25</td>
-                </tr>
-                <tr>
-                    <td>Battle of the Sexes</td>
-                    <td></td>
-                </tr>
-            </tbody>
-        </table>
+        <p>Welcome, company members! This is your central hub for production resources, rehearsal schedules, and company updates. Please keep this link private.</p>
+        
+        <h2>Productions</h2>
+        <section class="production-grid">
+            <div class="production-card">
+                <h3>The Pillowman</h3>
+                <a href="#" class="button">Rehearsal Schedule</a>
+                <a href="#" class="button">Script Drafts</a>
+                <a href="#" class="button">Character Breakdown</a>
+            </div>
+            <div class="production-card">
+                <h3>Waiting for Godot</h3>
+                <a href="#" class="button">Rehearsal Schedule</a>
+                <a href="#" class="button">Script Drafts</a>
+                <a href="#" class="button">Character Breakdown</a>
+            </div>
+        </section>
+
+        <h2>Company Links</h2>
+        <ul>
+            <li><a href="#">Conflict Calendar</a></li>
+            <li><a href="#">Costume Measurement Form</a></li>
+            <li><a href="#">Contact Sheet</a></li>
+        </ul>
+
+        <h2>Support the Lab</h2>
+        <p>Help us grow by sharing our audition notices and show announcements!</p>
+        <a href="#" class="button">Social Media Kit</a>
     </main>
 
+    <script>
+        document.querySelector('.menu-btn').addEventListener('click', () => {
+            const nav = document.querySelector('nav ul');
+            nav.style.display = nav.style.display === 'block' ? 'none' : 'block';
+        });
+    </script>
 </body>
 </html>
