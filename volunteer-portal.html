@@ -21,7 +21,6 @@
         <section id="shifts">
             <h2>Available Shifts</h2>
             <div id="shift-container" class="production-grid">
-                <!-- Shifts will be injected here by JavaScript -->
                 <p>Loading available shifts...</p>
             </div>
             <iframe src="https://docs.google.com/forms/d/e/1FAIpQLScyg_GztWg2sliQxQ8Etdq_RKIjIjrVHyjSx9IqMI_vPk_RbQ/viewform?embedded=true" width="640" height="837" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
@@ -29,24 +28,37 @@
     </main>
 
     <script>
-        // Clerk Auth Logic
-        window.addEventListener('load', async () => {
-            const Clerk = window.Clerk;
-            await Clerk.load();
+        const PUBLISHABLE_KEY = 'pk_test_bGVhcm5pbmctbWFzdG9kb24tMzUuY2xlcmsuYWNjb3VudHMuZGV2JA';
 
-            if (Clerk.user) {
-                document.getElementById('portal-content').style.display = 'block';
-                document.getElementById('clerk-auth').innerHTML = '<div id="user-button"></div>';
-                Clerk.mountUserButton(document.getElementById('user-button'));
-                loadShifts(); // Call function to load data
-            } else {
-                document.getElementById('clerk-auth').innerHTML = '<div id="sign-in"></div>';
-                Clerk.mountSignIn(document.getElementById('sign-in'));
-            }
+        window.addEventListener('load', async () => {
+            const waitForClerk = setInterval(() => {
+                if (window.Clerk) {
+                    clearInterval(waitForClerk);
+                    initClerk();
+                }
+            }, 100);
         });
 
+        async function initClerk() {
+            const Clerk = window.Clerk;
+            try {
+                await Clerk.load({ publishableKey: PUBLISHABLE_KEY });
+
+                if (Clerk.user) {
+                    document.getElementById('portal-content').style.display = 'block';
+                    document.getElementById('clerk-auth').innerHTML = '<div id="user-button"></div>';
+                    Clerk.mountUserButton(document.getElementById('user-button'));
+                    loadShifts();
+                } else {
+                    document.getElementById('clerk-auth').innerHTML = '<div id="sign-in"></div>';
+                    Clerk.mountSignIn(document.getElementById('sign-in'));
+                }
+            } catch (err) {
+                console.error("Clerk failed to load:", err);
+            }
+        }
+
         function loadShifts() {
-            // This is where we will fetch the data from your spreadsheet/database
             const container = document.getElementById('shift-container');
             container.innerHTML = `
                 <div class="production-card">
