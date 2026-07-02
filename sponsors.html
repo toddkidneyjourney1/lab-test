@@ -1,61 +1,67 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Page Title | The Laboratory Theater of Florida</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Sponsors | The Laboratory Theater of Florida</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .sponsor-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            padding: 2rem;
+            align-items: center;
+        }
+        .sponsor-card {
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid #333;
+        }
+        .sponsor-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(255, 51, 102, 0.2);
+            border-color: var(--accent);
+        }
+        .sponsor-card img {
+            max-width: 100%;
+            height: auto;
+            max-height: 100px;
+            filter: grayscale(100%);
+            transition: filter 0.3s ease;
+        }
+        .sponsor-card:hover img {
+            filter: grayscale(0%);
+        }
+    </style>
 </head>
 <body>
-  <!-- Hamburger Menu -->
-    <div class="hamburger-container">
-        <input type="checkbox" id="nav-toggle" class="nav-toggle">
-        <label for="nav-toggle" class="nav-toggle-label">
-            <span></span>
-        </label>
 
-         <nav class="hamburger-menu">
-            <a href="about.html">The Origin Story</a>
-            <a href="index.html">Back to the Main Lab</a>
-            <a href="plan.html">Lab Protocols</a>
-            <a href="volunteer.html">Join The Experiment</a>
-            <a href="company.html">The Internal Log</a>
-            <a href="support.html">Fuel The Innovation</a>
-            <a href="sponsors.html">Core Collaborators</a>
+    <header>
+        <nav>
+            <a href="index.html" class="button">Home</a>
         </nav>
-    </div><!-- Your navigation and content go here -->
+        <h1>Our Amazing Sponsors</h1>
+    </header>
+
+    <main>
+        <p style="text-align: center;">We are incredibly grateful to the local businesses and individuals who make our productions possible.</p>
+        
+        <section class="sponsor-grid">
+            <!-- Add your sponsor logos here -->
+            <div class="sponsor-card">
+                <img src="assets/sponsor1.png" alt="Sponsor Logo">
+                <h3>Sponsor Name</h3>
+            </div>
+            <div class="sponsor-card">
+                <img src="assets/sponsor2.png" alt="Sponsor Logo">
+                <h3>Sponsor Name</h3>
+            </div>
+        </section>
+    </main>
+
 </body>
 </html>
-<section class="sponsor-page">
-  <h1>Our Amazing Sponsors</h1>
-  <p>The Laboratory Theater of Florida is proud to be supported by a wonderful community of sponsors. We are incredibly grateful for their commitment to bringing innovative live theater to Fort Myers.</p>
-
-  <div class="sponsor-grid">
-    <h2>Foundation & Corporate Partners</h2>
-    <ul class="sponsor-list">
-      <li><a href="https://www.leegov.com/vcb">Lee County Visitor and Convention Bureau</a></li>
-      <li>LGBT Fund</li>
-      <li><a href="https://allegrettifoundation.org/">Allegretti Foundation</a></li>
-      <li><a href="https://www.cityftmyers.com/">City of Fort Myers</a></li>
-      <li><a href="https://www.swflfoundation.org/">SWFL Community Foundation</a></li>
-      <li><a href="https://www.thenorthlawfirm.com/">The North Law Firm</a></li>
-      <li>Fort Myers Rotary Club</li>
-    </ul>
-
-    <h2>Individual & Family Sponsors</h2>
-    <ul class="sponsor-list">
-      <li>Janet & Bruce Bunch</li>
-      <li>Art Zupko</li>
-      <li>The Bireley Family Foundation</li>
-      <li>Arlene Foreman</li>
-      <li>Emily Eason</li>
-      <li>Marlene & Darrell Smith</li>
-      <li>JoAnn Reece & Robert Hilliard</li>
-    </ul>
-  </div>
-
-  <div class="cta-section">
-    <p>Interested in supporting the arts in our community?</p>
-    <a href="https:support/html" class="button">Support Us</a>
-  </div>
-</section>
