@@ -3,76 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Volunteer Portal | The Laboratory Theater of Florida</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js" async></script>
+    <title>Cast & Crew Portal - Laboratory Theater of Florida</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; padding: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        .btn { padding: 5px 10px; background-color: #007bff; color: white; text-decoration: none; border-radius: 4px; }
+        .btn:hover { background-color: #0056b3; }
+    </style>
 </head>
 <body>
-
-    <header>
-        <nav>
-            <a href="index.html" class="button">Home</a>
-        </nav>
-        <h1>Volunteer Portal</h1>
-        <div id="clerk-auth"></div>
-    </header>
-
-    <main id="portal-content" style="display:none;">
-        <section id="shifts">
-            <h2>Available Shifts</h2>
-            <div id="shift-container" class="production-grid">
-                <p>Loading available shifts...</p>
-            </div>
-            
-            <div style="margin-top: 40px;">
-                <iframe src="https://docs.google.com/forms/d/e/1FAIpQLScyg_GztWg2sliQxQ8Etdq_RKIjIjrVHyjSx9IqMI_vPk_RbQ/viewform?embedded=true" 
-                        width="640" height="837" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
-            </div>
-        </section>
-    </main>
+    <h1>Cast & Crew Portal</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Show Title</th>
+                <th>Dates</th>
+                <th>Rehearsal Schedule</th>
+                <th>Contact Sheet</th>
+                <th>Communication</th>
+            </tr>
+        </thead>
+        <tbody id="portal-body"></tbody>
+    </table>
 
     <script>
-        window.addEventListener('load', async () => {
-            const Clerk = window.Clerk;
-            await Clerk.load();
-            
-            if (Clerk.user) {
-                document.getElementById('portal-content').style.display = 'block';
-                document.getElementById('clerk-auth').innerHTML = '<div id="user-button"></div>';
-                Clerk.mountUserButton(document.getElementById('user-button'));
-                loadShifts();
-            } else {
-                document.getElementById('clerk-auth').innerHTML = '<div id="sign-in"></div>';
-                Clerk.mountSignIn(document.getElementById('sign-in'));
-            }
+        const shows = [
+            { title: "Alien: The Musical Parody", dates: "June 7, 2024 – June 29, 2024" },
+            { title: "Squirrel Girl Goes to College", dates: "July 11, 2024 – July 14, 2024" },
+            { title: "Clyde's", dates: "July 26, 2024 – August 11, 2024" },
+            { title: "Gutenberg! The Musical!", dates: "September 13, 2024 – September 29, 2024" },
+            { title: "Dracula: A Comedy of Terrors", dates: "October 18, 2024 – November 9, 2024" },
+            { title: "Christmas With the Crawfords", dates: "December 6, 2024 – December 22, 2024" },
+            { title: "Good Bad People", dates: "January 24, 2025 – February 8, 2025" }
+        ];
+
+        const tbody = document.getElementById('portal-body');
+        shows.forEach(show => {
+            tbody.innerHTML += `<tr>
+                <td>${show.title}</td>
+                <td>${show.dates}</td>
+                <td><a href="#" class="btn">Schedule</a></td>
+                <td><a href="#" class="btn">Contact</a></td>
+                <td><a href="mailto:?subject=Regarding ${show.title}" class="btn">Message</a></td>
+            </tr>`;
         });
-
-        function loadShifts() {
-            const container = document.getElementById('shift-container');
-            
-            const seasonShows = [
-                { title: "Waiting for Godot", dates: "Aug 21 – Sept 6, 2026" },
-                { title: "The Pillowman", dates: "Oct 9 – Oct 25, 2026" },
-                { title: "The Rivals", dates: "Nov 13 – Nov 29, 2026" },
-                { title: "God of Carnage", dates: "Jan 15 – Jan 31, 2027" },
-                { title: "Bare: A Pop Opera", dates: "Feb 15 – Mar 7, 2027" },
-                { title: "A Midsummer Night's Dream", dates: "Mar 26 – Apr 11, 2027" },
-                { title: "Fences", dates: "Apr 23 – May 9, 2027" }
-            ];
-
-            container.innerHTML = '';
-            
-            seasonShows.forEach(show => {
-                const card = document.createElement('div');
-                card.className = 'production-card';
-                card.innerHTML = `
-                    <h3>${show.title}</h3>
-                    <p>${show.dates}</p>
-                    <button class="button">View Volunteer Shifts</button>
-                `;
-                container.appendChild(card);
-            });
-        }
     </script>
 </body>
 </html>
