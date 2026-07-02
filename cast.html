@@ -1,50 +1,111 @@
-<div class="production-grid">
-    <!-- Waiting for Godot -->
-    <div class="production-card">
-        <h3>Waiting for Godot</h3>
-        <a href="production/godot.html" class="button">Schedule</a>
-        <a href="production/godot.html" class="button">Script</a>
-    </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cast & Crew Portal | The Laboratory Theater of Florida</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Clerk SDK for Authentication -->
+    <script src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js" async></script>
+</head>
+<body>
 
-    <!-- The Pillowman -->
-    <div class="production-card">
-        <h3>The Pillowman</h3>
-        <a href="production/pillowman.html" class="button">Schedule</a>
-        <a href="production/pillowman.html" class="button">Script</a>
-    </div>
+    <header>
+        <nav>
+            <a href="index.html" class="button">Home</a>
+            <a href="company.html" class="button">Company Hub</a>
+        </nav>
+        <h1>Cast & Crew Portal</h1>
+        <p>Secure access for current company members.</p>
+        <!-- Clerk Mount Point -->
+        <div id="clerk-auth"></div>
+    </header>
 
-    <!-- The Rivals -->
-    <div class="production-card">
-        <h3>The Rivals</h3>
-        <a href="production/rivals.html" class="button">Schedule</a>
-        <a href="production/rivals.html" class="button">Script</a>
-    </div>
+    <main id="portal-content" style="display:none;">
+        <section id="productions">
+            <h2>Current Productions</h2>
+            <div class="production-grid">
+                <!-- Waiting for Godot -->
+                <div class="production-card">
+                    <h3>Waiting for Godot</h3>
+                    <a href="production/godot.html" class="button">Schedule</a>
+                    <a href="production/godot.html" class="button">Script</a>
+                </div>
 
-    <!-- God of Carnage -->
-    <div class="production-card">
-        <h3>God of Carnage</h3>
-        <a href="production/god-of-carnage.html" class="button">Schedule</a>
-        <a href="production/god-of-carnage.html" class="button">Script</a>
-    </div>
+                <!-- The Pillowman -->
+                <div class="production-card">
+                    <h3>The Pillowman</h3>
+                    <a href="production/pillowman.html" class="button">Schedule</a>
+                    <a href="production/pillowman.html" class="button">Script</a>
+                </div>
 
-    <!-- Bare: A Pop Opera -->
-    <div class="production-card">
-        <h3>Bare: A Pop Opera</h3>
-        <a href="production/bare.html" class="button">Schedule</a>
-        <a href="production/bare.html" class="button">Script</a>
-    </div>
+                <!-- The Rivals -->
+                <div class="production-card">
+                    <h3>The Rivals</h3>
+                    <a href="production/rivals.html" class="button">Schedule</a>
+                    <a href="production/rivals.html" class="button">Script</a>
+                </div>
 
-    <!-- A Midsummer Night's Dream -->
-    <div class="production-card">
-        <h3>A Midsummer Night's Dream</h3>
-        <a href="production/midsummer.html" class="button">Schedule</a>
-        <a href="production/midsummer.html" class="button">Script</a>
-    </div>
+                <!-- God of Carnage -->
+                <div class="production-card">
+                    <h3>God of Carnage</h3>
+                    <a href="production/god-of-carnage.html" class="button">Schedule</a>
+                    <a href="production/god-of-carnage.html" class="button">Script</a>
+                </div>
 
-    <!-- Fences -->
-    <div class="production-card">
-        <h3>Fences</h3>
-        <a href="production/fences.html" class="button">Schedule</a>
-        <a href="production/fences.html" class="button">Script</a>
-    </div>
-</div>
+                <!-- Bare: A Pop Opera -->
+                <div class="production-card">
+                    <h3>Bare: A Pop Opera</h3>
+                    <a href="production/bare.html" class="button">Schedule</a>
+                    <a href="production/bare.html" class="button">Script</a>
+                </div>
+
+                <!-- A Midsummer Night's Dream -->
+                <div class="production-card">
+                    <h3>A Midsummer Night's Dream</h3>
+                    <a href="production/midsummer.html" class="button">Schedule</a>
+                    <a href="production/midsummer.html" class="button">Script</a>
+                </div>
+
+                <!-- Fences -->
+                <div class="production-card">
+                    <h3>Fences</h3>
+                    <a href="production/fences.html" class="button">Schedule</a>
+                    <a href="production/fences.html" class="button">Script</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="resources">
+            <h2>Company Resources</h2>
+            <ul>
+                <li><a href="#">Conflict Calendar</a></li>
+                <li><a href="#">Contact Sheet</a></li>
+                <li><a href="#">Company Handbook</a></li>
+            </ul>
+        </section>
+    </main>
+
+    <script>
+        // Clerk Authentication Logic
+        window.addEventListener('load', async () => {
+            const Clerk = window.Clerk;
+            await Clerk.load();
+
+            if (Clerk.user) {
+                // Show content if logged in
+                document.getElementById('portal-content').style.display = 'block';
+                Clerk.mountUserButton(document.getElementById('clerk-auth'));
+            } else {
+                // Show sign-in if logged out
+                Clerk.mountSignIn(document.getElementById('clerk-auth'));
+            }
+        });
+    </script>
+
+    <footer>
+        <p>&copy; 2026 The Laboratory Theater of Florida</p>
+    </footer>
+
+</body>
+</html>
