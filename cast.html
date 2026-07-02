@@ -9,46 +9,60 @@
         table { width: 100%; border-collapse: collapse; margin-top: 20px; }
         th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
         th { background-color: #f2f2f2; }
-        .btn { padding: 5px 10px; background-color: #007bff; color: white; text-decoration: none; border-radius: 4px; }
+        .btn { padding: 5px 10px; background-color: #007bff; color: white; text-decoration: none; display: inline-block; border-radius: 4px; }
         .btn:hover { background-color: #0056b3; }
     </style>
 </head>
 <body>
+
     <h1>Cast & Crew Portal</h1>
+
     <table>
         <thead>
             <tr>
                 <th>Show Title</th>
                 <th>Dates</th>
-                <th>Rehearsal Schedule</th>
-                <th>Contact Sheet</th>
-                <th>Communication</th>
+                <th>Script Access</th>
             </tr>
         </thead>
-        <tbody id="portal-body"></tbody>
+        <tbody>
+            <tr>
+                <td>Hair</td>
+                <td>08/08/25 - 09/07/25</td>
+                <td><a href="#" class="btn" data-script="LINK_TO_HAIR_SCRIPT">View Script</a></td>
+            </tr>
+            <tr>
+                <td>Grey House</td>
+                <td>10/03/25 - 11/02/25</td>
+                <td><a href="#" class="btn" data-script="LINK_TO_GREY_HOUSE_SCRIPT">View Script</a></td>
+            </tr>
+            <tr>
+                <td>Clownbar Christmas</td>
+                <td>12/04/25 - 12/21/25</td>
+                <td><a href="#" class="btn" data-script="LINK_TO_CLOWNBAR_SCRIPT">View Script</a></td>
+            </tr>
+            <tr>
+                <td>Battle of the Sexes</td>
+                <td>TBD</td>
+                <td><a href="#" class="btn" data-script="LINK_TO_BATTLE_SEXES_SCRIPT">View Script</a></td>
+            </tr>
+            <tr>
+                <td>A Funny Thing Happened on the Way to the Forum</td>
+                <td>01/16/26 - 02/01/26</td>
+                <td><a href="#" class="btn" data-script="LINK_TO_FORUM_SCRIPT">View Script</a></td>
+            </tr>
+            <tr>
+                <td>2 Trains Running</td>
+                <td>02/18/26 - 03/08/26</td>
+                <td><a href="#" class="btn" data-script="LINK_TO_TRAINS_SCRIPT">View Script</a></td>
+            </tr>
+            <tr>
+                <td>Julius Caesar</td>
+                <td>03/27/26 - 04/26/26</td>
+                <td><a href="#" class="btn" data-script="LINK_TO_CAESAR_SCRIPT">View Script</a></td>
+            </tr>
+        </tbody>
     </table>
 
-    <script>
-        const shows = [
-            { title: "Alien: The Musical Parody", dates: "June 7, 2024 – June 29, 2024" },
-            { title: "Squirrel Girl Goes to College", dates: "July 11, 2024 – July 14, 2024" },
-            { title: "Clyde's", dates: "July 26, 2024 – August 11, 2024" },
-            { title: "Gutenberg! The Musical!", dates: "September 13, 2024 – September 29, 2024" },
-            { title: "Dracula: A Comedy of Terrors", dates: "October 18, 2024 – November 9, 2024" },
-            { title: "Christmas With the Crawfords", dates: "December 6, 2024 – December 22, 2024" },
-            { title: "Good Bad People", dates: "January 24, 2025 – February 8, 2025" }
-        ];
-
-        const tbody = document.getElementById('portal-body');
-        shows.forEach(show => {
-            tbody.innerHTML += `<tr>
-                <td>${show.title}</td>
-                <td>${show.dates}</td>
-                <td><a href="#" class="btn">Schedule</a></td>
-                <td><a href="#" class="btn">Contact</a></td>
-                <td><a href="mailto:?subject=Regarding ${show.title}" class="btn">Message</a></td>
-            </tr>`;
-        });
-    </script>
 </body>
 </html>
