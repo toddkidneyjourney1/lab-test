@@ -1,36 +1,64 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Page Title | The Laboratory Theater of Florida</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Volunteer Portal | The Laboratory Theater of Florida</title>
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- Load Clerk and Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://js.clerk.com/v4/clerk-portal.js"></script> <!-- Ensure your Clerk script source is correct -->
 </head>
 <body>
-  <!-- Your navigation and content go here -->
+
+    <section class="volunteer-portal">
+        <h1>Volunteer Portal</h1>
+        <p>Welcome to the Lab Theater family! Our volunteers are the heartbeat of our productions.</p>
+
+        <div id="app">
+            <!-- Clerk components will render here -->
+            <div id="clerk-container">
+                <script type="text/javascript" src="https://cdn.clerk.com/public/clerk.js"></script>
+                <script>
+                    window.addEventListener('load', async () => {
+                        await Clerk.load();
+
+                        if (Clerk.user) {
+                            // User is signed in
+                            document.getElementById('app').innerHTML = `
+                                <h2>Welcome, ${Clerk.user.firstName}!</h2>
+                                <p>You are logged in.</p>
+                                <button onclick="Clerk.signOut()">Sign Out</button>
+                            `;
+                        } else {
+                            // User is not signed in
+                            document.getElementById('app').innerHTML = `<div id="sign-in"></div>`;
+                            Clerk.mountSignIn(document.getElementById('sign-in'));
+                        }
+                    });
+                </script>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Supabase Initialization with Clerk
+        const supabaseUrl = 'https://izytzrxrgnahyvgwqhgd.supabase.co';
+        const supabaseKey = 'YOUR_PUBLISHABLE_KEY_HERE'; 
+
+        const supabase = supabase.createClient(supabaseUrl, supabaseKey, {
+            global: {
+                fetch: async (url, options = {}) => {
+                    const clerkToken = await Clerk.session.getToken({ template: 'supabase' });
+                    options.headers = new Headers(options.headers);
+                    options.headers.set('Authorization', `Bearer ${clerkToken}`);
+                    return fetch(url, options);
+                },
+            },
+        });
+
+        console.log("Supabase client initialized with Clerk integration.");
+    </script>
 </body>
 </html>
-<section class="volunteer-portal">
-  <h1>Volunteer Portal</h1>
-  <p>Welcome to the Lab Theater family! Our volunteers are the heartbeat of our productions. Whether you are ushering, helping with set construction, or assisting in the office, your time makes our work possible.</p>
-
-  <div class="portal-grid">
-    <div class="portal-card">
-      <h2>New Volunteers</h2>
-      <p>Interested in joining our team? We’d love to have you!</p>
-      <a href="https://laboratorytheaterflorida.com/learn-with-us/" class="button">Sign Up Today</a>
-    </div>
-
-    <div class="portal-card">
-      <h2>Returning Volunteers</h2>
-      <p>Log in to view your upcoming shifts and manage your schedule.</p>
-      <a href="#" class="button secondary">Volunteer Login</a>
-    </div>
-  </div>
-
-  <div class="contact-support">
-    <h3>Questions?</h3>
-    <p>Need help with your account or have questions about volunteering? Email us at <a href="mailto:office@laboratorytheaterflorida.com">office@laboratorytheaterflorida.com</a>.</p>
-  </div>
-</section>
