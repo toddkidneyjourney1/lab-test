@@ -1,110 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Laboratory Theater of Florida</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <!-- Hamburger Menu -->
-<input type="checkbox" id="nav-toggle" class="nav-toggle">
-<label for="nav-toggle" class="nav-toggle-label">
-    <span></span>
-</label>
+/* Container for your production cards */
+.experiment-grid {
+    display: grid;
+    /* This creates a 3-column layout on desktops that shrinks to 1 column on mobile */
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
 
-<nav class="hamburger-menu">
-    <a href="about.html">The Origin Story</a>
-    <a href="https://index.hitm">Box Office</a>
-    <a href="plan.html">Lab Protocols</a>
-    <a href="volunteer.html">Join The Experimentl</a>
-    <a href="company.html">The Internal Log</a>
-    <a href="support.html">Fuel The Innovation</a>
-<a href="sponsors.html">Core Collaborators </a>
-</nav>
+/* Styling the individual cards */
+.experiment-card {
+    border: 1px solid #ff0000; /* Lab-brand red border */
+    padding: 15px;
+    background-color: #1a1a1a; /* Dark background */
+    transition: transform 0.2s ease-in-out;
+}
 
-<!-- Update your header block in index.html -->
-<header>
-    <!-- Hamburger Trigger -->
-    
-    <div class="logo">
-        THE <span>LAB</span>
-        <p class="tagline">Intentionally innovative live theater</p>
-    </div>
-</header>
-
-    <main>
-       <!-- Featured Hero Section -->
-<section class="hero">
-    <div class="hero-content">
-        <span class="tag">Our Current Experiment</span>
-        <h1>Waiting for Godot</h1>
-        <p>On a barren road, two men wait for a mysterious figure who never arrives.</p>
-        <a href="https://www.purplepass.com/events/375339-waiting-for-godot-aug-20th-2026" class="btn-primary">Secure Your Seat</a>
-    </div>
-    <img src="assets/godot.jpg" alt="Waiting for Godot">
-</section>
-
-        <!-- Season Lineup -->
-        <section class="shows-list">
-            <h2>WHATS ON THE SLAB</h2>
-            
-            <a href="production/godot.html" class="show-item">
-                <img src="assets/godot.jpg" alt="Waiting for Godot">
-                <div class="show-details">
-                    <h3>Waiting for Godot</h3>
-                    <p>Aug 21 – Sept 6</p>
-                </div>
-            </a>
-
-            <a href="production/pillowman.html" class="show-item">
-                <img src="assets/pillowman.jpg" alt="The Pillowman">
-                <div class="show-details">
-                    <h3>The Pillowman</h3>
-                    <p>October 8 – 25</p>
-                </div>
-            </a>
-
-            <a href="production/rivals.html" class="show-item">
-                <img src="assets/rivals.jpg" alt="The Rivals">
-                <div class="show-details">
-                    <h3>The Rivals</h3>
-                    <p>November 12 – 29</p>
-                </div>
-            </a>
-
-            <a href="production/god.html" class="show-item">
-                <img src="assets/godofcarnage.jpg" alt="God of Carnage">
-                <div class="show-details">
-                    <h3>God of Carnage</h3>
-                    <p>January 14 – 31</p>
-                </div>
-            </a>
-
-            <a href="production/bare.html" class="show-item">
-                <img src="assets/bare.jpg" alt="Bare: A Pop Opera">
-                <div class="show-details">
-                    <h3>Bare: A Pop Opera</h3>
-                    <p>February 18 – March 7</p>
-                </div>
-            </a>
-
-            <a href="production/shakespeare.html" class="show-item">
-                <img src="assets/midsummer.jpg" alt="A Midsummer Night's Dream">
-                <div class="show-details">
-                    <h3>A Midsummer Night's Dream</h3>
-                    <p>March 25 – April 11</p>
-                </div>
-            </a>
-
-            <a href="production/fences.html" class="show-item">
-                <img src="assets/fences.jpg" alt="Fences">
-                <div class="show-details">
-                    <h3>Fences</h3>
-                    <p>April 22 – May 9</p>
-                </div>
-            </a>
-        </section>
-    </main>
-</body>
-</html>
+/* Hover effect to make it feel more interactive */
+.experiment-card:hover {
+    transform: scale(1.02);
+    border-color: #ffffff; /* Subtle color shift on hover */
+}
