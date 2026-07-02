@@ -6,9 +6,16 @@
     <title>Volunteer Portal | The Laboratory Theater of Florida</title>
     <link rel="stylesheet" href="style.css">
     
-    <!-- Load Clerk and Supabase -->
+    <!-- Load Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="https://js.clerk.com/v4/clerk-portal.js"></script> <!-- Ensure your Clerk script source is correct -->
+    
+    <!-- Load Clerk with your specific Public Key -->
+    <script 
+      async 
+      crossorigin="anonymous" 
+      src="https://js.clerk.com/v4/clerk-portal.js" 
+      data-clerk-publishable-key="pk_test_bGVhcm5pbmctbWFzdG9kb24tMzUuY2xlcmsuYWNjb3VudHMuZGV2JA">
+    </script>
 </head>
 <body>
 
@@ -19,7 +26,6 @@
         <div id="app">
             <!-- Clerk components will render here -->
             <div id="clerk-container">
-                <script type="text/javascript" src="https://cdn.clerk.com/public/clerk.js"></script>
                 <script>
                     window.addEventListener('load', async () => {
                         await Clerk.load();
@@ -43,7 +49,7 @@
     </section>
 
     <script>
-        // Supabase Initialization with Clerk
+        // Supabase Initialization
         const supabaseUrl = 'https://izytzrxrgnahyvgwqhgd.supabase.co';
         const supabaseKey = 'sb_publishable_wo-PDCkLxkuGLsar5by1Sw_ShjHgZDC'; 
 
