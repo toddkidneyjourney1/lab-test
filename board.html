@@ -1,95 +1,137 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css">
-  <title>Board of Directors | The Laboratory Theater of Florida</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Board of Directors | The Laboratory Theater of Florida</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .board-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            padding: 2rem;
+        }
+        .board-card {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        .board-card:hover {
+            transform: translateY(-5px);
+            border-color: #ff3366;
+        }
+        .board-card img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #ff3366;
+            margin-bottom: 1rem;
+        }
+        .board-card h3 { color: #fff; margin-bottom: 0.2rem; }
+        .board-card .title { color: #ff3366; font-weight: bold; margin-bottom: 1rem; display: block; }
+        .board-card .bio { color: #ccc; font-size: 0.9rem; line-height: 1.4; }
+    </style>
 </head>
 <body>
 
-  <nav class="hamburger-menu">
-    <a href="index.html">Home</a>
-    <a href="about.html">About Us</a>
-    <a href="team.html">Our Team</a>
-    <a href="board.html">Board of Directors</a>
-  </nav>
+    <header class="main-header">
+        <div class="logo">
+            <a href="index.html">THE LAB (oratory theater)</a>
+            <span class="tagline">INTENTIONALLY INNOVATIVE LIVE THEATER</span>
+        </div>
 
-  <main class="about-page">
-    <h1>Board of Directors</h1>
-    <p>Our theater is guided by a dedicated group of community leaders.</p>
-    
-    <div class="team-grid">
-      <!-- Waner Del Rosario -->
-      <div class="team-card">
-        <img src="assets/waner.JPG" alt="Waner Del Rosario">
-        <h3>Waner Del Rosario</h3>
-        <p><strong>President</strong></p>
-        <p><small>A professional with experience in arts, technology, and aviation, Waner brings creative vision and technical expertise. He is the founder of Dreniam Technology Solutions and a Technology Education Leader at Lee Health. He aims to increase access to the arts and foster a more inclusive artistic landscape.</small></p>
-      </div>
+        <div class="hamburger-container">
+            <input type="checkbox" id="nav-toggle" class="nav-toggle">
+            <label for="nav-toggle" class="nav-toggle-label">
+                <span></span>
+            </label>
+            <nav class="hamburger-menu">
+                <a href="about.html">The Origin Story</a>
+                <a href="index.html">Back to the Main Lab</a>
+                <a href="plan.html">Lab Protocols</a>
+                <a href="volunteer.html">Join The Experiment</a>
+                <a href="company.html">The Internal Log</a>
+                <a href="support.html">Fuel The Innovation</a>
+                <a href="sponsors.html">Core Collaborators</a>
+            </nav>
+        </div>
+    </header>
 
-      <!-- Nykkie Rizley -->
-      <div class="team-card">
-        <img src="assets/nykkie.JPG" alt="Nykkie Rizley">
-        <h3>Nykkie Rizley</h3>
-        <p><strong>Vice President</strong></p>
-        <p><small>A founding member of The Laboratory Theater, Nykkie serves as the Director of Operations at Royal Shell Vacations and President of FAVR. She is an active community member and theater advocate.</small></p>
-      </div>
+    <main>
+        <h1>Board of Directors</h1>
+        <p style="text-align: center;">Our theater is guided by a dedicated group of community leaders.</p>
 
-      <!-- Lauren Miller -->
-      <div class="team-card">
-        <img src="assets/lauren.JPG" alt="Lauren Miller">
-        <h3>Lauren Miller</h3>
-        <p><strong>Secretary</strong></p>
-        <p><small>A high school educator in the Lee County School District, Lauren has been involved in theater since 2007. She is a dedicated volunteer at the Lab, having served as a director, stage manager, and actor.</small></p>
-      </div>
+        <section class="board-grid">
+            <!-- Waner Del Rosario -->
+            <div class="board-card">
+                <img src="waner.jpg" alt="Waner Del Rosario">
+                <h3>Waner Del Rosario</h3>
+                <span class="title">President</span>
+                <p class="bio">A professional with experience in arts, technology, and aviation. Founder of Dreniam Technology Solutions.</p>
+            </div>
 
-      <!-- Steven Coe -->
-      <div class="team-card">
-        <img src="assets/steven.JPG" alt="Steven Coe">
-        <h3>Steven Coe</h3>
-        <p><strong>Treasurer</strong></p>
-        <p><small>Active at the Lab since 2016, Steven is a local actor and artist with training in stage combat. He has been involved in over twenty area productions and is certified with Meisner International.</small></p>
-      </div>
+            <!-- Nykkie Rizley -->
+            <div class="board-card">
+                <img src="nykkie.jpg" alt="Nykkie Rizley">
+                <h3>Nykkie Rizley</h3>
+                <span class="title">Vice President</span>
+                <p class="bio">A founding member of The Laboratory Theater and Director of Operations at Royal Shell Vacations.</p>
+            </div>
 
-       </div> <!-- W. Earl Sparrow, Jr. -->
-      <div class="team-card">
-        <img src="assets/sparrow.JPG" alt="W. Earl Sparrow, Jr.">
-        <h3>W. Earl Sparrow, Jr.</h3>
-        <p>Board Member</p>
-        <p><small>Affiliated with the Lab since 2021, Willie is a music director with a B.S. in Music from Florida A&M and a Masters in Music Education from the University of Florida.</small></p>
-      </div>
+            <!-- Lauren Miller -->
+            <div class="board-card">
+                <img src="lauren.jpg" alt="Lauren Miller">
+                <h3>Lauren Miller</h3>
+                <span class="title">Secretary</span>
+                <p class="bio">A high school educator and dedicated Lab volunteer since 2007, serving as director, stage manager, and actor.</p>
+            </div>
 
+            <!-- Steven Coe -->
+            <div class="board-card">
+                <img src="steven.jpg" alt="Steven Coe">
+                <h3>Steven Coe</h3>
+                <span class="title">Treasurer</span>
+                <p class="bio">Local actor and artist active at the Lab since 2016, with training in stage combat.</p>
+            </div>
 
-      <!-- Ryan Adair -->
-      <div class="team-card">
-        <img src="assets/ryan.JPG" alt="Ryan Adair">
-        <h3>Ryan Adair</h3>
-        <p>Board Member</p>
-        <p><small>A three-time Emmy Award-winning television producer and assistant news director for local Southwest Florida affiliates. Ryan has been involved in theater since the age of 12.</small></p>
-      </div>
+            <!-- W. Earl Sparrow, Jr. -->
+            <div class="board-card">
+                <img src="earl.jpg" alt="W. Earl Sparrow, Jr.">
+                <h3>W. Earl Sparrow, Jr.</h3>
+                <span class="title">Board Member</span>
+                <p class="bio">Music director with a Masters in Music Education from the University of Florida.</p>
+            </div>
 
-       <!-- T. J. Albertson -->
-      <div class="team-card">
-        <img src="assets/tj.JPG" alt="T. J. Albertson">
-        <h3>T. J. Albertson</h3>
-        <p>Board Member</p>
-        <p><small>An active actor with the theater since 2017, TJ has performed in productions such as The Minutes and The Crucible. Outside of the theater, he works in sales.</small></p>
-      
+            <!-- Ryan Adair -->
+            <div class="board-card">
+                <img src="ryan.jpg" alt="Ryan Adair">
+                <h3>Ryan Adair</h3>
+                <span class="title">Board Member</span>
+                <p class="bio">Three-time Emmy Award-winning television producer and assistant news director.</p>
+            </div>
 
-      <!-- Peter Ndiangui -->
-      <div class="team-card">
-        <img src="assets/peter.JPG" alt="Peter Ndiangui">
-        <h3>Peter Ndiangui</h3>
-        <p>Board Member</p>
-        <p><small>Peter Ndiangui serves as an Adjunct Professor at Florida Gulf Coast University.</small></p>
-      </div>
-    </div>
-    
-    <div style="text-align: center; margin-top: 40px;">
-      <a href="about.html" class="button">Back to About Us</a>
-    </div>
-  </main>
+            <!-- T. J. Albertson -->
+            <div class="board-card">
+                <img src="tj.jpg" alt="T. J. Albertson">
+                <h3>T. J. Albertson</h3>
+                <span class="title">Board Member</span>
+                <p class="bio">Active actor with the theater since 2017, performing in The Minutes and The Crucible.</p>
+            </div>
+
+            <!-- Peter Ndiangui -->
+            <div class="board-card">
+                <img src="peter.jpg" alt="Peter Ndiangui">
+                <h3>Peter Ndiangui</h3>
+                <span class="title">Board Member</span>
+                <p class="bio">Adjunct Professor at Florida Gulf Coast University.</p>
+            </div>
+        </section>
+    </main>
 
 </body>
 </html>
