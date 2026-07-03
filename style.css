@@ -6,7 +6,17 @@
     --accent: #ff3366;
     --gray: #a0a0a0;
 }
+.main-header {
+    display: flex;
+    justify-content: space-between; /* Keeps logo left, hamburger menu right */
+    align-items: center;            /* Vertically centers them */
+    padding: 1rem 2rem;
+    background-color: #1a1a1a;
+}
 
+.logo {
+    text-align: left; /* Ensures text inside the logo container is left-aligned */
+}
 body { 
     background: var(--bg); 
     color: var(--text); 
