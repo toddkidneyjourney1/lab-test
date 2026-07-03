@@ -22,15 +22,21 @@ header {
     align-items: center; 
 }
 
-.logo { font-size: 1.5rem; font-weight: 900; letter-spacing: 2px; }
-.logo span { color: var(--accent); }
+.logo a {
+    text-decoration: none;
+    color: #ff3366; /* Your brand accent */
+    font-weight: bold;
+    font-size: 1.5rem;
+    display: block; /* Ensures tagline sits below */
+}
+
 .tagline {
-    font-size: 0.75rem;
-    color: var(--gray);
-    font-weight: 400;
-    margin: 0;
+    color: #ffffff; /* Sets the text to white */
+    font-size: 0.8rem;
     text-transform: uppercase;
     letter-spacing: 1px;
+    display: block;
+}
 }
 
 main { max-width: 800px; margin: 0 auto; padding: 0 1rem; }
