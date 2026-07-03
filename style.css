@@ -278,6 +278,10 @@ main { max-width: 800px; margin: 0 auto; padding: 0 1rem; }
 
 .sponsor-card:hover {
     background: #333; /* Changes to a lighter gray on hover */
+    .team-card h3 {
+    color: #ffffff; /* Set to white so they show against the dark background */
+    margin-bottom: 0.5rem;
+}
     border-color: #ff3366; /* Adds an accent color border */
     cursor: pointer;
 }
