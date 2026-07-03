@@ -22,21 +22,15 @@ header {
     align-items: center; 
 }
 
-.logo a {
-    text-decoration: none;
-    color: #ff3366; /* Your brand accent */
-    font-weight: bold;
-    font-size: 1.5rem;
-    display: block; /* Ensures tagline sits below */
-}
-
+.logo { font-size: 1.5rem; font-weight: 900; letter-spacing: 2px; }
+.logo span { color: var(--accent); }
 .tagline {
-    color: #ffffff; /* Sets the text to white */
-    font-size: 0.8rem;
+    font-size: 0.75rem;
+    color: var(--gray);
+    font-weight: 400;
+    margin: 0;
     text-transform: uppercase;
     letter-spacing: 1px;
-    display: block;
-}
 }
 
 main { max-width: 800px; margin: 0 auto; padding: 0 1rem; }
@@ -271,47 +265,4 @@ main { max-width: 800px; margin: 0 auto; padding: 0 1rem; }
     background: #333; /* Changes to a lighter gray on hover */
     border-color: #ff3366; /* Adds an accent color border */
     cursor: pointer;
-}
-.main-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem 2rem;
-    background-color: #1a1a1a; /* Matches your dark theme */
-    color: white;
-}
-
-.logo a {
-    text-decoration: none;
-    color: #ff3366; /* Use your accent color */
-    font-weight: bold;
-    font-size: 1.5rem;
-}
-
-/* Hamburger toggle styling */
-.hamburger-container {
-    position: relative;
-}
-/* Ensure these styles are present for the grid */
-.production-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
-    padding: 20px;
-}
-
-.production-card {
-    background: var(--card-bg);
-    padding: 20px;
-    border-radius: 8px;
-    border: 1px solid #333;
-    text-align: center;
-    text-decoration: none;
-    color: var(--text);
-    transition: all 0.3s ease;
-}
-
-.production-card:hover {
-    border-color: var(--accent);
-    transform: translateY(-5px);
 }
