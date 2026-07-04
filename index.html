@@ -466,18 +466,31 @@
         form.addEventListener('submit', function (event) {
             event.preventDefault();
 
-            const email = emailInput.value.trim().toLowerCase();
-            const valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+            const email = emailInput.value.trim();
 
-            if (!valid) {
+            if (!emailInput.checkValidity() || !email) {
                 status.textContent = 'Please enter a valid email address.';
                 status.className = 'status';
+                emailInput.reportValidity();
                 emailInput.focus();
                 return;
             }
 
-            const savedEntries = JSON.parse(localStorage.getItem(storageKey) || '[]');
-            if (!savedEntries.includes(email)) {
+            let savedEntries = [];
+
+            try {
+                const storedValue = localStorage.getItem(storageKey);
+                const parsedValue = storedValue ? JSON.parse(storedValue) : [];
+                savedEntries = Array.isArray(parsedValue) ? parsedValue : [];
+            } catch (error) {
+                savedEntries = [];
+            }
+
+            const alreadySaved = savedEntries.some(function (entry) {
+                return typeof entry === 'string' && entry.toLowerCase() === email.toLowerCase();
+            });
+
+            if (!alreadySaved) {
                 savedEntries.push(email);
                 localStorage.setItem(storageKey, JSON.stringify(savedEntries));
             }
