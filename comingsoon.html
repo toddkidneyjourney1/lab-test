@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Volunteer Portal Coming Soon | The Laboratory Theater of Florida</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .coming-soon-hero {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 60vh;
+            text-align: center;
+            padding: 2rem 1rem;
+            background: linear-gradient(135deg, rgba(255, 26, 77, 0.1) 0%, rgba(0, 255, 200, 0.1) 100%);
+        }
+
+        .coming-soon-hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--accent, #ff1a4d);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .coming-soon-hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            color: #ccc;
+            max-width: 600px;
+        }
+
+        .countdown-section {
+            background: rgba(20, 20, 30, 0.8);
+            padding: 2rem;
+            border-radius: 12px;
+            border: 2px solid var(--accent, #ff1a4d);
+            margin: 2rem 0;
+            max-width: 500px;
+        }
+
+        .countdown-title {
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent, #ff1a4d);
+            font-weight: bold;
+        }
+
+        .countdown {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .countdown-box {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 1.5rem 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--accent, #ff1a4d);
+        }
+
+        .countdown-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--accent, #ff1a4d);
+        }
+
+        .countdown-label {
+            font-size: 0.75rem;
+            color: #999;
+            margin-top: 0.5rem;
+            text-transform: uppercase;
+        }
+
+        .email-signup {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 2rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+            max-width: 500px;
+        }
+
+        .email-signup h3 {
+            color: var(--accent, #ff1a4d);
+            margin-bottom: 1rem;
+        }
+
+        .email-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .email-form input {
+            padding: 0.8rem;
+            border: 1px solid var(--accent, #ff1a4d);
+            border-radius: 4px;
+            background: rgba(0, 0, 0, 0.3);
+            color: white;
+            font-size: 1rem;
+        }
+
+        .email-form input::placeholder {
+            color: #999;
+        }
+
+        .email-form button {
+            padding: 0.8rem;
+            background: var(--accent, #ff1a4d);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+            font-size: 1rem;
+        }
+
+        .email-form button:hover {
+            background: #ff3366;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+            max-width: 1000px;
+        }
+
+        .feature-card {
+            background: rgba(20, 20, 30, 0.8);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent, #ff1a4d);
+            text-align: left;
+        }
+
+        .feature-card h3 {
+            color: var(--accent, #ff1a4d);
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-card p {
+            color: #ccc;
+            font-size: 0.95rem;
+        }
+
+        @media (max-width: 768px) {
+            .coming-soon-hero h1 {
+                font-size: 2rem;
+            }
+
+            .countdown {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .countdown-number {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hamburger Menu -->
+    <input type="checkbox" id="nav-toggle" class="nav-toggle">
+    <label for="nav-toggle" class="nav-toggle-label">
+        <span></span>
+    </label>
+
+    <!-- Menu Overlay (Scrim) -->
+    <label for="nav-toggle" class="nav-overlay"></label>
+
+    <nav class="hamburger-menu">
+        <a href="index.html">Back to the Slab</a>
+        <a href="about.html">Origin Story</a>
+        <a href="archive25.html">Past Experiments</a>
+        <a href="plan.html">Lab Protocols</a>
+        <a href="volunteer.html">Join the Experiment</a>
+        <a href="comingsoon.html">Volunteer Portal</a>
+        <a href="company.html">The Internal Log</a>
+        <a href="support.html">Fuel the Innovation</a>
+        <a href="sponsors.html">Core Collaborators</a>
+        <a href="cast.html">Meet the Cast</a>
+    </nav>
+
+    <!-- Header -->
+    <header>
+        <div class="logo">
+            <a href="index.html" style="text-decoration: none; color: inherit;">
+                THE <span>LAB</span>
+                <p class="tagline">Intentionally innovative live theater</p>
+            </a>
+        </div>
+    </header>
+
+    <main>
+        <!-- Coming Soon Hero Section -->
+        <section class="coming-soon-hero">
+            <h1>Volunteer Portal</h1>
+            <p>Join the experiment and help bring theatrical magic to life!</p>
+            <p style="font-size: 1rem; color: #999;">Our volunteer portal is launching soon. Get notified when it's ready.</p>
+
+            <!-- Countdown Timer -->
+            <div class="countdown-section">
+                <div class="countdown-title">Launch Countdown</div>
+                <div class="countdown">
+                    <div class="countdown-box">
+                        <div class="countdown-number" id="days">0</div>
+                        <div class="countdown-label">Days</div>
+                    </div>
+                    <div class="countdown-box">
+                        <div class="countdown-number" id="hours">0</div>
+                        <div class="countdown-label">Hours</div>
+                    </div>
+                    <div class="countdown-box">
+                        <div class="countdown-number" id="minutes">0</div>
+                        <div class="countdown-label">Minutes</div>
+                    </div>
+                    <div class="countdown-box">
+                        <div class="countdown-number" id="seconds">0</div>
+                        <div class="countdown-label">Seconds</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Email Signup -->
+            <div class="email-signup">
+                <h3>Get Notified</h3>
+                <form class="email-form" onsubmit="handleEmailSignup(event)">
+                    <input 
+                        type="email" 
+                        placeholder="Enter your email address" 
+                        required
+                        id="email-input"
+                    >
+                    <button type="submit">Notify Me</button>
+                </form>
+                <p style="font-size: 0.85rem; color: #999; margin-top: 1rem; text-align: center;">
+                    We'll send you an email when the volunteer portal launches.
+                </p>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section style="padding: 2rem; text-align: center;">
+            <h2 style="margin-bottom: 2rem;">What's Coming</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <h3>📋 Easy Sign-ups</h3>
+                    <p>Browse available shifts and sign up for the volunteer opportunities that work for you.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🎭 Behind the Scenes</h3>
+                    <p>Be part of the magic! Help with ushering, tech, setup, and much more.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🤝 Community</h3>
+                    <p>Connect with fellow theater enthusiasts and become part of The Lab's vibrant community.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>⏰ Flexible Scheduling</h3>
+                    <p>Choose shifts that fit your schedule and availability.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Call to Action -->
+        <section style="padding: 3rem 1rem; text-align: center; background: rgba(255, 26, 77, 0.05);">
+            <h2>Ready to Make Theater Magic?</h2>
+            <p style="margin-bottom: 1.5rem; color: #ccc;">
+                Sign up above to be notified the moment our volunteer portal launches!
+            </p>
+            <a href="volunteer.html" class="btn-primary">Learn More About Volunteering</a>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-contact">
+            <p>📍 Downtown Tampa &nbsp;&nbsp;|&nbsp;&nbsp; 📞 (813) 555-LAB1 &nbsp;&nbsp;|&nbsp;&nbsp; ✉️ info@thelabtheater.org</p>
+        </div>
+        <div class="footer-social">
+            <a href="#" title="Instagram">Instagram</a>
+            <a href="#" title="Facebook">Facebook</a>
+            <a href="#" title="Twitter">Twitter</a>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 The Laboratory Theater of Florida</p>
+        </div>
+    </footer>
+
+    <script>
+        // Countdown Timer
+        function updateCountdown() {
+            // Set launch date to August 21, 2026 (when Waiting for Godot opens)
+            const launchDate = new Date('2026-08-21T00:00:00').getTime();
+            const now = new Date().getTime();
+            const distance = launchDate - now;
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById('days').textContent = String(days).padStart(2, '0');
+            document.getElementById('hours').textContent = String(hours).padStart(2, '0');
+            document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
+            document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+
+            if (distance < 0) {
+                document.querySelector('.countdown-title').textContent = 'Portal is Live!';
+                document.querySelector('.countdown').innerHTML = '<p style="grid-column: 1 / -1; color: var(--accent, #ff1a4d); font-size: 1.2rem;">🎉 The volunteer portal is now open! Visit the portal to get started.</p>';
+            }
+        }
+
+        // Update countdown every second
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+
+        // Email signup handler
+        function handleEmailSignup(event) {
+            event.preventDefault();
+            const email = document.getElementById('email-input').value;
+            
+            // Store in localStorage (for demo purposes)
+            const signups = JSON.parse(localStorage.getItem('volunteerSignups') || '[]');
+            if (!signups.includes(email)) {
+                signups.push(email);
+                localStorage.setItem('volunteerSignups', JSON.stringify(signups));
+            }
+
+            // Show confirmation
+            const button = event.target.querySelector('button');
+            const originalText = button.textContent;
+            button.textContent = '✓ Email Saved!';
+            button.style.background = '#33cc33';
+            
+            setTimeout(() => {
+                button.textContent = originalText;
+                button.style.background = '';
+                document.getElementById('email-input').value = '';
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
