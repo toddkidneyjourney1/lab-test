@@ -6,6 +6,111 @@
     <title>Volunteer Portal | The Laboratory Theater of Florida</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js" async></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        .shift-card {
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid #333;
+            margin-bottom: 1rem;
+        }
+        .shift-card h3 {
+            margin-top: 0;
+            color: var(--accent);
+        }
+        .shift-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin: 1rem 0;
+            font-size: 0.9rem;
+        }
+        .shift-info p {
+            margin: 0.5rem 0;
+        }
+        .shift-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .signup-btn {
+            flex: 1;
+            padding: 0.8rem;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+        .signup-btn:hover {
+            background: #ff1a4d;
+        }
+        .signup-btn:disabled {
+            background: #666;
+            cursor: not-allowed;
+        }
+        .cancel-btn {
+            flex: 1;
+            padding: 0.8rem;
+            background: #666;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+        .cancel-btn:hover {
+            background: #888;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-top: 0.5rem;
+        }
+        .status-full {
+            background: #cc3333;
+            color: white;
+        }
+        .status-available {
+            background: #33cc33;
+            color: white;
+        }
+        .status-signed-up {
+            background: var(--accent);
+            color: white;
+        }
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            font-size: 1.1rem;
+        }
+        .error {
+            background: #cc3333;
+            color: white;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+        }
+        .success {
+            background: #33cc33;
+            color: white;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+        }
+        #user-button {
+            position: absolute;
+            top: 1rem;
+            right: 2rem;
+        }
+    </style>
 </head>
 <body>
     <!-- Hamburger Menu -->
@@ -35,18 +140,33 @@
     </header>
 
     <main id="portal-content" style="display:none;">
+        <h1>Volunteer Portal</h1>
+        <p>Sign up for volunteer shifts at The Laboratory Theater of Florida.</p>
+        
+        <div id="message-container"></div>
+        
         <section id="shifts">
             <h2>Available Shifts</h2>
             <div id="shift-container" class="production-grid">
-                <p>Loading available shifts...</p>
+                <p class="loading">Loading available shifts...</p>
             </div>
-            <iframe src="https://docs.google.com/forms/d/e/1FAIpQLScyg_GztWg2sliQxQ8Etdq_RKIjIjrVHyjSx9IqMI_vPk_RbQ/viewform?embedded=true" width="640" height="837" frameborder="0" marginheight="0" marginwidth="0"></iframe>
         </section>
     </main>
 
     <script>
         const PUBLISHABLE_KEY = 'pk_test_bGVhcm5pbmctbWFzdG9kb24tMzUuY2xlcmsuYWNjb3VudHMuZGV2JA';
+        const SUPABASE_URL = 'https://izytzrxrgnahyvgwqhgd.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_wo-PDCkLxkuGLsar5by1Sw_ShjHgZDC';
 
+        let supabase;
+        let clerkUser = null;
+
+        // Initialize Supabase
+        function initSupabase() {
+            supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        }
+
+        // Initialize Clerk
         window.addEventListener('load', async () => {
             const waitForClerk = setInterval(() => {
                 if (window.Clerk) {
@@ -62,9 +182,13 @@
                 await Clerk.load({ publishableKey: PUBLISHABLE_KEY });
 
                 if (Clerk.user) {
+                    clerkUser = Clerk.user;
                     document.getElementById('portal-content').style.display = 'block';
                     document.getElementById('clerk-auth').innerHTML = '<div id="user-button"></div>';
                     Clerk.mountUserButton(document.getElementById('user-button'));
+                    
+                    // Initialize Supabase after Clerk is loaded
+                    initSupabase();
                     loadShifts();
                 } else {
                     document.getElementById('clerk-auth').innerHTML = '<div id="sign-in"></div>';
@@ -72,18 +196,145 @@
                 }
             } catch (err) {
                 console.error("Clerk failed to load:", err);
+                showError("Failed to initialize authentication");
             }
         }
 
-        function loadShifts() {
+        async function loadShifts() {
             const container = document.getElementById('shift-container');
-            container.innerHTML = `
-                <div class="production-card">
-                    <h3>Usher</h3>
-                    <p>July 15, 2026 | 6:00 PM</p>
-                    <button class="button">Sign Up</button>
-                </div>
-            `;
+            
+            try {
+                // Fetch all shifts from Supabase
+                const { data: shifts, error } = await supabase
+                    .from('volunteer_shifts')
+                    .select('*')
+                    .order('date', { ascending: true })
+                    .order('time', { ascending: true });
+
+                if (error) {
+                    throw error;
+                }
+
+                if (!shifts || shifts.length === 0) {
+                    container.innerHTML = '<p style="text-align: center; padding: 2rem;">No shifts available at this time.</p>';
+                    return;
+                }
+
+                // Fetch user's current sign-ups
+                const { data: userSignups, error: signupError } = await supabase
+                    .from('volunteer_signups')
+                    .select('shift_id')
+                    .eq('user_id', clerkUser.id);
+
+                if (signupError) {
+                    console.error('Error loading signups:', signupError);
+                }
+
+                const signedUpShiftIds = (userSignups || []).map(s => s.shift_id);
+
+                // Render shifts
+                container.innerHTML = shifts.map(shift => {
+                    const isSignedUp = signedUpShiftIds.includes(shift.id);
+                    const spotsTaken = shift.current_signups || 0;
+                    const spotsRemaining = (shift.capacity || 10) - spotsTaken;
+                    const isFull = spotsRemaining <= 0;
+
+                    return `
+                        <div class="shift-card">
+                            <h3>${shift.title || shift.role}</h3>
+                            <div class="shift-info">
+                                <p><strong>Date:</strong> ${new Date(shift.date).toLocaleDateString()}</p>
+                                <p><strong>Time:</strong> ${shift.time}</p>
+                                <p><strong>Position:</strong> ${shift.role}</p>
+                                <p><strong>Spots:</strong> ${spotsRemaining} of ${shift.capacity || 10} available</p>
+                            </div>
+                            ${shift.description ? `<p>${shift.description}</p>` : ''}
+                            <div>
+                                ${isFull ? '<span class="status-badge status-full">Shift Full</span>' : 
+                                  isSignedUp ? '<span class="status-badge status-signed-up">Signed Up</span>' : 
+                                  '<span class="status-badge status-available">Available</span>'}
+                            </div>
+                            <div class="shift-actions">
+                                ${isSignedUp ? 
+                                    `<button class="cancel-btn" onclick="cancelSignup(${shift.id})">Cancel Signup</button>` :
+                                    `<button class="signup-btn" onclick="signupForShift(${shift.id})" ${isFull ? 'disabled' : ''}>Sign Up</button>`
+                                }
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+            } catch (err) {
+                console.error('Error loading shifts:', err);
+                container.innerHTML = '<p class="error">Error loading shifts. Please try again later.</p>';
+            }
+        }
+
+        async function signupForShift(shiftId) {
+            try {
+                const { error } = await supabase
+                    .from('volunteer_signups')
+                    .insert([
+                        {
+                            shift_id: shiftId,
+                            user_id: clerkUser.id,
+                            email: clerkUser.primaryEmailAddress?.emailAddress,
+                            first_name: clerkUser.firstName,
+                            last_name: clerkUser.lastName,
+                            created_at: new Date().toISOString()
+                        }
+                    ]);
+
+                if (error) {
+                    if (error.code === '23505') {
+                        showError('You are already signed up for this shift!');
+                    } else {
+                        throw error;
+                    }
+                } else {
+                    showSuccess('Successfully signed up for the shift!');
+                    await loadShifts();
+                }
+            } catch (err) {
+                console.error('Error signing up:', err);
+                showError('Failed to sign up for shift. Please try again.');
+            }
+        }
+
+        async function cancelSignup(shiftId) {
+            try {
+                const { error } = await supabase
+                    .from('volunteer_signups')
+                    .delete()
+                    .eq('shift_id', shiftId)
+                    .eq('user_id', clerkUser.id);
+
+                if (error) {
+                    throw error;
+                }
+
+                showSuccess('Successfully cancelled signup!');
+                await loadShifts();
+            } catch (err) {
+                console.error('Error cancelling signup:', err);
+                showError('Failed to cancel signup. Please try again.');
+            }
+        }
+
+        function showMessage(message, type = 'success') {
+            const container = document.getElementById('message-container');
+            container.innerHTML = `<div class="${type}">${message}</div>`;
+            setTimeout(() => {
+                container.innerHTML = '';
+            }, 4000);
+        }
+
+        function showSuccess(message) {
+            showMessage(message, 'success');
+        }
+
+        function showError(message) {
+            showMessage(message, 'error');
         }
     </script>
 </body>
