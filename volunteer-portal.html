@@ -160,6 +160,7 @@
 
         let supabase;
         let clerkUser = null;
+        let currentVolunteerId = null;
 
         // Initialize Supabase
         function initSupabase() {
@@ -189,6 +190,9 @@
                     
                     // Initialize Supabase after Clerk is loaded
                     initSupabase();
+                    
+                    // Get or create volunteer record
+                    await getOrCreateVolunteer();
                     loadShifts();
                 } else {
                     document.getElementById('clerk-auth').innerHTML = '<div id="sign-in"></div>';
@@ -200,16 +204,53 @@
             }
         }
 
+        async function getOrCreateVolunteer() {
+            try {
+                // Check if volunteer exists
+                const { data: existingVolunteer, error: fetchError } = await supabase
+                    .from('volunteers')
+                    .select('id')
+                    .eq('clerk_id', clerkUser.id)
+                    .single();
+
+                if (existingVolunteer) {
+                    currentVolunteerId = existingVolunteer.id;
+                    return;
+                }
+
+                // Create new volunteer record
+                const { data: newVolunteer, error: createError } = await supabase
+                    .from('volunteers')
+                    .insert([
+                        {
+                            clerk_id: clerkUser.id,
+                            full_name: `${clerkUser.firstName || ''} ${clerkUser.lastName || ''}`.trim(),
+                            email: clerkUser.primaryEmailAddress?.emailAddress,
+                        }
+                    ])
+                    .select()
+                    .single();
+
+                if (createError) {
+                    throw createError;
+                }
+
+                currentVolunteerId = newVolunteer.id;
+            } catch (err) {
+                console.error('Error managing volunteer record:', err);
+                showError('Failed to load volunteer profile');
+            }
+        }
+
         async function loadShifts() {
             const container = document.getElementById('shift-container');
             
             try {
-                // Fetch all shifts from Supabase
+                // Fetch all available shifts from "Volunteer-shifts" table
                 const { data: shifts, error } = await supabase
-                    .from('volunteer_shifts')
+                    .from('"Volunteer-shifts"')
                     .select('*')
-                    .order('date', { ascending: true })
-                    .order('time', { ascending: true });
+                    .order('shift_date', { ascending: true });
 
                 if (error) {
                     throw error;
@@ -220,35 +261,31 @@
                     return;
                 }
 
-                // Fetch user's current sign-ups
+                // Fetch user's current sign-ups from "volunteer_shifts" table
                 const { data: userSignups, error: signupError } = await supabase
-                    .from('volunteer_signups')
-                    .select('shift_id')
-                    .eq('user_id', clerkUser.id);
+                    .from('volunteer_shifts')
+                    .select('shift_id:id')
+                    .eq('volunteer_id', currentVolunteerId);
 
                 if (signupError) {
                     console.error('Error loading signups:', signupError);
                 }
 
-                const signedUpShiftIds = (userSignups || []).map(s => s.shift_id);
+                const signedUpShifts = (userSignups || []).map(s => s.shift_id);
 
                 // Render shifts
                 container.innerHTML = shifts.map(shift => {
-                    const isSignedUp = signedUpShiftIds.includes(shift.id);
-                    const spotsTaken = shift.current_signups || 0;
-                    const spotsRemaining = (shift.capacity || 10) - spotsTaken;
-                    const isFull = spotsRemaining <= 0;
+                    const isSignedUp = signedUpShifts.includes(shift.id);
+                    const isFull = shift.volunteer_count <= 0;
+                    const spotsRemaining = Math.max(0, shift.volunteer_count || 0);
 
                     return `
                         <div class="shift-card">
-                            <h3>${shift.title || shift.role}</h3>
+                            <h3>${shift.shift_name}</h3>
                             <div class="shift-info">
-                                <p><strong>Date:</strong> ${new Date(shift.date).toLocaleDateString()}</p>
-                                <p><strong>Time:</strong> ${shift.time}</p>
-                                <p><strong>Position:</strong> ${shift.role}</p>
-                                <p><strong>Spots:</strong> ${spotsRemaining} of ${shift.capacity || 10} available</p>
+                                <p><strong>Date:</strong> ${new Date(shift.shift_date).toLocaleDateString()}</p>
+                                <p><strong>Spots Available:</strong> ${spotsRemaining}</p>
                             </div>
-                            ${shift.description ? `<p>${shift.description}</p>` : ''}
                             <div>
                                 ${isFull ? '<span class="status-badge status-full">Shift Full</span>' : 
                                   isSignedUp ? '<span class="status-badge status-signed-up">Signed Up</span>' : 
@@ -256,8 +293,8 @@
                             </div>
                             <div class="shift-actions">
                                 ${isSignedUp ? 
-                                    `<button class="cancel-btn" onclick="cancelSignup(${shift.id})">Cancel Signup</button>` :
-                                    `<button class="signup-btn" onclick="signupForShift(${shift.id})" ${isFull ? 'disabled' : ''}>Sign Up</button>`
+                                    `<button class="cancel-btn" onclick="cancelSignup('${shift.id}')">Cancel Signup</button>` :
+                                    `<button class="signup-btn" onclick="signupForShift('${shift.id}')" ${isFull ? 'disabled' : ''}>Sign Up</button>`
                                 }
                             </div>
                         </div>
@@ -272,16 +309,16 @@
 
         async function signupForShift(shiftId) {
             try {
+                // Insert signup record in volunteer_shifts table
                 const { error } = await supabase
-                    .from('volunteer_signups')
+                    .from('volunteer_shifts')
                     .insert([
                         {
+                            volunteer_id: currentVolunteerId,
                             shift_id: shiftId,
-                            user_id: clerkUser.id,
-                            email: clerkUser.primaryEmailAddress?.emailAddress,
-                            first_name: clerkUser.firstName,
-                            last_name: clerkUser.lastName,
-                            created_at: new Date().toISOString()
+                            shift_start: new Date().toISOString(),
+                            shift_end: new Date().toISOString(),
+                            role: 'Volunteer'
                         }
                     ]);
 
@@ -293,6 +330,21 @@
                     }
                 } else {
                     showSuccess('Successfully signed up for the shift!');
+                    
+                    // Decrement volunteer count in Volunteer-shifts table
+                    const { data: shift } = await supabase
+                        .from('"Volunteer-shifts"')
+                        .select('volunteer_count')
+                        .eq('id', shiftId)
+                        .single();
+                    
+                    if (shift) {
+                        await supabase
+                            .from('"Volunteer-shifts"')
+                            .update({ volunteer_count: (shift.volunteer_count || 0) - 1 })
+                            .eq('id', shiftId);
+                    }
+                    
                     await loadShifts();
                 }
             } catch (err) {
@@ -303,17 +355,33 @@
 
         async function cancelSignup(shiftId) {
             try {
+                // Delete signup record
                 const { error } = await supabase
-                    .from('volunteer_signups')
+                    .from('volunteer_shifts')
                     .delete()
-                    .eq('shift_id', shiftId)
-                    .eq('user_id', clerkUser.id);
+                    .eq('volunteer_id', currentVolunteerId)
+                    .eq('shift_id', shiftId);
 
                 if (error) {
                     throw error;
                 }
 
                 showSuccess('Successfully cancelled signup!');
+                
+                // Increment volunteer count in Volunteer-shifts table
+                const { data: shift } = await supabase
+                    .from('"Volunteer-shifts"')
+                    .select('volunteer_count')
+                    .eq('id', shiftId)
+                    .single();
+                
+                if (shift) {
+                    await supabase
+                        .from('"Volunteer-shifts"')
+                        .update({ volunteer_count: (shift.volunteer_count || 0) + 1 })
+                        .eq('id', shiftId);
+                }
+                
                 await loadShifts();
             } catch (err) {
                 console.error('Error cancelling signup:', err);
