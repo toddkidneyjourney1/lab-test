@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Volunteer Portal Coming Soon | The Laboratory Theater of Florida</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Hamburger Menu -->
+    <input type="checkbox" id="nav-toggle" class="nav-toggle">
+    <label for="nav-toggle" class="nav-toggle-label">
+        <span></span>
+    </label>
+
+    <!-- Menu Overlay (Scrim) -->
+    <label for="nav-toggle" class="nav-overlay"></label>
+
+    <nav class="hamburger-menu">
+        <a href="index.html">Home</a>
+        <a href="about.html">Origin Story</a>
+        <a href="archive25.html">Past Experiments</a>
+        <a href="plan.html">Lab Protocols</a>
+        <a href="volunteer.html">Join the Experiment</a>
+        <a href="comingsoon.html">Volunteer Updates</a>
+        <a href="volunteer-portal.html">Volunteer Portal</a>
+        <a href="company.html">The Internal Log</a>
+        <a href="support.html">Fuel the Innovation</a>
+        <a href="sponsors.html">Core Collaborators</a>
+    </nav>
+
+    <header class="main-header">
+        <div class="logo">
+            <a href="index.html">THE <span>LAB</span></a>
+            <p class="tagline">Intentionally innovative live theater</p>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero coming-soon-hero">
+            <div class="hero-content">
+                <span class="tag">Volunteer Portal Launch</span>
+                <h1>A smarter volunteer experience is almost here.</h1>
+                <p>We are preparing a dedicated volunteer portal for The Laboratory Theater of Florida so our community can view opportunities, manage shifts, and stay connected throughout the season.</p>
+                <div class="quick-links">
+                    <a href="volunteer.html" class="btn-primary">Explore Volunteer Opportunities</a>
+                    <a href="volunteer-portal.html" class="button secondary">Preview the Portal</a>
+                </div>
+            </div>
+            <aside class="countdown-panel" aria-label="Countdown to volunteer portal launch">
+                <p class="countdown-kicker">Expected launch</p>
+                <h2>September 1, 2026</h2>
+                <div class="countdown-grid">
+                    <div class="countdown-item">
+                        <span class="countdown-value" id="countdown-days">00</span>
+                        <span class="countdown-label">Days</span>
+                    </div>
+                    <div class="countdown-item">
+                        <span class="countdown-value" id="countdown-hours">00</span>
+                        <span class="countdown-label">Hours</span>
+                    </div>
+                    <div class="countdown-item">
+                        <span class="countdown-value" id="countdown-minutes">00</span>
+                        <span class="countdown-label">Minutes</span>
+                    </div>
+                    <div class="countdown-item">
+                        <span class="countdown-value" id="countdown-seconds">00</span>
+                        <span class="countdown-label">Seconds</span>
+                    </div>
+                </div>
+                <p id="countdown-message" class="status-message">We are counting down to a volunteer launch designed for Season 18 support.</p>
+            </aside>
+        </section>
+
+        <section class="newsletter">
+            <h2>Get notified when the portal goes live</h2>
+            <p>Request launch updates, early volunteer announcements, and first notice when new shifts are posted.</p>
+            <form id="notification-form" class="newsletter-form">
+                <input type="email" id="notification-email" name="email" placeholder="Enter your email address" autocomplete="email" required>
+                <button type="submit" class="btn-primary">Notify Me</button>
+            </form>
+            <p class="small-note">Submitting opens an email draft to the Lab office so you can request volunteer portal notifications.</p>
+            <p id="signup-message" class="status-message" aria-live="polite"></p>
+        </section>
+
+        <section class="production-details">
+            <span class="tag">Upcoming Opportunities</span>
+            <h2>How you can plug into the next experiment</h2>
+            <p class="content">Whether you are welcoming patrons at the door or helping bring productions to life backstage, the upcoming portal will make it easier to see where you can help.</p>
+            <div class="production-grid">
+                <div class="production-card">
+                    <h3>Front of House</h3>
+                    <p>Support performances as an usher, greeter, or concessions helper during our mainstage run.</p>
+                </div>
+                <div class="production-card">
+                    <h3>Scenic &amp; Props</h3>
+                    <p>Assist with build days, strike calls, prop organization, and backstage preparation.</p>
+                </div>
+                <div class="production-card">
+                    <h3>Box Office Support</h3>
+                    <p>Help patrons with check-in, seating questions, and event-night logistics.</p>
+                </div>
+                <div class="production-card">
+                    <h3>Community Events</h3>
+                    <p>Represent The Lab at special events, donor gatherings, and outreach opportunities.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="testimonials">
+            <h2>Keep exploring The Lab</h2>
+            <div class="cta-links">
+                <a href="index.html" class="button">Back to Home</a>
+                <a href="about.html" class="button secondary">Read Our Origin Story</a>
+                <a href="support.html" class="button secondary">Support the Theater</a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-contact">
+            <p>📍 Downtown Tampa &nbsp;&nbsp;|&nbsp;&nbsp; 📞 (813) 555-LAB1 &nbsp;&nbsp;|&nbsp;&nbsp; ✉️ info@thelabtheater.org</p>
+        </div>
+        <div class="footer-social">
+            <a href="#" title="Instagram">Instagram</a>
+            <a href="#" title="Facebook">Facebook</a>
+            <a href="#" title="Twitter">Twitter</a>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 The Laboratory Theater of Florida</p>
+        </div>
+    </footer>
+
+    <script>
+        const launchDate = new Date('2026-09-01T09:00:00-04:00');
+        const countdownElements = {
+            days: document.getElementById('countdown-days'),
+            hours: document.getElementById('countdown-hours'),
+            minutes: document.getElementById('countdown-minutes'),
+            seconds: document.getElementById('countdown-seconds')
+        };
+        const countdownMessage = document.getElementById('countdown-message');
+
+        function updateCountdown() {
+            const difference = launchDate.getTime() - Date.now();
+
+            if (difference <= 0) {
+                Object.values(countdownElements).forEach((element) => {
+                    element.textContent = '00';
+                });
+                countdownMessage.textContent = 'The volunteer portal is live. Visit the portal preview link above to get started.';
+                return;
+            }
+
+            const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
+            const minutes = Math.floor((difference / 1000 / 60) % 60);
+            const seconds = Math.floor((difference / 1000) % 60);
+
+            countdownElements.days.textContent = String(days).padStart(2, '0');
+            countdownElements.hours.textContent = String(hours).padStart(2, '0');
+            countdownElements.minutes.textContent = String(minutes).padStart(2, '0');
+            countdownElements.seconds.textContent = String(seconds).padStart(2, '0');
+        }
+
+        updateCountdown();
+        window.setInterval(updateCountdown, 1000);
+
+        const notificationForm = document.getElementById('notification-form');
+        const notificationEmail = document.getElementById('notification-email');
+        const signupMessage = document.getElementById('signup-message');
+        const storageKey = 'labVolunteerPortalNotifications';
+
+        notificationForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const email = notificationEmail.value.trim();
+
+            if (!email) {
+                signupMessage.textContent = 'Please enter an email address so we know where to reach you.';
+                return;
+            }
+
+            try {
+                const existingList = JSON.parse(window.localStorage.getItem(storageKey) || '[]');
+                if (!existingList.includes(email)) {
+                    existingList.push(email);
+                    window.localStorage.setItem(storageKey, JSON.stringify(existingList));
+                }
+            } catch (error) {
+                console.warn('Unable to store volunteer notification signup locally.', error);
+            }
+
+            signupMessage.textContent = 'Thanks! Your email app should open with a ready-to-send notification request.';
+            notificationForm.reset();
+
+            const subject = encodeURIComponent('Volunteer Portal Launch Notifications');
+            const body = encodeURIComponent(`Please notify me when the volunteer portal launches.
+
+Email: ${email}`);
+            window.location.href = `mailto:office@laboratorytheaterflorida.com?subject=${subject}&body=${body}`;
+        });
+    </script>
+</body>
+</html>
