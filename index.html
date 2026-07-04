@@ -3,183 +3,489 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Laboratory Theater of Florida</title>
-    <link rel="stylesheet" href="style.css">
+    <meta name="description" content="Lab Test is preparing a polished new launch. Join the email list for updates.">
+    <title>Lab Test | Coming Soon</title>
+    <style>
+        :root {
+            --bg: #07111f;
+            --bg-soft: rgba(14, 27, 46, 0.86);
+            --surface: rgba(14, 24, 39, 0.78);
+            --surface-strong: rgba(20, 35, 56, 0.92);
+            --border: rgba(255, 255, 255, 0.12);
+            --text: #f5f7fb;
+            --muted: #a8b5c8;
+            --accent: #69c6ff;
+            --accent-strong: #3c8dff;
+            --success: #68e0a0;
+            --shadow: 0 24px 60px rgba(3, 10, 22, 0.45);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Inter, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(105, 198, 255, 0.18), transparent 38%),
+                radial-gradient(circle at bottom right, rgba(60, 141, 255, 0.18), transparent 32%),
+                linear-gradient(145deg, #04080f 0%, var(--bg) 45%, #0b1830 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            overflow-x: hidden;
+        }
+
+        body::before,
+        body::after {
+            content: "";
+            position: fixed;
+            inset: auto;
+            width: 18rem;
+            height: 18rem;
+            border-radius: 50%;
+            filter: blur(10px);
+            opacity: 0.55;
+            animation: float 9s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        body::before {
+            top: 7%;
+            left: -4rem;
+            background: rgba(105, 198, 255, 0.18);
+        }
+
+        body::after {
+            right: -4rem;
+            bottom: 8%;
+            background: rgba(60, 141, 255, 0.15);
+            animation-delay: -3s;
+        }
+
+        main {
+            position: relative;
+            z-index: 1;
+            width: min(100%, 1080px);
+        }
+
+        .hero {
+            display: grid;
+            grid-template-columns: 1.15fr 0.85fr;
+            gap: 32px;
+            padding: 48px;
+            border: 1px solid var(--border);
+            border-radius: 28px;
+            background: linear-gradient(180deg, var(--bg-soft), var(--surface));
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(18px);
+        }
+
+        .hero-copy,
+        .hero-panel {
+            animation: rise 0.8s ease-out both;
+        }
+
+        .hero-panel {
+            animation-delay: 0.12s;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 16px;
+            border-radius: 999px;
+            background: rgba(105, 198, 255, 0.1);
+            color: var(--accent);
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .eyebrow::before {
+            content: "";
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background: currentColor;
+            box-shadow: 0 0 0 0 rgba(105, 198, 255, 0.45);
+            animation: pulse 2s infinite;
+        }
+
+        h1 {
+            margin: 20px 0 16px;
+            font-size: clamp(2.5rem, 5vw, 4.6rem);
+            line-height: 1.05;
+            letter-spacing: -0.04em;
+        }
+
+        .lead {
+            max-width: 34rem;
+            margin: 0 0 28px;
+            color: var(--muted);
+            font-size: 1.08rem;
+            line-height: 1.75;
+        }
+
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+            margin-bottom: 28px;
+        }
+
+        .button,
+        button {
+            appearance: none;
+            border: 0;
+            border-radius: 999px;
+            padding: 0.95rem 1.4rem;
+            font: inherit;
+            font-weight: 700;
+            text-decoration: none;
+            cursor: pointer;
+            transition: transform 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease;
+        }
+
+        .button-primary,
+        button {
+            color: #04111e;
+            background: linear-gradient(135deg, var(--accent), #8fddff);
+            box-shadow: 0 14px 32px rgba(105, 198, 255, 0.24);
+        }
+
+        .button-secondary {
+            color: var(--text);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+        }
+
+        .button:hover,
+        button:hover,
+        .button:focus-visible,
+        button:focus-visible {
+            transform: translateY(-2px);
+            outline: none;
+        }
+
+        .hero-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 18px;
+            color: var(--muted);
+            font-size: 0.95rem;
+        }
+
+        .hero-meta span {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .hero-panel {
+            display: grid;
+            gap: 18px;
+            align-content: start;
+        }
+
+        .panel-card {
+            padding: 24px;
+            border-radius: 22px;
+            background: linear-gradient(180deg, rgba(18, 34, 54, 0.94), var(--surface-strong));
+            border: 1px solid rgba(255, 255, 255, 0.09);
+        }
+
+        .panel-card h2,
+        .panel-card h3 {
+            margin: 0 0 12px;
+        }
+
+        .panel-card p {
+            margin: 0;
+            color: var(--muted);
+            line-height: 1.7;
+        }
+
+        form {
+            display: grid;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 12px;
+        }
+
+        input[type="email"] {
+            flex: 1;
+            min-width: 0;
+            padding: 0.95rem 1rem;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text);
+            font: inherit;
+        }
+
+        input[type="email"]::placeholder {
+            color: #7f90a8;
+        }
+
+        input[type="email"]:focus {
+            outline: 2px solid rgba(105, 198, 255, 0.5);
+            outline-offset: 2px;
+        }
+
+        .form-note,
+        .status {
+            font-size: 0.92rem;
+            color: var(--muted);
+        }
+
+        .status {
+            min-height: 1.4em;
+        }
+
+        .status.success {
+            color: var(--success);
+        }
+
+        .highlights {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 14px;
+            margin-top: 8px;
+        }
+
+        .highlight {
+            padding: 16px;
+            border-radius: 18px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .highlight strong {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 1rem;
+        }
+
+        .highlight span {
+            color: var(--muted);
+            font-size: 0.94rem;
+        }
+
+        .socials {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .socials a {
+            color: var(--text);
+            text-decoration: none;
+            padding: 0.7rem 1rem;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: transform 0.25s ease, border-color 0.25s ease;
+        }
+
+        .socials a:hover,
+        .socials a:focus-visible {
+            transform: translateY(-2px);
+            border-color: rgba(105, 198, 255, 0.5);
+            outline: none;
+        }
+
+        footer {
+            margin-top: 20px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.92rem;
+        }
+
+        @keyframes rise {
+            from {
+                opacity: 0;
+                transform: translateY(24px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-18px);
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(105, 198, 255, 0.45);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(105, 198, 255, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(105, 198, 255, 0);
+            }
+        }
+
+        @media (max-width: 900px) {
+            .hero {
+                grid-template-columns: 1fr;
+                padding: 36px;
+            }
+
+            .highlights {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 640px) {
+            body {
+                padding: 16px;
+            }
+
+            .hero {
+                padding: 24px;
+                border-radius: 24px;
+            }
+
+            .form-row,
+            .actions {
+                flex-direction: column;
+            }
+
+            .highlights {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-meta {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <!-- Hamburger Menu -->
-<input type="checkbox" id="nav-toggle" class="nav-toggle">
-<label for="nav-toggle" class="nav-toggle-label">
-    <span></span>
-</label>
-
-<!-- Menu Overlay (Scrim) -->
-<label for="nav-toggle" class="nav-overlay"></label>
-
-<nav class="hamburger-menu">
-    <a href="about.html">Origin Story</a>
-    <a href="archive25.html">Past Experiments</a>
-    <a href="index.html">Back to the Slab</a>
-    <a href="plan.html">Lab Protocols</a>
-    <a href="volunteer.html">Join the Experiment</a>
-    <a href="company.html">The Internal Log</a>
-    <a href="support.html">Fuel the Innovation</a>
-    <a href="sponsors.html">Core Collaborators</a>
-    <a href="cast.html">Meet the Cast</a>
-</nav>
-
-<!-- Header -->
-<header>
-    <div class="logo">
-        THE <span>LAB</span>
-        <p class="tagline">Intentionally innovative live theater</p>
-    </div>
-</header>
-
     <main>
-        <!-- Featured Hero Section -->
-        <section class="hero">
-            <div class="hero-content">
-                <span class="tag">Our Current Experiment</span>
-                <h1>Waiting for Godot</h1>
-                <p>On a barren road, two men wait for a mysterious figure who never arrives.</p>
-                <a href="https://www.purplepass.com/events/375339-waiting-for-godot-aug-20th-2026" class="btn-primary">Secure Your Seat</a>
-            </div>
-            <img src="assets/godot.jpg" alt="Waiting for Godot production poster">
-        </section>
-
-        <!-- Cast Section -->
-        <section class="cast-section">
-            <h2>The Experiment's Cast</h2>
-            <div class="cast-grid">
-                <div class="cast-member">
-                    <h3>Samuel Kirk</h3>
-                    <p class="role">Vladimir</p>
+        <section class="hero" aria-labelledby="coming-soon-title">
+            <div class="hero-copy">
+                <span class="eyebrow">Coming Soon</span>
+                <h1 id="coming-soon-title">A smarter Lab Test experience is almost here.</h1>
+                <p class="lead">
+                    We’re putting the finishing touches on a professional new launch for Lab Test.
+                    Join the early access list to be the first to know when we go live.
+                </p>
+                <div class="actions">
+                    <a class="button button-primary" href="#signup">Get launch updates</a>
+                    <a class="button button-secondary" href="about.html">Learn more</a>
                 </div>
-                <div class="cast-member">
-                    <h3>Marcus Chen</h3>
-                    <p class="role">Estragon</p>
-                </div>
-                <div class="cast-member">
-                    <h3>James Richardson</h3>
-                    <p class="role">Pozzo</p>
-                </div>
-                <div class="cast-member">
-                    <h3>David Park</h3>
-                    <p class="role">Lucky</p>
+                <div class="hero-meta" aria-label="Launch highlights">
+                    <span>Modern responsive design</span>
+                    <span>Email capture ready</span>
+                    <span>Launching soon</span>
                 </div>
             </div>
-        </section>
 
-        <!-- Season Lineup -->
-        <section class="shows-list">
-            <!-- Season 18 Pass Button - Centered Above Section Title -->
-            <div class="season-pass-inline">
-                <a href="https://www.purplepass.com/events/380468-season-18-passes-jun-25th-2026" class="season-pass-btn-inline">
-                    SEASON 18 PASSES
-                </a>
-            </div>
+            <div class="hero-panel">
+                <div class="panel-card" id="signup">
+                    <h2>Stay in the loop</h2>
+                    <p>Subscribe for launch announcements, feature previews, and early updates.</p>
+                    <form id="signup-form" novalidate>
+                        <div class="form-row">
+                            <input
+                                id="email"
+                                name="email"
+                                type="email"
+                                placeholder="Enter your email address"
+                                autocomplete="email"
+                                required
+                                aria-label="Email address"
+                            >
+                            <button type="submit">Notify me</button>
+                        </div>
+                        <p class="form-note">This form is integration-ready for GitHub Pages and currently stores signups in your browser for demo purposes.</p>
+                        <p id="form-status" class="status" aria-live="polite"></p>
+                    </form>
+                </div>
 
-            <h2>WHATS ON THE SLAB</h2>
-            
-            <a href="production/godot.html" class="show-item">
-                <img src="assets/godot.jpg" alt="Waiting for Godot production">
-                <div class="show-details">
-                    <h3>Waiting for Godot</h3>
-                    <p class="show-date">Aug 21 – Sept 6</p>
-                    <p class="show-blurb">Two men wait on a barren road for someone who may never arrive.</p>
-                </div>
-            </a>
-
-            <a href="production/pillowman.html" class="show-item">
-                <img src="assets/pillowman.jpg" alt="The Pillowman production">
-                <div class="show-details">
-                    <h3>The Pillowman</h3>
-                    <p class="show-date">October 8 – 25</p>
-                    <p class="show-blurb">A darkly comic tale where fiction and reality blur into something terrifying.</p>
-                </div>
-            </a>
-
-            <a href="production/rivals.html" class="show-item">
-                <img src="assets/rivals.jpg" alt="The Rivals production">
-                <div class="show-details">
-                    <h3>The Rivals</h3>
-                    <p class="show-date">November 12 – 29</p>
-                    <p class="show-blurb">An 18th-century comedy of manners bursting with wit, disguises, and romantic chaos.</p>
-                </div>
-            </a>
-
-            <a href="production/god.html" class="show-item">
-                <img src="assets/godofcarnage.jpg" alt="God of Carnage production">
-                <div class="show-details">
-                    <h3>God of Carnage</h3>
-                    <p class="show-date">January 14 – 31</p>
-                    <p class="show-blurb">A civilized dinner conversation spirals into a hilarious battle of wits and egos.</p>
-                </div>
-            </a>
-
-            <a href="production/bare.html" class="show-item">
-                <img src="assets/bare.jpg" alt="Bare: A Pop Opera production">
-                <div class="show-details">
-                    <h3>Bare: A Pop Opera</h3>
-                    <p class="show-date">February 18 – March 7</p>
-                    <p class="show-blurb">A powerful rock musical about identity, faith, and the courage to be yourself.</p>
-                </div>
-            </a>
-
-            <a href="production/shakespeare.html" class="show-item">
-                <img src="assets/midsummer.jpg" alt="A Midsummer Night's Dream production">
-                <div class="show-details">
-                    <h3>A Midsummer Night's Dream</h3>
-                    <p class="show-date">March 25 – April 11</p>
-                    <p class="show-blurb">Love spells, fairies, and chaos in an enchanted forest create magical mayhem.</p>
-                </div>
-            </a>
-
-            <a href="production/fences.html" class="show-item">
-                <img src="assets/fences.jpg" alt="Fences production">
-                <div class="show-details">
-                    <h3>Fences</h3>
-                    <p class="show-date">April 22 – May 9</p>
-                    <p class="show-blurb">A Pulitzer Prize winner exploring dreams, sacrifice, and the walls we build.</p>
-                </div>
-            </a>
-        </section>
-
-        <!-- Testimonials Section -->
-        <section class="testimonials">
-            <h2>What Our Audience Says</h2>
-            <div class="testimonials-grid">
-                <div class="testimonial-card">
-                    <p class="testimonial-text">"A night of pure theatrical magic. The Lab pushed boundaries and touched our hearts."</p>
-                    <p class="testimonial-author">— Sarah M.</p>
-                </div>
-                <div class="testimonial-card">
-                    <p class="testimonial-text">"Intimate, daring, and unforgettable. This is what theater should be."</p>
-                    <p class="testimonial-author">— James T.</p>
-                </div>
-                <div class="testimonial-card">
-                    <p class="testimonial-text">"The Lab is a vital part of our community. Every show is an experience."</p>
-                    <p class="testimonial-author">— Maria L.</p>
+                <div class="panel-card">
+                    <h3>What to expect</h3>
+                    <div class="highlights">
+                        <div class="highlight">
+                            <strong>Polished launch</strong>
+                            <span>A clear, professional destination for first impressions.</span>
+                        </div>
+                        <div class="highlight">
+                            <strong>Fast on mobile</strong>
+                            <span>Optimized layouts across phones, tablets, and desktops.</span>
+                        </div>
+                        <div class="highlight">
+                            <strong>Ready to scale</strong>
+                            <span>Prepared for future newsletter or API-backed signup integration.</span>
+                        </div>
+                    </div>
+                    <div class="socials" aria-label="Quick links">
+                        <a href="about.html">About</a>
+                        <a href="plan.html">Roadmap</a>
+                    </div>
                 </div>
             </div>
         </section>
+
+        <footer>
+            <p>&copy; <span id="year"></span> Lab Test. All rights reserved.</p>
+        </footer>
     </main>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-contact">
-            <p>📍 Downtown Tampa &nbsp;&nbsp;|&nbsp;&nbsp; 📞 (813) 555-LAB1 &nbsp;&nbsp;|&nbsp;&nbsp; ✉️ info@thelabtheater.org</p>
-        </div>
-        <div class="footer-social">
-            <a href="#" title="Instagram">Instagram</a>
-            <a href="#" title="Facebook">Facebook</a>
-            <a href="#" title="Twitter">Twitter</a>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2026 The Laboratory Theater of Florida</p>
-        </div>
-    </footer>
+    <script>
+        const form = document.getElementById('signup-form');
+        const emailInput = document.getElementById('email');
+        const status = document.getElementById('form-status');
+        const storageKey = 'lab-test-coming-soon-signups';
 
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const email = emailInput.value.trim().toLowerCase();
+            const valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+            if (!valid) {
+                status.textContent = 'Please enter a valid email address.';
+                status.className = 'status';
+                emailInput.focus();
+                return;
+            }
+
+            const savedEntries = JSON.parse(localStorage.getItem(storageKey) || '[]');
+            if (!savedEntries.includes(email)) {
+                savedEntries.push(email);
+                localStorage.setItem(storageKey, JSON.stringify(savedEntries));
+            }
+
+            form.reset();
+            status.textContent = 'Thanks — you’re on the list for launch updates.';
+            status.className = 'status success';
+        });
+    </script>
 </body>
 </html>
