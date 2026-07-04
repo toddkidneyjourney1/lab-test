@@ -7,27 +7,31 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <!-- Hamburger Menu -->
+    <input type="checkbox" id="nav-toggle" class="nav-toggle">
+    <label for="nav-toggle" class="nav-toggle-label">
+        <span></span>
+    </label>
 
-    <header class="main-header">
+    <!-- Menu Overlay (Scrim) -->
+    <label for="nav-toggle" class="nav-overlay"></label>
+
+    <nav class="hamburger-menu">
+        <a href="index.html">Home</a>
+        <a href="about.html">Origin Story</a>
+        <a href="archive25.html">Past Experiments</a>
+        <a href="plan.html">Lab Protocols</a>
+        <a href="volunteer.html">Join the Experiment</a>
+        <a href="company.html">The Internal Log</a>
+        <a href="support.html">Fuel the Innovation</a>
+        <a href="sponsors.html">Core Collaborators</a>
+    </nav>
+
+    <!-- Header -->
+    <header>
         <div class="logo">
-            <a href="index.html">THE LAB (oratory theater)</a>
-        </div>
-
-        <!-- Hamburger Menu -->
-        <div class="hamburger-container">
-            <input type="checkbox" id="nav-toggle" class="nav-toggle">
-            <label for="nav-toggle" class="nav-toggle-label">
-                <span></span>
-            </label>
-            <nav class="hamburger-menu">
-                <a href="about.html">The Origin Story</a>
-                <a href="index.html">Back to the Main Lab</a>
-                <a href="plan.html">Lab Protocols</a>
-                <a href="volunteer.html">Join The Experiment</a>
-                <a href="company.html">The Internal Log</a>
-                <a href="support.html">Fuel The Innovation</a>
-                <a href="sponsors.html">Core Collaborators</a>
-            </nav>
+            THE <span>LAB</span>
+            <p class="tagline">Intentionally innovative live theater</p>
         </div>
     </header>
 
