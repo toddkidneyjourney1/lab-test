@@ -3,196 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cast & Crew Portal | The Laboratory Theater of Florida</title>
+    <title>Cast & Crew | The Laboratory Theater of Florida</title>
     <link rel="stylesheet" href="style.css">
-    <script src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js" async></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <style>
-        .announcement-ticker {
-            background: var(--accent);
-            color: white;
-            padding: 1rem;
-            border-radius: 8px;
-            margin-bottom: 2rem;
-            overflow: hidden;
-            height: 60px;
-            display: flex;
-            align-items: center;
-        }
-        .ticker-content {
-            animation: scroll 15s linear infinite;
-            white-space: nowrap;
-            font-weight: bold;
-            font-size: 1.1rem;
-        }
-        @keyframes scroll {
-            0% { transform: translateX(100%); }
-            100% { transform: translateX(-100%); }
-        }
-        .production-card-cast {
-            background: var(--card-bg);
-            border: 1px solid #333;
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
-        .production-card-cast h3 {
-            color: var(--accent);
-            margin-top: 0;
-        }
-        .card-actions {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-        .card-button {
-            padding: 0.8rem;
-            background: var(--accent);
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: bold;
-            text-decoration: none;
-            text-align: center;
-            transition: background 0.2s;
-        }
-        .card-button:hover {
-            background: #ff1a4d;
-        }
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.7);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-        }
-        .modal.active {
-            display: flex;
-        }
-        .modal-content {
-            background: var(--card-bg);
-            padding: 2rem;
-            border-radius: 8px;
-            max-width: 800px;
-            max-height: 80vh;
-            overflow-y: auto;
-            width: 90%;
-        }
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-        .modal-close {
-            background: none;
-            border: none;
-            color: var(--text);
-            font-size: 2rem;
-            cursor: pointer;
-        }
-        .calendar-embed {
-            width: 100%;
-            height: 600px;
-            border: none;
-            border-radius: 8px;
-        }
-        .character-list, .cast-list {
-            margin-top: 1rem;
-        }
-        .character-item, .cast-item {
-            background: rgba(255,255,255,0.05);
-            padding: 1rem;
-            margin-bottom: 0.5rem;
-            border-radius: 4px;
-            border-left: 3px solid var(--accent);
-        }
-        .character-item strong, .cast-item strong {
-            color: var(--accent);
-        }
-        .admin-section {
-            background: rgba(255, 51, 102, 0.1);
-            border: 2px solid var(--accent);
-            padding: 1.5rem;
-            border-radius: 8px;
-            margin-bottom: 2rem;
-        }
-        .admin-buttons {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 1rem;
-            margin-bottom: 1rem;
-        }
-        .admin-btn {
-            padding: 0.8rem;
-            background: var(--accent);
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-        .admin-btn:hover {
-            background: #ff1a4d;
-        }
-        .form-group {
-            margin-bottom: 1rem;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: bold;
-        }
-        .form-group input,
-        .form-group textarea,
-        .form-group select {
-            width: 100%;
-            padding: 0.8rem;
-            border: 1px solid #666;
-            border-radius: 4px;
-            background: rgba(255,255,255,0.05);
-            color: var(--text);
-            font-family: inherit;
-        }
-        .form-group textarea {
-            resize: vertical;
-            min-height: 100px;
-        }
-        .loading {
-            text-align: center;
-            padding: 2rem;
-        }
-        .error {
-            background: #cc3333;
-            color: white;
-            padding: 1rem;
-            border-radius: 4px;
-            margin-bottom: 1rem;
-        }
-        .success {
-            background: #33cc33;
-            color: white;
-            padding: 1rem;
-            border-radius: 4px;
-            margin-bottom: 1rem;
-        }
-        #user-button {
-            position: absolute;
-            top: 1rem;
-            right: 2rem;
-        }
-        .productions-grid {
-            display: grid;
-            gap: 1.5rem;
-        }
-    </style>
 </head>
 <body>
     <!-- Hamburger Menu -->
@@ -200,7 +12,10 @@
     <label for="nav-toggle" class="nav-toggle-label">
         <span></span>
     </label>
-    
+
+    <!-- Menu Overlay -->
+    <label for="nav-toggle" class="nav-overlay"></label>
+
     <nav class="hamburger-menu">
         <a href="index.html">Home</a>
         <a href="about.html">Origin Story</a>
@@ -211,438 +26,124 @@
         <a href="support.html">Fuel the Innovation</a>
         <a href="sponsors.html">Core Collaborators</a>
     </nav>
-    
+
     <!-- Header -->
-    <header class="main-header">
+    <header>
         <div class="logo">
-            <a href="index.html">THE <span>LAB</span></a>
+            THE <span>LAB</span>
             <p class="tagline">Intentionally innovative live theater</p>
         </div>
-        <div id="clerk-auth"></div>
     </header>
 
-    <main id="portal-content" style="display:none;">
-        <h1>Cast & Crew Portal</h1>
-        <p>Welcome, company members! This is your central hub for production resources, rehearsal schedules, and company updates.</p>
-        
-        <div id="message-container"></div>
-        
-        <!-- Announcement Ticker -->
-        <div class="announcement-ticker">
-            <div class="ticker-content" id="ticker">Loading announcements...</div>
-        </div>
+    <main>
+        <!-- Page Hero -->
+        <section class="page-hero">
+            <h1>Meet Our Cast & Crew</h1>
+            <p>Explore the talented artists in each of our productions</p>
+        </section>
 
-        <!-- Admin Section -->
-        <div id="admin-section" style="display:none;">
-            <div class="admin-section">
-                <h2>Admin Panel</h2>
-                <div class="admin-buttons">
-                    <button class="admin-btn" onclick="openAdminModal('announcement')">Add Announcement</button>
-                    <button class="admin-btn" onclick="openAdminModal('character')">Add Character</button>
-                    <button class="admin-btn" onclick="openAdminModal('cast')">Add Cast Member</button>
+        <!-- Production Cast Cards -->
+        <section class="production-cast-section">
+            <!-- Waiting for Godot -->
+            <a href="cast-godot.html" class="production-cast-card">
+                <div class="production-cast-image">
+                    <img src="assets/godot.jpg" alt="Waiting for Godot cast">
                 </div>
-                <div id="admin-content"></div>
-            </div>
-        </div>
+                <div class="production-cast-info">
+                    <h2>Waiting for Godot</h2>
+                    <p>Aug 21 – Sept 6</p>
+                    <span class="cast-link">View Cast →</span>
+                </div>
+            </a>
 
-        <!-- Productions Grid -->
-        <div id="productions-container" class="productions-grid">
-            <p class="loading">Loading productions...</p>
-        </div>
+            <!-- The Pillowman -->
+            <a href="cast-pillowman.html" class="production-cast-card">
+                <div class="production-cast-image">
+                    <img src="assets/pillowman.jpg" alt="The Pillowman cast">
+                </div>
+                <div class="production-cast-info">
+                    <h2>The Pillowman</h2>
+                    <p>October 8 – 25</p>
+                    <span class="cast-link">View Cast →</span>
+                </div>
+            </a>
+
+            <!-- The Rivals -->
+            <a href="cast-rivals.html" class="production-cast-card">
+                <div class="production-cast-image">
+                    <img src="assets/rivals.jpg" alt="The Rivals cast">
+                </div>
+                <div class="production-cast-info">
+                    <h2>The Rivals</h2>
+                    <p>November 12 – 29</p>
+                    <span class="cast-link">View Cast →</span>
+                </div>
+            </a>
+
+            <!-- God of Carnage -->
+            <a href="cast-godofcarnage.html" class="production-cast-card">
+                <div class="production-cast-image">
+                    <img src="assets/godofcarnage.jpg" alt="God of Carnage cast">
+                </div>
+                <div class="production-cast-info">
+                    <h2>God of Carnage</h2>
+                    <p>January 14 – 31</p>
+                    <span class="cast-link">View Cast →</span>
+                </div>
+            </a>
+
+            <!-- Bare: A Pop Opera -->
+            <a href="cast-bare.html" class="production-cast-card">
+                <div class="production-cast-image">
+                    <img src="assets/bare.jpg" alt="Bare: A Pop Opera cast">
+                </div>
+                <div class="production-cast-info">
+                    <h2>Bare: A Pop Opera</h2>
+                    <p>February 18 – March 7</p>
+                    <span class="cast-link">View Cast →</span>
+                </div>
+            </a>
+
+            <!-- A Midsummer Night's Dream -->
+            <a href="cast-midsummer.html" class="production-cast-card">
+                <div class="production-cast-image">
+                    <img src="assets/midsummer.jpg" alt="A Midsummer Night's Dream cast">
+                </div>
+                <div class="production-cast-info">
+                    <h2>A Midsummer Night's Dream</h2>
+                    <p>March 25 – April 11</p>
+                    <span class="cast-link">View Cast →</span>
+                </div>
+            </a>
+
+            <!-- Fences -->
+            <a href="cast-fences.html" class="production-cast-card">
+                <div class="production-cast-image">
+                    <img src="assets/fences.jpg" alt="Fences cast">
+                </div>
+                <div class="production-cast-info">
+                    <h2>Fences</h2>
+                    <p>April 22 – May 9</p>
+                    <span class="cast-link">View Cast →</span>
+                </div>
+            </a>
+        </section>
     </main>
 
-    <!-- Modals -->
-    <div id="calendar-modal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 id="calendar-title">Rehearsal Schedule</h2>
-                <button class="modal-close" onclick="closeModal('calendar-modal')">&times;</button>
-            </div>
-            <iframe id="calendar-embed" class="calendar-embed"></iframe>
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-contact">
+            <p>📍 Downtown Tampa &nbsp;&nbsp;|&nbsp;&nbsp; 📞 (813) 555-LAB1 &nbsp;&nbsp;|&nbsp;&nbsp; ✉️ info@thelabtheater.org</p>
         </div>
-    </div>
-
-    <div id="character-modal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 id="character-title">Character Breakdown</h2>
-                <button class="modal-close" onclick="closeModal('character-modal')">&times;</button>
-            </div>
-            <div id="character-list" class="character-list"></div>
+        <div class="footer-social">
+            <a href="#" title="Instagram">Instagram</a>
+            <a href="#" title="Facebook">Facebook</a>
+            <a href="#" title="Twitter">Twitter</a>
         </div>
-    </div>
-
-    <div id="cast-modal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 id="cast-title">Cast List</h2>
-                <button class="modal-close" onclick="closeModal('cast-modal')">&times;</button>
-            </div>
-            <div id="cast-list" class="cast-list"></div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 The Laboratory Theater of Florida</p>
         </div>
-    </div>
+    </footer>
 
-    <div id="admin-modal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 id="admin-modal-title">Admin</h2>
-                <button class="modal-close" onclick="closeModal('admin-modal')">&times;</button>
-            </div>
-            <form id="admin-form" onsubmit="handleAdminForm(event)">
-                <div id="admin-form-content"></div>
-                <button type="submit" class="admin-btn" style="width: 100%; margin-top: 1rem;">Save</button>
-            </form>
-        </div>
-    </div>
-
-    <script>
-        const PUBLISHABLE_KEY = 'pk_test_bGVhcm5pbmctbWFzdG9kb24tMzUuY2xlcmsuYWNjb3VudHMuZGV2JA';
-        const SUPABASE_URL = 'https://izytzrxrgnahyvgwqhgd.supabase.co';
-        const SUPABASE_ANON_KEY = 'sb_publishable_wo-PDCkLxkuGLsar5by1Sw_ShjHgZDC';
-        const ADMIN_EMAIL = 'mrtoddlyman@gmail.com';
-
-        let supabase;
-        let clerkUser = null;
-        let isAdmin = false;
-        let currentProductionId = null;
-
-        const productions = [
-            { id: 'waiting-for-godot', title: 'Waiting for Godot', calendarId: 'primary' },
-            { id: 'pillowman', title: 'The Pillowman', calendarId: 'primary' },
-            { id: 'rivals', title: 'The Rivals', calendarId: 'primary' },
-            { id: 'god-carnage', title: 'God of Carnage', calendarId: 'primary' },
-            { id: 'bare', title: 'Bare: A Pop Opera', calendarId: 'primary' },
-            { id: 'midsummer', title: "A Midsummer Night's Dream", calendarId: 'primary' },
-            { id: 'fences', title: 'Fences', calendarId: 'primary' }
-        ];
-
-        function initSupabase() {
-            supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        }
-
-        window.addEventListener('load', async () => {
-            const waitForClerk = setInterval(() => {
-                if (window.Clerk) {
-                    clearInterval(waitForClerk);
-                    initClerk();
-                }
-            }, 100);
-        });
-
-        async function initClerk() {
-            const Clerk = window.Clerk;
-            try {
-                await Clerk.load({ publishableKey: PUBLISHABLE_KEY });
-
-                if (Clerk.user) {
-                    clerkUser = Clerk.user;
-                    document.getElementById('portal-content').style.display = 'block';
-                    document.getElementById('clerk-auth').innerHTML = '<div id="user-button"></div>';
-                    Clerk.mountUserButton(document.getElementById('user-button'));
-                    
-                    initSupabase();
-                    
-                    // Check if admin
-                    isAdmin = clerkUser.primaryEmailAddress?.emailAddress === ADMIN_EMAIL;
-                    if (isAdmin) {
-                        document.getElementById('admin-section').style.display = 'block';
-                    }
-                    
-                    loadProductions();
-                    loadAnnouncements();
-                } else {
-                    document.getElementById('clerk-auth').innerHTML = '<div id="sign-in"></div>';
-                    Clerk.mountSignIn(document.getElementById('sign-in'));
-                }
-            } catch (err) {
-                console.error("Clerk failed to load:", err);
-                showError("Failed to initialize authentication");
-            }
-        }
-
-        async function loadProductions() {
-            const container = document.getElementById('productions-container');
-            
-            try {
-                // Fetch or create production records
-                let productionsData = [];
-                for (const prod of productions) {
-                    const { data: existing } = await supabase
-                        .from('productions')
-                        .select('id')
-                        .eq('title', prod.title)
-                        .single();
-                    
-                    if (!existing) {
-                        const { data: created } = await supabase
-                            .from('productions')
-                            .insert([{ title: prod.title, google_calendar_url: `https://calendar.google.com/calendar/embed?src=${prod.calendarId}` }])
-                            .select()
-                            .single();
-                        if (created) productionsData.push(created);
-                    } else {
-                        productionsData.push(existing);
-                    }
-                }
-
-                // Fetch user's cast assignments (if not admin)
-                let userProductions = productionsData;
-                if (!isAdmin) {
-                    const { data: assignments } = await supabase
-                        .from('cast_assignments')
-                        .select('production_id')
-                        .eq('actor_id', clerkUser.id);
-                    
-                    const assignedIds = (assignments || []).map(a => a.production_id);
-                    userProductions = productionsData.filter(p => assignedIds.includes(p.id));
-                }
-
-                container.innerHTML = userProductions.map(prod => `
-                    <div class="production-card-cast">
-                        <h3>${prod.title}</h3>
-                        <div class="card-actions">
-                            <button class="card-button" onclick="openCalendar('${prod.id}', '${prod.title}')">Rehearsal Schedule</button>
-                            <button class="card-button" onclick="openCharacterBreakdown('${prod.id}', '${prod.title}')">Character Breakdown</button>
-                            <button class="card-button" onclick="openCastList('${prod.id}', '${prod.title}')">Cast List</button>
-                        </div>
-                    </div>
-                `).join('');
-
-            } catch (err) {
-                console.error('Error loading productions:', err);
-                container.innerHTML = '<p class="error">Error loading productions</p>';
-            }
-        }
-
-        async function loadAnnouncements() {
-            try {
-                const { data: announcements } = await supabase
-                    .from('announcements')
-                    .select('text')
-                    .order('priority', { ascending: false })
-                    .limit(10);
-
-                const ticker = document.getElementById('ticker');
-                if (announcements && announcements.length > 0) {
-                    ticker.textContent = announcements.map(a => a.text).join('  •  ');
-                } else {
-                    ticker.textContent = 'No announcements at this time. Stay tuned!';
-                }
-            } catch (err) {
-                console.error('Error loading announcements:', err);
-            }
-        }
-
-        function openCalendar(productionId, title) {
-            document.getElementById('calendar-title').textContent = `${title} - Rehearsal Schedule`;
-            document.getElementById('calendar-embed').src = `https://calendar.google.com/calendar/embed?src=primary&showTitle=0&showPrint=0&height=600`;
-            document.getElementById('calendar-modal').classList.add('active');
-        }
-
-        async function openCharacterBreakdown(productionId, title) {
-            try {
-                const { data: characters } = await supabase
-                    .from('character_breakdown')
-                    .select('*')
-                    .eq('production_id', productionId);
-
-                const listDiv = document.getElementById('character-list');
-                document.getElementById('character-title').textContent = `${title} - Character Breakdown`;
-                
-                if (!characters || characters.length === 0) {
-                    listDiv.innerHTML = '<p>No character breakdown available yet.</p>';
-                } else {
-                    listDiv.innerHTML = characters.map(c => `
-                        <div class="character-item">
-                            <strong>${c.character_name}</strong> (${c.role_type})
-                            <p>${c.description || 'No description'}</p>
-                        </div>
-                    `).join('');
-                }
-                document.getElementById('character-modal').classList.add('active');
-            } catch (err) {
-                console.error('Error loading characters:', err);
-                showError('Error loading character breakdown');
-            }
-        }
-
-        async function openCastList(productionId, title) {
-            try {
-                const { data: castMembers } = await supabase
-                    .from('cast_assignments')
-                    .select('cast_members(full_name), character_name, role_type')
-                    .eq('production_id', productionId);
-
-                const listDiv = document.getElementById('cast-list');
-                document.getElementById('cast-title').textContent = `${title} - Cast List`;
-                
-                if (!castMembers || castMembers.length === 0) {
-                    listDiv.innerHTML = '<p>Cast list coming soon.</p>';
-                } else {
-                    listDiv.innerHTML = castMembers.map(c => `
-                        <div class="cast-item">
-                            <strong>${c.cast_members?.full_name || 'TBA'}</strong> as ${c.character_name}
-                            <p>${c.role_type}</p>
-                        </div>
-                    `).join('');
-                }
-                document.getElementById('cast-modal').classList.add('active');
-            } catch (err) {
-                console.error('Error loading cast:', err);
-                showError('Error loading cast list');
-            }
-        }
-
-        function openAdminModal(type) {
-            currentProductionId = null;
-            const form = document.getElementById('admin-form-content');
-            const title = document.getElementById('admin-modal-title');
-
-            if (type === 'announcement') {
-                title.textContent = 'Add Announcement';
-                form.innerHTML = `
-                    <div class="form-group">
-                        <label>Announcement Text</label>
-                        <textarea name="text" required></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label>Priority (1-3)</label>
-                        <input type="number" name="priority" min="1" max="3" value="1" required>
-                    </div>
-                `;
-                document.getElementById('admin-form').dataset.type = 'announcement';
-            } else if (type === 'character') {
-                title.textContent = 'Add Character';
-                form.innerHTML = `
-                    <div class="form-group">
-                        <label>Production</label>
-                        <select name="production_id" required id="prod-select"></select>
-                    </div>
-                    <div class="form-group">
-                        <label>Character Name</label>
-                        <input type="text" name="character_name" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Role Type (Lead/Supporting/Ensemble)</label>
-                        <input type="text" name="role_type" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Description</label>
-                        <textarea name="description"></textarea>
-                    </div>
-                `;
-                loadProductionsForSelect();
-                document.getElementById('admin-form').dataset.type = 'character';
-            } else if (type === 'cast') {
-                title.textContent = 'Add Cast Member';
-                form.innerHTML = `
-                    <div class="form-group">
-                        <label>Production</label>
-                        <select name="production_id" required id="prod-select"></select>
-                    </div>
-                    <div class="form-group">
-                        <label>Actor Email</label>
-                        <input type="email" name="actor_email" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Character Name</label>
-                        <input type="text" name="character_name" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Role Type (Lead/Supporting/Ensemble)</label>
-                        <input type="text" name="role_type" required>
-                    </div>
-                `;
-                loadProductionsForSelect();
-                document.getElementById('admin-form').dataset.type = 'cast';
-            }
-
-            document.getElementById('admin-modal').classList.add('active');
-        }
-
-        async function loadProductionsForSelect() {
-            const select = document.getElementById('prod-select');
-            const { data: prods } = await supabase.from('productions').select('id, title');
-            select.innerHTML = prods.map(p => `<option value="${p.id}">${p.title}</option>`).join('');
-        }
-
-        async function handleAdminForm(e) {
-            e.preventDefault();
-            const form = new FormData(document.getElementById('admin-form'));
-            const type = document.getElementById('admin-form').dataset.type;
-
-            try {
-                if (type === 'announcement') {
-                    await supabase.from('announcements').insert([{
-                        text: form.get('text'),
-                        priority: parseInt(form.get('priority'))
-                    }]);
-                    showSuccess('Announcement added!');
-                } else if (type === 'character') {
-                    await supabase.from('character_breakdown').insert([{
-                        production_id: form.get('production_id'),
-                        character_name: form.get('character_name'),
-                        role_type: form.get('role_type'),
-                        description: form.get('description')
-                    }]);
-                    showSuccess('Character added!');
-                } else if (type === 'cast') {
-                    // Get or create cast member
-                    let { data: actor } = await supabase
-                        .from('cast_members')
-                        .select('id')
-                        .eq('email', form.get('actor_email'))
-                        .single();
-
-                    if (!actor) {
-                        const { data: created } = await supabase
-                            .from('cast_members')
-                            .insert([{ email: form.get('actor_email') }])
-                            .select()
-                            .single();
-                        actor = created;
-                    }
-
-                    await supabase.from('cast_assignments').insert([{
-                        production_id: form.get('production_id'),
-                        actor_id: actor.id,
-                        character_name: form.get('character_name'),
-                        role_type: form.get('role_type')
-                    }]);
-                    showSuccess('Cast member added!');
-                }
-                
-                closeModal('admin-modal');
-                loadProductions();
-                loadAnnouncements();
-            } catch (err) {
-                console.error('Error:', err);
-                showError('Error saving data');
-            }
-        }
-
-        function closeModal(modalId) {
-            document.getElementById(modalId).classList.remove('active');
-        }
-
-        function showSuccess(message) {
-            const container = document.getElementById('message-container');
-            container.innerHTML = `<div class="success">${message}</div>`;
-            setTimeout(() => container.innerHTML = '', 4000);
-        }
-
-        function showError(message) {
-            const container = document.getElementById('message-container');
-            container.innerHTML = `<div class="error">${message}</div>`;
-            setTimeout(() => container.innerHTML = '', 4000);
-        }
-
-        window.openCalendar = openCalendar;
-        window.openCharacterBreakdown = openCharacterBreakdown;
-        window.openCastList = openCastList;
-        window.openAdminModal = openAdminModal;
-        window.closeModal = closeModal;
-        window.handleAdminForm = handleAdminForm;
-    </script>
 </body>
 </html>
