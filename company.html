@@ -3,62 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cast & Crew Portal | The Laboratory Theater of Florida</title>
+    <title>The Internal Log | The Laboratory Theater of Florida</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-    <header>
-        <nav class="hamburger-menu">
-            <a href="about.html">The Origin Story</a>
-            <a href="index.html">Back to the Main Lab</a>
-            <a href="plan.html">Lab Protocols</a>
-            <a href="volunteer.html">Join The Experiment</a>
-            <a href="company.html">The Internal Log</a>
-            <a href="support.html">Fuel The Innovation</a>
-            <a href="sponsors.html">Core Collaborators</a>
-        </nav>
-        <h1>Cast & Crew Portal</h1>
-        <p>Welcome, company members! This is your central hub for production resources, rehearsal schedules, and company updates. Please keep this link private.</p>
+    <!-- Hamburger Menu -->
+    <input type="checkbox" id="nav-toggle" class="nav-toggle">
+    <label for="nav-toggle" class="nav-toggle-label">
+        <span></span>
+    </label>
+    
+    <nav class="hamburger-menu">
+        <a href="index.html">Home</a>
+        <a href="about.html">Origin Story</a>
+        <a href="archive25.html">Past Experiments</a>
+        <a href="plan.html">Lab Protocols</a>
+        <a href="volunteer.html">Join the Experiment</a>
+        <a href="company.html">The Internal Log</a>
+        <a href="support.html">Fuel the Innovation</a>
+        <a href="sponsors.html">Core Collaborators</a>
+    </nav>
+    
+    <!-- Header -->
+    <header class="main-header">
+        <div class="logo">
+            <a href="index.html">THE <span>LAB</span></a>
+            <p class="tagline">Intentionally innovative live theater</p>
+        </div>
     </header>
 
-    <section id="productions">
-        <h2>Productions</h2>
-        
-        <!-- Production Card Grid -->
-        <div class="production-grid">
+    <main>
+        <h1>Cast & Crew Portal</h1>
+        <p>Welcome, company members! This is your central hub for production resources, rehearsal schedules, and company updates. Please keep this link private.</p>
+
+        <section id="productions">
+            <h2>Productions</h2>
             
-            <div class="production-card">
-                <h3>The Pillowman</h3>
-                <a href="#" class="button">Rehearsal Schedule</a>
-                <a href="#" class="button">Script Drafts</a>
-                <a href="#" class="button">Character Breakdown</a>
+            <!-- Production Card Grid -->
+            <div class="production-grid">
+                
+                <div class="production-card">
+                    <h3>The Pillowman</h3>
+                    <a href="#" class="button">Rehearsal Schedule</a>
+                    <a href="#" class="button">Script Drafts</a>
+                    <a href="#" class="button">Character Breakdown</a>
+                </div>
+
+                <div class="production-card">
+                    <h3>Waiting for Godot</h3>
+                    <a href="#" class="button">Rehearsal Schedule</a>
+                    <a href="#" class="button">Script Drafts</a>
+                    <a href="#" class="button">Character Breakdown</a>
+                </div>
+
             </div>
+        </section>
 
-            <div class="production-card">
-                <h3>Waiting for Godot</h3>
-                <a href="#" class="button">Rehearsal Schedule</a>
-                <a href="#" class="button">Script Drafts</a>
-                <a href="#" class="button">Character Breakdown</a>
-            </div>
+        <section id="company-links">
+            <h2>Company Links</h2>
+            <ul>
+                <li><a href="#">Conflict Calendar</a></li>
+                <li><a href="#">Costume Measurement Form</a></li>
+                <li><a href="#">Contact Sheet</a></li>
+            </ul>
+        </section>
 
-        </div>
-    </section>
-
-    <section id="company-links">
-        <h2>Company Links</h2>
-        <ul>
-            <li><a href="#">Conflict Calendar</a></li>
-            <li><a href="#">Costume Measurement Form</a></li>
-            <li><a href="#">Contact Sheet</a></li>
-        </ul>
-    </section>
-
-    <section id="support">
-        <h2>Support the Lab</h2>
-        <p>Help us grow by sharing our audition notices and show announcements!</p>
-        <a href="#" class="button">Social Media Kit</a>
-    </section>
+        <section id="support">
+            <h2>Support the Lab</h2>
+            <p>Help us grow by sharing our audition notices and show announcements!</p>
+            <a href="#" class="button">Social Media Kit</a>
+        </section>
+    </main>
 
 </body>
 </html>

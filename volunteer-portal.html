@@ -8,12 +8,29 @@
     <script src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js" async></script>
 </head>
 <body>
-
-    <header>
-        <nav>
-            <a href="index.html" class="button">Home</a>
-        </nav>
-        <h1>Volunteer Portal</h1>
+    <!-- Hamburger Menu -->
+    <input type="checkbox" id="nav-toggle" class="nav-toggle">
+    <label for="nav-toggle" class="nav-toggle-label">
+        <span></span>
+    </label>
+    
+    <nav class="hamburger-menu">
+        <a href="index.html">Home</a>
+        <a href="about.html">Origin Story</a>
+        <a href="archive25.html">Past Experiments</a>
+        <a href="plan.html">Lab Protocols</a>
+        <a href="volunteer.html">Join the Experiment</a>
+        <a href="company.html">The Internal Log</a>
+        <a href="support.html">Fuel the Innovation</a>
+        <a href="sponsors.html">Core Collaborators</a>
+    </nav>
+    
+    <!-- Header -->
+    <header class="main-header">
+        <div class="logo">
+            <a href="index.html">THE <span>LAB</span></a>
+            <p class="tagline">Intentionally innovative live theater</p>
+        </div>
         <div id="clerk-auth"></div>
     </header>
 
