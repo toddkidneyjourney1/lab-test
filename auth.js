@@ -14,6 +14,6 @@
         sessionStorage.setItem("isLoggedIn", "true");
     } else {
         alert("Incorrect password. Returning to home.");
-        window.location.href = "index.html";
+        window.location.href = "cast-portal.htmll";
     }
 })();
