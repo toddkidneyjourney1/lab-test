@@ -5,6 +5,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Laboratory Theater of Florida</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* Ensure all homepage photos are visible and responsive */
+        .hero img,
+        .show-item img,
+        img {
+            display: block;
+            max-width: 100%;
+            height: auto;
+        }
+
+        .hero {
+            overflow: visible;
+        }
+
+        .show-item {
+            overflow: visible;
+            align-items: flex-start;
+        }
+
+        .show-item img {
+            width: min(280px, 38vw);
+            min-width: 140px;
+            object-fit: contain;
+            object-position: center;
+            border-radius: 8px;
+            flex-shrink: 0;
+        }
+
+        @media (max-width: 768px) {
+            .show-item {
+                display: block;
+            }
+
+            .show-item img {
+                width: 100%;
+                max-height: none;
+                margin-bottom: 0.75rem;
+            }
+        }
+    </style>
 </head>
 <body>
     <!-- Hamburger Menu -->
