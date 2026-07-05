@@ -1,0 +1,45 @@
+--- /dev/null
++++ b/volunteer-signup.html
+@@ -0,0 +1,53 @@
++<!DOCTYPE html>
++<html lang="en">
++<head>
++  <meta charset="UTF-8" />
++  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
++  <title>Volunteer Signup | The Laboratory Theater of Florida</title>
++  <link rel="stylesheet" href="style.css" />
++</head>
++<body>
++  <header class="main-header">
++    <div class="logo">
++      <a href="index.html">THE <span>LAB</span></a>
++      <p class="tagline">Intentionally innovative live theater</p>
++    </div>
++  </header>
++
++  <main style="max-width:700px;margin:2rem auto;padding:1rem;">
++    <h1>Volunteer Signup</h1>
++    <p>Complete this form to join our volunteer team.</p>
++
++    <form action="volunteer-portal.html" method="get" style="display:grid;gap:1rem;">
++      <label>Full Name
++        <input type="text" name="name" required />
++      </label>
++
++      <label>Email
++        <input type="email" name="email" required />
++      </label>
++
++      <label>Phone
++        <input type="tel" name="phone" />
++      </label>
++
++      <label>Availability
++        <textarea name="availability" rows="4" placeholder="Weekends, evenings, etc."></textarea>
++      </label>
++
++      <button type="submit">Continue to Volunteer Portal</button>
++    </form>
++  </main>
++</body>
++</html>
