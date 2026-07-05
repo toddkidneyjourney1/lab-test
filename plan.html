@@ -5,6 +5,72 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lab Protocols | The Laboratory Theater of Florida</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        .visit-hero {
+            margin: 1.5rem 0 2rem;
+            padding: 1.5rem;
+            border: 1px solid #2f2f2f;
+            border-radius: 14px;
+            background: radial-gradient(900px 300px at 8% 0%, rgba(255,51,102,0.16), transparent 60%), #111;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.3);
+        }
+
+        .visit-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .panel {
+            background: #161616;
+            border: 1px solid #2f2f2f;
+            border-radius: 12px;
+            padding: 1rem;
+        }
+
+        .map-frame {
+            width: 100%;
+            min-height: 340px;
+            border: 0;
+            border-radius: 10px;
+        }
+
+        .restaurant-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1rem;
+            margin-top: 0.75rem;
+        }
+
+        .restaurant-card {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 10px;
+            padding: 1rem;
+        }
+
+        .restaurant-card h3 {
+            margin: 0 0 0.4rem;
+        }
+
+        .restaurant-card p {
+            margin: 0.35rem 0;
+            color: #d2d2d2;
+        }
+
+        .helpful-note {
+            font-size: 0.95rem;
+            color: #cfcfcf;
+            margin-top: 0.75rem;
+        }
+
+        @media (max-width: 900px) {
+            .visit-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body>
     <!-- Hamburger Menu -->
@@ -33,25 +99,66 @@
     </header>
 
     <main>
-        <h1>Plan Your Visit</h1>
-
-        <section id="directions">
-            <h2>Directions</h2>
-            <p>We are located at 1634 Woodford Ave, Fort Myers, FL 33901.</p>
+        <section class="visit-hero">
+            <h1>Plan Your Visit</h1>
+            <p>Make your night at The Lab easy, exciting, and unforgettable — from arrival to your post-show bite.</p>
         </section>
 
-        <section id="parking">
-            <h2>Parking</h2>
-            <p>Parking is available in the lot adjacent to the theater and along the street. Please observe all posted parking signs.</p>
+        <section class="visit-grid" id="directions">
+            <article class="panel">
+                <h2>How to Find Us</h2>
+                <p><strong>The Laboratory Theater of Florida</strong><br>1634 Woodford Ave, Fort Myers, FL 33901</p>
+                <p>Arrive 20–30 minutes early to park, check in, and settle in before curtain.</p>
+
+                <h3>Parking</h3>
+                <p>Parking is available in the lot adjacent to the theater and along nearby streets. Please observe all posted parking signs and private lot notices.</p>
+
+                <p class="helpful-note">Tip: Save the address in your maps app before leaving home for faster arrival.</p>
+            </article>
+
+            <article class="panel" aria-labelledby="map-heading">
+                <h2 id="map-heading">Map to the Theater</h2>
+                <iframe
+                    class="map-frame"
+                    title="Map to The Laboratory Theater of Florida"
+                    loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade"
+                    src="https://www.google.com/maps?q=1634+Woodford+Ave,+Fort+Myers,+FL+33901&output=embed">
+                </iframe>
+            </article>
         </section>
 
-        <section id="eateries">
-            <h2>Local Eateries & Bars</h2>
-            <p>Enjoy a pre-show meal or post-show drink at these local favorites near The Lab:</p>
-            <ul>
-                <li><strong>Downtown Dining:</strong> Explore the many restaurants just a short drive away in the historic River District.</li>
-                <li><strong>Local Spots:</strong> Check out nearby cafes and pubs within walking distance.</li>
-            </ul>
+        <section id="eateries" class="panel">
+            <h2>Local Restaurant Suggestions</h2>
+            <p>Great picks for dinner before the show or drinks and dessert after:</p>
+
+            <div class="restaurant-grid">
+                <article class="restaurant-card">
+                    <h3>The Veranda</h3>
+                    <p>Southern-inspired fine dining in a historic setting.</p>
+                    <p><strong>Great for:</strong> Date night, pre-show dinner</p>
+                </article>
+
+                <article class="restaurant-card">
+                    <h3>Ford's Garage (Downtown)</h3>
+                    <p>Casual American spot known for burgers and comfort food.</p>
+                    <p><strong>Great for:</strong> Groups, quick bite</p>
+                </article>
+
+                <article class="restaurant-card">
+                    <h3>Luminary Hotel Rooftop Bars</h3>
+                    <p>Craft cocktails and skyline views along the riverfront area.</p>
+                    <p><strong>Great for:</strong> Post-show drinks</p>
+                </article>
+
+                <article class="restaurant-card">
+                    <h3>Capone's Coal Fired Pizza</h3>
+                    <p>Popular local pizza option with a laid-back atmosphere.</p>
+                    <p><strong>Great for:</strong> Casual pre-show meal</p>
+                </article>
+            </div>
+
+            <p class="helpful-note">Restaurant hours can change seasonally — it’s best to check current hours and reservations before you go.</p>
         </section>
     </main>
 
