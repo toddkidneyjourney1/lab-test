@@ -5,6 +5,83 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Join the Experiment | The Laboratory Theater of Florida</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        .volunteer-portal {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 1rem 0 2rem;
+        }
+
+        .portal-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.25rem;
+            margin-top: 1.25rem;
+        }
+
+        .portal-card {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 1.25rem;
+            transition: transform 0.25s ease, border-color 0.25s ease;
+        }
+
+        .portal-card:hover {
+            transform: translateY(-3px);
+            border-color: #ff3366;
+        }
+
+        .contact-support {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            border: 1px solid #2f2f2f;
+            border-radius: 10px;
+            background: #141414;
+        }
+
+        /* Same login block pattern as cast portal */
+        .login-block {
+            margin-top: 1.5rem;
+            padding: 1.25rem;
+            border: 1px solid #333;
+            border-radius: 12px;
+            background: #121212;
+        }
+
+        .login-form {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0.75rem;
+            margin-top: 0.75rem;
+        }
+
+        .login-form label {
+            font-weight: 600;
+        }
+
+        .login-form input {
+            width: 100%;
+            padding: 0.7rem 0.8rem;
+            border-radius: 8px;
+            border: 1px solid #444;
+            background: #0f0f0f;
+            color: #f3f3f3;
+        }
+
+        .login-row {
+            display: flex;
+            gap: 0.6rem;
+            flex-wrap: wrap;
+            margin-top: 0.25rem;
+        }
+
+        .login-note {
+            color: #bfbfbf;
+            font-size: 0.92rem;
+            margin-top: 0.5rem;
+        }
+    </style>
 </head>
 <body>
     <!-- Hamburger Menu -->
@@ -35,21 +112,45 @@
     <main>
         <section class="volunteer-portal">
             <h1>Volunteer Portal</h1>
-            <p>Welcome to the Lab Theater family! Our volunteers are the heartbeat of our productions. Whether you are ushering, helping with set construction, or assisting in the office, your time makes a real difference.</p>
+            <p>Welcome to the Lab Theater family! Our volunteers are the heartbeat of our productions. Whether you are ushering, helping with set construction, or assisting in the office, your time and passion make each show possible.</p>
 
             <div class="portal-grid">
                 <div class="portal-card">
                     <h2>New Volunteers</h2>
-                    <p>Interested in joining our team? We'd love to have you!</p>
+                    <p>Interested in joining our team? We'd love to have you.</p>
                     <a href="volunteer-portal.html" class="button">Sign Up Today</a>
                 </div>
                 
                 <div class="portal-card">
                     <h2>Returning Volunteers</h2>
                     <p>Log in to view your upcoming shifts and manage your schedule.</p>
-                    <a href="volunteer-portal.html" class="button secondary">Volunteer Login</a>
+                    <a href="#volunteer-login" class="button secondary">Volunteer Login</a>
                 </div>
             </div>
+
+            <section id="volunteer-login" class="login-block">
+                <h2>Volunteer Login</h2>
+                <p>Use your portal credentials to access your account.</p>
+
+                <form class="login-form" action="volunteer-portal.html" method="get">
+                    <div>
+                        <label for="volunteer-email">Email</label>
+                        <input id="volunteer-email" name="email" type="email" placeholder="you@example.com" required>
+                    </div>
+
+                    <div>
+                        <label for="volunteer-password">Password</label>
+                        <input id="volunteer-password" name="password" type="password" placeholder="Enter password" required>
+                    </div>
+
+                    <div class="login-row">
+                        <button type="submit" class="button secondary">Log In</button>
+                        <a href="volunteer-portal.html" class="button">Create Account</a>
+                    </div>
+                </form>
+
+                <p class="login-note">Having trouble signing in? Email <a href="mailto:office@laboratorytheaterflorida.com">office@laboratorytheaterflorida.com</a>.</p>
+            </section>
 
             <div class="contact-support">
                 <h3>Questions?</h3>
