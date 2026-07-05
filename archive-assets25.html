@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Alien Gallery | The Laboratory Theater of Florida</title>
+    <link rel="stylesheet" href="style.css">
     <style>
         /* Base Styles */
         body { margin: 0; font-family: sans-serif; background-color: #1a1a1a; color: #fff; }
@@ -52,15 +53,35 @@
     </style>
 </head>
 <body>
+    <!-- Hamburger Menu -->
+    <input type="checkbox" id="nav-toggle" class="nav-toggle">
+    <label for="nav-toggle" class="nav-toggle-label">
+        <span></span>
+    </label>
 
-    <header class="main-header">
+    <!-- Menu Overlay (Scrim) -->
+    <label for="nav-toggle" class="nav-overlay"></label>
+
+    <nav class="hamburger-menu">
+        <a href="about.html">Origin Story</a>
+        <a href="archive25.html">Past Experiments</a>
+        <a href="index.html">Back to the Slab</a>
+        <a href="plan.html">Lab Protocols</a>
+        <a href="volunteer.html">Join the Experiment</a>
+        <a href="cast-portal.html">The Internal Log</a>
+        <a href="support.html">Fuel the Innovation</a>
+        <a href="sponsors.html">Core Collaborators</a>
+        <a href="cast.html">Meet the Cast</a>
+    </nav>
+
+    <!-- Header -->
+    <header>
         <div class="logo">
-            <a href="index.html"><span>THE</span> LAB</a>
+            THE <span>LAB</span>
+            <p class="tagline">Intentionally innovative live theater</p>
         </div>
-        <label class="nav-toggle-label">☰</label>
     </header>
-
-    <main>
+<main>
         <div class="photo-gallery">
             <div class="photo-item wide"><img src="assets/alien.JPG" alt="Alien Production 1"></div>
             <div class="photo-item"><img src="assets/alien4.JPG" alt="Alien Production 2"></div>
