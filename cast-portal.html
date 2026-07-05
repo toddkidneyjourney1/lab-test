@@ -1,112 +1,221 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cast Portal | The Laboratory Theater of Florida</title>
-    <link rel="stylesheet" href="style.css">
-    <style>
-        .cast-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 1.5rem;
-            padding: 1rem 0;
-        }
-
-        .cast-card {
-            background: #1a1a1a;
-            border: 1px solid #333;
-            border-radius: 12px;
-            padding: 1.5rem;
-            transition: transform 0.3s ease, border-color 0.3s ease;
-        }
-
-        .cast-card:hover {
-            transform: translateY(-4px);
-            border-color: #ff3366;
-        }
-
-        .cast-card h3 {
-            margin-bottom: 0.75rem;
-        }
-
-        .cast-card p {
-            color: #ccc;
-            margin-bottom: 1rem;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cast Portal | The Laboratory Theater of Florida</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .hidden { display: none; }
+    .panel { border: 1px solid #ddd; border-radius: 8px; padding: 1rem; margin: 1rem 0; }
+    .badge { display:inline-block; padding:.25rem .5rem; border-radius:999px; background:#111; color:#fff; font-size:.8rem; }
+    .row { display:flex; gap:.5rem; align-items:center; flex-wrap:wrap; }
+    button { cursor: pointer; }
+  </style>
 </head>
 <body>
+  <main style="max-width:900px;margin:2rem auto;padding:1rem;">
+    <h1>Cast Portal</h1>
+    <p>Secure role-based access (Clerk + Supabase)</p>
 
-    <header class="main-header">
-        <div class="logo">
-            THE <span>LAB</span>
-            <p class="tagline">Intentionally innovative live theater</p>
+    <div id="auth-controls" class="panel">
+      <div id="signed-out" class="row">
+        <button id="btn-signin">Sign in</button>
+      </div>
+
+      <div id="signed-in" class="hidden">
+        <p>
+          Signed in as <strong id="user-email"></strong>
+          <span id="role-badge" class="badge">cast</span>
+        </p>
+        <div class="row">
+          <button id="btn-signout">Sign out</button>
         </div>
+      </div>
+    </div>
 
-        <div class="hamburger-container">
-            <input type="checkbox" id="nav-toggle" class="nav-toggle">
-            <label for="nav-toggle" class="nav-toggle-label">
-                <span></span>
-            </label>
-            <nav class="hamburger-menu">
-                <a href="about.html">The Origin Story</a>
-                <a href="index.html">Back to the Main Lab</a>
-                <a href="plan.html">Lab Protocols</a>
-                <a href="volunteer.html">Join The Experiment</a>
-                <a href="company.html">The Internal Log</a>
-                <a href="support.html">Fuel The Innovation</a>
-                <a href="sponsors.html">Core Collaborators</a>
-            </nav>
-        </div>
-    </header>
+    <section id="admin-panel" class="panel hidden">
+      <h2>Admin Panel</h2>
+      <p>Full access: manage cast contacts, schedules, notes, and roles.</p>
+    </section>
 
-    <main>
-        <h1>Cast Portal</h1>
-        <p>Select your production below to view the cast page.</p>
+    <section id="sm-panel" class="panel hidden">
+      <h2>Stage Manager Panel</h2>
+      <p>Read/write schedules and rehearsal notes.</p>
+    </section>
 
-        <section class="cast-grid">
-            <article class="cast-card">
-                <h3>Waiting for Godot</h3>
-                <p>View cast details and production-specific information.</p>
-                <a href="cast-godot.html" class="button">Open Cast Page</a>
-            </article>
+    <section id="cast-panel" class="panel hidden">
+      <h2>Cast Panel</h2>
+      <p>Read-only access to contact info and schedules.</p>
+    </section>
 
-            <article class="cast-card">
-                <h3>The Pillowman</h3>
-                <p>View cast details and production-specific information.</p>
-                <a href="cast-pillowman.html" class="button">Open Cast Page</a>
-            </article>
+    <pre id="debug" class="panel hidden"></pre>
+  </main>
 
-            <article class="cast-card">
-                <h3>The Rivals</h3>
-                <p>View cast details and production-specific information.</p>
-                <a href="cast-rivals.html" class="button">Open Cast Page</a>
-            </article>
+  <script type="module">
+    import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-            <article class="cast-card">
-                <h3>God of Carnage</h3>
-                <p>View cast details and production-specific information.</p>
-                <a href="cast-god-of-carnage.html" class="button">Open Cast Page</a>
-            </article>
+    // Load Clerk browser SDK
+    const clerkScript = document.createElement("script");
+    clerkScript.src = "https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js";
+    clerkScript.async = true;
+    document.head.appendChild(clerkScript);
 
-            <article class="cast-card">
-                <h3>Bare</h3>
-                <p>View cast details and production-specific information.</p>
-                <a href="cast-bare.html" class="button">Open Cast Page</a>
-            </article>
+    // ===== CONFIG =====
+    const CLERK_PUBLISHABLE_KEY = "pk_test_bGVhcm5pbmctbWFzdG9kb24tMzUuY2xlcmsuYWNjb3VudHMuZGV2JA";
+    const CLERK_JWT_TEMPLATE = "supabase";
+    const SUPABASE_URL = "https://izytzrxrgnahyvgwqhgd.supabase.co";
+    const SUPABASE_ANON_KEY = "REPLACE_WITH_YOUR_ANON_KEY";
+    // ==================
 
-            <article class="cast-card">
-                <h3>Fences</h3>
-                <p>View cast details and production-specific information.</p>
-                <a href="cast-fences.html" class="button">Open Cast Page</a>
-            </article>
-        </section>
-    </main>
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    <footer>
-        <p>&copy; 2026 The Laboratory Theater of Florida</p>
-    </footer>
+    const $ = (id) => document.getElementById(id);
+    const show = (id) => $(id).classList.remove("hidden");
+    const hide = (id) => $(id).classList.add("hidden");
 
+    function setDebug(message) {
+      $("debug").textContent = message;
+      show("debug");
+    }
+
+    function clearDebug() {
+      $("debug").textContent = "";
+      hide("debug");
+    }
+
+    function renderRole(role) {
+      hide("admin-panel");
+      hide("sm-panel");
+      hide("cast-panel");
+
+      if (role === "admin") show("admin-panel");
+      else if (role === "stage_manager") show("sm-panel");
+      else show("cast-panel");
+
+      $("role-badge").textContent = role || "cast";
+    }
+
+    async function ensureProfile(clerkUser) {
+      // Clerk user id is a string; your profiles.id is uuid in SQL example.
+      // If your Clerk IDs are not UUID, switch profiles.id type to text in Supabase.
+      const userId = clerkUser.id;
+      const email = clerkUser?.primaryEmailAddress?.emailAddress || null;
+
+      const { data: existing, error: selectErr } = await supabase
+        .from("profiles")
+        .select("id,email,role")
+        .eq("id", userId)
+        .maybeSingle();
+
+      if (selectErr) throw selectErr;
+      if (existing) return existing;
+
+      const { data: created, error: insertErr } = await supabase
+        .from("profiles")
+        .insert({ id: userId, email, role: "cast" })
+        .select("id,email,role")
+        .single();
+
+      if (insertErr) throw insertErr;
+      return created;
+    }
+
+    async function setSupabaseSessionFromClerk() {
+      const token = await window.Clerk.session.getToken({ template: CLERK_JWT_TEMPLATE });
+
+      if (!token) throw new Error("Could not get Clerk token. Check JWT template name.");
+
+      // Supabase JS expects setSession for full auth flows, but with third-party JWT
+      // we can set auth header per request by re-creating client with global header.
+      return createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+        global: {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      });
+    }
+
+    async function onSignedIn() {
+      clearDebug();
+
+      const clerkUser = window.Clerk.user;
+      if (!clerkUser) return;
+
+      // Use authenticated Supabase client bound to Clerk JWT
+      const authedSupabase = await setSupabaseSessionFromClerk();
+
+      const email = clerkUser?.primaryEmailAddress?.emailAddress || "(no email)";
+      $("user-email").textContent = email;
+
+      // Ensure profile exists
+      const { data: existing, error: selectErr } = await authedSupabase
+        .from("profiles")
+        .select("id,email,role")
+        .eq("id", clerkUser.id)
+        .maybeSingle();
+
+      let profile = existing;
+      if (selectErr) throw selectErr;
+
+      if (!profile) {
+        const { data: created, error: insertErr } = await authedSupabase
+          .from("profiles")
+          .insert({ id: clerkUser.id, email, role: "cast" })
+          .select("id,email,role")
+          .single();
+        if (insertErr) throw insertErr;
+        profile = created;
+      }
+
+      hide("signed-out");
+      show("signed-in");
+      renderRole(profile.role);
+    }
+
+    async function onSignedOut() {
+      hide("signed-in");
+      show("signed-out");
+      hide("admin-panel");
+      hide("sm-panel");
+      hide("cast-panel");
+    }
+
+    async function init() {
+      await new Promise((resolve, reject) => {
+        clerkScript.onload = resolve;
+        clerkScript.onerror = () => reject(new Error("Failed to load Clerk SDK"));
+      });
+
+      await window.Clerk.load({ publishableKey: CLERK_PUBLISHABLE_KEY });
+
+      $("btn-signin").addEventListener("click", async () => {
+        await window.Clerk.openSignIn();
+      });
+
+      $("btn-signout").addEventListener("click", async () => {
+        await window.Clerk.signOut();
+        await onSignedOut();
+      });
+
+      window.Clerk.addListener(async ({ user }) => {
+        try {
+          if (user) await onSignedIn();
+          else await onSignedOut();
+        } catch (err) {
+          setDebug(`Auth error: ${err.message || err}`);
+        }
+      });
+
+      if (window.Clerk.user) {
+        await onSignedIn();
+      } else {
+        await onSignedOut();
+      }
+    }
+
+    init().catch((err) => setDebug(`Init error: ${err.message || err}`));
+  </script>
 </body>
 </html>
