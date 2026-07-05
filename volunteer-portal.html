@@ -157,6 +157,7 @@
         const PUBLISHABLE_KEY = 'pk_test_bGVhcm5pbmctbWFzdG9kb24tMzUuY2xlcmsuYWNjb3VudHMuZGV2JA';
         const SUPABASE_URL = 'https://izytzrxrgnahyvgwqhgd.supabase.co';
         const SUPABASE_ANON_KEY = 'sb_publishable_wo-PDCkLxkuGLsar5by1Sw_ShjHgZDC';
+        const SIGNUP_PAGE_URL = 'volunteer-signup.html';
 
         let supabase;
         let clerkUser = null;
@@ -184,16 +185,8 @@
 
                 if (Clerk.user) {
                     clerkUser = Clerk.user;
-                    document.getElementById('portal-content').style.display = 'block';
-                    document.getElementById('clerk-auth').innerHTML = '<div id="user-button"></div>';
-                    Clerk.mountUserButton(document.getElementById('user-button'));
-                    
-                    // Initialize Supabase after Clerk is loaded
-                    initSupabase();
-                    
-                    // Get or create volunteer record
-                    await getOrCreateVolunteer();
-                    loadShifts();
+                    redirectAuthenticatedUserToSignup();
+                    return;
                 } else {
                     document.getElementById('clerk-auth').innerHTML = '<div id="sign-in"></div>';
                     Clerk.mountSignIn(document.getElementById('sign-in'));
@@ -204,10 +197,13 @@
             }
         }
 
+        function redirectAuthenticatedUserToSignup() {
+            window.location.href = SIGNUP_PAGE_URL;
+        }
+
         async function getOrCreateVolunteer() {
             try {
-                // Check if volunteer exists
-                const { data: existingVolunteer, error: fetchError } = await supabase
+                const { data: existingVolunteer } = await supabase
                     .from('volunteers')
                     .select('id')
                     .eq('clerk_id', clerkUser.id)
@@ -218,7 +214,6 @@
                     return;
                 }
 
-                // Create new volunteer record
                 const { data: newVolunteer, error: createError } = await supabase
                     .from('volunteers')
                     .insert([
@@ -246,7 +241,6 @@
             const container = document.getElementById('shift-container');
             
             try {
-                // Fetch all available shifts from "Volunteer-shifts" table
                 const { data: shifts, error } = await supabase
                     .from('"Volunteer-shifts"')
                     .select('*')
@@ -261,7 +255,6 @@
                     return;
                 }
 
-                // Fetch user's current sign-ups from "volunteer_shifts" table
                 const { data: userSignups, error: signupError } = await supabase
                     .from('volunteer_shifts')
                     .select('shift_id:id')
@@ -273,7 +266,6 @@
 
                 const signedUpShifts = (userSignups || []).map(s => s.shift_id);
 
-                // Render shifts
                 container.innerHTML = shifts.map(shift => {
                     const isSignedUp = signedUpShifts.includes(shift.id);
                     const isFull = shift.volunteer_count <= 0;
@@ -309,7 +301,6 @@
 
         async function signupForShift(shiftId) {
             try {
-                // Insert signup record in volunteer_shifts table
                 const { error } = await supabase
                     .from('volunteer_shifts')
                     .insert([
@@ -331,7 +322,6 @@
                 } else {
                     showSuccess('Successfully signed up for the shift!');
                     
-                    // Decrement volunteer count in Volunteer-shifts table
                     const { data: shift } = await supabase
                         .from('"Volunteer-shifts"')
                         .select('volunteer_count')
@@ -355,7 +345,6 @@
 
         async function cancelSignup(shiftId) {
             try {
-                // Delete signup record
                 const { error } = await supabase
                     .from('volunteer_shifts')
                     .delete()
@@ -368,7 +357,6 @@
 
                 showSuccess('Successfully cancelled signup!');
                 
-                // Increment volunteer count in Volunteer-shifts table
                 const { data: shift } = await supabase
                     .from('"Volunteer-shifts"')
                     .select('volunteer_count')
@@ -391,6 +379,9 @@
 
         function showMessage(message, type = 'success') {
             const container = document.getElementById('message-container');
+            if (!container) {
+                return;
+            }
             container.innerHTML = `<div class="${type}">${message}</div>`;
             setTimeout(() => {
                 container.innerHTML = '';
