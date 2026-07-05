@@ -1,6 +1,6 @@
 // auth.js
 (function() {
-    const password = "YourSecretPassword123";
+    const password = "Lab123";
     
     // Check if the user has already entered the password in this session
     if (sessionStorage.getItem("isLoggedIn") === "true") {
