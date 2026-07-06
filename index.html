@@ -99,10 +99,14 @@
         }
 
         .show-item img {
-            width: 100%;
-            height: 280px;
-            object-fit: cover;
+            width: min(280px, 38vw);
+            min-width: 140px;
+            object-fit: contain;
+            object-position: center;
+            border-radius: 8px;
+            flex-shrink: 0;
             display: block;
+            margin: 1rem auto 0;
         }
 
         .show-item-content {
@@ -136,6 +140,18 @@
             .hero img {
                 max-width: min(100%, 680px);
                 justify-self: start;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .show-item {
+                display: block;
+            }
+
+            .show-item img {
+                width: 100%;
+                max-height: none;
+                margin-bottom: 0.75rem;
             }
         }
     </style>
@@ -215,7 +231,6 @@
                         <h3>Waiting for Godot</h3>
                         <p>Two men wait for someone who may never arrive.</p>
                         <div class="show-links">
-                            <a href="https://www.purplepass.com/events/375339-waiting-for-godot-aug-20th-2026" class="btn-primary">Tickets</a>
                             <a href="production/godot.html" class="button">Details</a>
                         </div>
                     </div>
@@ -227,7 +242,6 @@
                         <h3>The Pillowman</h3>
                         <p>A darkly compelling story about art, truth, and stories told under pressure.</p>
                         <div class="show-links">
-                            <a href="https://www.purplepass.com/events/376889-the-pillowman-oct-8th-2026" class="btn-primary">Tickets</a>
                             <a href="production/pillowman.html" class="button">Details</a>
                         </div>
                     </div>
@@ -239,7 +253,6 @@
                         <h3>The Rivals</h3>
                         <p>A lively comedy of mistaken identity, manners, and romance.</p>
                         <div class="show-links">
-                            <a href="https://www.purplepass.com/events/377104-the-rivals-nov-12th-2026" class="btn-primary">Tickets</a>
                             <a href="production/rivals.html" class="button">Details</a>
                         </div>
                     </div>
@@ -251,7 +264,6 @@
                         <h3>Bare: A Pop Opera</h3>
                         <p>A powerful coming-of-age story set in a Catholic boarding school.</p>
                         <div class="show-links">
-                            <a href="https://www.purplepass.com/events/377221-bare-a-pop-opera" class="btn-primary">Tickets</a>
                             <a href="production/bare.html" class="button">Details</a>
                         </div>
                     </div>
@@ -263,7 +275,6 @@
                         <h3>God of Carnage</h3>
                         <p>A tense and razor-sharp comedy about civility, conflict, and control.</p>
                         <div class="show-links">
-                            <a href="https://www.purplepass.com/events/377332-god-of-carnage" class="btn-primary">Tickets</a>
                             <a href="production/godofcarnage.html" class="button">Details</a>
                         </div>
                     </div>
@@ -275,7 +286,6 @@
                         <h3>Fences</h3>
                         <p>A moving drama about family, responsibility, and the limits we inherit.</p>
                         <div class="show-links">
-                            <a href="https://www.purplepass.com/events/377443-fences" class="btn-primary">Tickets</a>
                             <a href="cast-fences.html" class="button">Details</a>
                         </div>
                     </div>
