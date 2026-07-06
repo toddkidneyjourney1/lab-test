@@ -53,7 +53,7 @@
         <a href="plan.html">Lab Protocols</a>
         <a href="comingsoon.html">Join the Experiment</a>
         <a href="portal.html">Portal Access</a>
-        <a href="cast-portal.html">The Internal Log</a>
+        <a href="company.html">The Internal Log</a>
         <a href="support.html">Fuel the Innovation</a>
         <a href="sponsors.html">Core Collaborators</a>
     </nav>
@@ -70,9 +70,11 @@
             <h1>Portal Access</h1>
             <p>Enter the portal password to reveal volunteer and cast access links.</p>
 
-            <label for="portal-password">Password</label>
-            <input id="portal-password" type="password" autocomplete="current-password">
-            <button id="verify-button" class="btn-primary" type="button">Verify</button>
+            <form id="portal-form">
+                <label for="portal-password">Password</label>
+                <input id="portal-password" type="password" autocomplete="current-password" required>
+                <button id="verify-button" class="btn-primary" type="submit">Verify</button>
+            </form>
             <p id="status-message" class="status" aria-live="polite"></p>
 
             <div id="portal-links" class="portal-links" hidden>
@@ -84,12 +86,18 @@
 
     <script>
         (function () {
-            const PASSWORD = "Lab123";
-            const STORAGE_KEY = "portalAccessVerified";
+            const PASSWORD_HASH = "c567247e0b55894f235ebfb3db56fabe138d433eb0b8b12d8958a0e0e2163cbe";
+            const form = document.getElementById("portal-form");
             const input = document.getElementById("portal-password");
-            const button = document.getElementById("verify-button");
             const links = document.getElementById("portal-links");
             const status = document.getElementById("status-message");
+
+            async function sha256(value) {
+                const data = new TextEncoder().encode(value);
+                const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+                const hashArray = Array.from(new Uint8Array(hashBuffer));
+                return hashArray.map(function (b) { return b.toString(16).padStart(2, "0"); }).join("");
+            }
 
             function showLinks() {
                 links.hidden = false;
@@ -97,13 +105,10 @@
                 status.style.color = "var(--accent)";
             }
 
-            if (sessionStorage.getItem(STORAGE_KEY) === "true") {
-                showLinks();
-            }
-
-            button.addEventListener("click", function () {
-                if (input.value === PASSWORD) {
-                    sessionStorage.setItem(STORAGE_KEY, "true");
+            form.addEventListener("submit", async function (event) {
+                event.preventDefault();
+                const enteredHash = await sha256(input.value);
+                if (enteredHash === PASSWORD_HASH) {
                     showLinks();
                     input.value = "";
                     return;
@@ -111,6 +116,7 @@
 
                 status.textContent = "Incorrect password. Please try again.";
                 status.style.color = "#ff8888";
+                input.value = "";
             });
         })();
     </script>
