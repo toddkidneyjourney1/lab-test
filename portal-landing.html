@@ -269,7 +269,7 @@
     }
 
     async function waitForClerk(maxMs) {
-      var start = Date.now();
+      const start = Date.now();
       while (!window.Clerk) {
         if (Date.now() - start > maxMs) return false;
         await new Promise(function (r) { setTimeout(r, 100); });
@@ -285,7 +285,7 @@
       PORTALS.forEach(function (r) { setPortalState(r, 'loading'); });
       sessionActions.innerHTML = '<button class="btn" disabled>Loading\u2026</button>';
 
-      var clerkReady;
+      let clerkReady;
       try {
         clerkReady = await waitForClerk(5000);
       } catch (_) {
@@ -309,7 +309,7 @@
       }
 
       // Phase 2 – check authentication
-      var user = window.Clerk.user;
+      const user = window.Clerk.user;
 
       if (!user) {
         setStatus('Please sign in to access the portals.', undefined);
@@ -318,7 +318,7 @@
         return;
       }
 
-      var userLabel = (user.primaryEmailAddress && user.primaryEmailAddress.emailAddress)
+      const userLabel = (user.primaryEmailAddress && user.primaryEmailAddress.emailAddress)
         ? user.primaryEmailAddress.emailAddress
         : user.id;
       setSessionState(true, userLabel);
@@ -333,10 +333,10 @@
         return;
       }
 
-      var profileData, profileError;
+      let profileData, profileError;
       try {
-        var supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        var result = await supabaseClient
+        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        const result = await supabaseClient
           .from('profiles')
           .select('role')
           .eq('clerk_user_id', user.id)
@@ -355,7 +355,7 @@
         return;
       }
 
-      var currentRole = normalizeRole(profileData && profileData.role ? profileData.role : '');
+      const currentRole = normalizeRole(profileData && profileData.role ? profileData.role : '');
 
       if (!currentRole) {
         setStatus('No portal role is assigned to your account. Use \u201cRequest Access\u201d to contact an administrator.', undefined);
