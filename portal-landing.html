@@ -96,79 +96,103 @@
     <section class="auth-card">
       <h2>Session Actions</h2>
       <div class="actions">
-        <a class="btn btn-primary" href="/sign-in.html" id="signInLink">Sign in</a>
+        <a class="btn btn-primary" href="/sign-in.html?redirect_url=/portal-landing.html" id="signInLink">Sign in</a>
         <button class="btn" id="signOutBtn" type="button">Sign out</button>
       </div>
     </section>
   </main>
   <script>
-    const SIGN_IN_URL = '/sign-in.html';
+    const SIGN_IN_URL = '/sign-in.html?redirect_url=/portal-landing.html';
     const SUPABASE_URL = 'https://izytzrxrgnahyvgwqhgd.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml6eXR6cnhyZ25haHl2Z3dxaGdkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI4OTkwNjMsImV4cCI6MjA5ODQ3NTA2M30.eRJDTZVj122qnzGPQxWWE2gxCmVXuCTukWOkfckRkMk';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml6eXR6cnhyZ25haHl2Z3dxaGdkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI4OTkwNjMsImV4cCI6MjA5ODQ3NTA2M30[...]';
     const ROLE_ROUTES = { cast: '/cast-portal.html', volunteer: '/volunteer-portal.html', admin: '/admin-portal.html' };
     const statusEl = document.getElementById('status');
     const signInLink = document.getElementById('signInLink');
     const signOutBtn = document.getElementById('signOutBtn');
     signInLink.setAttribute('href', SIGN_IN_URL);
+
     function setStatus(text, isError = false) {
       statusEl.textContent = text;
       statusEl.classList.toggle('error', !!isError);
     }
+
     function normalizeRole(role) {
       return (role || '').toString().trim().toLowerCase();
     }
+
     async function boot() {
       try {
         if (!window.Clerk) {
           setStatus('Clerk failed to load. Check network or script include.', true);
           return;
         }
+
         await window.Clerk.load();
+
+        signInLink.addEventListener('click', (e) => {
+          e.preventDefault();
+          if (window.Clerk && typeof window.Clerk.openSignIn === 'function') {
+            window.Clerk.openSignIn({ afterSignInUrl: '/portal-landing.html' });
+          } else {
+            window.location.href = SIGN_IN_URL;
+          }
+        });
+
         const user = window.Clerk.user;
         if (!user) {
           setStatus('You are not signed in. Redirecting to sign in…');
           setTimeout(() => { window.location.href = SIGN_IN_URL; }, 600);
           return;
         }
+
         if (!window.supabase || !window.supabase.createClient) {
           setStatus('Supabase client failed to load.', true);
           return;
         }
+
         if (SUPABASE_URL.includes('REPLACE_ME') || SUPABASE_ANON_KEY === 'REPLACE_ME') {
           setStatus('Supabase is not configured. Set SUPABASE_URL and SUPABASE_ANON_KEY in portal-landing.html.', true);
           return;
         }
+
         const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         const { data, error } = await supabaseClient
           .from('profiles')
           .select('role')
           .eq('clerk_user_id', user.id)
           .maybeSingle();
+
         if (error) {
           setStatus('Unable to verify role in Supabase: ' + error.message, true);
           return;
         }
+
         const currentRole = normalizeRole(data?.role);
         if (!currentRole) {
           setStatus('Unauthorized: no role assigned in profiles.role for this user.', true);
         } else {
           setStatus('Authenticated as role: ' + currentRole);
         }
+
         document.querySelectorAll('button[data-role][data-target]').forEach((btn) => {
           btn.addEventListener('click', () => {
             const requiredRole = normalizeRole(btn.getAttribute('data-role'));
             const target = btn.getAttribute('data-target') || ROLE_ROUTES[requiredRole] || '/';
+
             if (!currentRole) {
               setStatus('Unauthorized: your account has no role.', true);
               return;
             }
+
             if (currentRole !== requiredRole) {
               setStatus(`Unauthorized: requires '${requiredRole}' role. You are '${currentRole}'.`, true);
               return;
             }
+
             window.location.href = target;
           });
         });
+
         signOutBtn.addEventListener('click', async () => {
           try { await window.Clerk.signOut(); }
           finally { window.location.href = SIGN_IN_URL; }
@@ -177,6 +201,7 @@
         setStatus('Authentication bootstrap failed: ' + (err?.message || String(err)), true);
       }
     }
+
     boot();
   </script>
 </body>
