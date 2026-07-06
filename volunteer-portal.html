@@ -456,6 +456,20 @@
             }
         }
 
+        async function restoreShiftAvailability(shiftId) {
+            const { data: shift, error } = await supabase
+                .from(SHIFT_SOURCE_TABLE)
+                .select('volunteer_count')
+                .eq('id', shiftId)
+                .single();
+
+            if (error || !shift) {
+                return;
+            }
+
+            await updateShiftAvailability(shiftId, Number(shift.volunteer_count) || 0, 1);
+        }
+
         async function signupForShift(shiftId) {
             try {
                 if (!currentVolunteerId) {
@@ -482,6 +496,8 @@
 
                 const shiftWindow = buildShiftWindow(shift.shift_date);
 
+                await updateShiftAvailability(shiftId, Number(shift.volunteer_count) || 0, -1);
+
                 const { error } = await supabase
                     .from(VOLUNTEER_SHIFT_TABLE)
                     .insert([
@@ -495,6 +511,7 @@
                     ]);
 
                 if (error) {
+                    await restoreShiftAvailability(shiftId);
                     if (error.code === '23505') {
                         showError('You are already signed up for this shift.');
                         return;
@@ -502,7 +519,6 @@
                     throw error;
                 }
 
-                await updateShiftAvailability(shiftId, Number(shift.volunteer_count) || 0, -1);
                 showSuccess('Successfully signed up for the shift.');
                 await loadShifts();
             } catch (error) {
