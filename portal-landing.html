@@ -3,95 +3,181 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Portal Landing | Lab Test</title>
+  <title>Portal Landing | The Laboratory Theater of Florida</title>
   <link rel="stylesheet" href="style.css" />
   <style>
-    .portal-landing {
-      max-width: 1000px;
-      margin: 2rem auto;
-      padding: 0 1rem 2rem;
+    body { margin: 0; }
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 2rem 1rem 3rem;
     }
-    .portal-hero {
-      background: #0f172a;
-      color: #fff;
-      border-radius: 12px;
-      padding: 2rem;
-      margin-bottom: 1.5rem;
+    .auth-card {
+      background: #151515;
+      border: 1px solid #2c2c2c;
+      border-radius: 14px;
+      padding: 1.25rem;
+      margin-bottom: 1rem;
     }
-    .portal-hero h1 {
-      margin: 0 0 0.5rem;
-      font-size: 2rem;
-    }
-    .portal-hero p {
-      margin: 0;
-      opacity: 0.9;
-    }
-    .portal-links {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 1rem;
-      margin: 1.5rem 0;
-    }
-    .portal-card {
-      border: 1px solid #e5e7eb;
+    .auth-card h2 { margin-top: 0; }
+    .muted { color: #cfcfcf; }
+    .status {
+      margin: 1rem 0;
+      padding: 0.75rem 1rem;
       border-radius: 10px;
-      padding: 1rem;
-      background: #fff;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      border: 1px solid #3a3a3a;
+      background: #101010;
     }
-    .portal-card h2 {
-      margin: 0 0 0.5rem;
-      font-size: 1.1rem;
+    .status.error {
+      border-color: #7a2b2b;
+      color: #ffd8d8;
+      background: #1a0f0f;
     }
-    .portal-card p {
-      margin: 0 0 0.75rem;
-      color: #374151;
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-top: 0.5rem;
     }
-    .portal-card a {
-      display: inline-block;
+    .btn {
+      appearance: none;
+      border: 1px solid #444;
+      border-radius: 999px;
+      padding: 0.55rem 1rem;
       text-decoration: none;
-      color: #0b57d0;
-      font-weight: 600;
+      color: inherit;
+      background: #1a1a1a;
+      cursor: pointer;
+      display: inline-block;
     }
-    .portal-status {
-      margin-top: 1.5rem;
-      padding: 1rem;
-      border-left: 4px solid #0b57d0;
-      background: #eff6ff;
-      border-radius: 8px;
+    .btn-primary {
+      border-color: #ff5c8a;
+      background: #ff5c8a;
+      color: #121212;
+      font-weight: 700;
+    }
+    code {
+      background: #111;
+      border: 1px solid #2d2d2d;
+      border-radius: 6px;
+      padding: 0.1rem 0.35rem;
     }
   </style>
+  <script async crossorigin="anonymous" data-clerk-publishable-key="pk_test_REPLACE_ME"
+    src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
-  <main class="portal-landing">
-    <section class="portal-hero">
-      <h1>Portal Landing Page</h1>
-      <p>Welcome to your central hub for cast, volunteer, and production resources.</p>
+  <main class="container">
+    <h1>Portal Authentication Gateway</h1>
+    <p class="muted">This page is wired to authentication using Clerk + Supabase role checks.</p>
+    <div id="status" class="status">Initializing authentication…</div>
+    <section class="auth-card">
+      <h2>Cast Portal Auth</h2>
+      <p class="muted">Required role: <code>cast</code></p>
+      <div class="actions">
+        <button class="btn" data-role="cast" data-target="/cast-portal.html">Enter Cast Portal</button>
+      </div>
     </section>
-
-    <section class="portal-links" aria-label="Quick links">
-      <article class="portal-card">
-        <h2>Volunteer Portal</h2>
-        <p>View volunteer opportunities, signups, and event support details.</p>
-        <a href="volunteer-portal.html">Open Volunteer Portal →</a>
-      </article>
-
-      <article class="portal-card">
-        <h2>Cast Portal</h2>
-        <p>Access cast-specific information and active production assignments.</p>
-        <a href="cast-portal.html">Open Cast Portal →</a>
-      </article>
-
-      <article class="portal-card">
-        <h2>Production Plans</h2>
-        <p>Review schedules, production planning, and project milestones.</p>
-        <a href="plan.html">Open Production Plans →</a>
-      </article>
+    <section class="auth-card">
+      <h2>Volunteer Portal Auth</h2>
+      <p class="muted">Required role: <code>volunteer</code></p>
+      <div class="actions">
+        <button class="btn" data-role="volunteer" data-target="/volunteer-portal.html">Enter Volunteer Portal</button>
+      </div>
     </section>
-
-    <section class="portal-status" aria-live="polite">
-      <strong>Status:</strong> Portal landing page created with default structure and quick links.
+    <section class="auth-card">
+      <h2>Admin/Internal Auth</h2>
+      <p class="muted">Required role: <code>admin</code></p>
+      <div class="actions">
+        <button class="btn" data-role="admin" data-target="/admin-portal.html">Enter Admin Portal</button>
+      </div>
+    </section>
+    <section class="auth-card">
+      <h2>Session Actions</h2>
+      <div class="actions">
+        <a class="btn btn-primary" href="/sign-in.html" id="signInLink">Sign in</a>
+        <button class="btn" id="signOutBtn" type="button">Sign out</button>
+      </div>
     </section>
   </main>
+  <script>
+    const SIGN_IN_URL = '/sign-in.html';
+    const SUPABASE_URL = 'https://REPLACE_ME.supabase.co';
+    const SUPABASE_ANON_KEY = 'REPLACE_ME';
+    const ROLE_ROUTES = { cast: '/cast-portal.html', volunteer: '/volunteer-portal.html', admin: '/admin-portal.html' };
+    const statusEl = document.getElementById('status');
+    const signInLink = document.getElementById('signInLink');
+    const signOutBtn = document.getElementById('signOutBtn');
+    signInLink.setAttribute('href', SIGN_IN_URL);
+    function setStatus(text, isError = false) {
+      statusEl.textContent = text;
+      statusEl.classList.toggle('error', !!isError);
+    }
+    function normalizeRole(role) {
+      return (role || '').toString().trim().toLowerCase();
+    }
+    async function boot() {
+      try {
+        if (!window.Clerk) {
+          setStatus('Clerk failed to load. Check network or script include.', true);
+          return;
+        }
+        await window.Clerk.load();
+        const user = window.Clerk.user;
+        if (!user) {
+          setStatus('You are not signed in. Redirecting to sign in…');
+          setTimeout(() => { window.location.href = SIGN_IN_URL; }, 600);
+          return;
+        }
+        if (!window.supabase || !window.supabase.createClient) {
+          setStatus('Supabase client failed to load.', true);
+          return;
+        }
+        if (SUPABASE_URL.includes('REPLACE_ME') || SUPABASE_ANON_KEY === 'REPLACE_ME') {
+          setStatus('Supabase is not configured. Set SUPABASE_URL and SUPABASE_ANON_KEY in portal-landing.html.', true);
+          return;
+        }
+        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        const { data, error } = await supabaseClient
+          .from('profiles')
+          .select('role')
+          .eq('clerk_user_id', user.id)
+          .maybeSingle();
+        if (error) {
+          setStatus('Unable to verify role in Supabase: ' + error.message, true);
+          return;
+        }
+        const currentRole = normalizeRole(data?.role);
+        if (!currentRole) {
+          setStatus('Unauthorized: no role assigned in profiles.role for this user.', true);
+        } else {
+          setStatus('Authenticated as role: ' + currentRole);
+        }
+        document.querySelectorAll('button[data-role][data-target]').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            const requiredRole = normalizeRole(btn.getAttribute('data-role'));
+            const target = btn.getAttribute('data-target') || ROLE_ROUTES[requiredRole] || '/';
+            if (!currentRole) {
+              setStatus('Unauthorized: your account has no role.', true);
+              return;
+            }
+            if (currentRole !== requiredRole) {
+              setStatus(`Unauthorized: requires '${requiredRole}' role. You are '${currentRole}'.`, true);
+              return;
+            }
+            window.location.href = target;
+          });
+        });
+        signOutBtn.addEventListener('click', async () => {
+          try { await window.Clerk.signOut(); }
+          finally { window.location.href = SIGN_IN_URL; }
+        });
+      } catch (err) {
+        setStatus('Authentication bootstrap failed: ' + (err?.message || String(err)), true);
+      }
+    }
+    boot();
+  </script>
 </body>
 </html>
