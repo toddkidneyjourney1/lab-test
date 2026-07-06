@@ -140,7 +140,6 @@
         const magicLinkForm = document.getElementById('magic-link-form');
         const emailInput = document.getElementById('auth-email');
         const magicEmailInput = document.getElementById('magic-email');
-        const fullNameInput = document.getElementById('full-name');
         const redirectPath = window.labAuth.getRedirectPath('portal-landing.html');
         const redirectUrl = window.labAuth.getRedirectUrl('portal-landing.html');
         const query = new URLSearchParams(window.location.search);
@@ -163,7 +162,8 @@
         async function handleEmailPasswordAuth(event) {
             event.preventDefault();
 
-            const mode = event.submitter?.value === 'signup' ? 'signup' : 'signin';
+            const submitter = event.submitter;
+            const mode = submitter?.getAttribute('name') === 'mode' && submitter.value === 'signup' ? 'signup' : 'signin';
             const formData = new FormData(emailAuthForm);
             const email = (formData.get('email') || '').toString().trim();
             const password = (formData.get('password') || '').toString();

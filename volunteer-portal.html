@@ -387,6 +387,7 @@
             }
 
             const signedUpShiftIds = (userSignups || []).map((signup) => signup.shift_id);
+
             shiftContainerEl.innerHTML = '';
 
             shifts.forEach((shift) => {
@@ -394,25 +395,26 @@
             });
         }
 
-        async function updateShiftAvailability(shiftId, delta) {
-            const { data: shift, error: fetchError } = await supabase
-                .from(SHIFT_SOURCE_TABLE)
-                .select('volunteer_count')
-                .eq('id', shiftId)
-                .single();
-
-            if (fetchError || !shift) {
-                return;
-            }
-
+        async function updateShiftAvailability(shiftId, currentCount, delta) {
             const nextCount = delta < 0
-                ? Math.max(0, (shift.volunteer_count || 0) + delta)
-                : (shift.volunteer_count || 0) + delta;
+                ? Math.max(0, currentCount + delta)
+                : currentCount + delta;
 
-            await supabase
+            const { data: updatedShift, error } = await supabase
                 .from(SHIFT_SOURCE_TABLE)
                 .update({ volunteer_count: nextCount })
-                .eq('id', shiftId);
+                .eq('id', shiftId)
+                .eq('volunteer_count', currentCount)
+                .select('id')
+                .maybeSingle();
+
+            if (error) {
+                throw error;
+            }
+
+            if (!updatedShift) {
+                throw new Error('Shift availability changed while your request was processing. Please refresh and try again.');
+            }
         }
 
         async function signupForShift(shiftId) {
@@ -421,14 +423,32 @@
                     throw new Error('Volunteer profile is not ready yet.');
                 }
 
+                const { data: shift, error: shiftError } = await supabase
+                    .from(SHIFT_SOURCE_TABLE)
+                    .select('shift_date, volunteer_count')
+                    .eq('id', shiftId)
+                    .single();
+
+                if (shiftError) {
+                    throw shiftError;
+                }
+
+                if ((shift?.volunteer_count || 0) <= 0) {
+                    throw new Error('This shift is already full.');
+                }
+
+                const shiftDate = shift?.shift_date || new Date().toISOString().slice(0, 10);
+                const shiftStart = new Date(`${shiftDate}T00:00:00`).toISOString();
+                const shiftEnd = new Date(`${shiftDate}T23:59:59`).toISOString();
+
                 const { error } = await supabase
                     .from(VOLUNTEER_SHIFT_TABLE)
                     .insert([
                         {
                             volunteer_id: currentVolunteerId,
                             shift_id: shiftId,
-                            shift_start: new Date().toISOString(),
-                            shift_end: null,
+                            shift_start: shiftStart,
+                            shift_end: shiftEnd,
                             role: 'Volunteer'
                         }
                     ]);
@@ -441,7 +461,7 @@
                     throw error;
                 }
 
-                await updateShiftAvailability(shiftId, -1);
+                await updateShiftAvailability(shiftId, Number(shift.volunteer_count) || 0, -1);
                 showSuccess('Successfully signed up for the shift.');
                 await loadShifts();
             } catch (error) {
@@ -451,6 +471,16 @@
 
         async function cancelSignup(shiftId) {
             try {
+                const { data: shift, error: shiftError } = await supabase
+                    .from(SHIFT_SOURCE_TABLE)
+                    .select('volunteer_count')
+                    .eq('id', shiftId)
+                    .single();
+
+                if (shiftError) {
+                    throw shiftError;
+                }
+
                 const { error } = await supabase
                     .from(VOLUNTEER_SHIFT_TABLE)
                     .delete()
@@ -461,7 +491,7 @@
                     throw error;
                 }
 
-                await updateShiftAvailability(shiftId, 1);
+                await updateShiftAvailability(shiftId, Number(shift.volunteer_count) || 0, 1);
                 showSuccess('Successfully cancelled signup.');
                 await loadShifts();
             } catch (error) {

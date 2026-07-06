@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Join the Experiment | The Laboratory Theater of Florida</title>
     <link rel="stylesheet" href="style.css">
+    <script src="auth-config.js"></script>
     <style>
         .volunteer-portal {
             max-width: 1000px;
@@ -154,25 +155,10 @@
     </main>
 
     <script>
-        function buildAuthUrl(mode, email) {
-            const url = new URL('sign-in.html', window.location.href);
-            url.searchParams.set('redirect_url', 'volunteer-portal.html');
-
-            if (mode) {
-                url.searchParams.set('mode', mode);
-            }
-
-            if (email) {
-                url.searchParams.set('email', email);
-            }
-
-            return `${url.pathname.replace(/^\//, '')}${url.search}${url.hash}`;
-        }
-
         document.getElementById('volunteer-login-form').addEventListener('submit', (event) => {
             event.preventDefault();
             const email = document.getElementById('volunteer-email').value.trim();
-            window.location.href = buildAuthUrl('', email);
+            window.location.href = window.labAuth.buildSignInUrl('volunteer-portal.html', { email });
         });
     </script>
 </body>
