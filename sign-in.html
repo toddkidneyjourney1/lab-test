@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In | The Laboratory Theater of Florida</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body { margin: 0; }
+        .auth-shell {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 2rem 1rem 3rem;
+        }
+        .auth-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
+        }
+        .auth-card {
+            background: #151515;
+            border: 1px solid #2c2c2c;
+            border-radius: 14px;
+            padding: 1.25rem;
+        }
+        .auth-card h2 {
+            margin-top: 0;
+        }
+        .status {
+            margin: 1rem 0;
+            padding: 0.75rem 1rem;
+            border-radius: 10px;
+            border: 1px solid #3a3a3a;
+            background: #101010;
+        }
+        .status.error {
+            border-color: #7a2b2b;
+            color: #ffd8d8;
+            background: #1a0f0f;
+        }
+        .auth-form {
+            display: grid;
+            gap: 0.75rem;
+        }
+        .auth-form label {
+            display: grid;
+            gap: 0.35rem;
+            font-weight: 600;
+        }
+        .auth-form input {
+            padding: 0.75rem 0.85rem;
+            border-radius: 8px;
+            border: 1px solid #444;
+            background: #101010;
+            color: #fff;
+        }
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+        .btn {
+            appearance: none;
+            border: 1px solid #444;
+            border-radius: 999px;
+            padding: 0.65rem 1rem;
+            text-decoration: none;
+            color: inherit;
+            background: #1a1a1a;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .btn-primary {
+            border-color: #ff5c8a;
+            background: #ff5c8a;
+            color: #121212;
+            font-weight: 700;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="auth-config.js"></script>
+</head>
+<body>
+    <main class="auth-shell">
+        <h1>Portal Sign In</h1>
+        <p>Use Supabase Auth to sign in with email and password, a magic link, or an OAuth provider.</p>
+
+        <div id="status" class="status">Preparing sign-in options…</div>
+
+        <div class="auth-grid">
+            <section class="auth-card">
+                <h2>Email &amp; Password</h2>
+                <form id="email-auth-form" class="auth-form">
+                    <label for="full-name">
+                        Full Name
+                        <input id="full-name" name="fullName" type="text" autocomplete="name" placeholder="Optional for sign in">
+                    </label>
+                    <label for="auth-email">
+                        Email
+                        <input id="auth-email" name="email" type="email" autocomplete="email" required>
+                    </label>
+                    <label for="auth-password">
+                        Password
+                        <input id="auth-password" name="password" type="password" autocomplete="current-password" required>
+                    </label>
+                    <div class="actions">
+                        <button class="btn btn-primary" type="submit" value="signin">Sign In</button>
+                        <button class="btn" type="submit" name="mode" value="signup">Create Account</button>
+                    </div>
+                </form>
+            </section>
+
+            <section class="auth-card">
+                <h2>Magic Link</h2>
+                <form id="magic-link-form" class="auth-form">
+                    <label for="magic-email">
+                        Email
+                        <input id="magic-email" name="email" type="email" autocomplete="email" required>
+                    </label>
+                    <button class="btn btn-primary" type="submit">Send Magic Link</button>
+                </form>
+            </section>
+
+            <section class="auth-card">
+                <h2>OAuth</h2>
+                <p>Use an OAuth provider configured in your Supabase project.</p>
+                <div class="actions">
+                    <button class="btn btn-primary" type="button" data-provider="google">Continue with Google</button>
+                    <button class="btn" type="button" data-provider="github">Continue with GitHub</button>
+                </div>
+            </section>
+        </div>
+
+        <p><a href="portal-landing.html">Back to Portal Landing</a></p>
+    </main>
+
+    <script>
+        const statusEl = document.getElementById('status');
+        const emailAuthForm = document.getElementById('email-auth-form');
+        const magicLinkForm = document.getElementById('magic-link-form');
+        const emailInput = document.getElementById('auth-email');
+        const magicEmailInput = document.getElementById('magic-email');
+        const fullNameInput = document.getElementById('full-name');
+        const redirectPath = window.labAuth.getRedirectPath('portal-landing.html');
+        const redirectUrl = window.labAuth.getRedirectUrl('portal-landing.html');
+        const query = new URLSearchParams(window.location.search);
+
+        function setStatus(message, isError = false) {
+            statusEl.textContent = message;
+            statusEl.classList.toggle('error', !!isError);
+        }
+
+        async function redirectIfSignedIn() {
+            const session = await window.labAuth.getSession();
+            if (session?.user) {
+                window.location.href = redirectPath;
+                return true;
+            }
+
+            return false;
+        }
+
+        async function handleEmailPasswordAuth(event) {
+            event.preventDefault();
+
+            const mode = event.submitter?.value === 'signup' ? 'signup' : 'signin';
+            const formData = new FormData(emailAuthForm);
+            const email = (formData.get('email') || '').toString().trim();
+            const password = (formData.get('password') || '').toString();
+            const fullName = (formData.get('fullName') || '').toString().trim();
+            const supabase = window.labAuth.getSupabaseClient();
+
+            if (!email || !password) {
+                setStatus('Email and password are required.', true);
+                return;
+            }
+
+            setStatus(mode === 'signup' ? 'Creating your account…' : 'Signing you in…');
+
+            try {
+                if (mode === 'signup') {
+                    const { data, error } = await supabase.auth.signUp({
+                        email,
+                        password,
+                        options: {
+                            emailRedirectTo: redirectUrl,
+                            data: fullName ? { full_name: fullName } : undefined
+                        }
+                    });
+
+                    if (error) {
+                        throw error;
+                    }
+
+                    if (data.session?.user) {
+                        window.location.href = redirectPath;
+                        return;
+                    }
+
+                    setStatus('Account created. Check your email to confirm your account, then sign in.');
+                    return;
+                }
+
+                const { error } = await supabase.auth.signInWithPassword({ email, password });
+                if (error) {
+                    throw error;
+                }
+
+                window.location.href = redirectPath;
+            } catch (error) {
+                setStatus(error.message, true);
+            }
+        }
+
+        async function handleMagicLink(event) {
+            event.preventDefault();
+
+            const email = (new FormData(magicLinkForm).get('email') || '').toString().trim();
+            if (!email) {
+                setStatus('Enter an email address to receive a magic link.', true);
+                return;
+            }
+
+            setStatus('Sending your magic link…');
+
+            try {
+                const { error } = await window.labAuth.getSupabaseClient().auth.signInWithOtp({
+                    email,
+                    options: {
+                        emailRedirectTo: redirectUrl
+                    }
+                });
+
+                if (error) {
+                    throw error;
+                }
+
+                setStatus('Magic link sent. Check your inbox to finish signing in.');
+            } catch (error) {
+                setStatus(error.message, true);
+            }
+        }
+
+        async function handleOAuth(provider) {
+            setStatus(`Redirecting to ${provider}…`);
+
+            try {
+                const { error } = await window.labAuth.getSupabaseClient().auth.signInWithOAuth({
+                    provider,
+                    options: {
+                        redirectTo: redirectUrl
+                    }
+                });
+
+                if (error) {
+                    throw error;
+                }
+            } catch (error) {
+                setStatus(error.message, true);
+            }
+        }
+
+        async function boot() {
+            try {
+                if (await redirectIfSignedIn()) {
+                    return;
+                }
+
+                const presetEmail = (query.get('email') || '').trim();
+                const mode = (query.get('mode') || '').trim().toLowerCase();
+
+                if (presetEmail) {
+                    emailInput.value = presetEmail;
+                    magicEmailInput.value = presetEmail;
+                }
+
+                if (mode === 'signup') {
+                    setStatus('Create an account to request portal access or manage volunteer activity.');
+                } else {
+                    setStatus('Choose a sign-in method to continue.');
+                }
+
+                window.labAuth.getSupabaseClient().auth.onAuthStateChange((event, session) => {
+                    if (session?.user) {
+                        window.location.href = redirectPath;
+                    }
+                });
+            } catch (error) {
+                setStatus(`Unable to load Supabase Auth: ${error.message}`, true);
+            }
+        }
+
+        emailAuthForm.addEventListener('submit', handleEmailPasswordAuth);
+        magicLinkForm.addEventListener('submit', handleMagicLink);
+        document.querySelectorAll('[data-provider]').forEach((button) => {
+            button.addEventListener('click', () => handleOAuth(button.getAttribute('data-provider')));
+        });
+
+        boot();
+    </script>
+</body>
+</html>

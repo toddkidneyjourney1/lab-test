@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Join the Experiment | The Laboratory Theater of Florida</title>
     <link rel="stylesheet" href="style.css">
-    <script src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js" async></script>
     <style>
         .volunteer-portal {
             max-width: 1000px;
@@ -118,19 +117,19 @@
                 <div class="portal-card">
                     <h2>New Volunteers</h2>
                     <p>Interested in joining our team? We'd love to have you.</p>
-                    <button type="button" class="button" id="create-account-button">Create Account</button>
+                    <a class="button" id="create-account-button" href="sign-in.html?mode=signup&amp;redirect_url=volunteer-portal.html">Create Account</a>
                 </div>
                 
                 <div class="portal-card">
                     <h2>Returning Volunteers</h2>
                     <p>Log in to view your upcoming shifts and manage your schedule.</p>
-                    <button type="button" class="button secondary" id="volunteer-login-button">Volunteer Login</button>
+                    <a class="button secondary" id="volunteer-login-button" href="sign-in.html?redirect_url=volunteer-portal.html">Volunteer Login</a>
                 </div>
             </div>
 
             <section id="volunteer-login" class="login-block">
                 <h2>Volunteer Login</h2>
-                <p>Use your portal credentials to access your account.</p>
+                <p>Start with your email and continue through the secure Supabase sign-in screen.</p>
 
                 <form class="login-form" id="volunteer-login-form">
                     <div>
@@ -138,16 +137,9 @@
                         <input id="volunteer-email" name="email" type="email" placeholder="you@example.com" required>
                     </div>
 
-                    <div>
-                        <label for="volunteer-password">Password</label>
-                        <input id="volunteer-password" name="password" type="password" placeholder="Enter password" required>
-                    </div>
-
                     <div class="login-row">
-                        <button type="submit" class="button secondary">Log In</button>
-                       <a href="volunteer-signup.html">
-    <button type="button" class="button">Create Account</button>
-</a>
+                        <button type="submit" class="button secondary">Continue to Sign In</button>
+                        <a href="sign-in.html?mode=signup&amp;redirect_url=volunteer-portal.html" class="button">Create Account</a>
                     </div>
                 </form>
 
@@ -162,50 +154,25 @@
     </main>
 
     <script>
-        const PUBLISHABLE_KEY = 'pk_test_bGVhcm5pbmctbWFzdG9kb24tMzUuY2xlcmsuYWNjb3VudHMuZGV2JA';
-        const AUTH_REDIRECT_URL = window.location.origin + window.location.pathname.replace('volunteer.html', 'volunteer-portal.html');
-        const AFTER_SIGN_OUT_URL = window.location.origin + window.location.pathname;
+        function buildAuthUrl(mode, email) {
+            const url = new URL('sign-in.html', window.location.href);
+            url.searchParams.set('redirect_url', 'volunteer-portal.html');
 
-        function buildSignInUrl() {
-            return AUTH_REDIRECT_URL;
-        }
-
-        function buildSignUpUrl() {
-            return AUTH_REDIRECT_URL;
-        }
-
-        async function launchSignIn() {
-            if (!window.Clerk) {
-                window.location.href = 'volunteer-portal.html';
-                return;
+            if (mode) {
+                url.searchParams.set('mode', mode);
             }
 
-            await window.Clerk.load({ publishableKey: PUBLISHABLE_KEY });
-            await window.Clerk.openSignIn({
-                afterSignInUrl: AUTH_REDIRECT_URL,
-                afterSignUpUrl: AUTH_REDIRECT_URL
-            });
-        }
-
-        async function launchSignUp() {
-            if (!window.Clerk) {
-                window.location.href = 'volunteer-portal.html';
-                return;
+            if (email) {
+                url.searchParams.set('email', email);
             }
 
-            await window.Clerk.load({ publishableKey: PUBLISHABLE_KEY });
-            await window.Clerk.openSignUp({
-                afterSignInUrl: AUTH_REDIRECT_URL,
-                afterSignUpUrl: AUTH_REDIRECT_URL
-            });
+            return `${url.pathname.replace(/^\//, '')}${url.search}${url.hash}`;
         }
 
-        document.getElementById('create-account-button').addEventListener('click', launchSignUp);
-        document.getElementById('inline-create-account-button').addEventListener('click', launchSignUp);
-        document.getElementById('volunteer-login-button').addEventListener('click', launchSignIn);
-        document.getElementById('volunteer-login-form').addEventListener('submit', async (event) => {
+        document.getElementById('volunteer-login-form').addEventListener('submit', (event) => {
             event.preventDefault();
-            await launchSignIn();
+            const email = document.getElementById('volunteer-email').value.trim();
+            window.location.href = buildAuthUrl('', email);
         });
     </script>
 </body>
