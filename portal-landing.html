@@ -6,8 +6,7 @@
   <title>Portal Landing | The Laboratory Theater of Florida</title>
   <link rel="stylesheet" href="style.css" />
   <style>
-    body { margin: 0; }
-    .container {
+    .portal-container {
       max-width: 960px;
       margin: 0 auto;
       padding: 2rem 1rem 3rem;
@@ -33,6 +32,11 @@
       color: #ffd8d8;
       background: #1a0f0f;
     }
+    .status.success {
+      border-color: #2b7a2b;
+      color: #d8ffd8;
+      background: #0f1a0f;
+    }
     .actions {
       display: flex;
       flex-wrap: wrap;
@@ -49,6 +53,11 @@
       background: #1a1a1a;
       cursor: pointer;
       display: inline-block;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .btn:hover {
+      background: #2a2a2a;
+      border-color: #555;
     }
     .btn-primary {
       border-color: #ff5c8a;
@@ -56,64 +65,127 @@
       color: #121212;
       font-weight: 700;
     }
+    .btn-primary:hover {
+      background: #ff4577;
+      border-color: #ff4577;
+    }
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+    .portal-button {
+      width: 100%;
+      padding: 0.75rem 1rem;
+    }
+    .portal-button:disabled {
+      background: #333;
+      border-color: #555;
+      cursor: not-allowed;
+    }
     code {
       background: #111;
       border: 1px solid #2d2d2d;
       border-radius: 6px;
       padding: 0.1rem 0.35rem;
     }
+    .request-access-btn {
+      border-color: #ff5c8a;
+      color: #ff5c8a;
+      margin-top: 1rem;
+    }
+    .request-access-btn:hover {
+      background: rgba(255, 92, 138, 0.1);
+    }
   </style>
-  <script async crossorigin="anonymous" data-clerk-publishable-key="pk_test_sb_publishable_wo-PDCkLxkuGLsar5by1Sw_ShjHgZDC"
-    src="https://unpkg.com/@clerk/clerk-js@latest/dist/clerk.browser.js"></script>
+  <script async crossorigin="anonymous" data-clerk-publishable-key="pk_test_bGVhcm5pbmctbWFzdG9kb24tMzUuY2xlcmsuYWNjb3VudHMuZGV2JA"
+    src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
-  <main class="container">
+  <!-- Hamburger Menu -->
+  <input type="checkbox" id="nav-toggle" class="nav-toggle">
+  <label for="nav-toggle" class="nav-toggle-label">
+    <span></span>
+  </label>
+  
+  <nav class="hamburger-menu">
+    <a href="index.html">Home</a>
+    <a href="about.html">Origin Story</a>
+    <a href="archive25.html">Past Experiments</a>
+    <a href="plan.html">Lab Protocols</a>
+    <a href="volunteer.html">Join the Experiment</a>
+    <a href="company.html">The Internal Log</a>
+    <a href="support.html">Fuel the Innovation</a>
+    <a href="sponsors.html">Core Collaborators</a>
+  </nav>
+
+  <!-- Header -->
+  <header class="main-header">
+    <div class="logo">
+      THE <span>LAB</span>
+      <p class="tagline">Intentionally innovative live theater</p>
+    </div>
+  </header>
+
+  <main class="portal-container">
     <h1>Portal Authentication Gateway</h1>
-    <p class="muted">This page is wired to authentication using Clerk + Supabase role checks.</p>
+    <p class="muted">Access your portal based on your assigned role.</p>
     <div id="status" class="status">Initializing authentication…</div>
+    
     <section class="auth-card">
-      <h2>Cast Portal Auth</h2>
+      <h2>Cast Portal</h2>
       <p class="muted">Required role: <code>cast</code></p>
       <div class="actions">
-        <button class="btn" data-role="cast" data-target="/cast-portal.html">Enter Cast Portal</button>
+        <button class="btn portal-button" id="btn-cast" data-role="cast" data-target="/cast-portal.html" disabled>Enter Cast Portal</button>
       </div>
     </section>
+    
     <section class="auth-card">
-      <h2>Volunteer Portal Auth</h2>
+      <h2>Volunteer Portal</h2>
       <p class="muted">Required role: <code>volunteer</code></p>
       <div class="actions">
-        <button class="btn" data-role="volunteer" data-target="/volunteer-portal.html">Enter Volunteer Portal</button>
+        <button class="btn portal-button" id="btn-volunteer" data-role="volunteer" data-target="/volunteer-portal.html" disabled>Enter Volunteer Portal</button>
       </div>
     </section>
+    
     <section class="auth-card">
-      <h2>Admin/Internal Auth</h2>
+      <h2>Admin Portal</h2>
       <p class="muted">Required role: <code>admin</code></p>
       <div class="actions">
-        <button class="btn" data-role="admin" data-target="/admin-portal.html">Enter Admin Portal</button>
+        <button class="btn portal-button" id="btn-admin" data-role="admin" data-target="/admin-portal.html" disabled>Enter Admin Portal</button>
       </div>
     </section>
+    
     <section class="auth-card">
       <h2>Session Actions</h2>
       <div class="actions">
-        <a class="btn btn-primary" href="/sign-in.html?redirect_url=/portal-landing.html" id="signInLink">Sign in</a>
-        <button class="btn" id="signOutBtn" type="button">Sign out</button>
+        <button class="btn btn-primary" id="signInLink">Sign in</button>
+        <button class="btn" id="signOutBtn" style="display:none;">Sign out</button>
       </div>
     </section>
   </main>
+
   <script>
     const SIGN_IN_URL = '/sign-in.html?redirect_url=/portal-landing.html';
     const SUPABASE_URL = 'https://izytzrxrgnahyvgwqhgd.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml6eXR6cnhyZ25haHl2Z3dxaGdkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI4OTkwNjMsImV4cCI6MjA5ODQ3NTA2M30[...]';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml6eXR6cnhyZ25haHl2Z3dxaGdkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI4OTkwNjMsImV4cCI6MjA5ODQ3NTA2M30.sb_publishable_wo-PDCkLxkuGLsar5by1Sw_ShjHgZDC';
     const ROLE_ROUTES = { cast: '/cast-portal.html', volunteer: '/volunteer-portal.html', admin: '/admin-portal.html' };
+    
     const statusEl = document.getElementById('status');
     const signInLink = document.getElementById('signInLink');
     const signOutBtn = document.getElementById('signOutBtn');
-    signInLink.setAttribute('href', SIGN_IN_URL);
+    
+    let currentRole = null;
+    let currentUser = null;
 
-    function setStatus(text, isError = false) {
+    function setStatus(text, type = 'info') {
       statusEl.textContent = text;
-      statusEl.classList.toggle('error', !!isError);
+      statusEl.className = 'status';
+      if (type === 'error') {
+        statusEl.classList.add('error');
+      } else if (type === 'success') {
+        statusEl.classList.add('success');
+      }
     }
 
     function normalizeRole(role) {
@@ -129,90 +201,124 @@
       return true;
     }
 
-    async function boot() {
+    async function checkAuth() {
       try {
+        // Wait for Clerk to load
         const clerkReady = await waitForClerk();
         if (!clerkReady) {
-          setStatus('Clerk failed to load. Verify publishable key/domain and script URL.', true);
+          setStatus('Clerk failed to load. Check network or configuration.', 'error');
           return;
         }
 
+        // Load Clerk
         await window.Clerk.load();
-
-        signInLink.addEventListener('click', (e) => {
-          e.preventDefault();
-          if (window.Clerk && typeof window.Clerk.openSignIn === 'function') {
-            window.Clerk.openSignIn({ afterSignInUrl: '/portal-landing.html' });
-          } else {
-            window.location.href = SIGN_IN_URL;
-          }
-        });
-
         const user = window.Clerk.user;
+
+        // If not signed in, redirect to sign-in
         if (!user) {
-          setStatus('You are not signed in. Redirecting to sign in…');
-          setTimeout(() => { window.location.href = SIGN_IN_URL; }, 600);
+          setStatus('You are not signed in. Please sign in to continue.');
+          signInLink.style.display = 'inline-block';
+          signOutBtn.style.display = 'none';
           return;
         }
 
+        currentUser = user;
+        setStatus('Checking your access level...');
+
+        // Check if Supabase is available
         if (!window.supabase || !window.supabase.createClient) {
-          setStatus('Supabase client failed to load.', true);
+          setStatus('Supabase client failed to load.', 'error');
           return;
         }
 
-        if (SUPABASE_URL.includes('REPLACE_ME') || SUPABASE_ANON_KEY === 'REPLACE_ME') {
-          setStatus('Supabase is not configured. Set SUPABASE_URL and SUPABASE_ANON_KEY in portal-landing.html.', true);
-          return;
-        }
-
+        // Create Supabase client
         const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // Query user role from profiles table
         const { data, error } = await supabaseClient
           .from('profiles')
           .select('role')
           .eq('clerk_user_id', user.id)
           .maybeSingle();
 
-        if (error) {
-          setStatus('Unable to verify role in Supabase: ' + error.message, true);
+        if (error && error.code !== 'PGRST116') {
+          setStatus('Error checking access: ' + error.message, 'error');
           return;
         }
 
-        const currentRole = normalizeRole(data?.role);
-        if (!currentRole) {
-          setStatus('Unauthorized: no role assigned in profiles.role for this user.', true);
+        const userRole = normalizeRole(data?.role);
+
+        if (!userRole) {
+          setStatus('Unauthorized: Your account does not have an assigned role. Contact support to request access.', 'error');
+          showRequestAccessOption();
         } else {
-          setStatus('Authenticated as role: ' + currentRole);
+          currentRole = userRole;
+          setStatus(`Authenticated as: ${userRole}`, 'success');
+          enablePortalButtons(userRole);
         }
 
-        document.querySelectorAll('button[data-role][data-target]').forEach((btn) => {
-          btn.addEventListener('click', () => {
-            const requiredRole = normalizeRole(btn.getAttribute('data-role'));
-            const target = btn.getAttribute('data-target') || ROLE_ROUTES[requiredRole] || '/';
-
-            if (!currentRole) {
-              setStatus('Unauthorized: your account has no role.', true);
-              return;
-            }
-
-            if (currentRole !== requiredRole) {
-              setStatus(`Unauthorized: requires '${requiredRole}' role. You are '${currentRole}'.`, true);
-              return;
-            }
-
-            window.location.href = target;
-          });
-        });
-
+        // Setup sign out button
+        signOutBtn.style.display = 'inline-block';
+        signInLink.style.display = 'none';
         signOutBtn.addEventListener('click', async () => {
-          try { await window.Clerk.signOut(); }
-          finally { window.location.href = SIGN_IN_URL; }
+          try {
+            await window.Clerk.signOut();
+            window.location.href = SIGN_IN_URL;
+          } catch (err) {
+            console.error('Sign out error:', err);
+            window.location.href = SIGN_IN_URL;
+          }
         });
+
       } catch (err) {
-        setStatus('Authentication bootstrap failed: ' + (err?.message || String(err)), true);
+        setStatus('Authentication error: ' + (err?.message || String(err)), 'error');
+        console.error('Auth error:', err);
       }
     }
 
-    boot();
+    function enablePortalButtons(userRole) {
+      // Enable all portal buttons
+      document.querySelectorAll('.portal-button').forEach((btn) => {
+        btn.disabled = false;
+        const requiredRole = normalizeRole(btn.getAttribute('data-role'));
+        const target = btn.getAttribute('data-target');
+
+        btn.addEventListener('click', () => {
+          if (userRole !== requiredRole) {
+            setStatus(`Access denied: You need '${requiredRole}' role. You have '${userRole}' role.`, 'error');
+            return;
+          }
+          window.location.href = target;
+        });
+      });
+    }
+
+    function showRequestAccessOption() {
+      const portals = document.querySelectorAll('.auth-card');
+      if (portals.length > 0) {
+        const lastCard = portals[portals.length - 2]; // Get second to last (before Session Actions)
+        const requestBtn = document.createElement('button');
+        requestBtn.className = 'btn request-access-btn';
+        requestBtn.textContent = 'Request Access';
+        requestBtn.addEventListener('click', () => {
+          window.location.href = 'mailto:support@labtheaterfl.com?subject=Portal Access Request&body=I would like to request access to the Laboratory Theater portal.';
+        });
+        lastCard.querySelector('.actions').appendChild(requestBtn);
+      }
+    }
+
+    // Sign in button handler
+    signInLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (window.Clerk && typeof window.Clerk.openSignIn === 'function') {
+        window.Clerk.openSignIn({ afterSignInUrl: '/portal-landing.html' });
+      } else {
+        window.location.href = SIGN_IN_URL;
+      }
+    });
+
+    // Start authentication check
+    checkAuth();
   </script>
 </body>
 </html>
