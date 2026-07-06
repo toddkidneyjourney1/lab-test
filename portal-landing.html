@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portal Landing | Lab Test</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .portal-landing {
+      max-width: 1000px;
+      margin: 2rem auto;
+      padding: 0 1rem 2rem;
+    }
+    .portal-hero {
+      background: #0f172a;
+      color: #fff;
+      border-radius: 12px;
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+    }
+    .portal-hero h1 {
+      margin: 0 0 0.5rem;
+      font-size: 2rem;
+    }
+    .portal-hero p {
+      margin: 0;
+      opacity: 0.9;
+    }
+    .portal-links {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+    .portal-card {
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      padding: 1rem;
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    .portal-card h2 {
+      margin: 0 0 0.5rem;
+      font-size: 1.1rem;
+    }
+    .portal-card p {
+      margin: 0 0 0.75rem;
+      color: #374151;
+    }
+    .portal-card a {
+      display: inline-block;
+      text-decoration: none;
+      color: #0b57d0;
+      font-weight: 600;
+    }
+    .portal-status {
+      margin-top: 1.5rem;
+      padding: 1rem;
+      border-left: 4px solid #0b57d0;
+      background: #eff6ff;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+  <main class="portal-landing">
+    <section class="portal-hero">
+      <h1>Portal Landing Page</h1>
+      <p>Welcome to your central hub for cast, volunteer, and production resources.</p>
+    </section>
+
+    <section class="portal-links" aria-label="Quick links">
+      <article class="portal-card">
+        <h2>Volunteer Portal</h2>
+        <p>View volunteer opportunities, signups, and event support details.</p>
+        <a href="volunteer-portal.html">Open Volunteer Portal →</a>
+      </article>
+
+      <article class="portal-card">
+        <h2>Cast Portal</h2>
+        <p>Access cast-specific information and active production assignments.</p>
+        <a href="cast-portal.html">Open Cast Portal →</a>
+      </article>
+
+      <article class="portal-card">
+        <h2>Production Plans</h2>
+        <p>Review schedules, production planning, and project milestones.</p>
+        <a href="plan.html">Open Production Plans →</a>
+      </article>
+    </section>
+
+    <section class="portal-status" aria-live="polite">
+      <strong>Status:</strong> Portal landing page created with default structure and quick links.
+    </section>
+  </main>
+</body>
+</html>
