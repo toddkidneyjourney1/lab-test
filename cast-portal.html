@@ -49,7 +49,14 @@
 </head>
 <body>
     <script>
-        if (sessionStorage.getItem('portalAccessGranted') !== 'true') {
+        const accessGranted = sessionStorage.getItem('portalAccessGranted') === 'true';
+        const grantedAtRaw = sessionStorage.getItem('portalAccessGrantedAt');
+        const grantedAt = grantedAtRaw ? Number(grantedAtRaw) : 0;
+        const accessFresh = Number.isFinite(grantedAt) && Date.now() - grantedAt <= (30 * 60 * 1000);
+
+        if (!accessGranted || !accessFresh) {
+            sessionStorage.removeItem('portalAccessGranted');
+            sessionStorage.removeItem('portalAccessGrantedAt');
             window.location.replace('portal-access.html');
         }
     </script>

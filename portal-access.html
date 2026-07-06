@@ -114,6 +114,9 @@
     <script>
         (function () {
             const PORTAL_PASSWORD_HASH = "0811611bcb6bb2582d490073ab042e8707f175ce6f3734b24f06a715a2886b09";
+            const ACCESS_FLAG_KEY = 'portalAccessGranted';
+            const ACCESS_TIME_KEY = 'portalAccessGrantedAt';
+            const ACCESS_TTL_MS = 30 * 60 * 1000;
             const form = document.getElementById('portal-access-form');
             const passwordInput = document.getElementById('portal-password');
             const message = document.getElementById('access-message');
@@ -130,7 +133,8 @@
             }
 
             function grantAccess() {
-                sessionStorage.setItem('portalAccessGranted', 'true');
+                sessionStorage.setItem(ACCESS_FLAG_KEY, 'true');
+                sessionStorage.setItem(ACCESS_TIME_KEY, String(Date.now()));
                 linksSection.classList.add('is-visible');
                 linksSection.setAttribute('aria-hidden', 'false');
                 message.textContent = 'Access granted.';
@@ -138,8 +142,9 @@
                 passwordInput.value = '';
             }
 
-            function revokeAccess() {
-                sessionStorage.removeItem('portalAccessGranted');
+            function denyAccess() {
+                sessionStorage.removeItem(ACCESS_FLAG_KEY);
+                sessionStorage.removeItem(ACCESS_TIME_KEY);
                 linksSection.classList.remove('is-visible');
                 linksSection.setAttribute('aria-hidden', 'true');
                 message.textContent = 'Incorrect password. Please try again.';
@@ -154,8 +159,18 @@
                 window.location.href = 'cast-portal.html';
             });
 
-            if (sessionStorage.getItem('portalAccessGranted') === 'true') {
+            const grantedAtRaw = sessionStorage.getItem(ACCESS_TIME_KEY);
+            const grantedAt = grantedAtRaw ? Number(grantedAtRaw) : 0;
+            const isFreshAccess =
+                sessionStorage.getItem(ACCESS_FLAG_KEY) === 'true' &&
+                Number.isFinite(grantedAt) &&
+                Date.now() - grantedAt <= ACCESS_TTL_MS;
+
+            if (isFreshAccess) {
                 grantAccess();
+            } else {
+                sessionStorage.removeItem(ACCESS_FLAG_KEY);
+                sessionStorage.removeItem(ACCESS_TIME_KEY);
             }
 
             form.addEventListener('submit', async function (event) {
@@ -167,7 +182,7 @@
                     return;
                 }
 
-                revokeAccess();
+                denyAccess();
             });
         })();
     </script>
