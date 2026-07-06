@@ -490,7 +490,7 @@
                     throw new Error('Unable to locate that shift.');
                 }
 
-                if ((shift.volunteer_count || 0) <= 0) {
+                if ((shift.volunteer_count ?? 0) <= 0) {
                     throw new Error('This shift is already full.');
                 }
 
