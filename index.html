@@ -32,6 +32,11 @@
         .hero-content p {
             font-size: 1.1rem;
             max-width: 55ch;
+            margin-bottom: 1rem;
+        }
+
+        .season-button {
+            display: inline-block;
             margin-bottom: 1.5rem;
         }
 
@@ -164,13 +169,8 @@
     </style>
 </head>
 <body>
-    <!-- Hamburger Menu -->
     <input type="checkbox" id="nav-toggle" class="nav-toggle">
-    <label for="nav-toggle" class="nav-toggle-label">
-        <span></span>
-    </label>
-
-    <!-- Menu Overlay (Scrim) -->
+    <label for="nav-toggle" class="nav-toggle-label"><span></span></label>
     <label for="nav-toggle" class="nav-overlay"></label>
 
     <nav class="hamburger-menu">
@@ -184,7 +184,6 @@
         <a href="sponsors.html">Core Collaborators</a>
     </nav>
 
-    <!-- Header -->
     <header>
         <div class="logo">
             THE <span>LAB</span>
@@ -193,41 +192,27 @@
     </header>
 
     <main>
-        <!-- Featured Hero Section -->
         <section class="hero">
             <div class="hero-content">
                 <span class="tag">Our Current Experiment</span>
                 <h1>Waiting for Godot</h1>
                 <p>On a barren road, two men wait for a mysterious figure who never arrives.</p>
+                <a href="season18.html" class="btn-primary season-button">Season 18</a>
                 <a href="https://www.purplepass.com/events/375339-waiting-for-godot-aug-20th-2026" class="btn-primary">Secure Your Seat</a>
             </div>
             <img src="assets/godot.jpg" alt="Waiting for Godot production poster">
         </section>
 
-        <!-- Cast Section -->
         <section class="cast-section">
             <h2>The Experiment's Cast</h2>
             <div class="cast-grid">
-                <div class="cast-member">
-                    <h3>Samuel Kirk</h3>
-                    <p class="role">Vladimir</p>
-                </div>
-                <div class="cast-member">
-                    <h3>Marcus Chen</h3>
-                    <p class="role">Estragon</p>
-                </div>
-                <div class="cast-member">
-                    <h3>James Richardson</h3>
-                    <p class="role">Pozzo</p>
-                </div>
-                <div class="cast-member">
-                    <h3>David Park</h3>
-                    <p class="role">Lucky</p>
-                </div>
+                <div class="cast-member"><h3>Samuel Kirk</h3><p class="role">Vladimir</p></div>
+                <div class="cast-member"><h3>Marcus Chen</h3><p class="role">Estragon</p></div>
+                <div class="cast-member"><h3>James Richardson</h3><p class="role">Pozzo</p></div>
+                <div class="cast-member"><h3>David Park</h3><p class="role">Lucky</p></div>
             </div>
         </section>
 
-        <!-- Back to the Slab / Shows Section -->
         <section class="shows-section">
             <h2>Back to the Slab</h2>
             <p>Explore our current and upcoming productions. Select a show to view details or ticketing.</p>
@@ -237,64 +222,47 @@
                     <div class="show-item-content">
                         <h3>Waiting for Godot</h3>
                         <p>Two men wait for someone who may never arrive.</p>
-                        <div class="show-links">
-                            <a href="production/godot.html" class="button">Details</a>
-                        </div>
+                        <div class="show-links"><a href="production/godot.html" class="button">Details</a></div>
                     </div>
                 </article>
-
                 <article class="show-item">
                     <img src="assets/pillowman.jpg" alt="The Pillowman">
                     <div class="show-item-content">
                         <h3>The Pillowman</h3>
                         <p>A darkly compelling story about art, truth, and stories told under pressure.</p>
-                        <div class="show-links">
-                            <a href="production/pillowman.html" class="button">Details</a>
-                        </div>
+                        <div class="show-links"><a href="production/pillowman.html" class="button">Details</a></div>
                     </div>
                 </article>
-
                 <article class="show-item">
                     <img src="assets/rivals.jpg" alt="The Rivals">
                     <div class="show-item-content">
                         <h3>The Rivals</h3>
                         <p>A lively comedy of mistaken identity, manners, and romance.</p>
-                        <div class="show-links">
-                            <a href="production/rivals.html" class="button">Details</a>
-                        </div>
+                        <div class="show-links"><a href="production/rivals.html" class="button">Details</a></div>
                     </div>
                 </article>
-
                 <article class="show-item">
                     <img src="assets/bare.jpg" alt="Bare: A Pop Opera">
                     <div class="show-item-content">
                         <h3>Bare: A Pop Opera</h3>
                         <p>A powerful coming-of-age story set in a Catholic boarding school.</p>
-                        <div class="show-links">
-                            <a href="production/bare.html" class="button">Details</a>
-                        </div>
+                        <div class="show-links"><a href="production/bare.html" class="button">Details</a></div>
                     </div>
                 </article>
-
                 <article class="show-item">
                     <img src="assets/carnage.jpg" alt="God of Carnage">
                     <div class="show-item-content">
                         <h3>God of Carnage</h3>
                         <p>A tense and razor-sharp comedy about civility, conflict, and control.</p>
-                        <div class="show-links">
-                            <a href="production/godofcarnage.html" class="button">Details</a>
-                        </div>
+                        <div class="show-links"><a href="production/godofcarnage.html" class="button">Details</a></div>
                     </div>
                 </article>
-
                 <article class="show-item">
                     <img src="assets/fences.jpg" alt="Fences">
                     <div class="show-item-content">
                         <h3>Fences</h3>
                         <p>A moving drama about family, responsibility, and the limits we inherit.</p>
-                        <div class="show-links">
-                            <a href="cast-fences.html" class="button">Details</a>
-                        </div>
+                        <div class="show-links"><a href="cast-fences.html" class="button">Details</a></div>
                     </div>
                 </article>
             </div>
