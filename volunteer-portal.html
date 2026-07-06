@@ -255,7 +255,7 @@
             start.setUTCHours(0, 0, 0, 0);
 
             const end = new Date(shiftDate);
-            end.setUTCHours(23, 59, 59, 0);
+            end.setUTCHours(23, 59, 59, 999);
 
             return {
                 start: start.toISOString(),
@@ -445,6 +445,9 @@
                 .maybeSingle();
 
             if (error) {
+                if (error.code === '42501') {
+                    throw new Error('Your account does not have permission to update shift availability. Run the Supabase setup SQL and verify the RLS policies.');
+                }
                 throw error;
             }
 
@@ -469,11 +472,15 @@
                     throw shiftError;
                 }
 
-                if ((shift?.volunteer_count || 0) <= 0) {
+                if (!shift) {
+                    throw new Error('Unable to locate that shift.');
+                }
+
+                if ((shift.volunteer_count || 0) <= 0) {
                     throw new Error('This shift is already full.');
                 }
 
-                const shiftWindow = buildShiftWindow(shift?.shift_date);
+                const shiftWindow = buildShiftWindow(shift.shift_date);
 
                 const { error } = await supabase
                     .from(VOLUNTEER_SHIFT_TABLE)

@@ -54,6 +54,11 @@
             background: #101010;
             color: #fff;
         }
+        .field-hint {
+            margin: -0.35rem 0 0;
+            color: #bfbfbf;
+            font-size: 0.9rem;
+        }
         .actions {
             display: flex;
             flex-wrap: wrap;
@@ -95,6 +100,7 @@
                         Full Name
                         <input id="full-name" name="fullName" type="text" autocomplete="name" placeholder="Optional for sign in">
                     </label>
+                    <p class="field-hint">Only needed when creating a new account.</p>
                     <label for="auth-email">
                         Email
                         <input id="auth-email" name="email" type="email" autocomplete="email" required>
@@ -149,6 +155,12 @@
             statusEl.classList.toggle('error', !!isError);
         }
 
+        function getFormMode(submitter) {
+            return submitter?.getAttribute('name') === 'mode' && submitter.value === 'signup'
+                ? 'signup'
+                : 'signin';
+        }
+
         async function redirectIfSignedIn() {
             const session = await window.labAuth.getSession();
             if (session?.user) {
@@ -162,8 +174,7 @@
         async function handleEmailPasswordAuth(event) {
             event.preventDefault();
 
-            const submitter = event.submitter;
-            const mode = submitter?.getAttribute('name') === 'mode' && submitter.value === 'signup' ? 'signup' : 'signin';
+            const mode = getFormMode(event.submitter);
             const formData = new FormData(emailAuthForm);
             const email = (formData.get('email') || '').toString().trim();
             const password = (formData.get('password') || '').toString();

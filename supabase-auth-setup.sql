@@ -92,6 +92,27 @@ create policy "Authenticated users can view shifts"
   for select
   using (auth.role() = 'authenticated');
 
+drop policy if exists "Volunteer users can update shift counts" on public."Volunteer-shifts";
+create policy "Volunteer users can update shift counts"
+  on public."Volunteer-shifts"
+  for update
+  using (
+    exists (
+      select 1
+      from public.profiles p
+      where p.id = auth.uid()
+        and p.role in ('volunteer', 'admin')
+    )
+  )
+  with check (
+    exists (
+      select 1
+      from public.profiles p
+      where p.id = auth.uid()
+        and p.role in ('volunteer', 'admin')
+    )
+  );
+
 drop policy if exists "Users can view own shift signups" on public.volunteer_shifts;
 create policy "Users can view own shift signups"
   on public.volunteer_shifts

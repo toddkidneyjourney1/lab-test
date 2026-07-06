@@ -158,6 +158,9 @@
         document.getElementById('volunteer-login-form').addEventListener('submit', (event) => {
             event.preventDefault();
             const email = document.getElementById('volunteer-email').value.trim();
+            if (!email) {
+                return;
+            }
             window.location.href = window.labAuth.buildSignInUrl('volunteer-portal.html', { email });
         });
     </script>
