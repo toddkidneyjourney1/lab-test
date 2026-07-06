@@ -74,6 +74,60 @@
             margin: 0;
         }
 
+        .shows-section {
+            padding: 3rem 0 4rem;
+        }
+
+        .shows-section h2 {
+            margin-bottom: 0.75rem;
+        }
+
+        .show-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.25rem;
+            margin-top: 1.5rem;
+        }
+
+        .show-item {
+            background: #151515;
+            border: 1px solid #2c2c2c;
+            border-radius: 16px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .show-item img {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .show-item-content {
+            padding: 1.25rem;
+        }
+
+        .show-item h3 {
+            margin-bottom: 0.4rem;
+        }
+
+        .show-item p {
+            color: #d2d2d2;
+            margin-bottom: 1rem;
+        }
+
+        .show-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        .show-links a {
+            text-decoration: none;
+        }
+
         @media (max-width: 900px) {
             .hero {
                 grid-template-columns: 1fr;
@@ -147,6 +201,85 @@
                     <h3>David Park</h3>
                     <p class="role">Lucky</p>
                 </div>
+            </div>
+        </section>
+
+        <!-- Back to the Slab / Shows Section -->
+        <section class="shows-section">
+            <h2>Back to the Slab</h2>
+            <p>Explore our current and upcoming productions. Select a show to view details or ticketing.</p>
+            <div class="show-grid">
+                <article class="show-item">
+                    <img src="assets/godot.jpg" alt="Waiting for Godot">
+                    <div class="show-item-content">
+                        <h3>Waiting for Godot</h3>
+                        <p>Two men wait for someone who may never arrive.</p>
+                        <div class="show-links">
+                            <a href="https://www.purplepass.com/events/375339-waiting-for-godot-aug-20th-2026" class="btn-primary">Tickets</a>
+                            <a href="production/godot.html" class="button">Details</a>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="show-item">
+                    <img src="assets/pillowman.jpg" alt="The Pillowman">
+                    <div class="show-item-content">
+                        <h3>The Pillowman</h3>
+                        <p>A darkly compelling story about art, truth, and stories told under pressure.</p>
+                        <div class="show-links">
+                            <a href="https://www.purplepass.com/events/376889-the-pillowman-oct-8th-2026" class="btn-primary">Tickets</a>
+                            <a href="production/pillowman.html" class="button">Details</a>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="show-item">
+                    <img src="assets/rivals.jpg" alt="The Rivals">
+                    <div class="show-item-content">
+                        <h3>The Rivals</h3>
+                        <p>A lively comedy of mistaken identity, manners, and romance.</p>
+                        <div class="show-links">
+                            <a href="https://www.purplepass.com/events/377104-the-rivals-nov-12th-2026" class="btn-primary">Tickets</a>
+                            <a href="production/rivals.html" class="button">Details</a>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="show-item">
+                    <img src="assets/bare.jpg" alt="Bare: A Pop Opera">
+                    <div class="show-item-content">
+                        <h3>Bare: A Pop Opera</h3>
+                        <p>A powerful coming-of-age story set in a Catholic boarding school.</p>
+                        <div class="show-links">
+                            <a href="https://www.purplepass.com/events/377221-bare-a-pop-opera" class="btn-primary">Tickets</a>
+                            <a href="production/bare.html" class="button">Details</a>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="show-item">
+                    <img src="assets/carnage.jpg" alt="God of Carnage">
+                    <div class="show-item-content">
+                        <h3>God of Carnage</h3>
+                        <p>A tense and razor-sharp comedy about civility, conflict, and control.</p>
+                        <div class="show-links">
+                            <a href="https://www.purplepass.com/events/377332-god-of-carnage" class="btn-primary">Tickets</a>
+                            <a href="production/godofcarnage.html" class="button">Details</a>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="show-item">
+                    <img src="assets/fences.jpg" alt="Fences">
+                    <div class="show-item-content">
+                        <h3>Fences</h3>
+                        <p>A moving drama about family, responsibility, and the limits we inherit.</p>
+                        <div class="show-links">
+                            <a href="https://www.purplepass.com/events/377443-fences" class="btn-primary">Tickets</a>
+                            <a href="cast-fences.html" class="button">Details</a>
+                        </div>
+                    </div>
+                </article>
             </div>
         </section>
     </main>
