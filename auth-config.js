@@ -1,6 +1,6 @@
 (function () {
-    const SUPABASE_URL = 'https://izytzrxrgnahyvgwqhgd.supabase.co';
-    const SUPABASE_ANON_KEY = [
+    const SUPABASE_URL = window.LAB_SUPABASE_URL || 'https://izytzrxrgnahyvgwqhgd.supabase.co';
+    const SUPABASE_ANON_KEY = window.LAB_SUPABASE_ANON_KEY || [
         btoa(JSON.stringify({ alg: 'HS256', typ: 'JWT' }))
             .replace(/\+/g, '-')
             .replace(/\//g, '_')

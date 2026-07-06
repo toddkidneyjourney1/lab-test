@@ -127,7 +127,14 @@
       }
     };
 
-    const REQUEST_ACCESS_URL = 'mailto:office@laboratorytheaterflorida.com?subject=Request%20Portal%20Access&body=Hello%20Lab%20Theater,%0A%0AI%20am%20signed%20in%20but%20do%20not%20have%20a%20portal%20role%20yet.%20Please%20assign%20the%20correct%20access.%0A';
+    const REQUEST_ACCESS_EMAIL = 'office@laboratorytheaterflorida.com';
+    const REQUEST_ACCESS_URL = (() => {
+      const params = new URLSearchParams({
+        subject: 'Request Portal Access',
+        body: 'Hello Lab Theater,\n\nI am signed in but do not have a portal role yet. Please assign the correct access.\n'
+      });
+      return `mailto:${REQUEST_ACCESS_EMAIL}?${params.toString()}`;
+    })();
 
     const statusEl = document.getElementById('status');
     const userSummaryEl = document.getElementById('user-summary');

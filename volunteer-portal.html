@@ -226,6 +226,43 @@
         let currentProfile = null;
         let currentVolunteerId = null;
 
+        function parseShiftDate(dateString) {
+            if (!dateString || typeof dateString !== 'string') {
+                return null;
+            }
+
+            const [year, month, day] = dateString.split('-').map(Number);
+            if (!year || !month || !day) {
+                return null;
+            }
+
+            const shiftDate = new Date(Date.UTC(year, month - 1, day));
+            return Number.isNaN(shiftDate.getTime()) ? null : shiftDate;
+        }
+
+        function formatShiftDate(dateString) {
+            const shiftDate = parseShiftDate(dateString);
+            return shiftDate ? shiftDate.toLocaleDateString() : 'TBD';
+        }
+
+        function buildShiftWindow(dateString) {
+            const shiftDate = parseShiftDate(dateString);
+            if (!shiftDate) {
+                throw new Error('Selected shift does not have a valid shift date.');
+            }
+
+            const start = new Date(shiftDate);
+            start.setUTCHours(0, 0, 0, 0);
+
+            const end = new Date(shiftDate);
+            end.setUTCHours(23, 59, 59, 0);
+
+            return {
+                start: start.toISOString(),
+                end: end.toISOString()
+            };
+        }
+
         function hideStateSections() {
             portalContentEl.style.display = 'none';
             authRequiredEl.style.display = 'none';
@@ -314,8 +351,7 @@
             info.className = 'shift-info';
 
             const dateInfo = document.createElement('p');
-            const shiftDate = shift.shift_date ? new Date(shift.shift_date) : null;
-            dateInfo.innerHTML = `<strong>Date:</strong> ${shiftDate && !Number.isNaN(shiftDate.getTime()) ? shiftDate.toLocaleDateString() : 'TBD'}`;
+            dateInfo.innerHTML = `<strong>Date:</strong> ${formatShiftDate(shift.shift_date)}`;
             info.appendChild(dateInfo);
 
             const countInfo = document.createElement('p');
@@ -437,9 +473,7 @@
                     throw new Error('This shift is already full.');
                 }
 
-                const shiftDate = shift?.shift_date || new Date().toISOString().slice(0, 10);
-                const shiftStart = new Date(`${shiftDate}T00:00:00`).toISOString();
-                const shiftEnd = new Date(`${shiftDate}T23:59:59`).toISOString();
+                const shiftWindow = buildShiftWindow(shift?.shift_date);
 
                 const { error } = await supabase
                     .from(VOLUNTEER_SHIFT_TABLE)
@@ -447,8 +481,8 @@
                         {
                             volunteer_id: currentVolunteerId,
                             shift_id: shiftId,
-                            shift_start: shiftStart,
-                            shift_end: shiftEnd,
+                            shift_start: shiftWindow.start,
+                            shift_end: shiftWindow.end,
                             role: 'Volunteer'
                         }
                     ]);

@@ -179,13 +179,18 @@
 
             try {
                 if (mode === 'signup') {
+                    const signUpOptions = {
+                        emailRedirectTo: redirectUrl
+                    };
+
+                    if (fullName) {
+                        signUpOptions.data = { full_name: fullName };
+                    }
+
                     const { data, error } = await supabase.auth.signUp({
                         email,
                         password,
-                        options: {
-                            emailRedirectTo: redirectUrl,
-                            data: fullName ? { full_name: fullName } : undefined
-                        }
+                        options: signUpOptions
                     });
 
                     if (error) {
@@ -197,7 +202,7 @@
                         return;
                     }
 
-                    setStatus('Account created. Check your email to confirm your account, then sign in.');
+                    setStatus('Account created. Check your email for next steps, or sign in now if your project does not require email confirmation.');
                     return;
                 }
 
