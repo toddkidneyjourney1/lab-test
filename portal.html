@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Access | The Laboratory Theater of Florida</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .portal-access {
+            max-width: 560px;
+            margin: 1rem auto 3rem;
+            padding: 1.5rem;
+            background: var(--card-bg);
+            border: 1px solid #333;
+            border-radius: 12px;
+        }
+
+        .portal-access h1 {
+            margin-top: 0;
+        }
+
+        .portal-access input[type="password"] {
+            width: 100%;
+            margin: 0.5rem 0 0.75rem;
+            padding: 0.75rem;
+            border-radius: 8px;
+            border: 1px solid #444;
+            background: #101013;
+            color: var(--text);
+            box-sizing: border-box;
+        }
+
+        .portal-links[hidden] {
+            display: none;
+        }
+
+        .status {
+            min-height: 1.25rem;
+            margin: 0.75rem 0 0.25rem;
+            color: var(--gray);
+        }
+    </style>
+</head>
+<body>
+    <input type="checkbox" id="nav-toggle" class="nav-toggle">
+    <label for="nav-toggle" class="nav-toggle-label"><span></span></label>
+    <label for="nav-toggle" class="nav-overlay"></label>
+
+    <nav class="hamburger-menu">
+        <a href="about.html">Origin Story</a>
+        <a href="archive25.html">Past Experiments</a>
+        <a href="index.html">Back to the Slab</a>
+        <a href="plan.html">Lab Protocols</a>
+        <a href="comingsoon.html">Join the Experiment</a>
+        <a href="portal.html">Portal Access</a>
+        <a href="company.html">The Internal Log</a>
+        <a href="support.html">Fuel the Innovation</a>
+        <a href="sponsors.html">Core Collaborators</a>
+    </nav>
+
+    <header>
+        <div class="logo">
+            THE <span>LAB</span>
+            <p class="tagline">Intentionally innovative live theater</p>
+        </div>
+    </header>
+
+    <main>
+        <section class="portal-access">
+            <h1>Portal Access</h1>
+            <p>Enter the portal password to reveal volunteer and cast access links.</p>
+
+            <form id="portal-form">
+                <label for="portal-password">Password</label>
+                <input id="portal-password" type="password" autocomplete="current-password" required>
+                <button id="verify-button" class="btn-primary" type="submit">Verify</button>
+            </form>
+            <p id="status-message" class="status" aria-live="polite"></p>
+
+            <div id="portal-links" class="portal-links" hidden>
+                <a href="volunteer-portal.html" class="button">Volunteer Portal</a>
+                <a href="cast-portal.html" class="button">Cast Portal</a>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        (function () {
+            const PASSWORD_HASH = "c567247e0b55894f235ebfb3db56fabe138d433eb0b8b12d8958a0e0e2163cbe";
+            const form = document.getElementById("portal-form");
+            const input = document.getElementById("portal-password");
+            const links = document.getElementById("portal-links");
+            const status = document.getElementById("status-message");
+
+            async function sha256(value) {
+                const data = new TextEncoder().encode(value);
+                const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+                const hashArray = Array.from(new Uint8Array(hashBuffer));
+                return hashArray.map(function (b) { return b.toString(16).padStart(2, "0"); }).join("");
+            }
+
+            function showLinks() {
+                links.hidden = false;
+                status.textContent = "Access granted.";
+                status.style.color = "var(--accent)";
+            }
+
+            form.addEventListener("submit", async function (event) {
+                event.preventDefault();
+                const enteredHash = await sha256(input.value);
+                if (enteredHash === PASSWORD_HASH) {
+                    showLinks();
+                    input.value = "";
+                    return;
+                }
+
+                status.textContent = "Incorrect password. Please try again.";
+                status.style.color = "#ff8888";
+                input.value = "";
+            });
+        })();
+    </script>
+</body>
+</html>
