@@ -12,14 +12,17 @@
       margin: 0 auto;
       padding: 2rem 1rem 3rem;
     }
-    .auth-card {
+    .card {
       background: #151515;
       border: 1px solid #2c2c2c;
       border-radius: 14px;
       padding: 1.25rem;
       margin-bottom: 1rem;
     }
-    .auth-card h2 { margin-top: 0; }
+    .card h2,
+    .card h3 {
+      margin-top: 0;
+    }
     .muted { color: #cfcfcf; }
     .status {
       margin: 1rem 0;
@@ -33,11 +36,17 @@
       color: #ffd8d8;
       background: #1a0f0f;
     }
-    .actions {
+    .actions,
+    .portal-grid {
       display: flex;
       flex-wrap: wrap;
       gap: 0.75rem;
-      margin-top: 0.5rem;
+    }
+    .portal-grid {
+      margin-top: 1rem;
+    }
+    .portal-card {
+      flex: 1 1 260px;
     }
     .btn {
       appearance: none;
@@ -56,6 +65,9 @@
       color: #121212;
       font-weight: 700;
     }
+    .hidden {
+      display: none !important;
+    }
     code {
       background: #111;
       border: 1px solid #2d2d2d;
@@ -63,154 +75,183 @@
       padding: 0.1rem 0.35rem;
     }
   </style>
-  <script async crossorigin="anonymous" data-clerk-publishable-key="pk_test_sb_publishable_wo-PDCkLxkuGLsar5by1Sw_ShjHgZDC"
-    src="https://unpkg.com/@clerk/clerk-js@latest/dist/clerk.browser.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="auth-config.js"></script>
 </head>
 <body>
   <main class="container">
     <h1>Portal Authentication Gateway</h1>
-    <p class="muted">This page is wired to authentication using Clerk + Supabase role checks.</p>
-    <div id="status" class="status">Initializing authentication…</div>
-    <section class="auth-card">
-      <h2>Cast Portal Auth</h2>
-      <p class="muted">Required role: <code>cast</code></p>
-      <div class="actions">
-        <button class="btn" data-role="cast" data-target="/cast-portal.html">Enter Cast Portal</button>
-      </div>
+    <p class="muted">Sign in with Supabase Auth to access the cast, volunteer, or admin portal assigned to your account.</p>
+
+    <div id="status" class="status">Checking your Supabase session…</div>
+
+    <section class="card">
+      <h2>Your Access</h2>
+      <p id="user-summary" class="muted">Not signed in.</p>
     </section>
-    <section class="auth-card">
-      <h2>Volunteer Portal Auth</h2>
-      <p class="muted">Required role: <code>volunteer</code></p>
-      <div class="actions">
-        <button class="btn" data-role="volunteer" data-target="/volunteer-portal.html">Enter Volunteer Portal</button>
-      </div>
+
+    <section class="card">
+      <h2>Portal Access</h2>
+      <div id="portal-options" class="portal-grid"></div>
+      <div id="request-access" class="portal-grid hidden"></div>
     </section>
-    <section class="auth-card">
-      <h2>Admin/Internal Auth</h2>
-      <p class="muted">Required role: <code>admin</code></p>
-      <div class="actions">
-        <button class="btn" data-role="admin" data-target="/admin-portal.html">Enter Admin Portal</button>
-      </div>
-    </section>
-    <section class="auth-card">
+
+    <section class="card">
       <h2>Session Actions</h2>
       <div class="actions">
-        <a class="btn btn-primary" href="/sign-in.html?redirect_url=/portal-landing.html" id="signInLink">Sign in</a>
-        <button class="btn" id="signOutBtn" type="button">Sign out</button>
+        <a class="btn btn-primary" href="sign-in.html?redirect_url=portal-landing.html" id="signInLink">Sign in</a>
+        <button class="btn hidden" id="signOutBtn" type="button">Sign out</button>
       </div>
     </section>
   </main>
+
   <script>
-    const SIGN_IN_URL = '/sign-in.html?redirect_url=/portal-landing.html';
-    const SUPABASE_URL = 'https://izytzrxrgnahyvgwqhgd.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml6eXR6cnhyZ25haHl2Z3dxaGdkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI4OTkwNjMsImV4cCI6MjA5ODQ3NTA2M30[...]';
-    const ROLE_ROUTES = { cast: '/cast-portal.html', volunteer: '/volunteer-portal.html', admin: '/admin-portal.html' };
+    const PORTALS = {
+      cast: {
+        title: 'Cast Portal',
+        description: 'Review cast materials and production updates.',
+        href: 'cast-portal.html',
+        button: 'Enter Cast Portal'
+      },
+      volunteer: {
+        title: 'Volunteer Portal',
+        description: 'Manage volunteer shifts and signups.',
+        href: 'volunteer-portal.html',
+        button: 'Enter Volunteer Portal'
+      },
+      admin: {
+        title: 'Admin Portal',
+        description: 'Access internal administration tools.',
+        href: 'admin-portal.html',
+        button: 'Enter Admin Portal'
+      }
+    };
+
+    const REQUEST_ACCESS_EMAIL = 'office@laboratorytheaterflorida.com';
+    const REQUEST_ACCESS_URL = (() => {
+      const params = new URLSearchParams({
+        subject: 'Request Portal Access',
+        body: 'Hello Lab Theater,\n\nI am signed in but do not have a portal role yet. Please assign the correct access.\n'
+      });
+      return `mailto:${REQUEST_ACCESS_EMAIL}?${params.toString()}`;
+    })();
+
     const statusEl = document.getElementById('status');
+    const userSummaryEl = document.getElementById('user-summary');
+    const portalOptionsEl = document.getElementById('portal-options');
+    const requestAccessEl = document.getElementById('request-access');
     const signInLink = document.getElementById('signInLink');
     const signOutBtn = document.getElementById('signOutBtn');
-    signInLink.setAttribute('href', SIGN_IN_URL);
 
-    function setStatus(text, isError = false) {
-      statusEl.textContent = text;
+    signInLink.href = window.labAuth.buildSignInUrl('portal-landing.html');
+
+    function setStatus(message, isError = false) {
+      statusEl.textContent = message;
       statusEl.classList.toggle('error', !!isError);
     }
 
-    function normalizeRole(role) {
-      return (role || '').toString().trim().toLowerCase();
+    function clearPortalOptions() {
+      portalOptionsEl.innerHTML = '';
+      requestAccessEl.innerHTML = '';
+      requestAccessEl.classList.add('hidden');
     }
 
-    async function waitForClerk(maxMs = 5000) {
-      const start = Date.now();
-      while (!window.Clerk) {
-        if (Date.now() - start > maxMs) return false;
-        await new Promise((resolve) => setTimeout(resolve, 100));
-      }
-      return true;
+    function setSignedOutState() {
+      clearPortalOptions();
+      userSummaryEl.textContent = 'Not signed in.';
+      signInLink.classList.remove('hidden');
+      signOutBtn.classList.add('hidden');
+    }
+
+    function renderPortalCard(config) {
+      const card = document.createElement('article');
+      card.className = 'card portal-card';
+
+      const title = document.createElement('h3');
+      title.textContent = config.title;
+      card.appendChild(title);
+
+      const description = document.createElement('p');
+      description.className = 'muted';
+      description.textContent = config.description;
+      card.appendChild(description);
+
+      const link = document.createElement('a');
+      link.className = 'btn btn-primary';
+      link.href = config.href;
+      link.textContent = config.button;
+      card.appendChild(link);
+
+      portalOptionsEl.appendChild(card);
+    }
+
+    function renderRequestAccessCard() {
+      requestAccessEl.classList.remove('hidden');
+
+      const card = document.createElement('article');
+      card.className = 'card portal-card';
+
+      const title = document.createElement('h3');
+      title.textContent = 'Request Access';
+      card.appendChild(title);
+
+      const description = document.createElement('p');
+      description.className = 'muted';
+      description.textContent = 'Your account is authenticated, but no portal role has been assigned yet.';
+      card.appendChild(description);
+
+      const link = document.createElement('a');
+      link.className = 'btn';
+      link.href = REQUEST_ACCESS_URL;
+      link.textContent = 'Request Access';
+      card.appendChild(link);
+
+      requestAccessEl.appendChild(card);
     }
 
     async function boot() {
       try {
-        const clerkReady = await waitForClerk();
-        if (!clerkReady) {
-          setStatus('Clerk failed to load. Verify publishable key/domain and script URL.', true);
-          return;
-        }
+        const user = await window.labAuth.getUser();
 
-        await window.Clerk.load();
-
-        signInLink.addEventListener('click', (e) => {
-          e.preventDefault();
-          if (window.Clerk && typeof window.Clerk.openSignIn === 'function') {
-            window.Clerk.openSignIn({ afterSignInUrl: '/portal-landing.html' });
-          } else {
-            window.location.href = SIGN_IN_URL;
-          }
-        });
-
-        const user = window.Clerk.user;
         if (!user) {
-          setStatus('You are not signed in. Redirecting to sign in…');
-          setTimeout(() => { window.location.href = SIGN_IN_URL; }, 600);
+          setSignedOutState();
+          setStatus('You are not signed in. Use the Sign in button to continue.');
           return;
         }
 
-        if (!window.supabase || !window.supabase.createClient) {
-          setStatus('Supabase client failed to load.', true);
+        signInLink.classList.add('hidden');
+        signOutBtn.classList.remove('hidden');
+
+        const profile = await window.labAuth.getProfile(user.id);
+        const role = window.labAuth.normalizeRole(profile?.role);
+        const displayName = window.labAuth.getUserDisplayName(user, profile);
+
+        userSummaryEl.textContent = `${displayName}${user.email ? ` · ${user.email}` : ''}`;
+        clearPortalOptions();
+
+        if (!role || !PORTALS[role]) {
+          renderRequestAccessCard();
+          setStatus('Signed in successfully, but no portal role is assigned to this account yet.', true);
           return;
         }
 
-        if (SUPABASE_URL.includes('REPLACE_ME') || SUPABASE_ANON_KEY === 'REPLACE_ME') {
-          setStatus('Supabase is not configured. Set SUPABASE_URL and SUPABASE_ANON_KEY in portal-landing.html.', true);
-          return;
-        }
-
-        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        const { data, error } = await supabaseClient
-          .from('profiles')
-          .select('role')
-          .eq('clerk_user_id', user.id)
-          .maybeSingle();
-
-        if (error) {
-          setStatus('Unable to verify role in Supabase: ' + error.message, true);
-          return;
-        }
-
-        const currentRole = normalizeRole(data?.role);
-        if (!currentRole) {
-          setStatus('Unauthorized: no role assigned in profiles.role for this user.', true);
-        } else {
-          setStatus('Authenticated as role: ' + currentRole);
-        }
-
-        document.querySelectorAll('button[data-role][data-target]').forEach((btn) => {
-          btn.addEventListener('click', () => {
-            const requiredRole = normalizeRole(btn.getAttribute('data-role'));
-            const target = btn.getAttribute('data-target') || ROLE_ROUTES[requiredRole] || '/';
-
-            if (!currentRole) {
-              setStatus('Unauthorized: your account has no role.', true);
-              return;
-            }
-
-            if (currentRole !== requiredRole) {
-              setStatus(`Unauthorized: requires '${requiredRole}' role. You are '${currentRole}'.`, true);
-              return;
-            }
-
-            window.location.href = target;
-          });
-        });
-
-        signOutBtn.addEventListener('click', async () => {
-          try { await window.Clerk.signOut(); }
-          finally { window.location.href = SIGN_IN_URL; }
-        });
-      } catch (err) {
-        setStatus('Authentication bootstrap failed: ' + (err?.message || String(err)), true);
+        renderPortalCard(PORTALS[role]);
+        setStatus(`Signed in successfully. Role detected: ${role}.`);
+      } catch (error) {
+        setSignedOutState();
+        clearPortalOptions();
+        setStatus(`Authentication check failed: ${error.message}`, true);
       }
     }
+
+    signOutBtn.addEventListener('click', async () => {
+      try {
+        await window.labAuth.signOut();
+        window.location.href = signInLink.href;
+      } catch (error) {
+        setStatus(`Sign out failed: ${error.message}`, true);
+      }
+    });
 
     boot();
   </script>

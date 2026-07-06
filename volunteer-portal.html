@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Volunteer Portal | The Laboratory Theater of Florida</title>
     <link rel="stylesheet" href="style.css">
-    <script src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js" async></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         .shift-card {
             background: var(--card-bg);
@@ -105,12 +103,49 @@
             border-radius: 4px;
             margin-bottom: 1rem;
         }
-        #user-button {
-            position: absolute;
-            top: 1rem;
-            right: 2rem;
+        #auth-actions {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .auth-link {
+            color: white;
+            text-decoration: none;
+            border: 1px solid #555;
+            border-radius: 999px;
+            padding: 0.45rem 0.9rem;
+        }
+        .auth-link.primary {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+        .auth-button {
+            background: transparent;
+            color: white;
+            border: 1px solid #555;
+            border-radius: 999px;
+            padding: 0.45rem 0.9rem;
+            cursor: pointer;
+        }
+        .auth-shell {
+            max-width: 780px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        .auth-card {
+            background: var(--card-bg);
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+        .auth-card h1,
+        .auth-card h2 {
+            margin-top: 0;
         }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="auth-config.js"></script>
 </head>
 <body>
     <!-- Hamburger Menu -->
@@ -130,13 +165,12 @@
         <a href="sponsors.html">Core Collaborators</a>
     </nav>
     
-    <!-- Header -->
     <header class="main-header">
         <div class="logo">
             <a href="index.html">THE <span>LAB</span></a>
             <p class="tagline">Intentionally innovative live theater</p>
         </div>
-        <div id="clerk-auth"></div>
+        <div id="auth-actions"></div>
     </header>
 
     <main id="portal-content" style="display:none;">
@@ -153,196 +187,359 @@
         </section>
     </main>
 
+    <section id="auth-required" class="auth-shell" style="display:none;">
+        <div class="auth-card">
+            <h2>Sign in required</h2>
+            <p>You must sign in with Supabase Auth before you can access the volunteer portal.</p>
+            <a class="auth-link primary" id="auth-required-link" href="sign-in.html?redirect_url=volunteer-portal.html">Go to Sign In</a>
+        </div>
+    </section>
+
+    <section id="access-denied" class="auth-shell" style="display:none;">
+        <div class="auth-card">
+            <h2>Access pending</h2>
+            <p id="access-denied-message">Your account is signed in, but volunteer access is not enabled yet.</p>
+            <div class="shift-actions">
+                <a class="auth-link primary" href="portal-landing.html">Back to Portal Landing</a>
+                <a class="auth-link" href="mailto:office@laboratorytheaterflorida.com?subject=Request%20Volunteer%20Portal%20Access">Request Access</a>
+            </div>
+        </div>
+    </section>
+
     <script>
-        const PUBLISHABLE_KEY = 'pk_test_bGVhcm5pbmctbWFzdG9kb24tMzUuY2xlcmsuYWNjb3VudHMuZGV2JA';
-        const SUPABASE_URL = 'https://izytzrxrgnahyvgwqhgd.supabase.co';
-        const SUPABASE_ANON_KEY = 'sb_publishable_wo-PDCkLxkuGLsar5by1Sw_ShjHgZDC';
+        const SHIFT_SOURCE_TABLE = 'Volunteer-shifts';
+        const VOLUNTEER_TABLE = 'volunteers';
+        const VOLUNTEER_SHIFT_TABLE = 'volunteer_shifts';
+
+        const authActionsEl = document.getElementById('auth-actions');
+        const portalContentEl = document.getElementById('portal-content');
+        const authRequiredEl = document.getElementById('auth-required');
+        const accessDeniedEl = document.getElementById('access-denied');
+        const accessDeniedMessageEl = document.getElementById('access-denied-message');
+        const authRequiredLinkEl = document.getElementById('auth-required-link');
+        const shiftContainerEl = document.getElementById('shift-container');
+
+        authRequiredLinkEl.href = window.labAuth.buildSignInUrl('volunteer-portal.html');
 
         let supabase;
-        let clerkUser = null;
+        let currentUser = null;
+        let currentProfile = null;
         let currentVolunteerId = null;
 
-        function initSupabase() {
-            supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        function parseShiftDate(dateString) {
+            if (!dateString || typeof dateString !== 'string') {
+                return null;
+            }
+
+            const [year, month, day] = dateString.split('-').map(Number);
+            if (!year || !month || !day) {
+                return null;
+            }
+
+            const shiftDate = new Date(Date.UTC(year, month - 1, day));
+            return Number.isNaN(shiftDate.getTime()) ? null : shiftDate;
         }
 
-        window.addEventListener('load', async () => {
-            const waitForClerk = setInterval(() => {
-                if (window.Clerk) {
-                    clearInterval(waitForClerk);
-                    initClerk();
-                }
-            }, 100);
-        });
+        function formatShiftDate(dateString) {
+            const shiftDate = parseShiftDate(dateString);
+            return shiftDate ? shiftDate.toLocaleDateString() : 'TBD';
+        }
 
-        async function initClerk() {
-            const Clerk = window.Clerk;
-            try {
-                await Clerk.load({ publishableKey: PUBLISHABLE_KEY });
-
-                if (Clerk.user) {
-                    clerkUser = Clerk.user;
-                    document.getElementById('portal-content').style.display = 'block';
-                    document.getElementById('clerk-auth').innerHTML = '<div id="user-button"></div>';
-                    Clerk.mountUserButton(document.getElementById('user-button'));
-
-                    initSupabase();
-                    await getOrCreateVolunteer();
-                    await loadShifts();
-                } else {
-                    document.getElementById('clerk-auth').innerHTML = '<div id="sign-in"></div>';
-                    Clerk.mountSignIn(document.getElementById('sign-in'));
-                }
-            } catch (err) {
-                console.error('Clerk failed to load:', err);
-                showError('Failed to initialize authentication');
+        function buildShiftWindow(dateString) {
+            const shiftDate = parseShiftDate(dateString);
+            if (!shiftDate) {
+                throw new Error('Selected shift does not have a valid shift date.');
             }
+
+            const start = new Date(shiftDate);
+            start.setUTCHours(0, 0, 0, 0);
+
+            const end = new Date(shiftDate);
+            end.setUTCHours(23, 59, 59, 999);
+
+            return {
+                start: start.toISOString(),
+                end: end.toISOString()
+            };
+        }
+
+        function hideStateSections() {
+            portalContentEl.style.display = 'none';
+            authRequiredEl.style.display = 'none';
+            accessDeniedEl.style.display = 'none';
+        }
+
+        function renderAuthActions(user) {
+            authActionsEl.innerHTML = '';
+
+            if (!user) {
+                const signInLink = document.createElement('a');
+                signInLink.className = 'auth-link primary';
+                signInLink.href = window.labAuth.buildSignInUrl('volunteer-portal.html');
+                signInLink.textContent = 'Sign In';
+                authActionsEl.appendChild(signInLink);
+                return;
+            }
+
+            const email = document.createElement('span');
+            email.textContent = user.email || 'Signed in';
+            authActionsEl.appendChild(email);
+
+            const signOutButton = document.createElement('button');
+            signOutButton.type = 'button';
+            signOutButton.className = 'auth-button';
+            signOutButton.textContent = 'Sign Out';
+            signOutButton.addEventListener('click', async () => {
+                try {
+                    await window.labAuth.signOut();
+                    window.location.href = window.labAuth.buildSignInUrl('volunteer-portal.html');
+                } catch (error) {
+                    showError(`Failed to sign out: ${error.message}`);
+                }
+            });
+            authActionsEl.appendChild(signOutButton);
         }
 
         async function getOrCreateVolunteer() {
-            try {
-                const { data: existingVolunteer, error: fetchError } = await supabase
-                    .from('volunteers')
-                    .select('id')
-                    .eq('clerk_id', clerkUser.id)
-                    .maybeSingle();
+            const { data: existingVolunteer, error: fetchError } = await supabase
+                .from(VOLUNTEER_TABLE)
+                .select('id')
+                .eq('auth_user_id', currentUser.id)
+                .maybeSingle();
 
-                if (fetchError) {
-                    throw fetchError;
-                }
-
-                if (existingVolunteer) {
-                    currentVolunteerId = existingVolunteer.id;
-                    return;
-                }
-
-                const { data: newVolunteer, error: createError } = await supabase
-                    .from('volunteers')
-                    .insert([
-                        {
-                            clerk_id: clerkUser.id,
-                            full_name: `${clerkUser.firstName || ''} ${clerkUser.lastName || ''}`.trim(),
-                            email: clerkUser.primaryEmailAddress?.emailAddress,
-                        }
-                    ])
-                    .select()
-                    .single();
-
-                if (createError) {
-                    throw createError;
-                }
-
-                currentVolunteerId = newVolunteer.id;
-            } catch (err) {
-                console.error('Error managing volunteer record:', err);
-                showError('Failed to load volunteer profile');
+            if (fetchError) {
+                throw fetchError;
             }
+
+            if (existingVolunteer) {
+                currentVolunteerId = existingVolunteer.id;
+                return;
+            }
+
+            const { data: newVolunteer, error: createError } = await supabase
+                .from(VOLUNTEER_TABLE)
+                .insert([
+                    {
+                        auth_user_id: currentUser.id,
+                        full_name: window.labAuth.getUserDisplayName(currentUser, currentProfile),
+                        email: currentUser.email || currentProfile?.email || null
+                    }
+                ])
+                .select('id')
+                .single();
+
+            if (createError) {
+                throw createError;
+            }
+
+            currentVolunteerId = newVolunteer.id;
+        }
+
+        function renderShiftCard(shift, signedUpShiftIds) {
+            const isSignedUp = signedUpShiftIds.includes(shift.id);
+            const spotsRemaining = Math.max(0, Number(shift.volunteer_count) || 0);
+            const isFull = spotsRemaining <= 0 && !isSignedUp;
+
+            const card = document.createElement('div');
+            card.className = 'shift-card';
+
+            const title = document.createElement('h3');
+            title.textContent = shift.shift_name || 'Volunteer Shift';
+            card.appendChild(title);
+
+            const info = document.createElement('div');
+            info.className = 'shift-info';
+
+            const dateInfo = document.createElement('p');
+            dateInfo.innerHTML = `<strong>Date:</strong> ${formatShiftDate(shift.shift_date)}`;
+            info.appendChild(dateInfo);
+
+            const countInfo = document.createElement('p');
+            countInfo.innerHTML = `<strong>Spots Available:</strong> ${spotsRemaining}`;
+            info.appendChild(countInfo);
+
+            card.appendChild(info);
+
+            const badge = document.createElement('span');
+            badge.className = 'status-badge';
+            if (isSignedUp) {
+                badge.classList.add('status-signed-up');
+                badge.textContent = 'Signed Up';
+            } else if (isFull) {
+                badge.classList.add('status-full');
+                badge.textContent = 'Shift Full';
+            } else {
+                badge.classList.add('status-available');
+                badge.textContent = 'Available';
+            }
+            card.appendChild(badge);
+
+            const actions = document.createElement('div');
+            actions.className = 'shift-actions';
+
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.textContent = isSignedUp ? 'Cancel Signup' : 'Sign Up';
+            button.className = isSignedUp ? 'cancel-btn' : 'signup-btn';
+            button.disabled = isFull;
+            button.addEventListener('click', () => {
+                if (isSignedUp) {
+                    cancelSignup(shift.id);
+                } else {
+                    signupForShift(shift.id);
+                }
+            });
+
+            actions.appendChild(button);
+            card.appendChild(actions);
+
+            return card;
         }
 
         async function loadShifts() {
-            const container = document.getElementById('shift-container');
+            shiftContainerEl.innerHTML = '<p class="loading">Loading available shifts...</p>';
 
-            try {
-                const { data: shifts, error } = await supabase
-                    .from('Volunteer-shifts')
-                    .select('*')
-                    .order('shift_date', { ascending: true });
+            const { data: shifts, error: shiftsError } = await supabase
+                .from(SHIFT_SOURCE_TABLE)
+                .select('*')
+                .order('shift_date', { ascending: true });
 
-                if (error) {
-                    throw error;
-                }
-
-                if (!shifts || shifts.length === 0) {
-                    container.innerHTML = '<p style="text-align: center; padding: 2rem;">No shifts available at this time.</p>';
-                    return;
-                }
-
-                const { data: userSignups, error: signupError } = await supabase
-                    .from('volunteer_shifts')
-                    .select('shift_id')
-                    .eq('volunteer_id', currentVolunteerId);
-
-                if (signupError) {
-                    console.error('Error loading signups:', signupError);
-                }
-
-                const signedUpShifts = (userSignups || []).map((signup) => signup.shift_id);
-
-                container.innerHTML = shifts.map((shift) => {
-                    const isSignedUp = signedUpShifts.includes(shift.id);
-                    const isFull = (shift.volunteer_count || 0) <= 0;
-                    const spotsRemaining = Math.max(0, shift.volunteer_count || 0);
-
-                    return `
-                        <div class="shift-card">
-                            <h3>${shift.shift_name}</h3>
-                            <div class="shift-info">
-                                <p><strong>Date:</strong> ${new Date(shift.shift_date).toLocaleDateString()}</p>
-                                <p><strong>Spots Available:</strong> ${spotsRemaining}</p>
-                            </div>
-                            <div>
-                                ${isFull ? '<span class="status-badge status-full">Shift Full</span>' : isSignedUp ? '<span class="status-badge status-signed-up">Signed Up</span>' : '<span class="status-badge status-available">Available</span>'}
-                            </div>
-                            <div class="shift-actions">
-                                ${isSignedUp ? `<button class="cancel-btn" onclick="cancelSignup('${shift.id}')">Cancel Signup</button>` : `<button class="signup-btn" onclick="signupForShift('${shift.id}')" ${isFull ? 'disabled' : ''}>Sign Up</button>`}
-                            </div>
-                        </div>
-                    `;
-                }).join('');
-            } catch (err) {
-                console.error('Error loading shifts:', err);
-                container.innerHTML = '<p class="error">Error loading shifts. Please try again later.</p>';
+            if (shiftsError) {
+                throw shiftsError;
             }
+
+            if (!shifts || shifts.length === 0) {
+                shiftContainerEl.innerHTML = '<p style="text-align:center;padding:2rem;">No shifts available at this time.</p>';
+                return;
+            }
+
+            const { data: userSignups, error: signupError } = await supabase
+                .from(VOLUNTEER_SHIFT_TABLE)
+                .select('shift_id')
+                .eq('volunteer_id', currentVolunteerId);
+
+            if (signupError) {
+                throw signupError;
+            }
+
+            const signedUpShiftIds = (userSignups || []).map((signup) => signup.shift_id);
+
+            shiftContainerEl.innerHTML = '';
+
+            shifts.forEach((shift) => {
+                shiftContainerEl.appendChild(renderShiftCard(shift, signedUpShiftIds));
+            });
+        }
+
+        async function updateShiftAvailability(shiftId, currentCount, delta) {
+            const nextCount = delta < 0
+                ? Math.max(0, currentCount + delta)
+                : currentCount + delta;
+
+            const { data: updatedShift, error } = await supabase
+                .from(SHIFT_SOURCE_TABLE)
+                .update({ volunteer_count: nextCount })
+                .eq('id', shiftId)
+                .eq('volunteer_count', currentCount)
+                .select('id')
+                .maybeSingle();
+
+            if (error) {
+                if (error.code === '42501') {
+                    throw new Error('Your account does not have permission to update shift availability. Run the Supabase setup SQL and verify the RLS policies.');
+                }
+                throw error;
+            }
+
+            if (!updatedShift) {
+                throw new Error('Shift availability changed while your request was processing. Please refresh and try again.');
+            }
+        }
+
+        async function restoreShiftAvailability(shiftId) {
+            const { data: shift, error } = await supabase
+                .from(SHIFT_SOURCE_TABLE)
+                .select('volunteer_count')
+                .eq('id', shiftId)
+                .single();
+
+            if (error || !shift) {
+                return;
+            }
+
+            await updateShiftAvailability(shiftId, Number(shift.volunteer_count) || 0, 1);
         }
 
         async function signupForShift(shiftId) {
             try {
+                if (!currentVolunteerId) {
+                    throw new Error('Volunteer profile is not ready yet.');
+                }
+
+                const { data: shift, error: shiftError } = await supabase
+                    .from(SHIFT_SOURCE_TABLE)
+                    .select('shift_date, volunteer_count')
+                    .eq('id', shiftId)
+                    .single();
+
+                if (shiftError) {
+                    throw shiftError;
+                }
+
+                if (!shift) {
+                    throw new Error('Unable to locate that shift.');
+                }
+
+                if ((shift.volunteer_count ?? 0) <= 0) {
+                    throw new Error('This shift is already full.');
+                }
+
+                const shiftWindow = buildShiftWindow(shift.shift_date);
+
+                await updateShiftAvailability(shiftId, Number(shift.volunteer_count) || 0, -1);
+
                 const { error } = await supabase
-                    .from('volunteer_shifts')
+                    .from(VOLUNTEER_SHIFT_TABLE)
                     .insert([
                         {
                             volunteer_id: currentVolunteerId,
                             shift_id: shiftId,
-                            shift_start: new Date().toISOString(),
-                            shift_end: new Date().toISOString(),
+                            shift_start: shiftWindow.start,
+                            shift_end: shiftWindow.end,
                             role: 'Volunteer'
                         }
                     ]);
 
                 if (error) {
+                    await restoreShiftAvailability(shiftId);
                     if (error.code === '23505') {
-                        showError('You are already signed up for this shift!');
-                    } else {
-                        throw error;
+                        showError('You are already signed up for this shift.');
+                        return;
                     }
-                } else {
-                    showSuccess('Successfully signed up for the shift!');
-
-                    const { data: shift } = await supabase
-                        .from('Volunteer-shifts')
-                        .select('volunteer_count')
-                        .eq('id', shiftId)
-                        .single();
-
-                    if (shift) {
-                        await supabase
-                            .from('Volunteer-shifts')
-                            .update({ volunteer_count: Math.max(0, (shift.volunteer_count || 0) - 1) })
-                            .eq('id', shiftId);
-                    }
-
-                    await loadShifts();
+                    throw error;
                 }
-            } catch (err) {
-                console.error('Error signing up:', err);
-                showError('Failed to sign up for shift. Please try again.');
+
+                showSuccess('Successfully signed up for the shift.');
+                await loadShifts();
+            } catch (error) {
+                showError(`Failed to sign up for shift: ${error.message}`);
             }
         }
 
         async function cancelSignup(shiftId) {
             try {
+                const { data: shift, error: shiftError } = await supabase
+                    .from(SHIFT_SOURCE_TABLE)
+                    .select('volunteer_count')
+                    .eq('id', shiftId)
+                    .single();
+
+                if (shiftError) {
+                    throw shiftError;
+                }
+
                 const { error } = await supabase
-                    .from('volunteer_shifts')
+                    .from(VOLUNTEER_SHIFT_TABLE)
                     .delete()
                     .eq('volunteer_id', currentVolunteerId)
                     .eq('shift_id', shiftId);
@@ -351,25 +548,11 @@
                     throw error;
                 }
 
-                showSuccess('Successfully cancelled signup!');
-
-                const { data: shift } = await supabase
-                    .from('Volunteer-shifts')
-                    .select('volunteer_count')
-                    .eq('id', shiftId)
-                    .single();
-
-                if (shift) {
-                    await supabase
-                        .from('Volunteer-shifts')
-                        .update({ volunteer_count: (shift.volunteer_count || 0) + 1 })
-                        .eq('id', shiftId);
-                }
-
+                await updateShiftAvailability(shiftId, Number(shift.volunteer_count) || 0, 1);
+                showSuccess('Successfully cancelled signup.');
                 await loadShifts();
-            } catch (err) {
-                console.error('Error cancelling signup:', err);
-                showError('Failed to cancel signup. Please try again.');
+            } catch (error) {
+                showError(`Failed to cancel signup: ${error.message}`);
             }
         }
 
@@ -378,9 +561,17 @@
             if (!container) {
                 return;
             }
-            container.innerHTML = `<div class="${type}">${message}</div>`;
+
+            container.textContent = '';
+            const banner = document.createElement('div');
+            banner.className = type;
+            banner.textContent = message;
+            container.appendChild(banner);
+
             setTimeout(() => {
-                container.innerHTML = '';
+                if (container.contains(banner)) {
+                    container.removeChild(banner);
+                }
             }, 4000);
         }
 
@@ -391,6 +582,43 @@
         function showError(message) {
             showMessage(message, 'error');
         }
+
+        async function boot() {
+            try {
+                supabase = window.labAuth.getSupabaseClient();
+                currentUser = await window.labAuth.getUser();
+                renderAuthActions(currentUser);
+
+                if (!currentUser) {
+                    hideStateSections();
+                    authRequiredEl.style.display = 'block';
+                    return;
+                }
+
+                currentProfile = await window.labAuth.getProfile(currentUser.id);
+                const role = window.labAuth.normalizeRole(currentProfile?.role);
+
+                if (!role || !['volunteer', 'admin'].includes(role)) {
+                    hideStateSections();
+                    accessDeniedMessageEl.textContent = role
+                        ? `Your account is signed in as ${role}, but volunteer portal access is limited to volunteer and admin users.`
+                        : 'Your account is signed in, but volunteer access is not enabled yet.';
+                    accessDeniedEl.style.display = 'block';
+                    return;
+                }
+
+                hideStateSections();
+                portalContentEl.style.display = 'block';
+                await getOrCreateVolunteer();
+                await loadShifts();
+            } catch (error) {
+                hideStateSections();
+                accessDeniedMessageEl.textContent = `Unable to load the volunteer portal: ${error.message}`;
+                accessDeniedEl.style.display = 'block';
+            }
+        }
+
+        boot();
     </script>
 </body>
 </html>
