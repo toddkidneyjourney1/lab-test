@@ -64,7 +64,7 @@
     }
   </style>
   <script async crossorigin="anonymous" data-clerk-publishable-key="pk_test_sb_publishable_wo-PDCkLxkuGLsar5by1Sw_ShjHgZDC"
-    src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js"></script>
+    src="https://unpkg.com/@clerk/clerk-js@latest/dist/clerk.browser.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
@@ -120,10 +120,20 @@
       return (role || '').toString().trim().toLowerCase();
     }
 
+    async function waitForClerk(maxMs = 5000) {
+      const start = Date.now();
+      while (!window.Clerk) {
+        if (Date.now() - start > maxMs) return false;
+        await new Promise((resolve) => setTimeout(resolve, 100));
+      }
+      return true;
+    }
+
     async function boot() {
       try {
-        if (!window.Clerk) {
-          setStatus('Clerk failed to load. Check network or script include.', true);
+        const clerkReady = await waitForClerk();
+        if (!clerkReady) {
+          setStatus('Clerk failed to load. Verify publishable key/domain and script URL.', true);
           return;
         }
 
