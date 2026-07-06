@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Access | The Laboratory Theater of Florida</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .portal-access {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 1rem 0 2rem;
+        }
+
+        .access-card {
+            background: #151515;
+            border: 1px solid #2c2c2c;
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+
+        .access-form {
+            display: grid;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .access-form input {
+            width: 100%;
+            padding: 0.7rem 0.8rem;
+            border-radius: 8px;
+            border: 1px solid #444;
+            background: #0f0f0f;
+            color: #f3f3f3;
+        }
+
+        .portal-links {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #333;
+            display: none;
+        }
+
+        .portal-links.is-visible {
+            display: block;
+        }
+
+        .button-row {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            margin-top: 0.75rem;
+        }
+
+        #access-message {
+            margin-top: 0.75rem;
+            color: #d2d2d2;
+            min-height: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+    <input type="checkbox" id="nav-toggle" class="nav-toggle">
+    <label for="nav-toggle" class="nav-toggle-label"><span></span></label>
+    <label for="nav-toggle" class="nav-overlay"></label>
+
+    <nav class="hamburger-menu">
+        <a href="about.html">Origin Story</a>
+        <a href="archive25.html">Past Experiments</a>
+        <a href="index.html">Back to the Slab</a>
+        <a href="plan.html">Lab Protocols</a>
+        <a href="comingsoon.html">Join the Experiment</a>
+        <a href="portal-access.html">Portal Access</a>
+        <a href="support.html">Fuel the Innovation</a>
+        <a href="sponsors.html">Core Collaborators</a>
+    </nav>
+
+    <header>
+        <div class="logo">
+            THE <span>LAB</span>
+            <p class="tagline">Intentionally innovative live theater</p>
+        </div>
+    </header>
+
+    <main>
+        <section class="portal-access">
+            <h1>Portal Access</h1>
+            <p>Enter the portal password to continue.</p>
+
+            <div class="access-card">
+                <form class="access-form" id="portal-access-form">
+                    <label for="portal-password">Password</label>
+                    <input id="portal-password" name="password" type="password" required autocomplete="current-password">
+                    <button type="submit" class="btn-primary">Verify Access</button>
+                </form>
+
+                <p id="access-message" aria-live="polite"></p>
+
+                <section id="portal-links" class="portal-links" aria-hidden="true">
+                    <h2>Choose Your Portal</h2>
+                    <div class="button-row">
+                        <button id="volunteer-portal-link" type="button" class="button">Volunteer Portal</button>
+                        <button id="cast-portal-link" type="button" class="button">Cast Portal</button>
+                    </div>
+                </section>
+
+                <noscript>
+                    <p>This page requires JavaScript to verify password access.</p>
+                </noscript>
+            </div>
+        </section>
+    </main>
+
+    <script src="portal-access-control.js"></script>
+    <script>
+        (function () {
+            const PORTAL_PASSWORD_HASH = "0811611bcb6bb2582d490073ab042e8707f175ce6f3734b24f06a715a2886b09";
+            const form = document.getElementById('portal-access-form');
+            const passwordInput = document.getElementById('portal-password');
+            const message = document.getElementById('access-message');
+            const linksSection = document.getElementById('portal-links');
+            const volunteerLink = document.getElementById('volunteer-portal-link');
+            const castLink = document.getElementById('cast-portal-link');
+
+            async function sha256(value) {
+                const bytes = new TextEncoder().encode(value);
+                const digest = await window.crypto.subtle.digest('SHA-256', bytes);
+                return Array.from(new Uint8Array(digest))
+                    .map((b) => b.toString(16).padStart(2, '0'))
+                    .join('');
+            }
+
+            function grantAccess() {
+                grantPortalAccess();
+                linksSection.classList.add('is-visible');
+                linksSection.setAttribute('aria-hidden', 'false');
+                message.textContent = 'Access granted.';
+                message.style.color = '#33cc66';
+                passwordInput.value = '';
+            }
+
+            function denyAccess() {
+                clearPortalAccess();
+                linksSection.classList.remove('is-visible');
+                linksSection.setAttribute('aria-hidden', 'true');
+                message.textContent = 'Incorrect password. Please try again.';
+                message.style.color = '#ff6b6b';
+            }
+
+            volunteerLink.addEventListener('click', function () {
+                window.location.href = 'volunteer-portal.html';
+            });
+
+            castLink.addEventListener('click', function () {
+                window.location.href = 'cast-portal.html';
+            });
+
+            if (hasValidPortalAccess()) {
+                grantAccess();
+            } else {
+                clearPortalAccess();
+            }
+
+            form.addEventListener('submit', async function (event) {
+                event.preventDefault();
+                const enteredHash = await sha256(passwordInput.value);
+
+                if (enteredHash === PORTAL_PASSWORD_HASH) {
+                    grantAccess();
+                    return;
+                }
+
+                denyAccess();
+            });
+        })();
+    </script>
+</body>
+</html>

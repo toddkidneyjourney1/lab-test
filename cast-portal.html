@@ -46,9 +46,14 @@
             margin: 0 auto;
         }
     </style>
+    <script src="portal-access-control.js"></script>
+    <script>
+        if (!hasValidPortalAccess()) {
+            window.location.replace('portal-access.html');
+        }
+    </script>
 </head>
 <body>
-
     <header class="main-header">
         <div class="logo">
             THE <span>LAB</span>
