@@ -48,15 +48,10 @@
     </style>
 </head>
 <body>
+    <script src="portal-access-control.js"></script>
     <script>
-        const accessGranted = sessionStorage.getItem('portalAccessGranted') === 'true';
-        const grantedAtRaw = sessionStorage.getItem('portalAccessGrantedAt');
-        const grantedAt = grantedAtRaw ? Number(grantedAtRaw) : 0;
-        const accessFresh = Number.isFinite(grantedAt) && Date.now() - grantedAt <= (30 * 60 * 1000);
-
-        if (!accessGranted || !accessFresh) {
-            sessionStorage.removeItem('portalAccessGranted');
-            sessionStorage.removeItem('portalAccessGrantedAt');
+        if (!hasValidPortalAccess()) {
+            clearPortalAccess();
             window.location.replace('portal-access.html');
         }
     </script>
