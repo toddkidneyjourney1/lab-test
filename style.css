@@ -177,7 +177,7 @@ main { max-width: 800px; margin: 0 auto; padding: 0 1rem; }
 
 .home-page .hero h1 {
     margin: 0;
-    font-size: 4.75rem;
+    font-size: 4rem;
     line-height: 1.08;
 }
 
@@ -818,7 +818,7 @@ main { max-width: 800px; margin: 0 auto; padding: 0 1rem; }
     }
 
     .home-page .hero h1 {
-        font-size: 3.75rem;
+        font-size: 3.25rem;
     }
 
     .home-page .hero-media {
