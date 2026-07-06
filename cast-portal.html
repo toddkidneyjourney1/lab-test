@@ -48,6 +48,11 @@
     </style>
 </head>
 <body>
+    <script>
+        if (sessionStorage.getItem('portalAccessGranted') !== 'true') {
+            window.location.replace('portal-access.html');
+        }
+    </script>
 
     <header class="main-header">
         <div class="logo">
