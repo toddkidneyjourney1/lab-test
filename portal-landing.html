@@ -42,6 +42,11 @@
       background: #111;
       color: #fff;
     }
+    .statusline {
+      margin-top: 0.5rem;
+      font-size: 0.9rem;
+      color: #ddd;
+    }
   </style>
 </head>
 <body>
@@ -79,11 +84,12 @@
         <input id="password" class="field" type="password" required placeholder="••••••••" />
 
         <div class="portal-actions">
-          <button class="btn btn-primary" type="submit">Sign In</button>
+          <button id="signin-btn" class="btn btn-primary" type="submit">Sign In</button>
         </div>
       </form>
 
       <button id="logout-btn" class="btn btn-secondary hidden" type="button">Sign Out</button>
+      <div id="session-status" class="statusline">Checking session…</div>
     </section>
 
     <section class="portal-card">
@@ -99,20 +105,25 @@
   <script type="module">
     import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-    // MUST match across portal-landing, volunteer-portal, cast-portal
+    // IMPORTANT: replace with real values
     const SUPABASE_URL = "YOUR_SUPABASE_URL";
     const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
-    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     const messageContainer = document.getElementById("message-container");
     const loginForm = document.getElementById("login-form");
     const logoutBtn = document.getElementById("logout-btn");
+    const signinBtn = document.getElementById("signin-btn");
     const volunteerLink = document.getElementById("volunteer-link");
     const castLink = document.getElementById("cast-link");
+    const sessionStatus = document.getElementById("session-status");
 
     function showMessage(text, type = "error") {
       messageContainer.innerHTML = `<div class="notice ${type}">${text}</div>`;
-      setTimeout(() => { messageContainer.innerHTML = ""; }, 4500);
+      setTimeout(() => { messageContainer.innerHTML = ""; }, 5000);
+    }
+
+    function setStatus(text) {
+      sessionStatus.textContent = text;
     }
 
     function preventWhenDisabled(e) {
@@ -136,17 +147,32 @@
       linkEl.removeEventListener("click", preventWhenDisabled);
     }
 
+    disablePortalLink(volunteerLink);
+    disablePortalLink(castLink);
+
+    let supabase;
+    try {
+      if (!SUPABASE_URL || !SUPABASE_ANON_KEY || SUPABASE_URL.includes("YOUR_") || SUPABASE_ANON_KEY.includes("YOUR_")) {
+        throw new Error("Supabase config is still using placeholder values.");
+      }
+      supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    } catch (e) {
+      setStatus("Configuration error");
+      showMessage(`Configuration error: ${e.message}`, "error");
+      throw e;
+    }
+
     async function fetchAccess(userId) {
-      // Defaults:
-      // profiles(id, is_volunteer)
-      // cast_assignments(user_id, show_id)
       const [{ data: profile, error: profileErr }, { data: castRows, error: castErr }] = await Promise.all([
-        supabase.from("profiles").select("is_volunteer").eq("id", userId).single(),
+        supabase.from("profiles").select("is_volunteer").eq("id", userId).maybeSingle(),
         supabase.from("cast_assignments").select("show_id").eq("user_id", userId).limit(1)
       ]);
 
-      const isVolunteer = !profileErr && !!profile?.is_volunteer;
-      const isCast = !castErr && Array.isArray(castRows) && castRows.length > 0;
+      if (profileErr) console.error("profiles lookup error:", profileErr);
+      if (castErr) console.error("cast lookup error:", castErr);
+
+      const isVolunteer = !!profile?.is_volunteer;
+      const isCast = Array.isArray(castRows) && castRows.length > 0;
       return { isVolunteer, isCast };
     }
 
@@ -155,8 +181,17 @@
       disablePortalLink(castLink);
 
       const { data: { user }, error } = await supabase.auth.getUser();
+      if (error) {
+        console.error("getUser error:", error);
+        setStatus("Not signed in");
+        loginForm.classList.remove("hidden");
+        logoutBtn.classList.add("hidden");
+        localStorage.removeItem("labPortalUserId");
+        return;
+      }
 
-      if (error || !user) {
+      if (!user) {
+        setStatus("Not signed in");
         loginForm.classList.remove("hidden");
         logoutBtn.classList.add("hidden");
         localStorage.removeItem("labPortalUserId");
@@ -166,10 +201,15 @@
       localStorage.setItem("labPortalUserId", user.id);
       loginForm.classList.add("hidden");
       logoutBtn.classList.remove("hidden");
+      setStatus(`Signed in as ${user.email || user.id}`);
 
       const access = await fetchAccess(user.id);
       if (access.isVolunteer) enablePortalLink(volunteerLink);
       if (access.isCast) enablePortalLink(castLink);
+
+      if (!access.isVolunteer && !access.isCast) {
+        showMessage("Signed in, but no portal permissions found for this account.", "error");
+      }
     }
 
     loginForm.addEventListener("submit", async (e) => {
@@ -183,12 +223,21 @@
         return;
       }
 
-      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      signinBtn.disabled = true;
+      setStatus("Signing in...");
+
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+
+      signinBtn.disabled = false;
+
       if (error) {
+        console.error("signInWithPassword error:", error);
+        setStatus("Sign-in failed");
         showMessage(error.message || "Login failed.", "error");
         return;
       }
 
+      console.log("signInWithPassword success:", data);
       showMessage("Signed in successfully.", "success");
       await refreshUIFromSession();
     });
