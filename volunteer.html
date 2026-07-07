@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="style.css" />
   <style>
     .volunteer-wrap {
-      max-width: 1100px;
+      max-width: 980px;
       margin: 0 auto;
       padding: 1.25rem 0 2.5rem;
     }
@@ -20,77 +20,17 @@
       margin-bottom: 1rem;
     }
 
-    .date-card {
-      background: #1a1a1a;
-      border: 1px solid #333;
-      border-radius: 12px;
-      padding: 1rem;
-      margin-bottom: 1rem;
-    }
-
-    .date-title {
-      margin: 0 0 .6rem 0;
-      font-size: 1.1rem;
-    }
-
-    .shift-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: .8rem;
-    }
-
-    .shift {
-      border: 1px solid #3a3a3a;
-      border-radius: 10px;
-      padding: .8rem;
-      background: #111;
-    }
-
-    .shift h3 {
-      margin: 0 0 .45rem 0;
-      font-size: 1rem;
-    }
-
-    .slot {
+    .toolbar {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border: 1px solid #2d2d2d;
-      border-radius: 8px;
-      padding: .45rem .55rem;
-      margin-top: .4rem;
-      background: #0f0f0f;
-      font-size: .92rem;
       gap: .5rem;
       flex-wrap: wrap;
-    }
-
-    .slot.filled {
-      border-color: #5c2626;
-      background: #221313;
-    }
-
-    .status {
-      font-weight: 700;
-      font-size: .82rem;
-      padding: .2rem .45rem;
-      border-radius: 6px;
-    }
-
-    .status.open {
-      background: #1d5f31;
-      color: #fff;
-    }
-
-    .status.full {
-      background: #7a2f2f;
-      color: #fff;
+      margin-top: .75rem;
     }
 
     .button {
       border: 0;
       border-radius: 8px;
-      padding: .45rem .7rem;
+      padding: .5rem .8rem;
       font-weight: 700;
       cursor: pointer;
       background: #d72638;
@@ -101,8 +41,13 @@
       background: #444;
     }
 
+    .button.subtle {
+      background: #2e2e2e;
+      color: #f1f1f1;
+    }
+
     .button[disabled] {
-      opacity: 0.5;
+      opacity: .6;
       cursor: not-allowed;
     }
 
@@ -116,23 +61,121 @@
     .notice.success { background: #2b9a4a; color: #fff; }
     .notice.error { background: #a33131; color: #fff; }
 
-    .legend {
-      font-size: .9rem;
-      color: #bfbfbf;
-      margin-top: .5rem;
-    }
-
-    .toolbar {
-      display: flex;
-      gap: .5rem;
-      flex-wrap: wrap;
-      margin-top: .75rem;
-    }
-
     .sync-meta {
       margin-top: .5rem;
       font-size: .85rem;
       color: #aaa;
+    }
+
+    .identity {
+      margin-top: .45rem;
+      font-size: .92rem;
+      color: #d9d9d9;
+    }
+
+    .list {
+      display: grid;
+      gap: .75rem;
+    }
+
+    .date-row {
+      background: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 12px;
+      padding: .85rem;
+      display: grid;
+      grid-template-columns: 1fr auto auto;
+      gap: .65rem;
+      align-items: center;
+    }
+
+    .date-label {
+      font-weight: 700;
+      font-size: 1rem;
+      margin: 0;
+    }
+
+    .spot-badge {
+      display: inline-block;
+      background: #222;
+      border: 1px solid #3a3a3a;
+      border-radius: 999px;
+      padding: .28rem .55rem;
+      font-size: .85rem;
+      color: #d8d8d8;
+      white-space: nowrap;
+    }
+
+    .muted {
+      color: #bcbcbc;
+      font-size: .9rem;
+      margin-top: .2rem;
+    }
+
+    .empty-state {
+      background: #161616;
+      border: 1px dashed #4a4a4a;
+      border-radius: 12px;
+      padding: .9rem;
+      color: #cbcbcb;
+    }
+
+    .picker {
+      margin-top: 1rem;
+      background: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 12px;
+      padding: 1rem;
+    }
+
+    .picker h2 {
+      margin: 0 0 .6rem 0;
+      font-size: 1.05rem;
+    }
+
+    .field {
+      margin-top: .6rem;
+    }
+
+    .field label {
+      display: block;
+      font-size: .9rem;
+      margin-bottom: .35rem;
+      color: #d0d0d0;
+    }
+
+    .field select,
+    .field input {
+      width: 100%;
+      max-width: 460px;
+      background: #0f0f0f;
+      color: #fff;
+      border: 1px solid #363636;
+      border-radius: 8px;
+      padding: .55rem .6rem;
+      font-size: .95rem;
+    }
+
+    .picker-actions {
+      margin-top: .85rem;
+      display: flex;
+      gap: .5rem;
+      flex-wrap: wrap;
+    }
+
+    .helper {
+      margin-top: .5rem;
+      font-size: .88rem;
+      color: #b8b8b8;
+    }
+
+    @media (max-width: 760px) {
+      .date-row {
+        grid-template-columns: 1fr;
+      }
+      .spot-badge {
+        justify-self: start;
+      }
     }
   </style>
 </head>
@@ -162,29 +205,44 @@
     <section class="intro">
       <h1>Volunteer Shift Sign-Up</h1>
       <p>
-        Welcome! Choose an open role for a performance date below.
-        Each date has:
-        <strong>1 Box Office</strong>,
-        <strong>1 Concessions</strong>, and
-        <strong>2 Ushers</strong>.
+        Pick a performance date, then choose one open role.
+        Each date has 1 Box Office, 1 Concessions, and 2 Ushers.
       </p>
-      <p class="legend">Filled slots are automatically locked.</p>
+      <div class="identity" id="identity-line"></div>
+
       <div class="toolbar">
-        <button id="refresh-btn" class="button secondary" type="button">Refresh from Supabase</button>
+        <button id="refresh-btn" class="button secondary" type="button">Refresh</button>
+        <button id="change-name-btn" class="button subtle" type="button">Change Name</button>
+        <button id="cancel-mine-btn" class="button subtle" type="button">Cancel My Signup</button>
       </div>
+
       <div id="sync-meta" class="sync-meta"></div>
       <div id="message"></div>
     </section>
 
-    <section id="schedule-root"></section>
+    <section id="dates-list" class="list"></section>
+
+    <section id="picker" class="picker" hidden>
+      <h2 id="picker-title">Choose a role</h2>
+
+      <div class="field">
+        <label for="role-select">Open roles for this date</label>
+        <select id="role-select"></select>
+      </div>
+
+      <div class="helper" id="picker-helper"></div>
+
+      <div class="picker-actions">
+        <button id="confirm-btn" class="button" type="button">Confirm Signup</button>
+        <button id="back-btn" class="button secondary" type="button">Back to Dates</button>
+      </div>
+    </section>
   </main>
 
-  <!-- Supabase JS (hardwired client-side setup as requested) -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
     // ============================================================
-    // HARDWIRED SUPABASE CONFIG
-    // Replace these with your real project credentials.
+    // HARDWIRED SUPABASE CONFIG (replace placeholders with real keys)
     // ============================================================
     const SUPABASE_URL = "https://YOUR_PROJECT_ID.supabase.co";
     const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
@@ -206,47 +264,61 @@
       usher: { label: "Usher", slots: 2 }
     };
 
-    // ---- SUPABASE TABLE ----
-    // Expected table schema:
-    // volunteer_shifts (
-    //   id bigint generated always as identity primary key,
-    //   performance_date text not null,
-    //   role text not null,
-    //   slot_index int not null,
-    //   assigned_to text null,
-    //   updated_at timestamptz not null default now(),
-    //   unique(performance_date, role, slot_index)
-    // )
     const TABLE_NAME = "volunteer_shifts";
 
-    // ---- VOLUNTEER IDENTITY ----
-    function getVolunteerName() {
-      const existing = localStorage.getItem("lab_volunteer_name");
-      if (existing) return existing;
-
-      const input = prompt("Enter your name to sign up for shifts:");
-      const safeName = (input || "").trim() || "Volunteer";
-      localStorage.setItem("lab_volunteer_name", safeName);
-      return safeName;
-    }
-
-    // ---- UI ----
+    // ---- UI refs ----
     const messageEl = document.getElementById("message");
-    const root = document.getElementById("schedule-root");
     const syncMetaEl = document.getElementById("sync-meta");
-    const refreshBtn = document.getElementById("refresh-btn");
+    const identityLineEl = document.getElementById("identity-line");
+    const datesListEl = document.getElementById("dates-list");
 
-    const volunteerName = getVolunteerName();
+    const pickerEl = document.getElementById("picker");
+    const pickerTitleEl = document.getElementById("picker-title");
+    const pickerHelperEl = document.getElementById("picker-helper");
+    const roleSelectEl = document.getElementById("role-select");
+
+    const refreshBtn = document.getElementById("refresh-btn");
+    const changeNameBtn = document.getElementById("change-name-btn");
+    const cancelMineBtn = document.getElementById("cancel-mine-btn");
+    const confirmBtn = document.getElementById("confirm-btn");
+    const backBtn = document.getElementById("back-btn");
+
+    // ---- state ----
+    let volunteerName = getVolunteerName();
     let schedule = defaultSchedule();
+    let selectedDate = null;
     let lastLoadedAt = null;
 
     function showMessage(text, type = "success") {
       messageEl.innerHTML = `<div class="notice ${type}">${text}</div>`;
-      setTimeout(() => (messageEl.innerHTML = ""), 4000);
+      setTimeout(() => {
+        messageEl.innerHTML = "";
+      }, 4500);
     }
 
     function setSyncMeta(text) {
       syncMetaEl.textContent = text || "";
+    }
+
+    function updateIdentityLine() {
+      identityLineEl.textContent = `Signing up as: ${volunteerName}`;
+    }
+
+    function getVolunteerName() {
+      const existing = localStorage.getItem("lab_volunteer_name");
+      if (existing && existing.trim()) return existing.trim();
+
+      const input = prompt("Enter your name to sign up for shifts:");
+      const safe = (input || "").trim() || "Volunteer";
+      localStorage.setItem("lab_volunteer_name", safe);
+      return safe;
+    }
+
+    function setVolunteerName(name) {
+      const safe = (name || "").trim() || "Volunteer";
+      localStorage.setItem("lab_volunteer_name", safe);
+      volunteerName = safe;
+      updateIdentityLine();
     }
 
     function defaultSchedule() {
@@ -267,18 +339,31 @@
       for (const row of rows || []) {
         const date = row.performance_date;
         const role = row.role;
-        const slotIndex = row.slot_index;
+        const slot = row.slot_index;
         const assigned = row.assigned_to ?? null;
 
         if (!fresh[date]) continue;
         if (!Object.prototype.hasOwnProperty.call(fresh[date], role)) continue;
-        if (typeof slotIndex !== "number") continue;
-        if (slotIndex < 0 || slotIndex >= fresh[date][role].length) continue;
+        if (typeof slot !== "number") continue;
+        if (slot < 0 || slot >= fresh[date][role].length) continue;
 
-        fresh[date][role][slotIndex] = assigned;
+        fresh[date][role][slot] = assigned;
       }
 
       return fresh;
+    }
+
+    function countOpenSlotsForDate(date) {
+      const day = schedule[date];
+      if (!day) return 0;
+      let count = 0;
+
+      for (const role of Object.keys(day)) {
+        for (const assigned of day[role]) {
+          if (!assigned) count += 1;
+        }
+      }
+      return count;
     }
 
     function alreadySignedForDate(date, name) {
@@ -290,8 +375,41 @@
       return false;
     }
 
+    function findMyAssignments(name) {
+      const out = [];
+      for (const date of PERFORMANCE_DATES) {
+        const day = schedule[date];
+        for (const role of Object.keys(day)) {
+          day[role].forEach((assigned, slotIndex) => {
+            if (assigned === name) {
+              out.push({ date, role, slotIndex });
+            }
+          });
+        }
+      }
+      return out;
+    }
+
+    function getOpenOptionsForDate(date) {
+      const options = [];
+      const day = schedule[date];
+      if (!day) return options;
+
+      for (const role of Object.keys(SHIFT_TEMPLATE)) {
+        day[role].forEach((assigned, slotIndex) => {
+          if (!assigned) {
+            options.push({
+              role,
+              slotIndex,
+              label: `${SHIFT_TEMPLATE[role].label} — Slot ${slotIndex + 1}`
+            });
+          }
+        });
+      }
+      return options;
+    }
+
     async function ensureSeedDataExists() {
-      // Read existing rows for configured dates
       const { data: existing, error: readErr } = await supabase
         .from(TABLE_NAME)
         .select("performance_date, role, slot_index")
@@ -320,18 +438,15 @@
         }
       }
 
-      if (toInsert.length > 0) {
-        const { error: insertErr } = await supabase
-          .from(TABLE_NAME)
-          .insert(toInsert);
-
+      if (toInsert.length) {
+        const { error: insertErr } = await supabase.from(TABLE_NAME).insert(toInsert);
         if (insertErr) throw insertErr;
       }
     }
 
     async function loadScheduleFromSupabase() {
       try {
-        setSyncMeta("Syncing from Supabase...");
+        setSyncMeta("Syncing...");
         await ensureSeedDataExists();
 
         const { data, error } = await supabase
@@ -344,39 +459,29 @@
 
         if (error) throw error;
 
-        schedule = normalizeScheduleFromRows(data);
+        schedule = normalizeScheduleFromRows(data || []);
         lastLoadedAt = new Date();
-        render();
+        setSyncMeta(`Last synced: ${lastLoadedAt.toLocaleString()}`);
 
-        const stamp = lastLoadedAt.toLocaleString();
-        setSyncMeta(`Last synced: ${stamp}`);
+        renderDates();
+        refreshPickerIfOpen();
       } catch (err) {
         console.error(err);
-        showMessage(`Failed to load shifts from Supabase: ${err.message || err}`, "error");
         setSyncMeta("Sync failed");
+        showMessage(`Failed to load shifts: ${err.message || err}`, "error");
       }
     }
 
     async function signUp(date, role, slotIndex) {
       try {
-        // Always refresh first to minimize stale writes
+        // Refresh first to reduce stale writes
         await loadScheduleFromSupabase();
 
-        const day = schedule[date];
-        if (!day || !day[role]) return;
-
-        if (day[role][slotIndex]) {
-          showMessage("That slot is already filled.", "error");
-          return;
-        }
-
-        // Optional rule: one role per volunteer per performance date
         if (alreadySignedForDate(date, volunteerName)) {
-          showMessage("You are already signed up for this performance date.", "error");
+          showMessage("You are already signed up for this date.", "error");
           return;
         }
 
-        // Optimistic concurrency: only update when currently unassigned
         const { data, error } = await supabase
           .from(TABLE_NAME)
           .update({
@@ -392,12 +497,13 @@
         if (error) throw error;
 
         if (!data || data.length === 0) {
-          showMessage("That slot was just taken by someone else. Please pick another.", "error");
+          showMessage("That spot was just taken. Please choose another.", "error");
           await loadScheduleFromSupabase();
           return;
         }
 
-        showMessage(`Signed up: ${SHIFT_TEMPLATE[role].label} on ${date}`, "success");
+        showMessage(`Signed up for ${SHIFT_TEMPLATE[role].label} on ${date}.`, "success");
+        closePicker();
         await loadScheduleFromSupabase();
       } catch (err) {
         console.error(err);
@@ -405,71 +511,223 @@
       }
     }
 
-    function render() {
-      root.innerHTML = "";
+    async function cancelMySignupForDate(date) {
+      try {
+        await loadScheduleFromSupabase();
+        const my = findMyAssignments(volunteerName).filter(x => x.date === date);
 
-      PERFORMANCE_DATES.forEach((date) => {
-        const card = document.createElement("article");
-        card.className = "date-card";
+        if (!my.length) {
+          showMessage("You do not have a signup on that date.", "error");
+          return;
+        }
 
-        const title = document.createElement("h2");
-        title.className = "date-title";
-        title.textContent = `Performance: ${date}`;
-        card.appendChild(title);
+        // There should be at most one assignment per date for same volunteer by our rule.
+        const target = my[0];
 
-        const grid = document.createElement("div");
-        grid.className = "shift-grid";
+        const { error } = await supabase
+          .from(TABLE_NAME)
+          .update({
+            assigned_to: null,
+            updated_at: new Date().toISOString()
+          })
+          .eq("performance_date", target.date)
+          .eq("role", target.role)
+          .eq("slot_index", target.slotIndex)
+          .eq("assigned_to", volunteerName);
 
-        Object.keys(SHIFT_TEMPLATE).forEach((role) => {
-          const roleBox = document.createElement("section");
-          roleBox.className = "shift";
+        if (error) throw error;
 
-          const h3 = document.createElement("h3");
-          h3.textContent = SHIFT_TEMPLATE[role].label;
-          roleBox.appendChild(h3);
+        showMessage(`Removed your signup from ${target.date}.`, "success");
+        closePicker();
+        await loadScheduleFromSupabase();
+      } catch (err) {
+        console.error(err);
+        showMessage(`Cancel failed: ${err.message || err}`, "error");
+      }
+    }
 
-          schedule[date][role].forEach((assignedTo, slotIndex) => {
-            const row = document.createElement("div");
-            row.className = "slot" + (assignedTo ? " filled" : "");
+    async function cancelAnyOfMine() {
+      try {
+        await loadScheduleFromSupabase();
+        const mine = findMyAssignments(volunteerName);
 
-            const left = document.createElement("div");
-            left.textContent = assignedTo ? `Assigned: ${assignedTo}` : `Slot ${slotIndex + 1}`;
-            row.appendChild(left);
+        if (!mine.length) {
+          showMessage("You currently have no signups to cancel.", "error");
+          return;
+        }
 
-            if (!assignedTo) {
-              const btn = document.createElement("button");
-              btn.className = "button";
-              btn.type = "button";
-              btn.textContent = "Sign Up";
-              btn.addEventListener("click", () => signUp(date, role, slotIndex));
-              row.appendChild(btn);
+        // If multiple somehow exist, cancel all in one go for this volunteer/date-role-slot tuple loop.
+        for (const a of mine) {
+          const { error } = await supabase
+            .from(TABLE_NAME)
+            .update({
+              assigned_to: null,
+              updated_at: new Date().toISOString()
+            })
+            .eq("performance_date", a.date)
+            .eq("role", a.role)
+            .eq("slot_index", a.slotIndex)
+            .eq("assigned_to", volunteerName);
 
-              const status = document.createElement("span");
-              status.className = "status open";
-              status.textContent = "OPEN";
-              row.appendChild(status);
-            } else {
-              const status = document.createElement("span");
-              status.className = "status full";
-              status.textContent = "FILLED";
-              row.appendChild(status);
-            }
+          if (error) throw error;
+        }
 
-            roleBox.appendChild(row);
-          });
+        showMessage("Your signup(s) were canceled.", "success");
+        closePicker();
+        await loadScheduleFromSupabase();
+      } catch (err) {
+        console.error(err);
+        showMessage(`Cancel failed: ${err.message || err}`, "error");
+      }
+    }
 
-          grid.appendChild(roleBox);
-        });
+    function renderDates() {
+      datesListEl.innerHTML = "";
 
-        card.appendChild(grid);
-        root.appendChild(card);
+      const datesWithOpen = PERFORMANCE_DATES.filter(d => countOpenSlotsForDate(d) > 0);
+
+      if (!datesWithOpen.length) {
+        datesListEl.innerHTML = `<div class="empty-state">All performance dates are fully staffed. Thank you!</div>`;
+        return;
+      }
+
+      for (const date of datesWithOpen) {
+        const openCount = countOpenSlotsForDate(date);
+        const alreadyOnDate = alreadySignedForDate(date, volunteerName);
+
+        const row = document.createElement("article");
+        row.className = "date-row";
+
+        const left = document.createElement("div");
+        left.innerHTML = `
+          <p class="date-label">${date}</p>
+          <div class="muted">${alreadyOnDate ? "You are already signed up for this date." : "Open for signup."}</div>
+        `;
+
+        const badge = document.createElement("div");
+        badge.className = "spot-badge";
+        badge.textContent = `${openCount} spot${openCount === 1 ? "" : "s"} left`;
+
+        const actionWrap = document.createElement("div");
+        actionWrap.style.display = "flex";
+        actionWrap.style.gap = ".45rem";
+        actionWrap.style.flexWrap = "wrap";
+
+        const chooseBtn = document.createElement("button");
+        chooseBtn.className = "button";
+        chooseBtn.type = "button";
+        chooseBtn.textContent = "Choose";
+        chooseBtn.disabled = alreadyOnDate;
+        chooseBtn.addEventListener("click", () => openPickerForDate(date));
+
+        actionWrap.appendChild(chooseBtn);
+
+        if (alreadyOnDate) {
+          const cancelBtn = document.createElement("button");
+          cancelBtn.className = "button secondary";
+          cancelBtn.type = "button";
+          cancelBtn.textContent = "Cancel";
+          cancelBtn.addEventListener("click", () => cancelMySignupForDate(date));
+          actionWrap.appendChild(cancelBtn);
+        }
+
+        row.appendChild(left);
+        row.appendChild(badge);
+        row.appendChild(actionWrap);
+
+        datesListEl.appendChild(row);
+      }
+    }
+
+    function openPickerForDate(date) {
+      selectedDate = date;
+      pickerEl.hidden = false;
+      pickerTitleEl.textContent = `Choose a role for ${date}`;
+      fillRoleSelectForDate(date);
+      pickerEl.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    function closePicker() {
+      selectedDate = null;
+      roleSelectEl.innerHTML = "";
+      pickerHelperEl.textContent = "";
+      pickerEl.hidden = true;
+    }
+
+    function fillRoleSelectForDate(date) {
+      const options = getOpenOptionsForDate(date);
+      roleSelectEl.innerHTML = "";
+
+      if (!options.length) {
+        const opt = document.createElement("option");
+        opt.value = "";
+        opt.textContent = "No open spots remaining";
+        roleSelectEl.appendChild(opt);
+        roleSelectEl.disabled = true;
+        confirmBtn.disabled = true;
+        pickerHelperEl.textContent = "This date just filled up. Please choose another date.";
+        return;
+      }
+
+      roleSelectEl.disabled = false;
+      confirmBtn.disabled = false;
+      pickerHelperEl.textContent = "Select one open role/slot and confirm.";
+
+      options.forEach((o) => {
+        const opt = document.createElement("option");
+        opt.value = `${o.role}||${o.slotIndex}`;
+        opt.textContent = o.label;
+        roleSelectEl.appendChild(opt);
       });
     }
 
+    function refreshPickerIfOpen() {
+      if (!selectedDate || pickerEl.hidden) return;
+      if (countOpenSlotsForDate(selectedDate) <= 0) {
+        closePicker();
+        return;
+      }
+      fillRoleSelectForDate(selectedDate);
+    }
+
+    // ---- events ----
     refreshBtn.addEventListener("click", loadScheduleFromSupabase);
 
-    // Initial load
-    render(); // immediate skeleton using default empty schedule
+    changeNameBtn.addEventListener("click", async () => {
+      const input = prompt("Enter your name:", volunteerName);
+      const next = (input || "").trim();
+      if (!next) return;
+      setVolunteerName(next);
+      closePicker();
+      await loadScheduleFromSupabase();
+      showMessage(`Name updated to ${volunteerName}.`, "success");
+    });
+
+    cancelMineBtn.addEventListener("click", cancelAnyOfMine);
+
+    backBtn.addEventListener("click", closePicker);
+
+    confirmBtn.addEventListener("click", async () => {
+      if (!selectedDate) return;
+      const value = roleSelectEl.value;
+      if (!value) {
+        showMessage("Please select an open role first.", "error");
+        return;
+      }
+
+      const [role, slotText] = value.split("||");
+      const slotIndex = Number(slotText);
+      if (!role || Number.isNaN(slotIndex)) {
+        showMessage("Invalid role selection.", "error");
+        return;
+      }
+
+      await signUp(selectedDate, role, slotIndex);
+    });
+
+    // ---- init ----
+    updateIdentityLine();
+    renderDates(); // immediate placeholder rendering
     loadScheduleFromSupabase();
   </script>
 </body>
