@@ -21,6 +21,8 @@
       --error-text: #ffd8d8;
     }
 
+    * { box-sizing: border-box; }
+
     body {
       background: var(--bg);
       color: #fff;
@@ -42,7 +44,8 @@
       margin-bottom: 1rem;
     }
 
-    .auth-card h1, .auth-card h2 {
+    .auth-card h1,
+    .auth-card h2 {
       margin-top: 0;
     }
 
@@ -57,11 +60,11 @@
       border: 1px solid #3a3a3a;
       background: #101010;
       display: none;
+      white-space: pre-wrap;
+      word-break: break-word;
     }
 
-    .status.show {
-      display: block;
-    }
+    .status.show { display: block; }
 
     .status.error {
       border-color: var(--error-border);
@@ -82,9 +85,7 @@
     }
 
     @media (min-width: 700px) {
-      .grid {
-        grid-template-columns: 1fr 1fr;
-      }
+      .grid { grid-template-columns: 1fr 1fr; }
     }
 
     label {
@@ -96,7 +97,6 @@
     input[type="email"],
     input[type="password"] {
       width: 100%;
-      box-sizing: border-box;
       border: 1px solid #3a3a3a;
       border-radius: 10px;
       background: #101010;
@@ -154,19 +154,13 @@
       cursor: not-allowed;
     }
 
-    .portal-choice {
-      margin-top: 0.5rem;
-    }
-
     .portal-button {
       width: 100%;
       padding: 0.75rem 1rem;
       text-align: center;
     }
 
-    .hidden {
-      display: none !important;
-    }
+    .hidden { display: none !important; }
 
     .portal-grid {
       display: grid;
@@ -176,9 +170,7 @@
     }
 
     @media (min-width: 560px) {
-      .portal-grid {
-        grid-template-columns: 1fr 1fr;
-      }
+      .portal-grid { grid-template-columns: 1fr 1fr; }
     }
 
     code {
@@ -189,9 +181,11 @@
     }
   </style>
 
+  <!-- Supabase JS (UMD) -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
+  <!-- Hamburger Menu -->
   <input type="checkbox" id="nav-toggle" class="nav-toggle" />
   <label for="nav-toggle" class="nav-toggle-label" aria-label="Open navigation menu">
     <span></span>
@@ -239,10 +233,10 @@
       <p class="muted">You are signed in. Select a destination below.</p>
 
       <div class="portal-grid">
-        <a id="volunteer-link" class="btn btn-primary portal-button portal-choice" href="volunteer-portal.html">
+        <a id="volunteer-link" class="btn btn-primary portal-button" href="volunteer-portal.html">
           Go to Volunteer Portal
         </a>
-        <a id="cast-link" class="btn portal-button portal-choice" href="cast-portal.html">
+        <a id="cast-link" class="btn portal-button" href="cast-portal.html">
           Go to Cast Portal
         </a>
       </div>
@@ -253,157 +247,166 @@
     </section>
   </main>
 
- <script>
-  const SUPABASE_URL = "https://izytzrxrgnahyvgwqhgd.supabase.co";
-  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml6eXR6cnhyZ25haHl2Z3dxaGdkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI4OTkwNjMsImV4cCI6MjA5ODQ3NTA2M30.eRJDTZVj122qnzGPQxWWE2gxCmVXuCTukWOkfckRkMk";
+  <script>
+    // ===== Supabase Config =====
+    const SUPABASE_URL = "https://izytzrxrgnahyvgwqhgd.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml6eXR6cnhyZ25haHl2Z3dxaGdkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI4OTkwNjMsImV4cCI6MjA5ODQ3NTA2M30.eRJDTZVj122qnzGPQxWWE2gxCmVXuCTukWOkfckRkMk";
 
-  const isConfigured =
-    SUPABASE_URL &&
-    SUPABASE_ANON_KEY &&
-    !SUPABASE_URL.includes("YOUR_PROJECT_ID") &&
-    !SUPABASE_ANON_KEY.includes("YOUR_SUPABASE_ANON_KEY");
+    // ===== Elements =====
+    const statusEl = document.getElementById("status");
+    const loginForm = document.getElementById("login-form");
+    const emailInput = document.getElementById("email");
+    const passwordInput = document.getElementById("password");
+    const loginBtn = document.getElementById("login-btn");
+    const logoutBtn = document.getElementById("logout-btn");
+    const portalSection = document.getElementById("portal-section");
+    const userEmailEl = document.getElementById("user-email");
 
-  const statusEl = document.getElementById("status");
-  const loginForm = document.getElementById("login-form");
-  const emailInput = document.getElementById("email");
-  const passwordInput = document.getElementById("password");
-  const loginBtn = document.getElementById("login-btn");
-  const logoutBtn = document.getElementById("logout-btn");
-  const portalSection = document.getElementById("portal-section");
-  const userEmailEl = document.getElementById("user-email");
+    // Use unique name to avoid any accidental collisions
+    let sbClient = null;
 
-  let supabase = null;
+    const isConfigured =
+      !!SUPABASE_URL &&
+      !!SUPABASE_ANON_KEY &&
+      !SUPABASE_URL.includes("YOUR_PROJECT_ID") &&
+      !SUPABASE_ANON_KEY.includes("YOUR_SUPABASE_ANON_KEY");
 
-  function showStatus(message, type = "") {
-    statusEl.textContent = message;
-    statusEl.className = "status show";
-    if (type === "error") statusEl.classList.add("error");
-    if (type === "success") statusEl.classList.add("success");
-  }
-
-  function clearStatus() {
-    statusEl.textContent = "";
-    statusEl.className = "status";
-  }
-
-  function setLoading(isLoading) {
-    loginBtn.disabled = isLoading;
-    loginBtn.textContent = isLoading ? "Logging in..." : "Log In";
-    emailInput.disabled = isLoading;
-    passwordInput.disabled = isLoading;
-  }
-
-  function setSignedInUI(user) {
-    portalSection.classList.remove("hidden");
-    logoutBtn.classList.remove("hidden");
-    loginBtn.classList.add("hidden");
-    userEmailEl.textContent = user?.email || "unknown";
-  }
-
-  function setSignedOutUI() {
-    portalSection.classList.add("hidden");
-    logoutBtn.classList.add("hidden");
-    loginBtn.classList.remove("hidden");
-    userEmailEl.textContent = "unknown";
-    passwordInput.value = "";
-  }
-
-  async function bootstrapAuth() {
-    if (!isConfigured) {
-      showStatus(
-        "Supabase is not configured yet. Add your project URL and anon key in this file to enable login.",
-        "error"
-      );
-      loginBtn.disabled = true;
-      return;
+    function showStatus(message, type = "") {
+      statusEl.textContent = message;
+      statusEl.className = "status show";
+      if (type === "error") statusEl.classList.add("error");
+      if (type === "success") statusEl.classList.add("success");
     }
 
-    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-    const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
-    if (sessionError) {
-      showStatus("Could not check session. Please refresh and try again.", "error");
-      return;
+    function clearStatus() {
+      statusEl.textContent = "";
+      statusEl.className = "status";
     }
 
-    const user = sessionData?.session?.user || null;
-    if (user) {
-      setSignedInUI(user);
-      showStatus("Welcome back! Choose a portal below.", "success");
-      emailInput.value = user.email || "";
-    } else {
-      setSignedOutUI();
+    function setLoading(isLoading) {
+      loginBtn.disabled = isLoading;
+      loginBtn.textContent = isLoading ? "Logging in..." : "Log In";
+      emailInput.disabled = isLoading;
+      passwordInput.disabled = isLoading;
     }
 
-    supabase.auth.onAuthStateChange((_event, session) => {
-      if (session?.user) {
-        setSignedInUI(session.user);
-        showStatus("Login successful. Choose your portal.", "success");
-        emailInput.value = session.user.email || "";
-      } else {
-        setSignedOutUI();
-        showStatus("You are logged out.", "success");
-      }
-    });
-  }
-
-  loginForm.addEventListener("submit", async (event) => {
-    event.preventDefault();
-    clearStatus();
-
-    if (!supabase) {
-      showStatus("Supabase is not configured. Please add credentials first.", "error");
-      return;
+    function setSignedInUI(user) {
+      portalSection.classList.remove("hidden");
+      logoutBtn.classList.remove("hidden");
+      loginBtn.classList.add("hidden");
+      userEmailEl.textContent = user?.email || "unknown";
     }
 
-    const email = emailInput.value.trim();
-    const password = passwordInput.value;
-
-    if (!email || !password) {
-      showStatus("Please enter both email and password.", "error");
-      return;
+    function setSignedOutUI() {
+      portalSection.classList.add("hidden");
+      logoutBtn.classList.add("hidden");
+      loginBtn.classList.remove("hidden");
+      userEmailEl.textContent = "unknown";
+      passwordInput.value = "";
     }
 
-    setLoading(true);
-    try {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password
-      });
-
-      if (error) {
-        showStatus(error.message || "Login failed.", "error");
+    async function bootstrapAuth() {
+      // Ensure Supabase script loaded
+      if (!window.supabase || typeof window.supabase.createClient !== "function") {
+        showStatus("Supabase library failed to load. Check internet/CDN blockers.", "error");
         return;
       }
 
-      if (data?.user) {
-        setSignedInUI(data.user);
-        showStatus("Login successful. Choose your portal.", "success");
-      } else {
-        showStatus("Login failed. Please try again.", "error");
+      if (!isConfigured) {
+        showStatus("Supabase is not configured. Add project URL and anon key.", "error");
+        loginBtn.disabled = true;
+        return;
       }
-    } catch (err) {
-      showStatus("Unexpected error while logging in.", "error");
-    } finally {
-      setLoading(false);
+
+      try {
+        sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // Existing session check
+        const { data, error } = await sbClient.auth.getSession();
+        if (error) {
+          showStatus("Could not check session: " + error.message, "error");
+          return;
+        }
+
+        const user = data?.session?.user ?? null;
+        if (user) {
+          setSignedInUI(user);
+          emailInput.value = user.email || "";
+          showStatus("Welcome back! Choose a portal below.", "success");
+        } else {
+          setSignedOutUI();
+        }
+
+        // Realtime auth changes
+        sbClient.auth.onAuthStateChange((_event, session) => {
+          if (session?.user) {
+            setSignedInUI(session.user);
+            emailInput.value = session.user.email || "";
+            showStatus("Login successful. Choose your portal.", "success");
+          } else {
+            setSignedOutUI();
+            showStatus("You are logged out.", "success");
+          }
+        });
+      } catch (err) {
+        showStatus("Auth startup error: " + (err?.message || "Unknown error"), "error");
+      }
     }
-  });
 
-  logoutBtn.addEventListener("click", async () => {
-    clearStatus();
-    if (!supabase) return;
+    loginForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      clearStatus();
 
-    const { error } = await supabase.auth.signOut();
-    if (error) {
-      showStatus(error.message || "Logout failed.", "error");
-      return;
-    }
+      if (!sbClient) {
+        showStatus("Auth client is not initialized.", "error");
+        return;
+      }
 
-    setSignedOutUI();
-    showStatus("You are logged out.", "success");
-  });
+      const email = emailInput.value.trim();
+      const password = passwordInput.value;
 
-  bootstrapAuth();
-</script>
+      if (!email || !password) {
+        showStatus("Please enter both email and password.", "error");
+        return;
+      }
+
+      setLoading(true);
+      try {
+        const { data, error } = await sbClient.auth.signInWithPassword({ email, password });
+
+        if (error) {
+          showStatus(error.message || "Login failed.", "error");
+          return;
+        }
+
+        if (data?.user) {
+          setSignedInUI(data.user);
+          showStatus("Login successful. Choose your portal.", "success");
+        } else {
+          showStatus("Login failed. No user returned.", "error");
+        }
+      } catch (err) {
+        showStatus("Unexpected error while logging in: " + (err?.message || "Unknown"), "error");
+      } finally {
+        setLoading(false);
+      }
+    });
+
+    logoutBtn.addEventListener("click", async () => {
+      clearStatus();
+      if (!sbClient) return;
+
+      const { error } = await sbClient.auth.signOut();
+      if (error) {
+        showStatus(error.message || "Logout failed.", "error");
+        return;
+      }
+
+      setSignedOutUI();
+      showStatus("You are logged out.", "success");
+    });
+
+    bootstrapAuth();
+  </script>
 </body>
 </html>
