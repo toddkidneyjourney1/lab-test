@@ -3,184 +3,76 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Volunteer Shifts | The Laboratory Theater of Florida</title>
+  <title>Volunteer Calendar | The Laboratory Theater of Florida</title>
   <link rel="stylesheet" href="style.css" />
   <style>
-    .volunteer-wrap {
-      max-width: 980px;
-      margin: 0 auto;
-      padding: 1.25rem 0 2.5rem;
+    .volunteer-wrap { max-width: 1120px; margin: 0 auto; padding: 1.25rem 0 2.5rem; }
+    .intro { background:#141414; border:1px solid #2f2f2f; border-radius:12px; padding:1rem 1.1rem; margin-bottom:1rem; }
+    .toolbar { display:flex; gap:.5rem; flex-wrap:wrap; margin-top:.75rem; }
+    .button { border:0; border-radius:8px; padding:.5rem .8rem; font-weight:700; cursor:pointer; background:#d72638; color:#fff; }
+    .button.secondary { background:#444; }
+    .button.subtle { background:#2e2e2e; color:#f1f1f1; }
+    .button[disabled] { opacity:.6; cursor:not-allowed; }
+    .notice { margin:.7rem 0 0; padding:.6rem .75rem; border-radius:8px; font-weight:600; }
+    .notice.success { background:#2b9a4a; color:#fff; }
+    .notice.error { background:#a33131; color:#fff; }
+    .sync-meta { margin-top:.5rem; font-size:.85rem; color:#aaa; }
+    .identity { margin-top:.45rem; font-size:.92rem; color:#d9d9d9; }
+
+    .calendar-wrap { display:grid; grid-template-columns: 1.25fr .95fr; gap:1rem; align-items:start; }
+    .calendar-card, .detail-card {
+      background:#1a1a1a; border:1px solid #333; border-radius:12px; padding:.9rem;
     }
 
-    .intro {
-      background: #141414;
-      border: 1px solid #2f2f2f;
-      border-radius: 12px;
-      padding: 1rem 1.1rem;
-      margin-bottom: 1rem;
+    .calendar-head { display:flex; justify-content:space-between; align-items:center; gap:.6rem; margin-bottom:.8rem; flex-wrap:wrap; }
+    .month-title { margin:0; font-size:1.05rem; }
+    .legend { display:flex; gap:.6rem; flex-wrap:wrap; font-size:.82rem; color:#c8c8c8; margin-bottom:.7rem; }
+    .dot { display:inline-block; width:.62rem; height:.62rem; border-radius:999px; margin-right:.3rem; vertical-align:middle; }
+    .dot.open { background:#33a852; }
+    .dot.full { background:#7a2f2f; }
+    .dot.none { background:#555; }
+
+    .dow, .grid { display:grid; grid-template-columns: repeat(7, minmax(0,1fr)); gap:.35rem; }
+    .dow div { text-align:center; font-size:.78rem; color:#acacac; padding-bottom:.2rem; }
+
+    .day {
+      border:1px solid #363636; border-radius:10px; min-height:78px; background:#111;
+      padding:.4rem; text-align:left; position:relative; cursor:default; color:#ddd;
+    }
+    .day .num { font-size:.84rem; color:#bdbdbd; }
+    .day.outside { opacity:.34; background:#0e0e0e; }
+    .day.has-show { border-color:#4a4a4a; cursor:pointer; }
+    .day.has-show.open { box-shadow: inset 0 0 0 1px rgba(51,168,82,.3); }
+    .day.has-show.full { box-shadow: inset 0 0 0 1px rgba(122,47,47,.35); }
+    .day.selected { outline:2px solid #d72638; }
+
+    .pill {
+      display:inline-block; margin-top:.28rem; font-size:.72rem; border-radius:999px;
+      padding:.12rem .42rem; border:1px solid #3f3f3f; background:#1f1f1f; color:#ddd;
+      white-space:nowrap;
+    }
+    .pill.open { border-color:#2a7d40; color:#9de4b0; }
+    .pill.full { border-color:#7a2f2f; color:#f0b3b3; }
+
+    .detail-card h2 { margin:0 0 .55rem 0; font-size:1.02rem; }
+    .detail-sub { font-size:.88rem; color:#bdbdbd; margin-bottom:.7rem; }
+    .show-name { font-size:.9rem; color:#dcdcdc; margin-bottom:.4rem; }
+    .role-list { display:grid; gap:.45rem; margin-top:.45rem; }
+    .role-row {
+      display:flex; justify-content:space-between; align-items:center; gap:.5rem; flex-wrap:wrap;
+      border:1px solid #353535; border-radius:9px; background:#111; padding:.5rem .55rem;
+    }
+    .role-meta { font-size:.84rem; color:#b7b7b7; }
+
+    .empty {
+      border:1px dashed #464646; border-radius:10px; padding:.7rem;
+      color:#c4c4c4; background:#131313; font-size:.92rem;
     }
 
-    .toolbar {
-      display: flex;
-      gap: .5rem;
-      flex-wrap: wrap;
-      margin-top: .75rem;
-    }
-
-    .button {
-      border: 0;
-      border-radius: 8px;
-      padding: .5rem .8rem;
-      font-weight: 700;
-      cursor: pointer;
-      background: #d72638;
-      color: #fff;
-    }
-
-    .button.secondary {
-      background: #444;
-    }
-
-    .button.subtle {
-      background: #2e2e2e;
-      color: #f1f1f1;
-    }
-
-    .button[disabled] {
-      opacity: .6;
-      cursor: not-allowed;
-    }
-
-    .notice {
-      margin: .7rem 0 0;
-      padding: .6rem .75rem;
-      border-radius: 8px;
-      font-weight: 600;
-    }
-
-    .notice.success { background: #2b9a4a; color: #fff; }
-    .notice.error { background: #a33131; color: #fff; }
-
-    .sync-meta {
-      margin-top: .5rem;
-      font-size: .85rem;
-      color: #aaa;
-    }
-
-    .identity {
-      margin-top: .45rem;
-      font-size: .92rem;
-      color: #d9d9d9;
-    }
-
-    .list {
-      display: grid;
-      gap: .75rem;
-    }
-
-    .date-row {
-      background: #1a1a1a;
-      border: 1px solid #333;
-      border-radius: 12px;
-      padding: .85rem;
-      display: grid;
-      grid-template-columns: 1fr auto auto;
-      gap: .65rem;
-      align-items: center;
-    }
-
-    .date-label {
-      font-weight: 700;
-      font-size: 1rem;
-      margin: 0;
-    }
-
-    .spot-badge {
-      display: inline-block;
-      background: #222;
-      border: 1px solid #3a3a3a;
-      border-radius: 999px;
-      padding: .28rem .55rem;
-      font-size: .85rem;
-      color: #d8d8d8;
-      white-space: nowrap;
-    }
-
-    .muted {
-      color: #bcbcbc;
-      font-size: .9rem;
-      margin-top: .2rem;
-    }
-
-    .empty-state {
-      background: #161616;
-      border: 1px dashed #4a4a4a;
-      border-radius: 12px;
-      padding: .9rem;
-      color: #cbcbcb;
-    }
-
-    .picker {
-      margin-top: 1rem;
-      background: #1a1a1a;
-      border: 1px solid #333;
-      border-radius: 12px;
-      padding: 1rem;
-    }
-
-    .picker h2 {
-      margin: 0 0 .6rem 0;
-      font-size: 1.05rem;
-    }
-
-    .field {
-      margin-top: .6rem;
-    }
-
-    .field label {
-      display: block;
-      font-size: .9rem;
-      margin-bottom: .35rem;
-      color: #d0d0d0;
-    }
-
-    .field select,
-    .field input {
-      width: 100%;
-      max-width: 460px;
-      background: #0f0f0f;
-      color: #fff;
-      border: 1px solid #363636;
-      border-radius: 8px;
-      padding: .55rem .6rem;
-      font-size: .95rem;
-    }
-
-    .picker-actions {
-      margin-top: .85rem;
-      display: flex;
-      gap: .5rem;
-      flex-wrap: wrap;
-    }
-
-    .helper {
-      margin-top: .5rem;
-      font-size: .88rem;
-      color: #b8b8b8;
-    }
-
-    @media (max-width: 760px) {
-      .date-row {
-        grid-template-columns: 1fr;
-      }
-      .spot-badge {
-        justify-self: start;
-      }
-    }
+    @media (max-width: 920px) { .calendar-wrap { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
-  <!-- Hamburger Menu -->
   <input type="checkbox" id="nav-toggle" class="nav-toggle" />
   <label for="nav-toggle" class="nav-toggle-label"><span></span></label>
 
@@ -189,7 +81,7 @@
     <a href="archive25.html">Past Experiments</a>
     <a href="index.html">Back to the Slab</a>
     <a href="plan.html">Lab Protocols</a>
-    <a href="portal-landing.html">Portal Landing</a>
+    <a href="volunteer.html">Volunteer Portal</a>
     <a href="support.html">Fuel the Innovation</a>
     <a href="sponsors.html">Core Collaborators</a>
   </nav>
@@ -203,59 +95,149 @@
 
   <main class="volunteer-wrap">
     <section class="intro">
-      <h1>Volunteer Shift Sign-Up</h1>
-      <p>
-        Pick a performance date, then choose one open role.
-        Each date has 1 Box Office, 1 Concessions, and 2 Ushers.
-      </p>
+      <h1>Volunteer Calendar</h1>
+      <p>Select a performance date, then claim one open role.</p>
       <div class="identity" id="identity-line"></div>
 
       <div class="toolbar">
         <button id="refresh-btn" class="button secondary" type="button">Refresh</button>
         <button id="change-name-btn" class="button subtle" type="button">Change Name</button>
-        <button id="cancel-mine-btn" class="button subtle" type="button">Cancel My Signup</button>
+        <button id="cancel-mine-btn" class="button subtle" type="button">Cancel My Signup(s)</button>
       </div>
 
       <div id="sync-meta" class="sync-meta"></div>
       <div id="message"></div>
     </section>
 
-    <section id="dates-list" class="list"></section>
+    <section class="calendar-wrap">
+      <article class="calendar-card">
+        <div class="calendar-head">
+          <h2 id="month-title" class="month-title">Month</h2>
+          <div class="toolbar">
+            <button id="prev-month-btn" class="button secondary" type="button">Prev</button>
+            <button id="today-month-btn" class="button secondary" type="button">This Month</button>
+            <button id="next-month-btn" class="button secondary" type="button">Next</button>
+          </div>
+        </div>
 
-    <section id="picker" class="picker" hidden>
-      <h2 id="picker-title">Choose a role</h2>
+        <div class="legend">
+          <span><span class="dot open"></span> Open spots</span>
+          <span><span class="dot full"></span> Fully staffed</span>
+          <span><span class="dot none"></span> No performance</span>
+        </div>
 
-      <div class="field">
-        <label for="role-select">Open roles for this date</label>
-        <select id="role-select"></select>
-      </div>
+        <div class="dow">
+          <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
+        </div>
+        <div id="calendar-grid" class="grid"></div>
+      </article>
 
-      <div class="helper" id="picker-helper"></div>
-
-      <div class="picker-actions">
-        <button id="confirm-btn" class="button" type="button">Confirm Signup</button>
-        <button id="back-btn" class="button secondary" type="button">Back to Dates</button>
-      </div>
+      <article class="detail-card">
+        <h2 id="detail-title">Select a performance date</h2>
+        <div id="detail-sub" class="detail-sub">Click a highlighted date in the calendar.</div>
+        <div id="detail-body" class="empty">No date selected yet.</div>
+      </article>
     </section>
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    // ============================================================
-    // HARDWIRED SUPABASE CONFIG (replace placeholders with real keys)
-    // ============================================================
     const SUPABASE_URL = "https://YOUR_PROJECT_ID.supabase.co";
     const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const TABLE_NAME = "volunteer_shifts";
 
-    // ---- CONFIG ----
-    const PERFORMANCE_DATES = [
-      "2026-07-10 7:30 PM",
-      "2026-07-11 7:30 PM",
-      "2026-07-17 7:30 PM",
-      "2026-07-18 7:30 PM",
-      "2026-07-24 7:30 PM",
-      "2026-07-25 7:30 PM"
+    // === MASTER PERFORMANCE SCHEDULE (83 items) ===
+    const MASTER_PERFORMANCES = [
+      { show: "Waiting for Godot", date: "2026-08-20", time: "7:30 PM", tz: "EDT" },
+      { show: "Waiting for Godot", date: "2026-08-21", time: "7:30 PM", tz: "EDT" },
+      { show: "Waiting for Godot", date: "2026-08-22", time: "7:30 PM", tz: "EDT" },
+      { show: "Waiting for Godot", date: "2026-08-23", time: "2:00 PM", tz: "EDT" },
+      { show: "Waiting for Godot", date: "2026-08-27", time: "7:30 PM", tz: "EDT" },
+      { show: "Waiting for Godot", date: "2026-08-28", time: "7:30 PM", tz: "EDT" },
+      { show: "Waiting for Godot", date: "2026-08-29", time: "2:00 PM", tz: "EDT" },
+      { show: "Waiting for Godot", date: "2026-08-30", time: "2:00 PM", tz: "EDT" },
+      { show: "Waiting for Godot", date: "2026-09-03", time: "7:30 PM", tz: "EDT" },
+      { show: "Waiting for Godot", date: "2026-09-04", time: "7:30 PM", tz: "EDT" },
+      { show: "Waiting for Godot", date: "2026-09-05", time: "7:30 PM", tz: "EDT" },
+      { show: "Waiting for Godot", date: "2026-09-06", time: "2:00 PM", tz: "EDT" },
+
+      { show: "The Pillowman", date: "2026-10-08", time: "7:30 PM", tz: "EDT" },
+      { show: "The Pillowman", date: "2026-10-09", time: "7:30 PM", tz: "EDT" },
+      { show: "The Pillowman", date: "2026-10-10", time: "7:30 PM", tz: "EDT" },
+      { show: "The Pillowman", date: "2026-10-11", time: "2:00 PM", tz: "EDT" },
+      { show: "The Pillowman", date: "2026-10-15", time: "7:30 PM", tz: "EDT" },
+      { show: "The Pillowman", date: "2026-10-16", time: "7:30 PM", tz: "EDT" },
+      { show: "The Pillowman", date: "2026-10-17", time: "2:00 PM", tz: "EDT" },
+      { show: "The Pillowman", date: "2026-10-18", time: "2:00 PM", tz: "EDT" },
+      { show: "The Pillowman", date: "2026-10-22", time: "7:30 PM", tz: "EDT" },
+      { show: "The Pillowman", date: "2026-10-23", time: "7:30 PM", tz: "EDT" },
+      { show: "The Pillowman", date: "2026-10-24", time: "7:30 PM", tz: "EDT" },
+      { show: "The Pillowman", date: "2026-10-25", time: "2:00 PM", tz: "EDT" },
+
+      { show: "The Rivals", date: "2026-11-12", time: "7:30 PM", tz: "EST" },
+      { show: "The Rivals", date: "2026-11-13", time: "7:30 PM", tz: "EST" },
+      { show: "The Rivals", date: "2026-11-14", time: "7:30 PM", tz: "EST" },
+      { show: "The Rivals", date: "2026-11-15", time: "2:00 PM", tz: "EST" },
+      { show: "The Rivals", date: "2026-11-19", time: "7:30 PM", tz: "EST" },
+      { show: "The Rivals", date: "2026-11-20", time: "7:30 PM", tz: "EST" },
+      { show: "The Rivals", date: "2026-11-21", time: "2:00 PM", tz: "EST" },
+      { show: "The Rivals", date: "2026-11-22", time: "2:00 PM", tz: "EST" },
+      { show: "The Rivals", date: "2026-11-27", time: "7:30 PM", tz: "EST" },
+      { show: "The Rivals", date: "2026-11-28", time: "7:30 PM", tz: "EST" },
+      { show: "The Rivals", date: "2026-11-29", time: "2:00 PM", tz: "EST" },
+
+      { show: "God of Carnage", date: "2027-01-14", time: "7:30 PM", tz: "EST" },
+      { show: "God of Carnage", date: "2027-01-15", time: "7:30 PM", tz: "EST" },
+      { show: "God of Carnage", date: "2027-01-16", time: "7:30 PM", tz: "EST" },
+      { show: "God of Carnage", date: "2027-01-17", time: "2:00 PM", tz: "EST" },
+      { show: "God of Carnage", date: "2027-01-21", time: "7:30 PM", tz: "EST" },
+      { show: "God of Carnage", date: "2027-01-22", time: "7:30 PM", tz: "EST" },
+      { show: "God of Carnage", date: "2027-01-23", time: "2:00 PM", tz: "EST" },
+      { show: "God of Carnage", date: "2027-01-24", time: "2:00 PM", tz: "EST" },
+      { show: "God of Carnage", date: "2027-01-28", time: "7:30 PM", tz: "EST" },
+      { show: "God of Carnage", date: "2027-01-29", time: "7:30 PM", tz: "EST" },
+      { show: "God of Carnage", date: "2027-01-30", time: "7:30 PM", tz: "EST" },
+      { show: "God of Carnage", date: "2027-01-31", time: "2:00 PM", tz: "EST" },
+
+      { show: "Bare", date: "2027-02-18", time: "7:30 PM", tz: "EST" },
+      { show: "Bare", date: "2027-02-19", time: "7:30 PM", tz: "EST" },
+      { show: "Bare", date: "2027-02-20", time: "7:30 PM", tz: "EST" },
+      { show: "Bare", date: "2027-02-21", time: "2:00 PM", tz: "EST" },
+      { show: "Bare", date: "2027-02-25", time: "7:30 PM", tz: "EST" },
+      { show: "Bare", date: "2027-02-26", time: "7:30 PM", tz: "EST" },
+      { show: "Bare", date: "2027-02-27", time: "2:00 PM", tz: "EST" },
+      { show: "Bare", date: "2027-02-28", time: "2:00 PM", tz: "EST" },
+      { show: "Bare", date: "2027-03-04", time: "7:30 PM", tz: "EST" },
+      { show: "Bare", date: "2027-03-05", time: "7:30 PM", tz: "EST" },
+      { show: "Bare", date: "2027-03-06", time: "7:30 PM", tz: "EST" },
+      { show: "Bare", date: "2027-03-07", time: "2:00 PM", tz: "EST" },
+
+      { show: "A Midsummer Night's Dream", date: "2027-03-25", time: "7:30 PM", tz: "EDT" },
+      { show: "A Midsummer Night's Dream", date: "2027-03-26", time: "7:30 PM", tz: "EDT" },
+      { show: "A Midsummer Night's Dream", date: "2027-03-27", time: "7:30 PM", tz: "EDT" },
+      { show: "A Midsummer Night's Dream", date: "2027-03-28", time: "2:00 PM", tz: "EDT" },
+      { show: "A Midsummer Night's Dream", date: "2027-04-01", time: "7:30 PM", tz: "EDT" },
+      { show: "A Midsummer Night's Dream", date: "2027-04-02", time: "7:30 PM", tz: "EDT" },
+      { show: "A Midsummer Night's Dream", date: "2027-04-03", time: "2:00 PM", tz: "EDT" },
+      { show: "A Midsummer Night's Dream", date: "2027-04-04", time: "2:00 PM", tz: "EDT" },
+      { show: "A Midsummer Night's Dream", date: "2027-04-08", time: "7:30 PM", tz: "EDT" },
+      { show: "A Midsummer Night's Dream", date: "2027-04-09", time: "7:30 PM", tz: "EDT" },
+      { show: "A Midsummer Night's Dream", date: "2027-04-10", time: "7:30 PM", tz: "EDT" },
+      { show: "A Midsummer Night's Dream", date: "2027-04-11", time: "2:00 PM", tz: "EDT" },
+
+      { show: "Fences by August Wilson", date: "2027-04-22", time: "7:30 PM", tz: "EDT" },
+      { show: "Fences by August Wilson", date: "2027-04-23", time: "7:30 PM", tz: "EDT" },
+      { show: "Fences by August Wilson", date: "2027-04-24", time: "7:30 PM", tz: "EDT" },
+      { show: "Fences by August Wilson", date: "2027-04-25", time: "2:00 PM", tz: "EDT" },
+      { show: "Fences by August Wilson", date: "2027-04-29", time: "7:30 PM", tz: "EDT" },
+      { show: "Fences by August Wilson", date: "2027-04-30", time: "7:30 PM", tz: "EDT" },
+      { show: "Fences by August Wilson", date: "2027-05-01", time: "2:00 PM", tz: "EDT" },
+      { show: "Fences by August Wilson", date: "2027-05-02", time: "2:00 PM", tz: "EDT" },
+      { show: "Fences by August Wilson", date: "2027-05-06", time: "7:30 PM", tz: "EDT" },
+      { show: "Fences by August Wilson", date: "2027-05-07", time: "7:30 PM", tz: "EDT" },
+      { show: "Fences by August Wilson", date: "2027-05-08", time: "7:30 PM", tz: "EDT" },
+      { show: "Fences by August Wilson", date: "2027-05-09", time: "2:00 PM", tz: "EDT" }
     ];
 
     const SHIFT_TEMPLATE = {
@@ -264,50 +246,47 @@
       usher: { label: "Usher", slots: 2 }
     };
 
-    const TABLE_NAME = "volunteer_shifts";
+    // Build performance strings used in DB, e.g. "2026-08-20 7:30 PM"
+    const PERFORMANCE_DATES = MASTER_PERFORMANCES.map(p => `${p.date} ${p.time}`);
 
-    // ---- UI refs ----
+    const PERFORMANCE_LOOKUP = {};
+    for (const p of MASTER_PERFORMANCES) {
+      PERFORMANCE_LOOKUP[p.date] = p;
+    }
+
     const messageEl = document.getElementById("message");
     const syncMetaEl = document.getElementById("sync-meta");
     const identityLineEl = document.getElementById("identity-line");
-    const datesListEl = document.getElementById("dates-list");
-
-    const pickerEl = document.getElementById("picker");
-    const pickerTitleEl = document.getElementById("picker-title");
-    const pickerHelperEl = document.getElementById("picker-helper");
-    const roleSelectEl = document.getElementById("role-select");
+    const monthTitleEl = document.getElementById("month-title");
+    const calendarGridEl = document.getElementById("calendar-grid");
+    const detailTitleEl = document.getElementById("detail-title");
+    const detailSubEl = document.getElementById("detail-sub");
+    const detailBodyEl = document.getElementById("detail-body");
 
     const refreshBtn = document.getElementById("refresh-btn");
     const changeNameBtn = document.getElementById("change-name-btn");
     const cancelMineBtn = document.getElementById("cancel-mine-btn");
-    const confirmBtn = document.getElementById("confirm-btn");
-    const backBtn = document.getElementById("back-btn");
+    const prevMonthBtn = document.getElementById("prev-month-btn");
+    const nextMonthBtn = document.getElementById("next-month-btn");
+    const todayMonthBtn = document.getElementById("today-month-btn");
 
-    // ---- state ----
     let volunteerName = getVolunteerName();
     let schedule = defaultSchedule();
-    let selectedDate = null;
+    let selectedDateKey = null;
+    let visibleMonth = new Date("2026-08-01T00:00:00");
     let lastLoadedAt = null;
 
     function showMessage(text, type = "success") {
       messageEl.innerHTML = `<div class="notice ${type}">${text}</div>`;
-      setTimeout(() => {
-        messageEl.innerHTML = "";
-      }, 4500);
+      setTimeout(() => (messageEl.innerHTML = ""), 4500);
     }
 
-    function setSyncMeta(text) {
-      syncMetaEl.textContent = text || "";
-    }
-
-    function updateIdentityLine() {
-      identityLineEl.textContent = `Signing up as: ${volunteerName}`;
-    }
+    function setSyncMeta(text) { syncMetaEl.textContent = text || ""; }
+    function updateIdentityLine() { identityLineEl.textContent = `Signing up as: ${volunteerName}`; }
 
     function getVolunteerName() {
       const existing = localStorage.getItem("lab_volunteer_name");
       if (existing && existing.trim()) return existing.trim();
-
       const input = prompt("Enter your name to sign up for shifts:");
       const safe = (input || "").trim() || "Volunteer";
       localStorage.setItem("lab_volunteer_name", safe);
@@ -321,10 +300,20 @@
       updateIdentityLine();
     }
 
+    function roleToShiftName(role) {
+      if (role === "box_office") return "Box Office";
+      if (role === "concessions") return "Concessions";
+      return "Usher";
+    }
+
     function defaultSchedule() {
       const obj = {};
-      for (const date of PERFORMANCE_DATES) {
-        obj[date] = {
+      for (const p of MASTER_PERFORMANCES) {
+        obj[p.date] = {
+          display: `${p.date} ${p.time}`,
+          show: p.show,
+          time: p.time,
+          tz: p.tz,
           box_office: Array(SHIFT_TEMPLATE.box_office.slots).fill(null),
           concessions: Array(SHIFT_TEMPLATE.concessions.slots).fill(null),
           usher: Array(SHIFT_TEMPLATE.usher.slots).fill(null)
@@ -335,41 +324,36 @@
 
     function normalizeScheduleFromRows(rows) {
       const fresh = defaultSchedule();
-
       for (const row of rows || []) {
-        const date = row.performance_date;
+        const dateKey = (row.performance_date || "").split(" ")[0];
         const role = row.role;
-        const slot = row.slot_index;
+        const slotIndex = row.slot_index;
         const assigned = row.assigned_to ?? null;
 
-        if (!fresh[date]) continue;
-        if (!Object.prototype.hasOwnProperty.call(fresh[date], role)) continue;
-        if (typeof slot !== "number") continue;
-        if (slot < 0 || slot >= fresh[date][role].length) continue;
+        if (!fresh[dateKey]) continue;
+        if (!Object.prototype.hasOwnProperty.call(fresh[dateKey], role)) continue;
+        if (typeof slotIndex !== "number") continue;
+        if (slotIndex < 0 || slotIndex >= fresh[dateKey][role].length) continue;
 
-        fresh[date][role][slot] = assigned;
+        fresh[dateKey][role][slotIndex] = assigned;
       }
-
       return fresh;
     }
 
-    function countOpenSlotsForDate(date) {
-      const day = schedule[date];
+    function countOpenSlots(dateKey) {
+      const day = schedule[dateKey];
       if (!day) return 0;
       let count = 0;
-
-      for (const role of Object.keys(day)) {
-        for (const assigned of day[role]) {
-          if (!assigned) count += 1;
-        }
+      for (const role of Object.keys(SHIFT_TEMPLATE)) {
+        for (const assigned of day[role]) if (!assigned) count += 1;
       }
       return count;
     }
 
-    function alreadySignedForDate(date, name) {
-      const day = schedule[date];
+    function alreadySignedForDate(dateKey, name) {
+      const day = schedule[dateKey];
       if (!day) return false;
-      for (const role of Object.keys(day)) {
+      for (const role of Object.keys(SHIFT_TEMPLATE)) {
         if (day[role].includes(name)) return true;
       }
       return false;
@@ -377,24 +361,21 @@
 
     function findMyAssignments(name) {
       const out = [];
-      for (const date of PERFORMANCE_DATES) {
-        const day = schedule[date];
-        for (const role of Object.keys(day)) {
+      for (const dateKey of Object.keys(schedule)) {
+        const day = schedule[dateKey];
+        for (const role of Object.keys(SHIFT_TEMPLATE)) {
           day[role].forEach((assigned, slotIndex) => {
-            if (assigned === name) {
-              out.push({ date, role, slotIndex });
-            }
+            if (assigned === name) out.push({ dateKey, role, slotIndex });
           });
         }
       }
       return out;
     }
 
-    function getOpenOptionsForDate(date) {
+    function getOpenOptionsForDate(dateKey) {
+      const day = schedule[dateKey];
+      if (!day) return [];
       const options = [];
-      const day = schedule[date];
-      if (!day) return options;
-
       for (const role of Object.keys(SHIFT_TEMPLATE)) {
         day[role].forEach((assigned, slotIndex) => {
           if (!assigned) {
@@ -409,10 +390,8 @@
       return options;
     }
 
-    function roleToShiftName(role) {
-      if (role === "box_office") return "Box Office";
-      if (role === "concessions") return "Concessions";
-      return "Usher";
+    function getRawPerformanceString(dateKey) {
+      return schedule[dateKey]?.display || dateKey;
     }
 
     async function ensureSeedDataExists() {
@@ -428,15 +407,16 @@
       );
 
       const toInsert = [];
-      for (const date of PERFORMANCE_DATES) {
+      for (const p of MASTER_PERFORMANCES) {
+        const perfRaw = `${p.date} ${p.time}`;
         for (const role of Object.keys(SHIFT_TEMPLATE)) {
           for (let slotIndex = 0; slotIndex < SHIFT_TEMPLATE[role].slots; slotIndex++) {
-            const key = `${date}||${role}||${slotIndex}`;
+            const key = `${perfRaw}||${role}||${slotIndex}`;
             if (!existingSet.has(key)) {
               toInsert.push({
-                performance_date: date,
+                performance_date: perfRaw,
                 role,
-                shift_name: roleToShiftName(role), // legacy compatibility
+                shift_name: roleToShiftName(role),
                 slot_index: slotIndex,
                 assigned_to: null
               });
@@ -445,7 +425,7 @@
         }
       }
 
-      if (toInsert.length) {
+      if (toInsert.length > 0) {
         const { error: insertErr } = await supabase.from(TABLE_NAME).insert(toInsert);
         if (insertErr) throw insertErr;
       }
@@ -470,8 +450,8 @@
         lastLoadedAt = new Date();
         setSyncMeta(`Last synced: ${lastLoadedAt.toLocaleString()}`);
 
-        renderDates();
-        refreshPickerIfOpen();
+        renderCalendar();
+        renderDetailPanel();
       } catch (err) {
         console.error(err);
         setSyncMeta("Sync failed");
@@ -479,23 +459,25 @@
       }
     }
 
-    async function signUp(date, role, slotIndex) {
+    async function signUp(dateKey, role, slotIndex) {
       try {
         await loadScheduleFromSupabase();
 
-        if (alreadySignedForDate(date, volunteerName)) {
+        if (alreadySignedForDate(dateKey, volunteerName)) {
           showMessage("You are already signed up for this date.", "error");
           return;
         }
+
+        const perfRaw = getRawPerformanceString(dateKey);
 
         const { data, error } = await supabase
           .from(TABLE_NAME)
           .update({
             assigned_to: volunteerName,
-            shift_name: roleToShiftName(role), // legacy compatibility
+            shift_name: roleToShiftName(role),
             updated_at: new Date().toISOString()
           })
-          .eq("performance_date", date)
+          .eq("performance_date", perfRaw)
           .eq("role", role)
           .eq("slot_index", slotIndex)
           .is("assigned_to", null)
@@ -504,52 +486,16 @@
         if (error) throw error;
 
         if (!data || data.length === 0) {
-          showMessage("That spot was just taken. Please choose another.", "error");
+          showMessage("That slot was just taken. Please choose another.", "error");
           await loadScheduleFromSupabase();
           return;
         }
 
-        showMessage(`Signed up for ${SHIFT_TEMPLATE[role].label} on ${date}.`, "success");
-        closePicker();
+        showMessage(`Signed up for ${SHIFT_TEMPLATE[role].label} on ${perfRaw}.`, "success");
         await loadScheduleFromSupabase();
       } catch (err) {
         console.error(err);
         showMessage(`Signup failed: ${err.message || err}`, "error");
-      }
-    }
-
-    async function cancelMySignupForDate(date) {
-      try {
-        await loadScheduleFromSupabase();
-        const my = findMyAssignments(volunteerName).filter(x => x.date === date);
-
-        if (!my.length) {
-          showMessage("You do not have a signup on that date.", "error");
-          return;
-        }
-
-        const target = my[0];
-
-        const { error } = await supabase
-          .from(TABLE_NAME)
-          .update({
-            assigned_to: null,
-            shift_name: roleToShiftName(target.role), // keep non-null legacy field
-            updated_at: new Date().toISOString()
-          })
-          .eq("performance_date", target.date)
-          .eq("role", target.role)
-          .eq("slot_index", target.slotIndex)
-          .eq("assigned_to", volunteerName);
-
-        if (error) throw error;
-
-        showMessage(`Removed your signup from ${target.date}.`, "success");
-        closePicker();
-        await loadScheduleFromSupabase();
-      } catch (err) {
-        console.error(err);
-        showMessage(`Cancel failed: ${err.message || err}`, "error");
       }
     }
 
@@ -564,6 +510,7 @@
         }
 
         for (const a of mine) {
+          const perfRaw = getRawPerformanceString(a.dateKey);
           const { error } = await supabase
             .from(TABLE_NAME)
             .update({
@@ -571,7 +518,7 @@
               shift_name: roleToShiftName(a.role),
               updated_at: new Date().toISOString()
             })
-            .eq("performance_date", a.date)
+            .eq("performance_date", perfRaw)
             .eq("role", a.role)
             .eq("slot_index", a.slotIndex)
             .eq("assigned_to", volunteerName);
@@ -580,7 +527,6 @@
         }
 
         showMessage("Your signup(s) were canceled.", "success");
-        closePicker();
         await loadScheduleFromSupabase();
       } catch (err) {
         console.error(err);
@@ -588,116 +534,131 @@
       }
     }
 
-    function renderDates() {
-      datesListEl.innerHTML = "";
+    function renderCalendar() {
+      const y = visibleMonth.getFullYear();
+      const m = visibleMonth.getMonth();
+      const first = new Date(y, m, 1);
+      const last = new Date(y, m + 1, 0);
 
-      const datesWithOpen = PERFORMANCE_DATES.filter(d => countOpenSlotsForDate(d) > 0);
+      monthTitleEl.textContent = first.toLocaleString(undefined, { month: "long", year: "numeric" });
 
-      if (!datesWithOpen.length) {
-        datesListEl.innerHTML = `<div class="empty-state">All performance dates are fully staffed. Thank you!</div>`;
-        return;
+      const startWeekday = first.getDay();
+      const daysInMonth = last.getDate();
+      const prevLast = new Date(y, m, 0).getDate();
+      const cells = [];
+
+      for (let i = 0; i < startWeekday; i++) {
+        const dayNum = prevLast - startWeekday + i + 1;
+        cells.push({ dateObj: new Date(y, m - 1, dayNum), outside: true });
+      }
+      for (let day = 1; day <= daysInMonth; day++) {
+        cells.push({ dateObj: new Date(y, m, day), outside: false });
+      }
+      while (cells.length % 7 !== 0) {
+        const n = cells.length - (startWeekday + daysInMonth) + 1;
+        cells.push({ dateObj: new Date(y, m + 1, n), outside: true });
       }
 
-      for (const date of datesWithOpen) {
-        const openCount = countOpenSlotsForDate(date);
-        const alreadyOnDate = alreadySignedForDate(date, volunteerName);
+      calendarGridEl.innerHTML = "";
 
-        const row = document.createElement("article");
-        row.className = "date-row";
+      for (const cell of cells) {
+        const d = cell.dateObj;
+        const dateKey = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+        const isPerformance = !!schedule[dateKey];
+        const open = isPerformance ? countOpenSlots(dateKey) : 0;
+        const isFull = isPerformance && open === 0;
+        const isSelected = selectedDateKey === dateKey;
 
-        const left = document.createElement("div");
-        left.innerHTML = `
-          <p class="date-label">${date}</p>
-          <div class="muted">${alreadyOnDate ? "You are already signed up for this date." : "Open for signup."}</div>
-        `;
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "day";
+        if (cell.outside) btn.classList.add("outside");
+        if (isPerformance) btn.classList.add("has-show");
+        if (isPerformance && open > 0) btn.classList.add("open");
+        if (isFull) btn.classList.add("full");
+        if (isSelected) btn.classList.add("selected");
+        btn.innerHTML = `<div class="num">${d.getDate()}</div>`;
 
-        const badge = document.createElement("div");
-        badge.className = "spot-badge";
-        badge.textContent = `${openCount} spot${openCount === 1 ? "" : "s"} left`;
+        if (isPerformance) {
+          const pill = document.createElement("span");
+          pill.className = "pill " + (open > 0 ? "open" : "full");
+          pill.textContent = open > 0 ? `${open} open` : "Full";
+          btn.appendChild(pill);
 
-        const actionWrap = document.createElement("div");
-        actionWrap.style.display = "flex";
-        actionWrap.style.gap = ".45rem";
-        actionWrap.style.flexWrap = "wrap";
-
-        const chooseBtn = document.createElement("button");
-        chooseBtn.className = "button";
-        chooseBtn.type = "button";
-        chooseBtn.textContent = "Choose";
-        chooseBtn.disabled = alreadyOnDate;
-        chooseBtn.addEventListener("click", () => openPickerForDate(date));
-
-        actionWrap.appendChild(chooseBtn);
-
-        if (alreadyOnDate) {
-          const cancelBtn = document.createElement("button");
-          cancelBtn.className = "button secondary";
-          cancelBtn.type = "button";
-          cancelBtn.textContent = "Cancel";
-          cancelBtn.addEventListener("click", () => cancelMySignupForDate(date));
-          actionWrap.appendChild(cancelBtn);
+          btn.addEventListener("click", () => {
+            selectedDateKey = dateKey;
+            renderCalendar();
+            renderDetailPanel();
+          });
+        } else {
+          btn.disabled = true;
         }
 
+        calendarGridEl.appendChild(btn);
+      }
+    }
+
+    function renderDetailPanel() {
+      if (!selectedDateKey || !schedule[selectedDateKey]) {
+        detailTitleEl.textContent = "Select a performance date";
+        detailSubEl.textContent = "Click a highlighted date in the calendar.";
+        detailBodyEl.className = "empty";
+        detailBodyEl.innerHTML = "No date selected yet.";
+        return;
+      }
+
+      const perfRaw = getRawPerformanceString(selectedDateKey);
+      const showMeta = PERFORMANCE_LOOKUP[selectedDateKey];
+      const openCount = countOpenSlots(selectedDateKey);
+      const signed = alreadySignedForDate(selectedDateKey, volunteerName);
+
+      detailTitleEl.textContent = perfRaw;
+      detailSubEl.textContent = signed
+        ? "You are already signed up for this performance date."
+        : (openCount > 0 ? `${openCount} open slot(s) available.` : "This date is fully staffed.");
+
+      if (openCount === 0) {
+        detailBodyEl.className = "empty";
+        detailBodyEl.innerHTML = `
+          <div class="show-name"><strong>${showMeta?.show || ""}</strong> ${showMeta ? `(${showMeta.tz})` : ""}</div>
+          No open roles remain for this date.
+        `;
+        return;
+      }
+
+      const options = getOpenOptionsForDate(selectedDateKey);
+      const wrap = document.createElement("div");
+      wrap.className = "role-list";
+
+      const showInfo = document.createElement("div");
+      showInfo.className = "show-name";
+      showInfo.innerHTML = `<strong>${showMeta?.show || ""}</strong> ${showMeta ? `(${showMeta.tz})` : ""}`;
+      wrap.appendChild(showInfo);
+
+      options.forEach(opt => {
+        const row = document.createElement("div");
+        row.className = "role-row";
+
+        const left = document.createElement("div");
+        left.innerHTML = `<strong>${opt.label}</strong><div class="role-meta">Tap sign up to claim this slot</div>`;
+
+        const btn = document.createElement("button");
+        btn.className = "button";
+        btn.type = "button";
+        btn.textContent = "Sign Up";
+        btn.disabled = signed;
+        btn.addEventListener("click", () => signUp(selectedDateKey, opt.role, opt.slotIndex));
+
         row.appendChild(left);
-        row.appendChild(badge);
-        row.appendChild(actionWrap);
-
-        datesListEl.appendChild(row);
-      }
-    }
-
-    function openPickerForDate(date) {
-      selectedDate = date;
-      pickerEl.hidden = false;
-      pickerTitleEl.textContent = `Choose a role for ${date}`;
-      fillRoleSelectForDate(date);
-      pickerEl.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-
-    function closePicker() {
-      selectedDate = null;
-      roleSelectEl.innerHTML = "";
-      pickerHelperEl.textContent = "";
-      pickerEl.hidden = true;
-    }
-
-    function fillRoleSelectForDate(date) {
-      const options = getOpenOptionsForDate(date);
-      roleSelectEl.innerHTML = "";
-
-      if (!options.length) {
-        const opt = document.createElement("option");
-        opt.value = "";
-        opt.textContent = "No open spots remaining";
-        roleSelectEl.appendChild(opt);
-        roleSelectEl.disabled = true;
-        confirmBtn.disabled = true;
-        pickerHelperEl.textContent = "This date just filled up. Please choose another date.";
-        return;
-      }
-
-      roleSelectEl.disabled = false;
-      confirmBtn.disabled = false;
-      pickerHelperEl.textContent = "Select one open role/slot and confirm.";
-
-      options.forEach((o) => {
-        const opt = document.createElement("option");
-        opt.value = `${o.role}||${o.slotIndex}`;
-        opt.textContent = o.label;
-        roleSelectEl.appendChild(opt);
+        row.appendChild(btn);
+        wrap.appendChild(row);
       });
+
+      detailBodyEl.className = "";
+      detailBodyEl.innerHTML = "";
+      detailBodyEl.appendChild(wrap);
     }
 
-    function refreshPickerIfOpen() {
-      if (!selectedDate || pickerEl.hidden) return;
-      if (countOpenSlotsForDate(selectedDate) <= 0) {
-        closePicker();
-        return;
-      }
-      fillRoleSelectForDate(selectedDate);
-    }
-
-    // ---- events ----
     refreshBtn.addEventListener("click", loadScheduleFromSupabase);
 
     changeNameBtn.addEventListener("click", async () => {
@@ -705,36 +666,31 @@
       const next = (input || "").trim();
       if (!next) return;
       setVolunteerName(next);
-      closePicker();
-      await loadScheduleFromSupabase();
       showMessage(`Name updated to ${volunteerName}.`, "success");
+      await loadScheduleFromSupabase();
     });
 
     cancelMineBtn.addEventListener("click", cancelAnyOfMine);
 
-    backBtn.addEventListener("click", closePicker);
-
-    confirmBtn.addEventListener("click", async () => {
-      if (!selectedDate) return;
-      const value = roleSelectEl.value;
-      if (!value) {
-        showMessage("Please select an open role first.", "error");
-        return;
-      }
-
-      const [role, slotText] = value.split("||");
-      const slotIndex = Number(slotText);
-      if (!role || Number.isNaN(slotIndex)) {
-        showMessage("Invalid role selection.", "error");
-        return;
-      }
-
-      await signUp(selectedDate, role, slotIndex);
+    prevMonthBtn.addEventListener("click", () => {
+      visibleMonth = new Date(visibleMonth.getFullYear(), visibleMonth.getMonth() - 1, 1);
+      renderCalendar();
     });
 
-    // ---- init ----
+    nextMonthBtn.addEventListener("click", () => {
+      visibleMonth = new Date(visibleMonth.getFullYear(), visibleMonth.getMonth() + 1, 1);
+      renderCalendar();
+    });
+
+    todayMonthBtn.addEventListener("click", () => {
+      const today = new Date();
+      visibleMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+      renderCalendar();
+    });
+
     updateIdentityLine();
-    renderDates(); // immediate placeholder rendering
+    renderCalendar();
+    renderDetailPanel();
     loadScheduleFromSupabase();
   </script>
 </body>
