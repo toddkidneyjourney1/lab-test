@@ -255,81 +255,83 @@
     </section>
   </main>
 
-  <script>
-    // ==========================
-    // REQUIRED: Replace these with your real values from Supabase
-    // ==========================
-    const SUPABASE_URL = "https://izytzrxrgnahyvgwqhgd.supabase.co";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml6eXR6cnhyZ25haHl2Z3dxaGdkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI4OTkwNjMsImV4cCI6MjA5ODQ3NTA2M30.eRJDTZVj122qnzGPQxWWE2gxCmVXuCTukWOkfckRkMk";
+ <script>
+  const SUPABASE_URL = "https://izytzrxrgnahyvgwqhgd.supabase.co";
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml6eXR6cnhyZ25haHl2Z3dxaGdkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI4OTkwNjMsImV4cCI6MjA5ODQ3NTA2M30.eRJDTZVj122qnzGPQxWWE2gxCmVXuCTukWOkfckRkMk";
 
-    // Guard against unconfigured credentials
-    const isConfigured =
-      SUPABASE_URL &&
-      SUPABASE_ANON_KEY &&
-      !SUPABASE_URL.includes("YOUR_PROJECT_ID") &&
-      !SUPABASE_ANON_KEY.includes("YOUR_SUPABASE_ANON_KEY");
+  const isConfigured =
+    SUPABASE_URL &&
+    SUPABASE_ANON_KEY &&
+    !SUPABASE_URL.includes("YOUR_PROJECT_ID") &&
+    !SUPABASE_ANON_KEY.includes("YOUR_SUPABASE_ANON_KEY");
 
-    const statusEl = document.getElementById("status");
-    const loginForm = document.getElementById("login-form");
-    const emailInput = document.getElementById("email");
-    const passwordInput = document.getElementById("password");
-    const loginBtn = document.getElementById("login-btn");
-    const logoutBtn = document.getElementById("logout-btn");
-    const portalSection = document.getElementById("portal-section");
-    const userEmailEl = document.getElementById("user-email");
+  const statusEl = document.getElementById("status");
+  const loginForm = document.getElementById("login-form");
+  const emailInput = document.getElementById("email");
+  const passwordInput = document.getElementById("password");
+  const loginBtn = document.getElementById("login-btn");
+  const logoutBtn = document.getElementById("logout-btn");
+  const portalSection = document.getElementById("portal-section");
+  const userEmailEl = document.getElementById("user-email");
 
-    let supabase = null;
+  let supabase = null;
 
-    function showStatus(message, type = "") {
-      statusEl.textContent = message;
-      statusEl.className = "status show";
-      if (type === "error") statusEl.classList.add("error");
-      if (type === "success") statusEl.classList.add("success");
-    }
+  function showStatus(message, type = "") {
+    statusEl.textContent = message;
+    statusEl.className = "status show";
+    if (type === "error") statusEl.classList.add("error");
+    if (type === "success") statusEl.classList.add("success");
+    console.log("[STATUS]", type || "info", message);
+  }
 
-    function clearStatus() {
-      statusEl.textContent = "";
-      statusEl.className = "status";
-    }
+  function clearStatus() {
+    statusEl.textContent = "";
+    statusEl.className = "status";
+  }
 
-    function setLoading(isLoading) {
-      loginBtn.disabled = isLoading;
-      loginBtn.textContent = isLoading ? "Logging in..." : "Log In";
-      emailInput.disabled = isLoading;
-      passwordInput.disabled = isLoading;
-    }
+  function setLoading(isLoading) {
+    loginBtn.disabled = isLoading;
+    loginBtn.textContent = isLoading ? "Logging in..." : "Log In";
+    emailInput.disabled = isLoading;
+    passwordInput.disabled = isLoading;
+  }
 
-    function setSignedInUI(user) {
-      portalSection.classList.remove("hidden");
-      logoutBtn.classList.remove("hidden");
-      loginBtn.classList.add("hidden");
-      userEmailEl.textContent = user?.email || "unknown";
-    }
+  function setSignedInUI(user) {
+    portalSection.classList.remove("hidden");
+    logoutBtn.classList.remove("hidden");
+    loginBtn.classList.add("hidden");
+    userEmailEl.textContent = user?.email || "unknown";
+  }
 
-    function setSignedOutUI() {
-      portalSection.classList.add("hidden");
-      logoutBtn.classList.add("hidden");
-      loginBtn.classList.remove("hidden");
-      userEmailEl.textContent = "unknown";
-      passwordInput.value = "";
-    }
+  function setSignedOutUI() {
+    portalSection.classList.add("hidden");
+    logoutBtn.classList.add("hidden");
+    loginBtn.classList.remove("hidden");
+    userEmailEl.textContent = "unknown";
+    passwordInput.value = "";
+  }
 
-    async function bootstrapAuth() {
+  async function bootstrapAuth() {
+    try {
+      if (!window.supabase) {
+        showStatus("Supabase library failed to load (CDN blocked).", "error");
+        return;
+      }
+
       if (!isConfigured) {
-        showStatus(
-          "Supabase is not configured yet. Add your project URL and anon key in this file to enable login.",
-          "error"
-        );
+        showStatus("Supabase is not configured yet. Add URL and anon key.", "error");
         loginBtn.disabled = true;
         return;
       }
 
       supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      console.log("[DEBUG] Supabase client created");
 
-      // Check existing session on load
       const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+      console.log("[DEBUG] getSession:", { sessionData, sessionError });
+
       if (sessionError) {
-        showStatus("Could not check session. Please refresh and try again.", "error");
+        showStatus("Session check failed: " + sessionError.message, "error");
         return;
       }
 
@@ -342,8 +344,8 @@
         setSignedOutUI();
       }
 
-      // Listen for auth state changes (login/logout/refresh)
-      supabase.auth.onAuthStateChange((_event, session) => {
+      supabase.auth.onAuthStateChange((event, session) => {
+        console.log("[DEBUG] onAuthStateChange:", event, session);
         if (session?.user) {
           setSignedInUI(session.user);
           showStatus("Login successful. Choose your portal.", "success");
@@ -353,14 +355,20 @@
           showStatus("You are logged out.", "success");
         }
       });
+    } catch (e) {
+      console.error("[DEBUG] bootstrapAuth error:", e);
+      showStatus("Bootstrap error: " + (e?.message || "unknown"), "error");
     }
+  }
 
-    loginForm.addEventListener("submit", async (event) => {
-      event.preventDefault();
-      clearStatus();
+  loginForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    clearStatus();
+    console.log("[DEBUG] Submit fired");
 
+    try {
       if (!supabase) {
-        showStatus("Supabase is not configured. Please add credentials first.", "error");
+        showStatus("Supabase client is not initialized.", "error");
         return;
       }
 
@@ -373,45 +381,40 @@
       }
 
       setLoading(true);
-      try {
-        const { data, error } = await supabase.auth.signInWithPassword({
-          email,
-          password
-        });
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+      console.log("[DEBUG] signInWithPassword result:", { data, error });
 
-        if (error) {
-          showStatus(error.message || "Login failed.", "error");
-          return;
-        }
-
-        if (data?.user) {
-          setSignedInUI(data.user);
-          showStatus("Login successful. Choose your portal.", "success");
-        } else {
-          showStatus("Login failed. Please try again.", "error");
-        }
-      } catch (err) {
-        showStatus("Unexpected error while logging in.", "error");
-      } finally {
-        setLoading(false);
-      }
-    });
-
-    logoutBtn.addEventListener("click", async () => {
-      clearStatus();
-      if (!supabase) return;
-
-      const { error } = await supabase.auth.signOut();
       if (error) {
-        showStatus(error.message || "Logout failed.", "error");
+        showStatus("Login failed: " + error.message, "error");
         return;
       }
 
-      setSignedOutUI();
-      showStatus("You are logged out.", "success");
-    });
+      if (data?.user) {
+        setSignedInUI(data.user);
+        showStatus("Login successful. Choose your portal.", "success");
+      } else {
+        showStatus("Login failed. No user returned.", "error");
+      }
+    } catch (err) {
+      console.error("[DEBUG] submit error:", err);
+      showStatus("Unexpected login error: " + (err?.message || "unknown"), "error");
+    } finally {
+      setLoading(false);
+    }
+  });
 
-    bootstrapAuth();
-  </script>
-</body>
+  logoutBtn.addEventListener("click", async () => {
+    clearStatus();
+    if (!supabase) return;
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      showStatus("Logout failed: " + error.message, "error");
+      return;
+    }
+    setSignedOutUI();
+    showStatus("You are logged out.", "success");
+  });
+
+  bootstrapAuth();
+</script>
 </html>
