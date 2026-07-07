@@ -30,7 +30,7 @@
 
     const SUPABASE_URL = "https://izytzrxrgnahyvgwqhgd.supabase.co";
     const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
-    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const supabase = createClient(sb_publishable_xfsIVVSH8vcUz9XfZgirwA_wl-GSYOw);
 
     async function enforceAuth() {
       const { data: { user } } = await supabase.auth.getUser();
