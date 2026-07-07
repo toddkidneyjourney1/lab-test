@@ -40,30 +40,24 @@
 
   <main id="cast-content">
     <h1>Cast Portal</h1>
-    <p>Shows assigned to you.</p>
+    <p>Select your show and enter its password.</p>
     <div id="message-container"></div>
     <section id="my-shows">
-      <h2>My Shows</h2>
-      <div id="cast-show-container" class="production-grid"><p class="loading">Loading your shows...</p></div>
+      <h2>Available Cast Pages</h2>
+      <div id="cast-show-container" class="production-grid"></div>
     </section>
   </main>
 
-  <script type="module">
-    import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-
-    const SUPABASE_URL = "https://izytzrxrgnahyvgwqhgd.supabase.co";
-    const SUPABASE_ANON_KEY = "sb_publishable_xfsIVVSH8vcUz9XfZgirwA_wl-GSYOw";
-    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-    const SHOW_PASSWORDS = {
-      "Fences": "Legacy",
-      "A Midsummer Night's Dream": "Fantasy",
-      "Bare": "Identity",
-      "God of Carnage": "Conflict",
-      "The Rivals": "Romance",
-      "The Pillowman": "Darkness",
-      "Waiting for Godot": "Absurdity"
-    };
+  <script>
+    const SHOWS = [
+      { title: "Fences", href: "cast-fences.html", password: "Legacy" },
+      { title: "A Midsummer Night's Dream", href: "cast-midsummer.html", password: "Fantasy" },
+      { title: "Bare", href: "cast-bare.html", password: "Identity" },
+      { title: "God of Carnage", href: "cast-godofcarnage.html", password: "Conflict" },
+      { title: "The Rivals", href: "cast-rivals.html", password: "Romance" },
+      { title: "The Pillowman", href: "cast-pillowman.html", password: "Darkness" },
+      { title: "Waiting for Godot", href: "cast-godot.html", password: "Absurdity" }
+    ];
 
     function showMessage(text, type = "error") {
       const container = document.getElementById("message-container");
@@ -74,120 +68,45 @@
       return `cast_portal_access_${showTitle}`;
     }
 
-    function ensureShowAccess(showTitle) {
-      const expectedPassword = SHOW_PASSWORDS[showTitle];
-      if (!expectedPassword) return true;
-
-      if (sessionStorage.getItem(getSessionKey(showTitle)) === "granted") {
+    function ensureShowAccess(show) {
+      if (sessionStorage.getItem(getSessionKey(show.title)) === "granted") {
         return true;
       }
 
-      const entered = window.prompt(`Enter the cast password for ${showTitle}:`, "");
+      const entered = window.prompt(`Enter the cast password for ${show.title}:`, "");
       if (entered === null) return false;
 
-      if ((entered || "").trim() === expectedPassword) {
-        sessionStorage.setItem(getSessionKey(showTitle), "granted");
+      if ((entered || "").trim() === show.password) {
+        sessionStorage.setItem(getSessionKey(show.title), "granted");
         return true;
       }
 
-      window.alert("Incorrect password.");
+      showMessage("Incorrect password.");
       return false;
     }
 
-    function slugForShow(showTitle) {
-      const map = {
-        "Fences": "cast-fences.html",
-        "A Midsummer Night's Dream": "cast-midsummer.html",
-        "Bare": "cast-bare.html",
-        "God of Carnage": "cast-godofcarnage.html",
-        "The Rivals": "cast-rivals.html",
-        "The Pillowman": "cast-pillowman.html",
-        "Waiting for Godot": "cast-godot.html"
-      };
-      return map[showTitle] || null;
-    }
-
-    function renderShows(shows) {
+    function renderShows() {
       const container = document.getElementById("cast-show-container");
-
-      if (!shows.length) {
-        container.innerHTML = "<p>No assigned shows found.</p>";
-        return;
-      }
-
-      container.innerHTML = shows.map((show) => {
-        const href = slugForShow(show.title);
-        const buttonHtml = href
-          ? `<button class="btn primary cast-open-btn" data-show="${show.title}" data-href="${href}">Open Cast Page</button>`
-          : "";
-
-        return `
-          <article class="show-card">
-            <h3>${show.title ?? "Untitled Show"}</h3>
-            <p class="show-meta"><strong>Date:</strong> ${show.show_date ?? "TBD"}</p>
-            <p class="show-meta"><strong>Venue:</strong> ${show.venue ?? "TBD"}</p>
-            <p class="show-meta"><strong>Role:</strong> ${show.cast_role ?? "Assigned Cast"}</p>
-            ${buttonHtml}
-          </article>
-        `;
-      }).join("");
+      container.innerHTML = SHOWS.map((show) => `
+        <article class="show-card">
+          <h3>${show.title}</h3>
+          <p class="show-meta"><strong>Access:</strong> Password protected</p>
+          <button class="btn primary cast-open-btn" data-title="${show.title}" data-href="${show.href}">Open Cast Page</button>
+        </article>
+      `).join("");
 
       container.querySelectorAll(".cast-open-btn").forEach((button) => {
         button.addEventListener("click", () => {
-          const showTitle = button.getAttribute("data-show");
-          const href = button.getAttribute("data-href");
-          if (ensureShowAccess(showTitle)) {
-            window.location.href = href;
+          const show = SHOWS.find((item) => item.title === button.getAttribute("data-title"));
+          if (!show) return;
+          if (ensureShowAccess(show)) {
+            window.location.href = show.href;
           }
         });
       });
     }
 
-    async function loadCastShows() {
-      const { data: { user }, error: userErr } = await supabase.auth.getUser();
-      if (userErr || !user) {
-        window.location.href = "portal-landing.html";
-        return;
-      }
-
-      const { data: assignments, error: assignmentError } = await supabase
-        .from("cast_assignments")
-        .select("show_id, cast_role")
-        .eq("user_id", user.id);
-
-      if (assignmentError) {
-        showMessage("Could not load cast assignments.");
-        return;
-      }
-
-      const showIds = [...new Set((assignments || []).map((a) => a.show_id).filter(Boolean))];
-
-      if (!showIds.length) {
-        renderShows([]);
-        return;
-      }
-
-      const { data: shows, error: showsError } = await supabase
-        .from("shows")
-        .select("id, title, show_date, venue")
-        .in("id", showIds)
-        .order("show_date", { ascending: true });
-
-      if (showsError) {
-        showMessage("Could not load shows.");
-        return;
-      }
-
-      const roleMap = new Map((assignments || []).map((a) => [a.show_id, a.cast_role]));
-      const merged = (shows || []).map((s) => ({
-        ...s,
-        cast_role: roleMap.get(s.id) || null
-      }));
-
-      renderShows(merged);
-    }
-
-    window.addEventListener("load", loadCastShows);
+    window.addEventListener("load", renderShows);
   </script>
 </body>
 </html>
