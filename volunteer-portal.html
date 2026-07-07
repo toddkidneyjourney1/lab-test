@@ -3,37 +3,27 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Volunteer Portal | The Laboratory Theater of Florida</title>
+  <title>Portal Landing | The Laboratory Theater of Florida</title>
   <link rel="stylesheet" href="style.css" />
   <style>
-    .shift-card {
+    .portal-card {
       background: var(--card-bg);
       padding: 1.25rem;
       border-radius: 8px;
       border: 1px solid #333;
       margin-bottom: 1rem;
     }
-    .shift-card h3 { margin-top: 0; color: var(--accent); }
-    .shift-meta { margin: 0.5rem 0 0.75rem; font-size: 0.95rem; color: #ddd; }
-    .status-badge {
-      display: inline-block;
-      padding: 0.3rem 0.75rem;
-      border-radius: 999px;
-      font-size: 0.8rem;
-      font-weight: 700;
-      margin-bottom: 0.75rem;
-    }
-    .status-open { background: #2b9a4a; color: #fff; }
-    .status-full { background: #a33131; color: #fff; }
-    .status-signed { background: var(--accent); color: #fff; }
-    .shift-actions { display: flex; gap: 0.75rem; margin-top: 0.5rem; }
+    .portal-card h3 { margin-top: 0; color: var(--accent); }
+    .portal-actions { display: grid; gap: 0.75rem; margin-top: 0.75rem; }
     .btn {
-      flex: 1;
+      display: inline-block;
+      text-align: center;
       padding: 0.7rem 0.9rem;
       border: 0;
       border-radius: 6px;
       cursor: pointer;
       font-weight: 700;
+      text-decoration: none;
     }
     .btn-primary { background: var(--accent); color: #fff; }
     .btn-secondary { background: #666; color: #fff; }
@@ -41,7 +31,8 @@
     .notice { padding: 0.8rem 1rem; border-radius: 6px; margin: 0.75rem 0; font-weight: 600; }
     .notice.success { background: #2b9a4a; color: #fff; }
     .notice.error { background: #a33131; color: #fff; }
-    .loading { text-align: center; padding: 1.5rem; color: #ddd; }
+    .muted { color: #bbb; font-size: 0.95rem; }
+    .hidden { display: none !important; }
   </style>
 </head>
 <body>
@@ -61,153 +52,144 @@
     <div class="logo">THE <span>LAB</span><p class="tagline">Intentionally innovative live theater</p></div>
   </header>
 
-  <main id="portal-content">
-    <h1>Volunteer Portal</h1>
-    <p>Sign up for volunteer shifts by date and role.</p>
+  <main>
+    <h1>Portal Landing</h1>
+    <p>Sign in once, then continue to your authorized portal.</p>
     <div id="message-container"></div>
-    <section id="shifts">
-      <h2>Available Shifts</h2>
-      <div id="shift-container" class="production-grid"><p class="loading">Loading shifts...</p></div>
+
+    <section class="portal-card" id="auth-card">
+      <h3>Authentication</h3>
+      <p class="muted">Use your email to sign in. You’ll receive a magic link.</p>
+      <form id="login-form">
+        <label for="email">Email</label><br />
+        <input id="email" type="email" required placeholder="you@example.com" style="width:100%;max-width:420px;padding:.65rem;border-radius:6px;border:1px solid #444;background:#111;color:#fff;" />
+        <div class="portal-actions">
+          <button class="btn btn-primary" type="submit">Send Magic Link</button>
+        </div>
+      </form>
+      <button id="logout-btn" class="btn btn-secondary hidden" type="button">Sign Out</button>
+    </section>
+
+    <section class="portal-card">
+      <h3>Your Portals</h3>
+      <p class="muted">Buttons enable based on your profile permissions.</p>
+      <div class="portal-actions">
+        <a id="volunteer-link" class="btn btn-secondary" href="volunteer-portal.html" aria-disabled="true">Volunteer Portal</a>
+        <a id="cast-link" class="btn btn-secondary" href="cast-portal.html" aria-disabled="true">Cast Portal</a>
+      </div>
     </section>
   </main>
 
   <script type="module">
     import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-    // Replace with your real project values
-    const SUPABASE_URL = "https://YOUR_PROJECT.supabase.co";
+    // MUST match across all portal pages
+    const SUPABASE_URL = "YOUR_SUPABASE_URL";
     const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
     const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    const SHIFT_SCHEDULE = [
-      { id: "s1", date: "DATE_PLACEHOLDER_1", type: "Ushering", spots: 4 },
-      { id: "s2", date: "DATE_PLACEHOLDER_2", type: "Concessions", spots: 3 },
-      { id: "s3", date: "DATE_PLACEHOLDER_3", type: "Box Office", spots: 2 },
-      { id: "s4", date: "DATE_PLACEHOLDER_4", type: "Behind the Scenes", spots: 5 },
-      { id: "s5", date: "DATE_PLACEHOLDER_5", type: "Ushering", spots: 4 },
-      { id: "s6", date: "DATE_PLACEHOLDER_6", type: "Concessions", spots: 3 },
-      { id: "s7", date: "DATE_PLACEHOLDER_7", type: "Box Office", spots: 2 },
-      { id: "s8", date: "DATE_PLACEHOLDER_8", type: "Behind the Scenes", spots: 5 }
-    ];
+    const messageContainer = document.getElementById("message-container");
+    const loginForm = document.getElementById("login-form");
+    const logoutBtn = document.getElementById("logout-btn");
+    const volunteerLink = document.getElementById("volunteer-link");
+    const castLink = document.getElementById("cast-link");
 
-    const STORAGE_KEY = "labVolunteerPortalSignups";
-    let currentUser = null;
-
-    function showMessage(text, type) {
-      const container = document.getElementById("message-container");
-      container.innerHTML = `<div class="notice ${type}">${text}</div>`;
-      setTimeout(() => { container.innerHTML = ""; }, 3500);
+    function showMessage(text, type = "error") {
+      messageContainer.innerHTML = `<div class="notice ${type}">${text}</div>`;
+      setTimeout(() => { messageContainer.innerHTML = ""; }, 4500);
     }
 
-    function getSignups() {
-      try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}"); } catch { return {}; }
+    function disablePortalLink(linkEl) {
+      linkEl.classList.remove("btn-primary");
+      linkEl.classList.add("btn-secondary");
+      linkEl.setAttribute("aria-disabled", "true");
+      linkEl.addEventListener("click", preventWhenDisabled);
     }
 
-    function saveSignups(signups) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(signups));
+    function enablePortalLink(linkEl) {
+      linkEl.classList.remove("btn-secondary");
+      linkEl.classList.add("btn-primary");
+      linkEl.setAttribute("aria-disabled", "false");
+      linkEl.removeEventListener("click", preventWhenDisabled);
     }
 
-    function getCurrentUserKey() {
-      return currentUser?.id || "anonymous";
+    function preventWhenDisabled(e) {
+      if (e.currentTarget.getAttribute("aria-disabled") === "true") {
+        e.preventDefault();
+        showMessage("You are not authorized for that portal.", "error");
+      }
     }
 
-    async function requireVolunteerAccess() {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session?.user) {
-        window.location.href = "portal-landing.html";
-        return false;
+    async function fetchAccess(userId) {
+      // defaults requested:
+      // profiles(id, is_volunteer)
+      // cast_assignments(user_id, show_id)
+      const [{ data: profile, error: profileErr }, { data: castRows, error: castErr }] = await Promise.all([
+        supabase.from("profiles").select("is_volunteer").eq("id", userId).single(),
+        supabase.from("cast_assignments").select("show_id").eq("user_id", userId).limit(1)
+      ]);
+
+      const isVolunteer = !profileErr && !!profile?.is_volunteer;
+      const isCast = !castErr && Array.isArray(castRows) && castRows.length > 0;
+      return { isVolunteer, isCast };
+    }
+
+    async function refreshUIFromSession() {
+      const { data: { user }, error } = await supabase.auth.getUser();
+
+      disablePortalLink(volunteerLink);
+      disablePortalLink(castLink);
+
+      if (error || !user) {
+        logoutBtn.classList.add("hidden");
+        loginForm.classList.remove("hidden");
+        localStorage.removeItem("labPortalUserId");
+        return;
       }
 
-      currentUser = session.user;
+      localStorage.setItem("labPortalUserId", user.id);
+      logoutBtn.classList.remove("hidden");
+      loginForm.classList.add("hidden");
 
-      const { data: profile, error } = await supabase
-        .from("profiles")
-        .select("is_volunteer")
-        .eq("id", currentUser.id)
-        .single();
+      const access = await fetchAccess(user.id);
 
-      if (error || !profile?.is_volunteer) {
-        showMessage("Access denied. Volunteer authorization required.", "error");
-        setTimeout(() => {
-          window.location.href = "portal-landing.html";
-        }, 1200);
-        return false;
-      }
-
-      return true;
+      if (access.isVolunteer) enablePortalLink(volunteerLink);
+      if (access.isCast) enablePortalLink(castLink);
     }
 
-    function renderShifts() {
-      const container = document.getElementById("shift-container");
-      const signups = getSignups();
-      const currentUserKey = getCurrentUserKey();
+    loginForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const email = document.getElementById("email").value.trim();
+      if (!email) return;
 
-      container.innerHTML = SHIFT_SCHEDULE.map((shift) => {
-        const signedUsers = signups[shift.id] || [];
-        const isSignedUp = signedUsers.includes(currentUserKey);
-        const remaining = Math.max(0, shift.spots - signedUsers.length);
-        const isFull = remaining === 0;
-
-        let statusClass = "status-open";
-        let statusLabel = `Open (${remaining} spot${remaining === 1 ? "" : "s"} left)`;
-
-        if (isSignedUp) {
-          statusClass = "status-signed";
-          statusLabel = "You are signed up";
-        } else if (isFull) {
-          statusClass = "status-full";
-          statusLabel = "Shift Full";
+      const { error } = await supabase.auth.signInWithOtp({
+        email,
+        options: {
+          // keep user on this page after magic-link auth
+          emailRedirectTo: `${window.location.origin}${window.location.pathname}`
         }
+      });
 
-        return `
-          <article class="shift-card">
-            <h3>${shift.type}</h3>
-            <p class="shift-meta"><strong>Date:</strong> ${shift.date}</p>
-            <span class="status-badge ${statusClass}">${statusLabel}</span>
-            <div class="shift-actions">
-              ${isSignedUp
-                ? `<button class="btn btn-secondary" onclick="cancelShift('${shift.id}')">Cancel</button>`
-                : `<button class="btn btn-primary" onclick="signupForShift('${shift.id}')" ${isFull ? "disabled" : ""}>Sign Up</button>`}
-            </div>
-          </article>`;
-      }).join("");
-    }
-
-    window.signupForShift = function signupForShift(shiftId) {
-      const userKey = getCurrentUserKey();
-      if (!userKey || userKey === "anonymous") {
-        return showMessage("No active session found. Please return to Portal Landing.", "error");
+      if (error) {
+        showMessage(error.message || "Could not send magic link.", "error");
+        return;
       }
 
-      const signups = getSignups();
-      const shift = SHIFT_SCHEDULE.find((s) => s.id === shiftId);
-      if (!shift) return;
-
-      const signedUsers = signups[shiftId] || [];
-      if (signedUsers.includes(userKey)) return showMessage("You are already signed up for this shift.", "error");
-      if (signedUsers.length >= shift.spots) return showMessage("This shift is already full.", "error");
-
-      signups[shiftId] = [...signedUsers, userKey];
-      saveSignups(signups);
-      showMessage("Signup successful!", "success");
-      renderShifts();
-    };
-
-    window.cancelShift = function cancelShift(shiftId) {
-      const userKey = getCurrentUserKey();
-      const signups = getSignups();
-      const signedUsers = signups[shiftId] || [];
-      signups[shiftId] = signedUsers.filter((id) => id !== userKey);
-      saveSignups(signups);
-      showMessage("Signup canceled.", "success");
-      renderShifts();
-    };
-
-    window.addEventListener("load", async () => {
-      const allowed = await requireVolunteerAccess();
-      if (!allowed) return;
-      renderShifts();
+      showMessage("Magic link sent. Check your email, then return here.", "success");
     });
+
+    logoutBtn.addEventListener("click", async () => {
+      await supabase.auth.signOut();
+      localStorage.removeItem("labPortalUserId");
+      showMessage("Signed out.", "success");
+      await refreshUIFromSession();
+    });
+
+    supabase.auth.onAuthStateChange(async () => {
+      await refreshUIFromSession();
+    });
+
+    window.addEventListener("load", refreshUIFromSession);
   </script>
 </body>
 </html>
