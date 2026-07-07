@@ -18,7 +18,34 @@
     .notice { padding: 0.8rem 1rem; border-radius: 6px; margin: 0.75rem 0; font-weight: 600; }
     .notice.success { background: #2b9a4a; color: #fff; }
     .notice.error { background: #a33131; color: #fff; }
-    .loading { text-align: center; padding: 1.5rem; color: #ddd; }
+    .portal-login {
+      max-width: 520px;
+      margin: 1.5rem auto 2rem;
+      background: var(--card-bg);
+      border: 1px solid #333;
+      border-radius: 10px;
+      padding: 1.25rem;
+    }
+    .portal-login label {
+      display: block;
+      margin-bottom: 0.4rem;
+      font-weight: 700;
+    }
+    .portal-login select,
+    .portal-login input {
+      width: 100%;
+      padding: 0.8rem 0.9rem;
+      border-radius: 8px;
+      border: 1px solid #444;
+      background: #101010;
+      color: #fff;
+      margin-bottom: 1rem;
+    }
+    .portal-actions {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
   </style>
 </head>
 <body>
@@ -42,6 +69,25 @@
     <h1>Cast Portal</h1>
     <p>Select your show and enter its password.</p>
     <div id="message-container"></div>
+
+    <section class="portal-login">
+      <h2 style="margin-top:0;">Cast Login</h2>
+      <form id="cast-login-form">
+        <label for="show-select">Show</label>
+        <select id="show-select" required>
+          <option value="">Choose your show</option>
+        </select>
+
+        <label for="show-password">Password</label>
+        <input id="show-password" type="password" autocomplete="current-password" required />
+
+        <div class="portal-actions">
+          <button type="submit" class="btn primary">Enter Portal</button>
+          <button type="button" class="btn warn" id="clear-access-btn">Clear Saved Access</button>
+        </div>
+      </form>
+    </section>
+
     <section id="my-shows">
       <h2>Available Cast Pages</h2>
       <div id="cast-show-container" class="production-grid"></div>
@@ -64,25 +110,34 @@
       container.innerHTML = `<div class="notice ${type}">${text}</div>`;
     }
 
+    function clearMessage() {
+      document.getElementById("message-container").innerHTML = "";
+    }
+
     function getSessionKey(showTitle) {
       return `cast_portal_access_${showTitle}`;
     }
 
-    function ensureShowAccess(show) {
-      if (sessionStorage.getItem(getSessionKey(show.title)) === "granted") {
-        return true;
-      }
+    function grantShowAccess(showTitle) {
+      sessionStorage.setItem(getSessionKey(showTitle), "granted");
+    }
 
-      const entered = window.prompt(`Enter the cast password for ${show.title}:`, "");
-      if (entered === null) return false;
+    function hasShowAccess(showTitle) {
+      return sessionStorage.getItem(getSessionKey(showTitle)) === "granted";
+    }
 
-      if ((entered || "").trim() === show.password) {
-        sessionStorage.setItem(getSessionKey(show.title), "granted");
-        return true;
-      }
+    function clearAllAccess() {
+      SHOWS.forEach((show) => sessionStorage.removeItem(getSessionKey(show.title)));
+    }
 
-      showMessage("Incorrect password.");
-      return false;
+    function populateShowSelect() {
+      const select = document.getElementById("show-select");
+      SHOWS.forEach((show) => {
+        const option = document.createElement("option");
+        option.value = show.title;
+        option.textContent = show.title;
+        select.appendChild(option);
+      });
     }
 
     function renderShows() {
@@ -90,23 +145,70 @@
       container.innerHTML = SHOWS.map((show) => `
         <article class="show-card">
           <h3>${show.title}</h3>
-          <p class="show-meta"><strong>Access:</strong> Password protected</p>
-          <button class="btn primary cast-open-btn" data-title="${show.title}" data-href="${show.href}">Open Cast Page</button>
+          <p class="show-meta"><strong>Access:</strong> ${hasShowAccess(show.title) ? "Unlocked for this session" : "Password protected"}</p>
+          <button class="btn primary cast-open-btn" data-title="${show.title}" data-href="${show.href}">
+            ${hasShowAccess(show.title) ? "Open Cast Page" : "Unlock & Open"}
+          </button>
         </article>
       `).join("");
 
       container.querySelectorAll(".cast-open-btn").forEach((button) => {
         button.addEventListener("click", () => {
-          const show = SHOWS.find((item) => item.title === button.getAttribute("data-title"));
-          if (!show) return;
-          if (ensureShowAccess(show)) {
-            window.location.href = show.href;
+          const title = button.getAttribute("data-title");
+          const href = button.getAttribute("data-href");
+          const select = document.getElementById("show-select");
+          select.value = title;
+          document.getElementById("show-password").focus();
+
+          if (hasShowAccess(title)) {
+            window.location.href = href;
+            return;
           }
+
+          showMessage(`Enter the password for ${title} above, then click Enter Portal.`, "success");
         });
       });
     }
 
-    window.addEventListener("load", renderShows);
+    function handleLogin(event) {
+      event.preventDefault();
+      clearMessage();
+
+      const showTitle = document.getElementById("show-select").value;
+      const password = document.getElementById("show-password").value;
+      const show = SHOWS.find((item) => item.title === showTitle);
+
+      if (!show) {
+        showMessage("Please choose your show.");
+        return;
+      }
+
+      if ((password || "").trim() !== show.password) {
+        showMessage("Incorrect password.");
+        return;
+      }
+
+      grantShowAccess(show.title);
+      renderShows();
+      showMessage(`${show.title} unlocked for this session. Redirecting...`, "success");
+      document.getElementById("show-password").value = "";
+      window.location.href = show.href;
+    }
+
+    function handleClearAccess() {
+      clearAllAccess();
+      renderShows();
+      clearMessage();
+      document.getElementById("cast-login-form").reset();
+      showMessage("Saved cast access cleared for this session.", "success");
+    }
+
+    window.addEventListener("load", () => {
+      populateShowSelect();
+      renderShows();
+      document.getElementById("cast-login-form").addEventListener("submit", handleLogin);
+      document.getElementById("clear-access-btn").addEventListener("click", handleClearAccess);
+    });
   </script>
 </body>
 </html>
