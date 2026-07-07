@@ -409,6 +409,12 @@
       return options;
     }
 
+    function roleToShiftName(role) {
+      if (role === "box_office") return "Box Office";
+      if (role === "concessions") return "Concessions";
+      return "Usher";
+    }
+
     async function ensureSeedDataExists() {
       const { data: existing, error: readErr } = await supabase
         .from(TABLE_NAME)
@@ -430,6 +436,7 @@
               toInsert.push({
                 performance_date: date,
                 role,
+                shift_name: roleToShiftName(role), // legacy compatibility
                 slot_index: slotIndex,
                 assigned_to: null
               });
@@ -474,7 +481,6 @@
 
     async function signUp(date, role, slotIndex) {
       try {
-        // Refresh first to reduce stale writes
         await loadScheduleFromSupabase();
 
         if (alreadySignedForDate(date, volunteerName)) {
@@ -486,6 +492,7 @@
           .from(TABLE_NAME)
           .update({
             assigned_to: volunteerName,
+            shift_name: roleToShiftName(role), // legacy compatibility
             updated_at: new Date().toISOString()
           })
           .eq("performance_date", date)
@@ -521,13 +528,13 @@
           return;
         }
 
-        // There should be at most one assignment per date for same volunteer by our rule.
         const target = my[0];
 
         const { error } = await supabase
           .from(TABLE_NAME)
           .update({
             assigned_to: null,
+            shift_name: roleToShiftName(target.role), // keep non-null legacy field
             updated_at: new Date().toISOString()
           })
           .eq("performance_date", target.date)
@@ -556,12 +563,12 @@
           return;
         }
 
-        // If multiple somehow exist, cancel all in one go for this volunteer/date-role-slot tuple loop.
         for (const a of mine) {
           const { error } = await supabase
             .from(TABLE_NAME)
             .update({
               assigned_to: null,
+              shift_name: roleToShiftName(a.role),
               updated_at: new Date().toISOString()
             })
             .eq("performance_date", a.date)
