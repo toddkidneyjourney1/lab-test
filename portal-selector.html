@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Select Portal | The Laboratory Theater of Florida</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .card { background: var(--card-bg, #1a1a1a); border: 1px solid #333; border-radius: 10px; padding: 1.2rem; max-width: 620px; margin: 2rem auto; }
+    .actions { display: grid; gap: .75rem; margin-top: 1rem; }
+    .btn { display: inline-block; text-align: center; border: 0; border-radius: 6px; padding: .75rem 1rem; font-weight: 700; text-decoration: none; cursor: pointer; }
+    .btn-primary { background: var(--accent, #d72638); color: #fff; }
+    .btn-secondary { background: #5d6475; color: #fff; }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <h1>Choose Your Portal</h1>
+    <p>You are signed in. Select where you want to go:</p>
+
+    <div class="actions">
+      <a class="btn btn-primary" href="cast-portal.html">Go to Cast Portal</a>
+      <a class="btn btn-secondary" href="volunteer-signup.html">Go to Volunteer Signup</a>
+      <button id="logout-btn" class="btn btn-secondary" type="button">Sign Out</button>
+    </div>
+  </main>
+
+  <script type="module">
+    import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+    const SUPABASE_URL = "https://izytzrxrgnahyvgwqhgd.supabase.co";
+    const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    async function enforceAuth() {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) window.location.href = "portal-landing.html";
+    }
+
+    document.getElementById("logout-btn").addEventListener("click", async () => {
+      await supabase.auth.signOut();
+      window.location.href = "portal-landing.html";
+    });
+
+    enforceAuth();
+  </script>
+</body>
+</html>
