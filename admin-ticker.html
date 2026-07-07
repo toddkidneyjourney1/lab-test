@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ticker Admin | The Laboratory Theater of Florida</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .admin-wrap {
+      max-width: 760px;
+      margin: 2rem auto;
+      background: var(--card-bg, #1b1b1b);
+      border: 1px solid #333;
+      border-radius: 10px;
+      padding: 1.25rem;
+    }
+    .admin-wrap label {
+      display: block;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+    .admin-wrap textarea {
+      width: 100%;
+      min-height: 140px;
+      border-radius: 8px;
+      border: 1px solid #444;
+      background: #101010;
+      color: #fff;
+      padding: 0.75rem 0.85rem;
+      margin-bottom: 0.9rem;
+      font-size: 1rem;
+      line-height: 1.45;
+    }
+    .notice { padding: 0.8rem 1rem; border-radius: 6px; margin: 0.75rem 0; font-weight: 600; }
+    .notice.success { background: #2b9a4a; color: #fff; }
+    .notice.error { background: #a33131; color: #fff; }
+    .admin-actions {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+    .help {
+      opacity: 0.9;
+      font-size: 0.95rem;
+      margin-top: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+  <input type="checkbox" id="nav-toggle" class="nav-toggle" />
+  <label for="nav-toggle" class="nav-toggle-label"><span></span></label>
+  <nav class="hamburger-menu">
+    <a href="index.html">Back to the Slab</a>
+    <a href="portal-landing.html">Portal Landing</a>
+    <a href="cast-portal.html">Cast Portal</a>
+  </nav>
+
+  <header>
+    <div class="logo">THE <span>LAB</span><p class="tagline">Intentionally innovative live theater</p></div>
+  </header>
+
+  <main>
+    <h1 style="text-align:center;">Ticker Admin</h1>
+    <section class="admin-wrap">
+      <p>Update the homepage ticker text below and click <strong>Save Ticker</strong>.</p>
+      <div id="message"></div>
+      <label for="ticker-input">Ticker Text</label>
+      <textarea id="ticker-input" placeholder="Enter ticker text..."></textarea>
+
+      <div class="admin-actions">
+        <button class="btn primary" id="save-btn" type="button">Save Ticker</button>
+        <button class="btn warn" id="clear-btn" type="button">Clear</button>
+        <a class="btn" href="cast-portal.html" style="text-decoration:none; display:inline-flex; align-items:center; justify-content:center;">Back to Cast Portal</a>
+      </div>
+
+      <p class="help">This stores ticker text in your browser via <code>localStorage</code> key <code>labTickerText</code>. Make sure your ticker script reads from that key.</p>
+    </section>
+  </main>
+
+  <script>
+    const STORAGE_KEY = 'labTickerText';
+
+    function showMessage(text, type = 'success') {
+      document.getElementById('message').innerHTML = `<div class="notice ${type}">${text}</div>`;
+    }
+
+    function loadTicker() {
+      const current = localStorage.getItem(STORAGE_KEY) || '';
+      document.getElementById('ticker-input').value = current;
+    }
+
+    function saveTicker() {
+      const value = document.getElementById('ticker-input').value.trim();
+      localStorage.setItem(STORAGE_KEY, value);
+      showMessage('Ticker updated successfully.', 'success');
+    }
+
+    function clearTicker() {
+      localStorage.removeItem(STORAGE_KEY);
+      document.getElementById('ticker-input').value = '';
+      showMessage('Ticker cleared.', 'success');
+    }
+
+    window.addEventListener('load', () => {
+      loadTicker();
+      document.getElementById('save-btn').addEventListener('click', saveTicker);
+      document.getElementById('clear-btn').addEventListener('click', clearTicker);
+    });
+  </script>
+</body>
+</html>
