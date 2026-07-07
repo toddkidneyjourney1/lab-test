@@ -5,66 +5,169 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Portal Landing | The Laboratory Theater of Florida</title>
   <link rel="stylesheet" href="style.css" />
+
   <style>
     :root {
-      --bg: #0f0f0f;
-      --card: #151515;
-      --muted: #cfcfcf;
-      --border: #2c2c2c;
+      --bg-0: #08090f;
+      --bg-1: #121420;
+      --card: rgba(20, 23, 36, 0.72);
+      --card-border: rgba(255, 255, 255, 0.14);
+      --text: #f4f7ff;
+      --muted: #b6bfd9;
+
       --primary: #ff5c8a;
-      --primary-hover: #ff4577;
-      --success-border: #2b7a2b;
-      --success-bg: #0f1a0f;
-      --success-text: #d8ffd8;
-      --error-border: #7a2b2b;
-      --error-bg: #1a0f0f;
-      --error-text: #ffd8d8;
+      --primary-2: #ff7ea5;
+      --secondary: #7aa2ff;
+
+      --success-border: #2f9150;
+      --success-bg: rgba(18, 56, 34, 0.66);
+      --success-text: #d8ffe3;
+
+      --error-border: #bc4b4b;
+      --error-bg: rgba(72, 24, 24, 0.66);
+      --error-text: #ffdede;
+
+      --shadow: 0 20px 54px rgba(0, 0, 0, 0.5);
+      --radius-xl: 20px;
+      --radius-lg: 12px;
+      --radius-pill: 999px;
     }
 
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
     body {
-      background: var(--bg);
-      color: #fff;
       margin: 0;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      color: var(--text);
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      min-height: 100vh;
+      background:
+        radial-gradient(1200px 580px at 8% -8%, rgba(122, 162, 255, 0.18), transparent 55%),
+        radial-gradient(1000px 520px at 92% -8%, rgba(255, 92, 138, 0.16), transparent 56%),
+        linear-gradient(155deg, var(--bg-0), var(--bg-1));
+      overflow-x: hidden;
+    }
+
+    .bg-orb {
+      position: fixed;
+      border-radius: 999px;
+      filter: blur(40px);
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.4;
+      animation: float 9s ease-in-out infinite;
+    }
+
+    .bg-orb.one {
+      width: 320px;
+      height: 320px;
+      top: -100px;
+      right: -80px;
+      background: rgba(255, 92, 138, 0.35);
+    }
+
+    .bg-orb.two {
+      width: 260px;
+      height: 260px;
+      bottom: -100px;
+      left: -70px;
+      background: rgba(122, 162, 255, 0.34);
+      animation-delay: 1.2s;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-14px); }
     }
 
     .portal-container {
-      max-width: 960px;
+      position: relative;
+      z-index: 1;
+      max-width: 980px;
       margin: 0 auto;
-      padding: 2rem 1rem 3rem;
+      padding: 2.3rem 1rem 3rem;
     }
 
     .auth-card {
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
       background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 1.25rem;
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-xl);
+      padding: 1.4rem;
       margin-bottom: 1rem;
+      box-shadow: var(--shadow);
+      animation: cardIn 0.35s ease;
     }
 
-    .auth-card h1,
+    @keyframes cardIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      margin-bottom: 0.3rem;
+    }
+
+    .title-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      box-shadow: 0 0 20px rgba(255, 92, 138, 0.7);
+      flex: 0 0 auto;
+    }
+
+    .auth-card h1 {
+      margin: 0;
+      font-size: clamp(1.45rem, 2.4vw, 2rem);
+      letter-spacing: 0.2px;
+    }
+
     .auth-card h2 {
-      margin-top: 0;
+      margin: 0 0 0.35rem;
+      font-size: clamp(1.15rem, 1.8vw, 1.4rem);
+      letter-spacing: 0.2px;
     }
 
     .muted {
       color: var(--muted);
+      line-height: 1.55;
+      margin-top: 0.4rem;
+      margin-bottom: 0.8rem;
     }
 
     .status {
       margin: 1rem 0;
-      padding: 0.75rem 1rem;
-      border-radius: 10px;
-      border: 1px solid #3a3a3a;
-      background: #101010;
+      padding: 0.8rem 0.95rem;
+      border-radius: var(--radius-lg);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      background: rgba(0, 0, 0, 0.24);
       display: none;
       white-space: pre-wrap;
       word-break: break-word;
+      font-weight: 550;
     }
 
-    .status.show { display: block; }
+    .status.show {
+      display: block;
+      animation: fadeIn 0.2s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-2px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
 
     .status.error {
       border-color: var(--error-border);
@@ -81,110 +184,180 @@
     .grid {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 0.85rem;
+      gap: 0.9rem;
     }
 
     @media (min-width: 700px) {
-      .grid { grid-template-columns: 1fr 1fr; }
+      .grid {
+        grid-template-columns: 1fr 1fr;
+      }
     }
 
     label {
       display: block;
-      font-weight: 600;
-      margin-bottom: 0.35rem;
+      font-weight: 650;
+      margin-bottom: 0.38rem;
+      letter-spacing: 0.2px;
     }
 
     input[type="email"],
     input[type="password"] {
       width: 100%;
-      border: 1px solid #3a3a3a;
-      border-radius: 10px;
-      background: #101010;
-      color: #fff;
-      padding: 0.65rem 0.75rem;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: var(--radius-lg);
+      background: rgba(11, 13, 22, 0.72);
+      color: var(--text);
+      padding: 0.75rem 0.82rem;
       font-size: 1rem;
+      transition: border-color .2s, box-shadow .2s, background .2s;
+    }
+
+    input::placeholder {
+      color: #96a2c8;
     }
 
     input:focus {
-      outline: 2px solid rgba(255, 92, 138, 0.4);
-      border-color: var(--primary);
+      outline: none;
+      border-color: var(--primary-2);
+      box-shadow: 0 0 0 3px rgba(255, 126, 165, 0.24);
+      background: rgba(11, 13, 22, 0.95);
     }
 
     .actions {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.75rem;
-      margin-top: 0.85rem;
+      gap: 0.7rem;
+      margin-top: 0.95rem;
     }
 
     .btn {
       appearance: none;
-      border: 1px solid #444;
-      border-radius: 999px;
-      padding: 0.55rem 1rem;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: var(--radius-pill);
+      padding: 0.62rem 1rem;
       text-decoration: none;
-      color: inherit;
-      background: #1a1a1a;
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.05);
       cursor: pointer;
-      display: inline-block;
-      transition: background 0.2s, border-color 0.2s;
-      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.45rem;
+      transition: transform .14s ease, background .2s, border-color .2s, box-shadow .2s;
+      font-weight: 700;
       font-size: 0.95rem;
+      min-height: 42px;
     }
 
     .btn:hover {
-      background: #2a2a2a;
-      border-color: #555;
+      transform: translateY(-1px);
+      background: rgba(255, 255, 255, 0.13);
+      border-color: rgba(255, 255, 255, 0.32);
+    }
+
+    .btn:active {
+      transform: translateY(0);
     }
 
     .btn-primary {
-      border-color: var(--primary);
-      background: var(--primary);
-      color: #121212;
-      font-weight: 700;
+      border-color: transparent;
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+      color: #1a0e13;
+      font-weight: 800;
+      box-shadow: 0 12px 26px rgba(255, 92, 138, 0.32);
     }
 
     .btn-primary:hover {
-      background: var(--primary-hover);
-      border-color: var(--primary-hover);
+      filter: brightness(1.04);
+      box-shadow: 0 14px 30px rgba(255, 92, 138, 0.38);
+    }
+
+    .btn-secondary {
+      border-color: rgba(122, 162, 255, 0.45);
+      background: rgba(122, 162, 255, 0.15);
+      color: #dce7ff;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(122, 162, 255, 0.22);
+      border-color: rgba(122, 162, 255, 0.65);
     }
 
     .btn:disabled {
-      opacity: 0.6;
+      opacity: 0.7;
       cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
     }
 
-    .portal-button {
-      width: 100%;
-      padding: 0.75rem 1rem;
-      text-align: center;
+    .spinner {
+      width: 14px;
+      height: 14px;
+      border: 2px solid rgba(0, 0, 0, 0.24);
+      border-top-color: rgba(0, 0, 0, 0.76);
+      border-radius: 999px;
+      animation: spin 0.8s linear infinite;
+      display: none;
     }
 
-    .hidden { display: none !important; }
+    .btn.loading .spinner {
+      display: inline-block;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .hidden {
+      display: none !important;
+    }
 
     .portal-grid {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 0.75rem;
+      gap: 0.8rem;
       margin-top: 1rem;
     }
 
     @media (min-width: 560px) {
-      .portal-grid { grid-template-columns: 1fr 1fr; }
+      .portal-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .portal-button {
+      width: 100%;
+      min-height: 52px;
+      padding: 0.75rem 1rem;
+      text-align: center;
+    }
+
+    .portal-button .icon {
+      font-size: 1rem;
+      line-height: 1;
+    }
+
+    .small-note {
+      margin-top: 0.95rem;
+      font-size: 0.95rem;
     }
 
     code {
-      background: #111;
-      border: 1px solid #2d2d2d;
-      border-radius: 6px;
-      padding: 0.1rem 0.35rem;
+      background: rgba(0, 0, 0, 0.34);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 8px;
+      padding: 0.15rem 0.38rem;
+      color: #d7e2ff;
     }
   </style>
 
-  <!-- Supabase JS (UMD) -->
+  <!-- Supabase JS (UMD build) -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
+  <div class="bg-orb one" aria-hidden="true"></div>
+  <div class="bg-orb two" aria-hidden="true"></div>
+
   <!-- Hamburger Menu -->
   <input type="checkbox" id="nav-toggle" class="nav-toggle" />
   <label for="nav-toggle" class="nav-toggle-label" aria-label="Open navigation menu">
@@ -201,7 +374,11 @@
 
   <main class="portal-container">
     <section class="auth-card">
-      <h1>Portal Landing</h1>
+      <div class="title-wrap">
+        <span class="title-dot" aria-hidden="true"></span>
+        <h1>Portal Landing</h1>
+      </div>
+
       <p class="muted">
         Sign in to continue. After login, choose where you want to go:
         <strong>Volunteer Portal</strong> or <strong>Cast Portal</strong>.
@@ -213,17 +390,38 @@
         <div class="grid">
           <div>
             <label for="email">Email</label>
-            <input id="email" name="email" type="email" autocomplete="email" required />
+            <input
+              id="email"
+              name="email"
+              type="email"
+              autocomplete="email"
+              placeholder="you@example.com"
+              required
+            />
           </div>
+
           <div>
             <label for="password">Password</label>
-            <input id="password" name="password" type="password" autocomplete="current-password" required />
+            <input
+              id="password"
+              name="password"
+              type="password"
+              autocomplete="current-password"
+              placeholder="••••••••"
+              required
+            />
           </div>
         </div>
 
         <div class="actions">
-          <button id="login-btn" class="btn btn-primary" type="submit">Log In</button>
-          <button id="logout-btn" class="btn hidden" type="button">Log Out</button>
+          <button id="login-btn" class="btn btn-primary" type="submit">
+            <span class="spinner" aria-hidden="true"></span>
+            <span id="login-btn-text">Log In</span>
+          </button>
+
+          <button id="logout-btn" class="btn btn-secondary hidden" type="button">
+            Log Out
+          </button>
         </div>
       </form>
     </section>
@@ -234,14 +432,17 @@
 
       <div class="portal-grid">
         <a id="volunteer-link" class="btn btn-primary portal-button" href="volunteer-portal.html">
-          Go to Volunteer Portal
+          <span class="icon" aria-hidden="true">🧪</span>
+          <span>Go to Volunteer Portal</span>
         </a>
-        <a id="cast-link" class="btn portal-button" href="cast-portal.html">
-          Go to Cast Portal
+
+        <a id="cast-link" class="btn btn-secondary portal-button" href="cast-portal.html">
+          <span class="icon" aria-hidden="true">🎭</span>
+          <span>Go to Cast Portal</span>
         </a>
       </div>
 
-      <p class="muted" style="margin-top: 1rem;">
+      <p class="muted small-note">
         Logged in as: <code id="user-email">unknown</code>
       </p>
     </section>
@@ -252,17 +453,18 @@
     const SUPABASE_URL = "https://izytzrxrgnahyvgwqhgd.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml6eXR6cnhyZ25haHl2Z3dxaGdkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI4OTkwNjMsImV4cCI6MjA5ODQ3NTA2M30.eRJDTZVj122qnzGPQxWWE2gxCmVXuCTukWOkfckRkMk";
 
-    // ===== Elements =====
+    // ===== DOM =====
     const statusEl = document.getElementById("status");
     const loginForm = document.getElementById("login-form");
     const emailInput = document.getElementById("email");
     const passwordInput = document.getElementById("password");
     const loginBtn = document.getElementById("login-btn");
+    const loginBtnText = document.getElementById("login-btn-text");
     const logoutBtn = document.getElementById("logout-btn");
     const portalSection = document.getElementById("portal-section");
     const userEmailEl = document.getElementById("user-email");
 
-    // Use unique name to avoid any accidental collisions
+    // unique var name to avoid conflicts
     let sbClient = null;
 
     const isConfigured =
@@ -285,7 +487,8 @@
 
     function setLoading(isLoading) {
       loginBtn.disabled = isLoading;
-      loginBtn.textContent = isLoading ? "Logging in..." : "Log In";
+      loginBtn.classList.toggle("loading", isLoading);
+      loginBtnText.textContent = isLoading ? "Logging in..." : "Log In";
       emailInput.disabled = isLoading;
       passwordInput.disabled = isLoading;
     }
@@ -306,9 +509,8 @@
     }
 
     async function bootstrapAuth() {
-      // Ensure Supabase script loaded
       if (!window.supabase || typeof window.supabase.createClient !== "function") {
-        showStatus("Supabase library failed to load. Check internet/CDN blockers.", "error");
+        showStatus("Supabase library failed to load. Check internet or script blockers.", "error");
         return;
       }
 
@@ -321,7 +523,6 @@
       try {
         sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        // Existing session check
         const { data, error } = await sbClient.auth.getSession();
         if (error) {
           showStatus("Could not check session: " + error.message, "error");
@@ -332,12 +533,11 @@
         if (user) {
           setSignedInUI(user);
           emailInput.value = user.email || "";
-          showStatus("Welcome back! Choose a portal below.", "success");
+          showStatus("Welcome back! Choose your portal below.", "success");
         } else {
           setSignedOutUI();
         }
 
-        // Realtime auth changes
         sbClient.auth.onAuthStateChange((_event, session) => {
           if (session?.user) {
             setSignedInUI(session.user);
@@ -349,7 +549,7 @@
           }
         });
       } catch (err) {
-        showStatus("Auth startup error: " + (err?.message || "Unknown error"), "error");
+        showStatus("Startup error: " + (err?.message || "Unknown error"), "error");
       }
     }
 
@@ -386,7 +586,7 @@
           showStatus("Login failed. No user returned.", "error");
         }
       } catch (err) {
-        showStatus("Unexpected error while logging in: " + (err?.message || "Unknown"), "error");
+        showStatus("Unexpected login error: " + (err?.message || "Unknown error"), "error");
       } finally {
         setLoading(false);
       }
