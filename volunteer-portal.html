@@ -1,394 +1,174 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Volunteer Portal | The Laboratory Theater of Florida</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js" async></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <style>
-        .shift-card {
-            background: var(--card-bg);
-            padding: 1.5rem;
-            border-radius: 8px;
-            border: 1px solid #333;
-            margin-bottom: 1rem;
-        }
-        .shift-card h3 {
-            margin-top: 0;
-            color: var(--accent);
-        }
-        .shift-info {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-            margin: 1rem 0;
-            font-size: 0.9rem;
-        }
-        .shift-info p {
-            margin: 0.5rem 0;
-        }
-        .shift-actions {
-            display: flex;
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-        .signup-btn {
-            flex: 1;
-            padding: 0.8rem;
-            background: var(--accent);
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: background 0.2s;
-        }
-        .signup-btn:hover {
-            background: #ff1a4d;
-        }
-        .signup-btn:disabled {
-            background: #666;
-            cursor: not-allowed;
-        }
-        .cancel-btn {
-            flex: 1;
-            padding: 0.8rem;
-            background: #666;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: background 0.2s;
-        }
-        .cancel-btn:hover {
-            background: #888;
-        }
-        .status-badge {
-            display: inline-block;
-            padding: 0.3rem 0.8rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: bold;
-            margin-top: 0.5rem;
-        }
-        .status-full {
-            background: #cc3333;
-            color: white;
-        }
-        .status-available {
-            background: #33cc33;
-            color: white;
-        }
-        .status-signed-up {
-            background: var(--accent);
-            color: white;
-        }
-        .loading {
-            text-align: center;
-            padding: 2rem;
-            font-size: 1.1rem;
-        }
-        .error {
-            background: #cc3333;
-            color: white;
-            padding: 1rem;
-            border-radius: 4px;
-            margin-bottom: 1rem;
-        }
-        .success {
-            background: #33cc33;
-            color: white;
-            padding: 1rem;
-            border-radius: 4px;
-            margin-bottom: 1rem;
-        }
-        #user-button {
-            position: absolute;
-            top: 1rem;
-            right: 2rem;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Volunteer Portal | The Laboratory Theater of Florida</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js" async></script>
+  <style>
+    .shift-card {
+      background: var(--card-bg);
+      padding: 1.25rem;
+      border-radius: 8px;
+      border: 1px solid #333;
+      margin-bottom: 1rem;
+    }
+    .shift-card h3 { margin-top: 0; color: var(--accent); }
+    .shift-meta { margin: 0.5rem 0 0.75rem; font-size: 0.95rem; color: #ddd; }
+    .status-badge { display: inline-block; padding: 0.3rem 0.75rem; border-radius: 999px; font-size: 0.8rem; font-weight: 700; margin-bottom: 0.75rem; }
+    .status-open { background: #2b9a4a; color: #fff; }
+    .status-full { background: #a33131; color: #fff; }
+    .status-signed { background: var(--accent); color: #fff; }
+    .shift-actions { display: flex; gap: 0.75rem; margin-top: 0.5rem; }
+    .btn { flex: 1; padding: 0.7rem 0.9rem; border: 0; border-radius: 6px; cursor: pointer; font-weight: 700; }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-secondary { background: #666; color: #fff; }
+    .btn:disabled { background: #555; cursor: not-allowed; opacity: 0.8; }
+    .notice { padding: 0.8rem 1rem; border-radius: 6px; margin: 0.75rem 0; font-weight: 600; }
+    .notice.success { background: #2b9a4a; color: #fff; }
+    .notice.error { background: #a33131; color: #fff; }
+    .loading { text-align: center; padding: 1.5rem; color: #ddd; }
+    #user-button { position: absolute; top: 1rem; right: 2rem; }
+  </style>
 </head>
 <body>
-    <!-- Hamburger Menu -->
-    <input type="checkbox" id="nav-toggle" class="nav-toggle">
-    <label for="nav-toggle" class="nav-toggle-label">
-        <span></span>
-    </label>
-    
-     <nav class="hamburger-menu">
-        <a href="about.html">Origin Story</a>
-        <a href="archive25.html">Past Experiments</a>
-        <a href="index.html">Back to the Slab</a>
-        <a href="plan.html">Lab Protocols</a>
-        
-        <a href="portal-landing.html">Portal Landing</a>
-        <a href="support.html">Fuel the Innovation</a>
-        <a href="sponsors.html">Core Collaborators</a>
-    </nav>
-    
-    <!-- Header -->
-   <header>
-        <div class="logo">
-            THE <span>LAB</span>
-            <p class="tagline">Intentionally innovative live theater</p>
-        </div>
-    </header>
-    <main id="portal-content" style="display:none;">
-        <h1>Volunteer Portal</h1>
-        <p>Sign up for volunteer shifts at The Laboratory Theater of Florida.</p>
-        
-        <div id="message-container"></div>
-        
-        <section id="shifts">
-            <h2>Available Shifts</h2>
-            <div id="shift-container" class="production-grid">
-                <p class="loading">Loading available shifts...</p>
+  <input type="checkbox" id="nav-toggle" class="nav-toggle" />
+  <label for="nav-toggle" class="nav-toggle-label"><span></span></label>
+  <nav class="hamburger-menu">
+    <a href="about.html">Origin Story</a>
+    <a href="archive25.html">Past Experiments</a>
+    <a href="index.html">Back to the Slab</a>
+    <a href="plan.html">Lab Protocols</a>
+    <a href="portal-landing.html">Portal Landing</a>
+    <a href="support.html">Fuel the Innovation</a>
+    <a href="sponsors.html">Core Collaborators</a>
+  </nav>
+
+  <header>
+    <div class="logo">THE <span>LAB</span><p class="tagline">Intentionally innovative live theater</p></div>
+  </header>
+
+  <div id="clerk-auth"></div>
+
+  <main id="portal-content" style="display: none">
+    <h1>Volunteer Portal</h1>
+    <p>Sign up for volunteer shifts by date and role.</p>
+    <div id="message-container"></div>
+    <section id="shifts">
+      <h2>Available Shifts</h2>
+      <div id="shift-container" class="production-grid"><p class="loading">Loading shifts...</p></div>
+    </section>
+  </main>
+
+  <script>
+    const PUBLISHABLE_KEY = "pk_test_bGVhcm5pbmctbWFzdG9kb24tMzUuY2xlcmsuYWNjb3VudHMuZGV2JA";
+    const SHIFT_SCHEDULE = [
+      { id: "s1", date: "DATE_PLACEHOLDER_1", type: "Ushering", spots: 4 },
+      { id: "s2", date: "DATE_PLACEHOLDER_2", type: "Concessions", spots: 3 },
+      { id: "s3", date: "DATE_PLACEHOLDER_3", type: "Box Office", spots: 2 },
+      { id: "s4", date: "DATE_PLACEHOLDER_4", type: "Behind the Scenes", spots: 5 },
+      { id: "s5", date: "DATE_PLACEHOLDER_5", type: "Ushering", spots: 4 },
+      { id: "s6", date: "DATE_PLACEHOLDER_6", type: "Concessions", spots: 3 },
+      { id: "s7", date: "DATE_PLACEHOLDER_7", type: "Box Office", spots: 2 },
+      { id: "s8", date: "DATE_PLACEHOLDER_8", type: "Behind the Scenes", spots: 5 }
+    ];
+    const STORAGE_KEY = "labVolunteerPortalSignups";
+    let clerkUser = null;
+
+    window.addEventListener("load", async () => {
+      const waitForClerk = setInterval(() => {
+        if (window.Clerk) {
+          clearInterval(waitForClerk);
+          initClerk();
+        }
+      }, 100);
+    });
+
+    async function initClerk() {
+      const Clerk = window.Clerk;
+      try {
+        await Clerk.load({ publishableKey: PUBLISHABLE_KEY });
+        if (Clerk.user) {
+          clerkUser = Clerk.user;
+          document.getElementById("portal-content").style.display = "block";
+          document.getElementById("clerk-auth").innerHTML = '<div id="user-button"></div>';
+          Clerk.mountUserButton(document.getElementById("user-button"));
+          renderShifts();
+        } else {
+          document.getElementById("clerk-auth").innerHTML = '<div id="sign-in"></div>';
+          Clerk.mountSignIn(document.getElementById("sign-in"));
+        }
+      } catch (error) {
+        console.error("Clerk initialization failed:", error);
+        showMessage("Failed to initialize authentication.", "error");
+      }
+    }
+
+    function getSignups() {
+      try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}"); } catch { return {}; }
+    }
+    function saveSignups(signups) { localStorage.setItem(STORAGE_KEY, JSON.stringify(signups)); }
+    function getCurrentUserKey() { return clerkUser?.id || "anonymous"; }
+
+    function renderShifts() {
+      const container = document.getElementById("shift-container");
+      const signups = getSignups();
+
+      container.innerHTML = SHIFT_SCHEDULE.map((shift) => {
+        const signedUsers = signups[shift.id] || [];
+        const isSignedUp = signedUsers.includes(getCurrentUserKey());
+        const remaining = Math.max(0, shift.spots - signedUsers.length);
+        const isFull = remaining === 0;
+        let statusClass = "status-open";
+        let statusLabel = `Open (${remaining} spot${remaining === 1 ? "" : "s"} left)`;
+        if (isSignedUp) { statusClass = "status-signed"; statusLabel = "You are signed up"; }
+        else if (isFull) { statusClass = "status-full"; statusLabel = "Shift Full"; }
+
+        return `
+          <article class="shift-card">
+            <h3>${shift.type}</h3>
+            <p class="shift-meta"><strong>Date:</strong> ${shift.date}</p>
+            <span class="status-badge ${statusClass}">${statusLabel}</span>
+            <div class="shift-actions">
+              ${isSignedUp
+                ? `<button class="btn btn-secondary" onclick="cancelShift('${shift.id}')">Cancel</button>`
+                : `<button class="btn btn-primary" onclick="signupForShift('${shift.id}')" ${isFull ? "disabled" : ""}>Sign Up</button>`}
             </div>
-        </section>
-    </main>
+          </article>`;
+      }).join("");
+    }
 
-    <script>
-        const PUBLISHABLE_KEY = 'pk_test_bGVhcm5pbmctbWFzdG9kb24tMzUuY2xlcmsuYWNjb3VudHMuZGV2JA';
-        const SUPABASE_URL = 'https://izytzrxrgnahyvgwqhgd.supabase.co';
-        const SUPABASE_ANON_KEY = 'sb_publishable_wo-PDCkLxkuGLsar5by1Sw_ShjHgZDC';
+    function signupForShift(shiftId) {
+      const userKey = getCurrentUserKey();
+      if (!userKey || userKey === "anonymous") return showMessage("Please sign in to sign up for shifts.", "error");
+      const signups = getSignups();
+      const shift = SHIFT_SCHEDULE.find((s) => s.id === shiftId);
+      if (!shift) return;
+      const signedUsers = signups[shiftId] || [];
+      if (signedUsers.includes(userKey)) return showMessage("You are already signed up for this shift.", "error");
+      if (signedUsers.length >= shift.spots) return showMessage("This shift is already full.", "error");
+      signups[shiftId] = [...signedUsers, userKey];
+      saveSignups(signups);
+      showMessage("Signup successful!", "success");
+      renderShifts();
+    }
 
-        let supabase;
-        let clerkUser = null;
-        let currentVolunteerId = null;
+    function cancelShift(shiftId) {
+      const userKey = getCurrentUserKey();
+      const signups = getSignups();
+      const signedUsers = signups[shiftId] || [];
+      signups[shiftId] = signedUsers.filter((id) => id !== userKey);
+      saveSignups(signups);
+      showMessage("Signup canceled.", "success");
+      renderShifts();
+    }
 
-        function initSupabase() {
-            supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        }
-
-        window.addEventListener('load', async () => {
-            const waitForClerk = setInterval(() => {
-                if (window.Clerk) {
-                    clearInterval(waitForClerk);
-                    initClerk();
-                }
-            }, 100);
-        });
-
-        async function initClerk() {
-            const Clerk = window.Clerk;
-            try {
-                await Clerk.load({ publishableKey: PUBLISHABLE_KEY });
-
-                if (Clerk.user) {
-                    clerkUser = Clerk.user;
-                    document.getElementById('portal-content').style.display = 'block';
-                    document.getElementById('clerk-auth').innerHTML = '<div id="user-button"></div>';
-                    Clerk.mountUserButton(document.getElementById('user-button'));
-
-                    initSupabase();
-                    await getOrCreateVolunteer();
-                    await loadShifts();
-                } else {
-                    document.getElementById('clerk-auth').innerHTML = '<div id="sign-in"></div>';
-                    Clerk.mountSignIn(document.getElementById('sign-in'));
-                }
-            } catch (err) {
-                console.error('Clerk failed to load:', err);
-                showError('Failed to initialize authentication');
-            }
-        }
-
-        async function getOrCreateVolunteer() {
-            try {
-                const { data: existingVolunteer, error: fetchError } = await supabase
-                    .from('volunteers')
-                    .select('id')
-                    .eq('clerk_id', clerkUser.id)
-                    .maybeSingle();
-
-                if (fetchError) {
-                    throw fetchError;
-                }
-
-                if (existingVolunteer) {
-                    currentVolunteerId = existingVolunteer.id;
-                    return;
-                }
-
-                const { data: newVolunteer, error: createError } = await supabase
-                    .from('volunteers')
-                    .insert([
-                        {
-                            clerk_id: clerkUser.id,
-                            full_name: `${clerkUser.firstName || ''} ${clerkUser.lastName || ''}`.trim(),
-                            email: clerkUser.primaryEmailAddress?.emailAddress,
-                        }
-                    ])
-                    .select()
-                    .single();
-
-                if (createError) {
-                    throw createError;
-                }
-
-                currentVolunteerId = newVolunteer.id;
-            } catch (err) {
-                console.error('Error managing volunteer record:', err);
-                showError('Failed to load volunteer profile');
-            }
-        }
-
-        async function loadShifts() {
-            const container = document.getElementById('shift-container');
-
-            try {
-                const { data: shifts, error } = await supabase
-                    .from('Volunteer-shifts')
-                    .select('*')
-                    .order('shift_date', { ascending: true });
-
-                if (error) {
-                    throw error;
-                }
-
-                if (!shifts || shifts.length === 0) {
-                    container.innerHTML = '<p style="text-align: center; padding: 2rem;">No shifts available at this time.</p>';
-                    return;
-                }
-
-                const { data: userSignups, error: signupError } = await supabase
-                    .from('volunteer_shifts')
-                    .select('shift_id')
-                    .eq('volunteer_id', currentVolunteerId);
-
-                if (signupError) {
-                    console.error('Error loading signups:', signupError);
-                }
-
-                const signedUpShifts = (userSignups || []).map((signup) => signup.shift_id);
-
-                container.innerHTML = shifts.map((shift) => {
-                    const isSignedUp = signedUpShifts.includes(shift.id);
-                    const isFull = (shift.volunteer_count || 0) <= 0;
-                    const spotsRemaining = Math.max(0, shift.volunteer_count || 0);
-
-                    return `
-                        <div class="shift-card">
-                            <h3>${shift.shift_name}</h3>
-                            <div class="shift-info">
-                                <p><strong>Date:</strong> ${new Date(shift.shift_date).toLocaleDateString()}</p>
-                                <p><strong>Spots Available:</strong> ${spotsRemaining}</p>
-                            </div>
-                            <div>
-                                ${isFull ? '<span class="status-badge status-full">Shift Full</span>' : isSignedUp ? '<span class="status-badge status-signed-up">Signed Up</span>' : '<span class="status-badge status-available">Available</span>'}
-                            </div>
-                            <div class="shift-actions">
-                                ${isSignedUp ? `<button class="cancel-btn" onclick="cancelSignup('${shift.id}')">Cancel Signup</button>` : `<button class="signup-btn" onclick="signupForShift('${shift.id}')" ${isFull ? 'disabled' : ''}>Sign Up</button>`}
-                            </div>
-                        </div>
-                    `;
-                }).join('');
-            } catch (err) {
-                console.error('Error loading shifts:', err);
-                container.innerHTML = '<p class="error">Error loading shifts. Please try again later.</p>';
-            }
-        }
-
-        async function signupForShift(shiftId) {
-            try {
-                const { error } = await supabase
-                    .from('volunteer_shifts')
-                    .insert([
-                        {
-                            volunteer_id: currentVolunteerId,
-                            shift_id: shiftId,
-                            shift_start: new Date().toISOString(),
-                            shift_end: new Date().toISOString(),
-                            role: 'Volunteer'
-                        }
-                    ]);
-
-                if (error) {
-                    if (error.code === '23505') {
-                        showError('You are already signed up for this shift!');
-                    } else {
-                        throw error;
-                    }
-                } else {
-                    showSuccess('Successfully signed up for the shift!');
-
-                    const { data: shift } = await supabase
-                        .from('Volunteer-shifts')
-                        .select('volunteer_count')
-                        .eq('id', shiftId)
-                        .single();
-
-                    if (shift) {
-                        await supabase
-                            .from('Volunteer-shifts')
-                            .update({ volunteer_count: Math.max(0, (shift.volunteer_count || 0) - 1) })
-                            .eq('id', shiftId);
-                    }
-
-                    await loadShifts();
-                }
-            } catch (err) {
-                console.error('Error signing up:', err);
-                showError('Failed to sign up for shift. Please try again.');
-            }
-        }
-
-        async function cancelSignup(shiftId) {
-            try {
-                const { error } = await supabase
-                    .from('volunteer_shifts')
-                    .delete()
-                    .eq('volunteer_id', currentVolunteerId)
-                    .eq('shift_id', shiftId);
-
-                if (error) {
-                    throw error;
-                }
-
-                showSuccess('Successfully cancelled signup!');
-
-                const { data: shift } = await supabase
-                    .from('Volunteer-shifts')
-                    .select('volunteer_count')
-                    .eq('id', shiftId)
-                    .single();
-
-                if (shift) {
-                    await supabase
-                        .from('Volunteer-shifts')
-                        .update({ volunteer_count: (shift.volunteer_count || 0) + 1 })
-                        .eq('id', shiftId);
-                }
-
-                await loadShifts();
-            } catch (err) {
-                console.error('Error cancelling signup:', err);
-                showError('Failed to cancel signup. Please try again.');
-            }
-        }
-
-        function showMessage(message, type = 'success') {
-            const container = document.getElementById('message-container');
-            if (!container) {
-                return;
-            }
-            container.innerHTML = `<div class="${type}">${message}</div>`;
-            setTimeout(() => {
-                container.innerHTML = '';
-            }, 4000);
-        }
-
-        function showSuccess(message) {
-            showMessage(message, 'success');
-        }
-
-        function showError(message) {
-            showMessage(message, 'error');
-        }
-    </script>
+    function showMessage(text, type) {
+      const container = document.getElementById("message-container");
+      container.innerHTML = `<div class="notice ${type}">${text}</div>`;
+      setTimeout(() => { container.innerHTML = ""; }, 3500);
+    }
+  </script>
 </body>
 </html>
