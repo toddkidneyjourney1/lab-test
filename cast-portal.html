@@ -51,14 +51,60 @@
   <script type="module">
     import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-    // MUST match portal-landing + volunteer-portal
     const SUPABASE_URL = "https://izytzrxrgnahyvgwqhgd.supabase.co";
     const SUPABASE_ANON_KEY = "sb_publishable_xfsIVVSH8vcUz9XfZgirwA_wl-GSYOw";
     const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+    const SHOW_PASSWORDS = {
+      "Fences": "Legacy",
+      "A Midsummer Night's Dream": "Fantasy",
+      "Bare": "Identity",
+      "God of Carnage": "Conflict",
+      "The Rivals": "Romance",
+      "The Pillowman": "Darkness",
+      "Waiting for Godot": "Absurdity"
+    };
+
     function showMessage(text, type = "error") {
       const container = document.getElementById("message-container");
       container.innerHTML = `<div class="notice ${type}">${text}</div>`;
+    }
+
+    function getSessionKey(showTitle) {
+      return `cast_portal_access_${showTitle}`;
+    }
+
+    function ensureShowAccess(showTitle) {
+      const expectedPassword = SHOW_PASSWORDS[showTitle];
+      if (!expectedPassword) return true;
+
+      if (sessionStorage.getItem(getSessionKey(showTitle)) === "granted") {
+        return true;
+      }
+
+      const entered = window.prompt(`Enter the cast password for ${showTitle}:`, "");
+      if (entered === null) return false;
+
+      if ((entered || "").trim() === expectedPassword) {
+        sessionStorage.setItem(getSessionKey(showTitle), "granted");
+        return true;
+      }
+
+      window.alert("Incorrect password.");
+      return false;
+    }
+
+    function slugForShow(showTitle) {
+      const map = {
+        "Fences": "cast-fences.html",
+        "A Midsummer Night's Dream": "cast-midsummer.html",
+        "Bare": "cast-bare.html",
+        "God of Carnage": "cast-godofcarnage.html",
+        "The Rivals": "cast-rivals.html",
+        "The Pillowman": "cast-pillowman.html",
+        "Waiting for Godot": "cast-godot.html"
+      };
+      return map[showTitle] || null;
     }
 
     function renderShows(shows) {
@@ -69,14 +115,32 @@
         return;
       }
 
-      container.innerHTML = shows.map((show) => `
-        <article class="show-card">
-          <h3>${show.title ?? "Untitled Show"}</h3>
-          <p class="show-meta"><strong>Date:</strong> ${show.show_date ?? "TBD"}</p>
-          <p class="show-meta"><strong>Venue:</strong> ${show.venue ?? "TBD"}</p>
-          <p class="show-meta"><strong>Role:</strong> ${show.cast_role ?? "Assigned Cast"}</p>
-        </article>
-      `).join("");
+      container.innerHTML = shows.map((show) => {
+        const href = slugForShow(show.title);
+        const buttonHtml = href
+          ? `<button class="btn primary cast-open-btn" data-show="${show.title}" data-href="${href}">Open Cast Page</button>`
+          : "";
+
+        return `
+          <article class="show-card">
+            <h3>${show.title ?? "Untitled Show"}</h3>
+            <p class="show-meta"><strong>Date:</strong> ${show.show_date ?? "TBD"}</p>
+            <p class="show-meta"><strong>Venue:</strong> ${show.venue ?? "TBD"}</p>
+            <p class="show-meta"><strong>Role:</strong> ${show.cast_role ?? "Assigned Cast"}</p>
+            ${buttonHtml}
+          </article>
+        `;
+      }).join("");
+
+      container.querySelectorAll(".cast-open-btn").forEach((button) => {
+        button.addEventListener("click", () => {
+          const showTitle = button.getAttribute("data-show");
+          const href = button.getAttribute("data-href");
+          if (ensureShowAccess(showTitle)) {
+            window.location.href = href;
+          }
+        });
+      });
     }
 
     async function loadCastShows() {
