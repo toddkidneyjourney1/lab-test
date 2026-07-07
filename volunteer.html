@@ -1,211 +1,337 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Join the Experiment | The Laboratory Theater of Florida</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js" async></script>
-    <style>
-        .volunteer-portal {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 1rem 0 2rem;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Volunteer Shifts | The Laboratory Theater of Florida</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .volunteer-wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1.25rem 0 2.5rem;
+    }
 
-        .portal-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 1.25rem;
-            margin-top: 1.25rem;
-        }
+    .intro {
+      background: #141414;
+      border: 1px solid #2f2f2f;
+      border-radius: 12px;
+      padding: 1rem 1.1rem;
+      margin-bottom: 1rem;
+    }
 
-        .portal-card {
-            background: #1a1a1a;
-            border: 1px solid #333;
-            border-radius: 12px;
-            padding: 1.25rem;
-            transition: transform 0.25s ease, border-color 0.25s ease;
-        }
+    .date-card {
+      background: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 12px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+    }
 
-        .portal-card:hover {
-            transform: translateY(-3px);
-            border-color: #ff3366;
-        }
+    .date-title {
+      margin: 0 0 .6rem 0;
+      font-size: 1.1rem;
+    }
 
-        .contact-support {
-            margin-top: 1.5rem;
-            padding: 1rem;
-            border: 1px solid #2f2f2f;
-            border-radius: 10px;
-            background: #141414;
-        }
+    .shift-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: .8rem;
+    }
 
-        .login-block {
-            margin-top: 1.5rem;
-            padding: 1.25rem;
-            border: 1px solid #333;
-            border-radius: 12px;
-            background: #121212;
-        }
+    .shift {
+      border: 1px solid #3a3a3a;
+      border-radius: 10px;
+      padding: .8rem;
+      background: #111;
+    }
 
-        .login-form {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 0.75rem;
-            margin-top: 0.75rem;
-        }
+    .shift h3 {
+      margin: 0 0 .45rem 0;
+      font-size: 1rem;
+    }
 
-        .login-form label {
-            font-weight: 600;
-        }
+    .slot {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border: 1px solid #2d2d2d;
+      border-radius: 8px;
+      padding: .45rem .55rem;
+      margin-top: .4rem;
+      background: #0f0f0f;
+      font-size: .92rem;
+    }
 
-        .login-form input {
-            width: 100%;
-            padding: 0.7rem 0.8rem;
-            border-radius: 8px;
-            border: 1px solid #444;
-            background: #0f0f0f;
-            color: #f3f3f3;
-        }
+    .slot.filled {
+      border-color: #5c2626;
+      background: #221313;
+    }
 
-        .login-row {
-            display: flex;
-            gap: 0.6rem;
-            flex-wrap: wrap;
-            margin-top: 0.25rem;
-        }
+    .status {
+      font-weight: 700;
+      font-size: .82rem;
+      padding: .2rem .45rem;
+      border-radius: 6px;
+    }
 
-        .login-note {
-            color: #bfbfbf;
-            font-size: 0.92rem;
-            margin-top: 0.5rem;
-        }
-    </style>
+    .status.open {
+      background: #1d5f31;
+      color: #fff;
+    }
+
+    .status.full {
+      background: #7a2f2f;
+      color: #fff;
+    }
+
+    .button {
+      border: 0;
+      border-radius: 8px;
+      padding: .45rem .7rem;
+      font-weight: 700;
+      cursor: pointer;
+      background: #d72638;
+      color: #fff;
+    }
+
+    .button[disabled] {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .notice {
+      margin: .7rem 0 0;
+      padding: .6rem .75rem;
+      border-radius: 8px;
+      font-weight: 600;
+    }
+
+    .notice.success { background: #2b9a4a; color: #fff; }
+    .notice.error { background: #a33131; color: #fff; }
+
+    .legend {
+      font-size: .9rem;
+      color: #bfbfbf;
+      margin-top: .5rem;
+    }
+  </style>
 </head>
 <body>
-    <!-- Hamburger Menu -->
-    <input type="checkbox" id="nav-toggle" class="nav-toggle">
-    <label for="nav-toggle" class="nav-toggle-label">
-        <span></span>
-    </label>
-    
-     <nav class="hamburger-menu">
-        <a href="about.html">Origin Story</a>
-        <a href="archive25.html">Past Experiments</a>
-        <a href="index.html">Back to the Slab</a>
-        <a href="plan.html">Lab Protocols</a>
-        
-        <a href="portal-landing.html">Portal Landing</a>
-        <a href="support.html">Fuel the Innovation</a>
-        <a href="sponsors.html">Core Collaborators</a>
-    </nav>
-    
-   <header>
-        <div class="logo">
-            THE <span>LAB</span>
-            <p class="tagline">Intentionally innovative live theater</p>
-        </div>
-    </header>
+  <!-- Hamburger Menu -->
+  <input type="checkbox" id="nav-toggle" class="nav-toggle" />
+  <label for="nav-toggle" class="nav-toggle-label"><span></span></label>
 
-    <main>
-        <section class="volunteer-portal">
-            <h1>Volunteer Portal</h1>
-            <p>Welcome to the Lab Theater family! Our volunteers are the heartbeat of our productions. Whether you are ushering, helping with set construction, or assisting in the office, your time makes our work possible.</p>
+  <nav class="hamburger-menu">
+    <a href="about.html">Origin Story</a>
+    <a href="archive25.html">Past Experiments</a>
+    <a href="index.html">Back to the Slab</a>
+    <a href="plan.html">Lab Protocols</a>
+    <a href="portal-landing.html">Portal Landing</a>
+    <a href="support.html">Fuel the Innovation</a>
+    <a href="sponsors.html">Core Collaborators</a>
+  </nav>
 
-            <div class="portal-grid">
-                <div class="portal-card">
-                    <h2>New Volunteers</h2>
-                    <p>Interested in joining our team? We'd love to have you.</p>
-                    <button type="button" class="button" id="create-account-button">Create Account</button>
-                </div>
-                
-                <div class="portal-card">
-                    <h2>Returning Volunteers</h2>
-                    <p>Log in to view your upcoming shifts and manage your schedule.</p>
-                    <button type="button" class="button secondary" id="volunteer-login-button">Volunteer Login</button>
-                </div>
-            </div>
+  <header>
+    <div class="logo">
+      THE <span>LAB</span>
+      <p class="tagline">Intentionally innovative live theater</p>
+    </div>
+  </header>
 
-            <section id="volunteer-login" class="login-block">
-                <h2>Volunteer Login</h2>
-                <p>Use your portal credentials to access your account.</p>
+  <main class="volunteer-wrap">
+    <section class="intro">
+      <h1>Volunteer Shift Sign-Up</h1>
+      <p>
+        Welcome! Choose an open role for a performance date below.
+        Each date has:
+        <strong>1 Box Office</strong>,
+        <strong>1 Concessions</strong>, and
+        <strong>2 Ushers</strong>.
+      </p>
+      <p class="legend">Filled slots are automatically locked.</p>
+      <div id="message"></div>
+    </section>
 
-                <form class="login-form" id="volunteer-login-form">
-                    <div>
-                        <label for="volunteer-email">Email</label>
-                        <input id="volunteer-email" name="email" type="email" placeholder="you@example.com" required>
-                    </div>
+    <section id="schedule-root"></section>
+  </main>
 
-                    <div>
-                        <label for="volunteer-password">Password</label>
-                        <input id="volunteer-password" name="password" type="password" placeholder="Enter password" required>
-                    </div>
+  <script>
+    // ---- CONFIG ----
+    // Replace with your real performance dates as needed:
+    const PERFORMANCE_DATES = [
+      "2026-07-10 7:30 PM",
+      "2026-07-11 7:30 PM",
+      "2026-07-17 7:30 PM",
+      "2026-07-18 7:30 PM",
+      "2026-07-24 7:30 PM",
+      "2026-07-25 7:30 PM"
+    ];
 
-                    <div class="login-row">
-                        <button type="submit" class="button secondary">Log In</button>
-                       <a href="volunteer-signup.html">
-    <button type="button" class="button">Create Account</button>
-</a>
-                    </div>
-                </form>
+    const SHIFT_TEMPLATE = {
+      box_office: { label: "Box Office", slots: 1 },
+      concessions: { label: "Concessions", slots: 1 },
+      usher: { label: "Usher", slots: 2 }
+    };
 
-                <p class="login-note">Having trouble signing in? Email <a href="mailto:office@laboratorytheaterflorida.com">office@laboratorytheaterflorida.com</a>.</p>
-            </section>
+    // ---- STORAGE ----
+    const STORAGE_KEY = "lab_volunteer_shift_signups_v1";
 
-            <div class="contact-support">
-                <h3>Questions?</h3>
-                <p>Need help with your account or have questions about volunteering? Email us at <a href="mailto:office@laboratorytheaterflorida.com">office@laboratorytheaterflorida.com</a>.</p>
-            </div>
-        </section>
-    </main>
+    function defaultSchedule() {
+      const obj = {};
+      for (const date of PERFORMANCE_DATES) {
+        obj[date] = {
+          box_office: Array(SHIFT_TEMPLATE.box_office.slots).fill(null),
+          concessions: Array(SHIFT_TEMPLATE.concessions.slots).fill(null),
+          usher: Array(SHIFT_TEMPLATE.usher.slots).fill(null)
+        };
+      }
+      return obj;
+    }
 
-    <script>
-        const PUBLISHABLE_KEY = 'pk_test_bGVhcm5pbmctbWFzdG9kb24tMzUuY2xlcmsuYWNjb3VudHMuZGV2JA';
-        const AUTH_REDIRECT_URL = window.location.origin + window.location.pathname.replace('volunteer.html', 'volunteer-portal.html');
-        const AFTER_SIGN_OUT_URL = window.location.origin + window.location.pathname;
+    function loadSchedule() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return defaultSchedule();
+        const parsed = JSON.parse(raw);
 
-        function buildSignInUrl() {
-            return AUTH_REDIRECT_URL;
+        // Keep only configured dates and ensure required structure exists
+        const fresh = defaultSchedule();
+        for (const date of PERFORMANCE_DATES) {
+          if (parsed[date]) {
+            for (const role of Object.keys(SHIFT_TEMPLATE)) {
+              if (Array.isArray(parsed[date][role])) {
+                const expected = SHIFT_TEMPLATE[role].slots;
+                fresh[date][role] = parsed[date][role].slice(0, expected);
+                while (fresh[date][role].length < expected) fresh[date][role].push(null);
+              }
+            }
+          }
         }
+        return fresh;
+      } catch {
+        return defaultSchedule();
+      }
+    }
 
-        function buildSignUpUrl() {
-            return AUTH_REDIRECT_URL;
-        }
+    function saveSchedule(schedule) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(schedule));
+    }
 
-        async function launchSignIn() {
-            if (!window.Clerk) {
-                window.location.href = 'volunteer-portal.html';
-                return;
+    // ---- VOLUNTEER IDENTITY ----
+    // In production, replace with real signed-in user identity.
+    function getVolunteerName() {
+      const existing = localStorage.getItem("lab_volunteer_name");
+      if (existing) return existing;
+
+      const input = prompt("Enter your name to sign up for shifts:");
+      const safeName = (input || "").trim() || "Volunteer";
+      localStorage.setItem("lab_volunteer_name", safeName);
+      return safeName;
+    }
+
+    // ---- UI ----
+    const messageEl = document.getElementById("message");
+    const root = document.getElementById("schedule-root");
+    let schedule = loadSchedule();
+    const volunteerName = getVolunteerName();
+
+    function showMessage(text, type = "success") {
+      messageEl.innerHTML = `<div class="notice ${type}">${text}</div>`;
+      setTimeout(() => (messageEl.innerHTML = ""), 3500);
+    }
+
+    function alreadySignedForDate(date, name) {
+      const day = schedule[date];
+      for (const role of Object.keys(day)) {
+        if (day[role].includes(name)) return true;
+      }
+      return false;
+    }
+
+    function signUp(date, role, slotIndex) {
+      const day = schedule[date];
+      if (!day || !day[role]) return;
+
+      if (day[role][slotIndex]) {
+        showMessage("That slot is already filled.", "error");
+        return;
+      }
+
+      // Optional rule: one role per volunteer per performance date
+      if (alreadySignedForDate(date, volunteerName)) {
+        showMessage("You are already signed up for this performance date.", "error");
+        return;
+      }
+
+      day[role][slotIndex] = volunteerName;
+      saveSchedule(schedule);
+      render();
+      showMessage(`Signed up: ${SHIFT_TEMPLATE[role].label} on ${date}`, "success");
+    }
+
+    function render() {
+      root.innerHTML = "";
+
+      PERFORMANCE_DATES.forEach((date) => {
+        const card = document.createElement("article");
+        card.className = "date-card";
+
+        const title = document.createElement("h2");
+        title.className = "date-title";
+        title.textContent = `Performance: ${date}`;
+        card.appendChild(title);
+
+        const grid = document.createElement("div");
+        grid.className = "shift-grid";
+
+        Object.keys(SHIFT_TEMPLATE).forEach((role) => {
+          const roleBox = document.createElement("section");
+          roleBox.className = "shift";
+
+          const h3 = document.createElement("h3");
+          h3.textContent = SHIFT_TEMPLATE[role].label;
+          roleBox.appendChild(h3);
+
+          schedule[date][role].forEach((assignedTo, slotIndex) => {
+            const row = document.createElement("div");
+            row.className = "slot" + (assignedTo ? " filled" : "");
+
+            const left = document.createElement("div");
+            left.textContent = assignedTo ? `Assigned: ${assignedTo}` : `Slot ${slotIndex + 1}`;
+            row.appendChild(left);
+
+            if (!assignedTo) {
+              const btn = document.createElement("button");
+              btn.className = "button";
+              btn.type = "button";
+              btn.textContent = "Sign Up";
+              btn.addEventListener("click", () => signUp(date, role, slotIndex));
+              row.appendChild(btn);
+
+              const status = document.createElement("span");
+              status.className = "status open";
+              status.textContent = "OPEN";
+              row.appendChild(status);
+            } else {
+              const status = document.createElement("span");
+              status.className = "status full";
+              status.textContent = "FILLED";
+              row.appendChild(status);
             }
 
-            await window.Clerk.load({ publishableKey: PUBLISHABLE_KEY });
-            await window.Clerk.openSignIn({
-                afterSignInUrl: AUTH_REDIRECT_URL,
-                afterSignUpUrl: AUTH_REDIRECT_URL
-            });
-        }
+            roleBox.appendChild(row);
+          });
 
-        async function launchSignUp() {
-            if (!window.Clerk) {
-                window.location.href = 'volunteer-portal.html';
-                return;
-            }
-
-            await window.Clerk.load({ publishableKey: PUBLISHABLE_KEY });
-            await window.Clerk.openSignUp({
-                afterSignInUrl: AUTH_REDIRECT_URL,
-                afterSignUpUrl: AUTH_REDIRECT_URL
-            });
-        }
-
-        document.getElementById('create-account-button').addEventListener('click', launchSignUp);
-        document.getElementById('inline-create-account-button').addEventListener('click', launchSignUp);
-        document.getElementById('volunteer-login-button').addEventListener('click', launchSignIn);
-        document.getElementById('volunteer-login-form').addEventListener('submit', async (event) => {
-            event.preventDefault();
-            await launchSignIn();
+          grid.appendChild(roleBox);
         });
-    </script>
+
+        card.appendChild(grid);
+        root.appendChild(card);
+      });
+    }
+
+    render();
+  </script>
 </body>
 </html>
