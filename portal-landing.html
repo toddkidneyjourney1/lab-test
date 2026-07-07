@@ -5,608 +5,191 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Portal Landing | The Laboratory Theater of Florida</title>
   <link rel="stylesheet" href="style.css" />
-
   <style>
-    :root {
-      --bg-0: #08090f;
-      --bg-1: #121420;
-      --card: rgba(20, 23, 36, 0.72);
-      --card-border: rgba(255, 255, 255, 0.14);
-      --text: #f4f7ff;
-      --muted: #b6bfd9;
-
-      --primary: #ff5c8a;
-      --primary-2: #ff7ea5;
-      --secondary: #7aa2ff;
-
-      --success-border: #2f9150;
-      --success-bg: rgba(18, 56, 34, 0.66);
-      --success-text: #d8ffe3;
-
-      --error-border: #bc4b4b;
-      --error-bg: rgba(72, 24, 24, 0.66);
-      --error-text: #ffdede;
-
-      --shadow: 0 20px 54px rgba(0, 0, 0, 0.5);
-      --radius-xl: 20px;
-      --radius-lg: 12px;
-      --radius-pill: 999px;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      color: var(--text);
-      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-      min-height: 100vh;
-      background:
-        radial-gradient(1200px 580px at 8% -8%, rgba(122, 162, 255, 0.18), transparent 55%),
-        radial-gradient(1000px 520px at 92% -8%, rgba(255, 92, 138, 0.16), transparent 56%),
-        linear-gradient(155deg, var(--bg-0), var(--bg-1));
-      overflow-x: hidden;
-    }
-
-    .bg-orb {
-      position: fixed;
-      border-radius: 999px;
-      filter: blur(40px);
-      pointer-events: none;
-      z-index: 0;
-      opacity: 0.4;
-      animation: float 9s ease-in-out infinite;
-    }
-
-    .bg-orb.one {
-      width: 320px;
-      height: 320px;
-      top: -100px;
-      right: -80px;
-      background: rgba(255, 92, 138, 0.35);
-    }
-
-    .bg-orb.two {
-      width: 260px;
-      height: 260px;
-      bottom: -100px;
-      left: -70px;
-      background: rgba(122, 162, 255, 0.34);
-      animation-delay: 1.2s;
-    }
-
-    @keyframes float {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-14px); }
-    }
-
-    .portal-container {
-      position: relative;
-      z-index: 1;
-      max-width: 980px;
-      margin: 0 auto;
-      padding: 2.3rem 1rem 3rem;
-    }
-
-    .auth-card {
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      background: var(--card);
-      border: 1px solid var(--card-border);
-      border-radius: var(--radius-xl);
-      padding: 1.4rem;
-      margin-bottom: 1rem;
-      box-shadow: var(--shadow);
-      animation: cardIn 0.35s ease;
-    }
-
-    @keyframes cardIn {
-      from {
-        opacity: 0;
-        transform: translateY(8px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .title-wrap {
-      display: flex;
-      align-items: center;
-      gap: 0.7rem;
-      margin-bottom: 0.3rem;
-    }
-
-    .title-dot {
-      width: 12px;
-      height: 12px;
-      border-radius: 999px;
-      background: linear-gradient(135deg, var(--primary), var(--secondary));
-      box-shadow: 0 0 20px rgba(255, 92, 138, 0.7);
-      flex: 0 0 auto;
-    }
-
-    .auth-card h1 {
-      margin: 0;
-      font-size: clamp(1.45rem, 2.4vw, 2rem);
-      letter-spacing: 0.2px;
-    }
-
-    .auth-card h2 {
-      margin: 0 0 0.35rem;
-      font-size: clamp(1.15rem, 1.8vw, 1.4rem);
-      letter-spacing: 0.2px;
-    }
-
-    .muted {
-      color: var(--muted);
-      line-height: 1.55;
-      margin-top: 0.4rem;
-      margin-bottom: 0.8rem;
-    }
-
-    .status {
-      margin: 1rem 0;
-      padding: 0.8rem 0.95rem;
-      border-radius: var(--radius-lg);
-      border: 1px solid rgba(255, 255, 255, 0.18);
-      background: rgba(0, 0, 0, 0.24);
-      display: none;
-      white-space: pre-wrap;
-      word-break: break-word;
-      font-weight: 550;
-    }
-
-    .status.show {
-      display: block;
-      animation: fadeIn 0.2s ease;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-2px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .status.error {
-      border-color: var(--error-border);
-      color: var(--error-text);
-      background: var(--error-bg);
-    }
-
-    .status.success {
-      border-color: var(--success-border);
-      color: var(--success-text);
-      background: var(--success-bg);
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 0.9rem;
-    }
-
-    @media (min-width: 700px) {
-      .grid {
-        grid-template-columns: 1fr 1fr;
-      }
-    }
-
-    label {
-      display: block;
-      font-weight: 650;
-      margin-bottom: 0.38rem;
-      letter-spacing: 0.2px;
-    }
-
-    input[type="email"],
-    input[type="password"] {
-      width: 100%;
-      border: 1px solid rgba(255, 255, 255, 0.18);
-      border-radius: var(--radius-lg);
-      background: rgba(11, 13, 22, 0.72);
-      color: var(--text);
-      padding: 0.75rem 0.82rem;
-      font-size: 1rem;
-      transition: border-color .2s, box-shadow .2s, background .2s;
-    }
-
-    input::placeholder {
-      color: #96a2c8;
-    }
-
-    input:focus {
-      outline: none;
-      border-color: var(--primary-2);
-      box-shadow: 0 0 0 3px rgba(255, 126, 165, 0.24);
-      background: rgba(11, 13, 22, 0.95);
-    }
-
-    .actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.7rem;
-      margin-top: 0.95rem;
-    }
-
-    .btn {
-      appearance: none;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: var(--radius-pill);
-      padding: 0.62rem 1rem;
-      text-decoration: none;
-      color: var(--text);
-      background: rgba(255, 255, 255, 0.05);
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.45rem;
-      transition: transform .14s ease, background .2s, border-color .2s, box-shadow .2s;
-      font-weight: 700;
-      font-size: 0.95rem;
-      min-height: 42px;
-    }
-
-    .btn:hover {
-      transform: translateY(-1px);
-      background: rgba(255, 255, 255, 0.13);
-      border-color: rgba(255, 255, 255, 0.32);
-    }
-
-    .btn:active {
-      transform: translateY(0);
-    }
-
-    .btn-primary {
-      border-color: transparent;
-      background: linear-gradient(135deg, var(--primary), var(--primary-2));
-      color: #1a0e13;
-      font-weight: 800;
-      box-shadow: 0 12px 26px rgba(255, 92, 138, 0.32);
-    }
-
-    .btn-primary:hover {
-      filter: brightness(1.04);
-      box-shadow: 0 14px 30px rgba(255, 92, 138, 0.38);
-    }
-
-    .btn-secondary {
-      border-color: rgba(122, 162, 255, 0.45);
-      background: rgba(122, 162, 255, 0.15);
-      color: #dce7ff;
-    }
-
-    .btn-secondary:hover {
-      background: rgba(122, 162, 255, 0.22);
-      border-color: rgba(122, 162, 255, 0.65);
-    }
-
-    .btn:disabled {
-      opacity: 0.7;
-      cursor: not-allowed;
-      transform: none;
-      box-shadow: none;
-    }
-
-    .spinner {
-      width: 14px;
-      height: 14px;
-      border: 2px solid rgba(0, 0, 0, 0.24);
-      border-top-color: rgba(0, 0, 0, 0.76);
-      border-radius: 999px;
-      animation: spin 0.8s linear infinite;
-      display: none;
-    }
-
-    .btn.loading .spinner {
-      display: inline-block;
-    }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-
-    .hidden {
-      display: none !important;
-    }
-
-    .portal-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 0.8rem;
-      margin-top: 1rem;
-    }
-
-    @media (min-width: 560px) {
-      .portal-grid {
-        grid-template-columns: 1fr 1fr;
-      }
-    }
-
-    .portal-button {
-      width: 100%;
-      min-height: 52px;
-      padding: 0.75rem 1rem;
-      text-align: center;
-    }
-
-    .portal-button .icon {
-      font-size: 1rem;
-      line-height: 1;
-    }
-
-    .small-note {
-      margin-top: 0.95rem;
-      font-size: 0.95rem;
-    }
-
-    code {
-      background: rgba(0, 0, 0, 0.34);
-      border: 1px solid rgba(255, 255, 255, 0.16);
+    .portal-card {
+      background: var(--card-bg);
+      padding: 1.25rem;
       border-radius: 8px;
-      padding: 0.15rem 0.38rem;
-      color: #d7e2ff;
+      border: 1px solid #333;
+      margin-bottom: 1rem;
     }
+    .portal-card h3 { margin-top: 0; color: var(--accent); }
+    .portal-actions { display: grid; gap: 0.75rem; margin-top: 0.75rem; }
+    .btn {
+      display: inline-block;
+      text-align: center;
+      padding: 0.7rem 0.9rem;
+      border: 0;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 700;
+      text-decoration: none;
+    }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-secondary { background: #666; color: #fff; }
+    .btn:disabled { background: #555; cursor: not-allowed; opacity: 0.8; }
+    .notice { padding: 0.8rem 1rem; border-radius: 6px; margin: 0.75rem 0; font-weight: 600; }
+    .notice.success { background: #2b9a4a; color: #fff; }
+    .notice.error { background: #a33131; color: #fff; }
+    .muted { color: #bbb; font-size: 0.95rem; }
+    .hidden { display: none !important; }
   </style>
-
-  <!-- Supabase JS (UMD build) -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
-  <div class="bg-orb one" aria-hidden="true"></div>
-  <div class="bg-orb two" aria-hidden="true"></div>
-
-  <!-- Hamburger Menu -->
   <input type="checkbox" id="nav-toggle" class="nav-toggle" />
-  <label for="nav-toggle" class="nav-toggle-label" aria-label="Open navigation menu">
-    <span></span>
-  </label>
-
-  <nav class="hamburger-menu" aria-label="Main Navigation">
+  <label for="nav-toggle" class="nav-toggle-label"><span></span></label>
+  <nav class="hamburger-menu">
     <a href="about.html">Origin Story</a>
     <a href="archive25.html">Past Experiments</a>
     <a href="index.html">Back to the Slab</a>
     <a href="plan.html">Lab Protocols</a>
-    <a href="portal-landing.html" aria-current="page">Portal Landing</a>
+    <a href="portal-landing.html">Portal Landing</a>
+    <a href="support.html">Fuel the Innovation</a>
+    <a href="sponsors.html">Core Collaborators</a>
   </nav>
 
-  <main class="portal-container">
-    <section class="auth-card">
-      <div class="title-wrap">
-        <span class="title-dot" aria-hidden="true"></span>
-        <h1>Portal Landing</h1>
-      </div>
+  <header>
+    <div class="logo">THE <span>LAB</span><p class="tagline">Intentionally innovative live theater</p></div>
+  </header>
 
-      <p class="muted">
-        Sign in to continue. After login, choose where you want to go:
-        <strong>Volunteer Portal</strong> or <strong>Cast Portal</strong>.
-      </p>
+  <main>
+    <h1>Portal Landing</h1>
+    <p>Sign in once, then continue to your authorized portal.</p>
+    <div id="message-container"></div>
 
-      <div id="status" class="status" role="status" aria-live="polite"></div>
-
-      <form id="login-form" novalidate>
-        <div class="grid">
-          <div>
-            <label for="email">Email</label>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              autocomplete="email"
-              placeholder="you@example.com"
-              required
-            />
-          </div>
-
-          <div>
-            <label for="password">Password</label>
-            <input
-              id="password"
-              name="password"
-              type="password"
-              autocomplete="current-password"
-              placeholder="••••••••"
-              required
-            />
-          </div>
-        </div>
-
-        <div class="actions">
-          <button id="login-btn" class="btn btn-primary" type="submit">
-            <span class="spinner" aria-hidden="true"></span>
-            <span id="login-btn-text">Log In</span>
-          </button>
-
-          <button id="logout-btn" class="btn btn-secondary hidden" type="button">
-            Log Out
-          </button>
+    <section class="portal-card" id="auth-card">
+      <h3>Authentication</h3>
+      <p class="muted">Use your email to sign in. You’ll receive a magic link.</p>
+      <form id="login-form">
+        <label for="email">Email</label><br />
+        <input id="email" type="email" required placeholder="you@example.com" style="width:100%;max-width:420px;padding:.65rem;border-radius:6px;border:1px solid #444;background:#111;color:#fff;" />
+        <div class="portal-actions">
+          <button class="btn btn-primary" type="submit">Send Magic Link</button>
         </div>
       </form>
+      <button id="logout-btn" class="btn btn-secondary hidden" type="button">Sign Out</button>
     </section>
 
-    <section id="portal-section" class="auth-card hidden">
-      <h2>Choose Your Portal</h2>
-      <p class="muted">You are signed in. Select a destination below.</p>
-
-      <div class="portal-grid">
-        <a id="volunteer-link" class="btn btn-primary portal-button" href="volunteer-portal.html">
-          <span class="icon" aria-hidden="true">🧪</span>
-          <span>Go to Volunteer Portal</span>
-        </a>
-
-        <a id="cast-link" class="btn btn-secondary portal-button" href="cast-portal.html">
-          <span class="icon" aria-hidden="true">🎭</span>
-          <span>Go to Cast Portal</span>
-        </a>
+    <section class="portal-card">
+      <h3>Your Portals</h3>
+      <p class="muted">Buttons enable based on your profile permissions.</p>
+      <div class="portal-actions">
+        <a id="volunteer-link" class="btn btn-secondary" href="volunteer-portal.html" aria-disabled="true">Volunteer Portal</a>
+        <a id="cast-link" class="btn btn-secondary" href="cast-portal.html" aria-disabled="true">Cast Portal</a>
       </div>
-
-      <p class="muted small-note">
-        Logged in as: <code id="user-email">unknown</code>
-      </p>
     </section>
   </main>
 
-  <script>
-    // ===== Supabase Config =====
-    const SUPABASE_URL = "https://izytzrxrgnahyvgwqhgd.supabase.co";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml6eXR6cnhyZ25haHl2Z3dxaGdkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI4OTkwNjMsImV4cCI6MjA5ODQ3NTA2M30.eRJDTZVj122qnzGPQxWWE2gxCmVXuCTukWOkfckRkMk";
+  <script type="module">
+    import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-    // ===== DOM =====
-    const statusEl = document.getElementById("status");
+    // MUST match across all portal pages
+    const SUPABASE_URL = "YOUR_SUPABASE_URL";
+    const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    const messageContainer = document.getElementById("message-container");
     const loginForm = document.getElementById("login-form");
-    const emailInput = document.getElementById("email");
-    const passwordInput = document.getElementById("password");
-    const loginBtn = document.getElementById("login-btn");
-    const loginBtnText = document.getElementById("login-btn-text");
     const logoutBtn = document.getElementById("logout-btn");
-    const portalSection = document.getElementById("portal-section");
-    const userEmailEl = document.getElementById("user-email");
+    const volunteerLink = document.getElementById("volunteer-link");
+    const castLink = document.getElementById("cast-link");
 
-    // unique var name to avoid conflicts
-    let sbClient = null;
-
-    const isConfigured =
-      !!SUPABASE_URL &&
-      !!SUPABASE_ANON_KEY &&
-      !SUPABASE_URL.includes("YOUR_PROJECT_ID") &&
-      !SUPABASE_ANON_KEY.includes("YOUR_SUPABASE_ANON_KEY");
-
-    function showStatus(message, type = "") {
-      statusEl.textContent = message;
-      statusEl.className = "status show";
-      if (type === "error") statusEl.classList.add("error");
-      if (type === "success") statusEl.classList.add("success");
+    function showMessage(text, type = "error") {
+      messageContainer.innerHTML = `<div class="notice ${type}">${text}</div>`;
+      setTimeout(() => { messageContainer.innerHTML = ""; }, 4500);
     }
 
-    function clearStatus() {
-      statusEl.textContent = "";
-      statusEl.className = "status";
+    function disablePortalLink(linkEl) {
+      linkEl.classList.remove("btn-primary");
+      linkEl.classList.add("btn-secondary");
+      linkEl.setAttribute("aria-disabled", "true");
+      linkEl.addEventListener("click", preventWhenDisabled);
     }
 
-    function setLoading(isLoading) {
-      loginBtn.disabled = isLoading;
-      loginBtn.classList.toggle("loading", isLoading);
-      loginBtnText.textContent = isLoading ? "Logging in..." : "Log In";
-      emailInput.disabled = isLoading;
-      passwordInput.disabled = isLoading;
+    function enablePortalLink(linkEl) {
+      linkEl.classList.remove("btn-secondary");
+      linkEl.classList.add("btn-primary");
+      linkEl.setAttribute("aria-disabled", "false");
+      linkEl.removeEventListener("click", preventWhenDisabled);
     }
 
-    function setSignedInUI(user) {
-      portalSection.classList.remove("hidden");
+    function preventWhenDisabled(e) {
+      if (e.currentTarget.getAttribute("aria-disabled") === "true") {
+        e.preventDefault();
+        showMessage("You are not authorized for that portal.", "error");
+      }
+    }
+
+    async function fetchAccess(userId) {
+      // defaults requested:
+      // profiles(id, is_volunteer)
+      // cast_assignments(user_id, show_id)
+      const [{ data: profile, error: profileErr }, { data: castRows, error: castErr }] = await Promise.all([
+        supabase.from("profiles").select("is_volunteer").eq("id", userId).single(),
+        supabase.from("cast_assignments").select("show_id").eq("user_id", userId).limit(1)
+      ]);
+
+      const isVolunteer = !profileErr && !!profile?.is_volunteer;
+      const isCast = !castErr && Array.isArray(castRows) && castRows.length > 0;
+      return { isVolunteer, isCast };
+    }
+
+    async function refreshUIFromSession() {
+      const { data: { user }, error } = await supabase.auth.getUser();
+
+      disablePortalLink(volunteerLink);
+      disablePortalLink(castLink);
+
+      if (error || !user) {
+        logoutBtn.classList.add("hidden");
+        loginForm.classList.remove("hidden");
+        localStorage.removeItem("labPortalUserId");
+        return;
+      }
+
+      localStorage.setItem("labPortalUserId", user.id);
       logoutBtn.classList.remove("hidden");
-      loginBtn.classList.add("hidden");
-      userEmailEl.textContent = user?.email || "unknown";
+      loginForm.classList.add("hidden");
+
+      const access = await fetchAccess(user.id);
+
+      if (access.isVolunteer) enablePortalLink(volunteerLink);
+      if (access.isCast) enablePortalLink(castLink);
     }
 
-    function setSignedOutUI() {
-      portalSection.classList.add("hidden");
-      logoutBtn.classList.add("hidden");
-      loginBtn.classList.remove("hidden");
-      userEmailEl.textContent = "unknown";
-      passwordInput.value = "";
-    }
+    loginForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const email = document.getElementById("email").value.trim();
+      if (!email) return;
 
-    async function bootstrapAuth() {
-      if (!window.supabase || typeof window.supabase.createClient !== "function") {
-        showStatus("Supabase library failed to load. Check internet or script blockers.", "error");
+      const { error } = await supabase.auth.signInWithOtp({
+        email,
+        options: {
+          // keep user on this page after magic-link auth
+          emailRedirectTo: `${window.location.origin}${window.location.pathname}`
+        }
+      });
+
+      if (error) {
+        showMessage(error.message || "Could not send magic link.", "error");
         return;
       }
 
-      if (!isConfigured) {
-        showStatus("Supabase is not configured. Add project URL and anon key.", "error");
-        loginBtn.disabled = true;
-        return;
-      }
-
-      try {
-        sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-        const { data, error } = await sbClient.auth.getSession();
-        if (error) {
-          showStatus("Could not check session: " + error.message, "error");
-          return;
-        }
-
-        const user = data?.session?.user ?? null;
-        if (user) {
-          setSignedInUI(user);
-          emailInput.value = user.email || "";
-          showStatus("Welcome back! Choose your portal below.", "success");
-        } else {
-          setSignedOutUI();
-        }
-
-        sbClient.auth.onAuthStateChange((_event, session) => {
-          if (session?.user) {
-            setSignedInUI(session.user);
-            emailInput.value = session.user.email || "";
-            showStatus("Login successful. Choose your portal.", "success");
-          } else {
-            setSignedOutUI();
-            showStatus("You are logged out.", "success");
-          }
-        });
-      } catch (err) {
-        showStatus("Startup error: " + (err?.message || "Unknown error"), "error");
-      }
-    }
-
-    loginForm.addEventListener("submit", async (event) => {
-      event.preventDefault();
-      clearStatus();
-
-      if (!sbClient) {
-        showStatus("Auth client is not initialized.", "error");
-        return;
-      }
-
-      const email = emailInput.value.trim();
-      const password = passwordInput.value;
-
-      if (!email || !password) {
-        showStatus("Please enter both email and password.", "error");
-        return;
-      }
-
-      setLoading(true);
-      try {
-        const { data, error } = await sbClient.auth.signInWithPassword({ email, password });
-
-        if (error) {
-          showStatus(error.message || "Login failed.", "error");
-          return;
-        }
-
-        if (data?.user) {
-          setSignedInUI(data.user);
-          showStatus("Login successful. Choose your portal.", "success");
-        } else {
-          showStatus("Login failed. No user returned.", "error");
-        }
-      } catch (err) {
-        showStatus("Unexpected login error: " + (err?.message || "Unknown error"), "error");
-      } finally {
-        setLoading(false);
-      }
+      showMessage("Magic link sent. Check your email, then return here.", "success");
     });
 
     logoutBtn.addEventListener("click", async () => {
-      clearStatus();
-      if (!sbClient) return;
-
-      const { error } = await sbClient.auth.signOut();
-      if (error) {
-        showStatus(error.message || "Logout failed.", "error");
-        return;
-      }
-
-      setSignedOutUI();
-      showStatus("You are logged out.", "success");
+      await supabase.auth.signOut();
+      localStorage.removeItem("labPortalUserId");
+      showMessage("Signed out.", "success");
+      await refreshUIFromSession();
     });
 
-    bootstrapAuth();
+    supabase.auth.onAuthStateChange(async () => {
+      await refreshUIFromSession();
+    });
+
+    window.addEventListener("load", refreshUIFromSession);
   </script>
 </body>
 </html>
