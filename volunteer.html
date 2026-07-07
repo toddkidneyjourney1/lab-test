@@ -43,6 +43,9 @@
     .notice { margin-top:8px; font-size:13px; color:#ddd; }
     .ok { color:#9fe0b0; }
     .err { color:#efb0b0; }
+    .config-box { margin-top:12px; padding:12px; border:1px solid #444; border-radius:10px; background:#111; }
+    .config-box h3 { margin:0 0 10px; }
+    .config-box input { width:100%; padding:8px; border-radius:8px; border:1px solid #444; background:#101010; color:#fff; margin-bottom:8px; }
   </style>
 </head>
 <body>
@@ -64,6 +67,16 @@
       </div>
 
       <div id="msg" class="notice"></div>
+
+      <div class="config-box">
+        <h3>Supabase Settings</h3>
+        <input id="supabase-url-input" placeholder="https://your-project.supabase.co" />
+        <input id="supabase-key-input" placeholder="your anon/publishable key" />
+        <div class="row">
+          <button id="save-supabase-btn" class="btn primary" type="button">Save Supabase Settings</button>
+          <button id="clear-supabase-btn" class="btn warn" type="button">Clear Settings</button>
+        </div>
+      </div>
     </div>
 
     <div class="layout">
@@ -84,30 +97,9 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
     (() => {
-      // =========================
-      // Supabase config
-      // =========================
-      const SUPABASE_URL = "https://izytzrxrgnahyvgwqhgd.supabase.co";
-const SUPABASE_ANON_KEY = "sb_publishable_xfsIVVSH8vcUz9XfZgirwA_wl-GSYOw";
       const TABLE_NAME = "volunteer_shifts";
+      const SHIFT_COUNTS = { box_office: 1, usher: 2, concessions: 1 };
 
-      let supabase = null;
-      try {
-        if (
-          !SUPABASE_URL.includes("YOUR_PROJECT_ID") &&
-          !SUPABASE_ANON_KEY.includes("YOUR_SUPABASE_ANON_KEY")
-        ) {
-          supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-            auth: { persistSession: false }
-          });
-        }
-      } catch (e) {
-        console.error("Supabase init error:", e);
-      }
-
-      // =========================
-      // Master schedule (83)
-      // =========================
       const MASTER_PERFORMANCES = [
         { show:"Waiting for Godot", date:"2026-08-20", time:"7:30 PM", tz:"EDT" },
         { show:"Waiting for Godot", date:"2026-08-21", time:"7:30 PM", tz:"EDT" },
@@ -121,7 +113,6 @@ const SUPABASE_ANON_KEY = "sb_publishable_xfsIVVSH8vcUz9XfZgirwA_wl-GSYOw";
         { show:"Waiting for Godot", date:"2026-09-04", time:"7:30 PM", tz:"EDT" },
         { show:"Waiting for Godot", date:"2026-09-05", time:"7:30 PM", tz:"EDT" },
         { show:"Waiting for Godot", date:"2026-09-06", time:"2:00 PM", tz:"EDT" },
-
         { show:"The Pillowman", date:"2026-10-08", time:"7:30 PM", tz:"EDT" },
         { show:"The Pillowman", date:"2026-10-09", time:"7:30 PM", tz:"EDT" },
         { show:"The Pillowman", date:"2026-10-10", time:"7:30 PM", tz:"EDT" },
@@ -134,7 +125,6 @@ const SUPABASE_ANON_KEY = "sb_publishable_xfsIVVSH8vcUz9XfZgirwA_wl-GSYOw";
         { show:"The Pillowman", date:"2026-10-23", time:"7:30 PM", tz:"EDT" },
         { show:"The Pillowman", date:"2026-10-24", time:"7:30 PM", tz:"EDT" },
         { show:"The Pillowman", date:"2026-10-25", time:"2:00 PM", tz:"EDT" },
-
         { show:"The Rivals", date:"2026-11-12", time:"7:30 PM", tz:"EST" },
         { show:"The Rivals", date:"2026-11-13", time:"7:30 PM", tz:"EST" },
         { show:"The Rivals", date:"2026-11-14", time:"7:30 PM", tz:"EST" },
@@ -146,7 +136,6 @@ const SUPABASE_ANON_KEY = "sb_publishable_xfsIVVSH8vcUz9XfZgirwA_wl-GSYOw";
         { show:"The Rivals", date:"2026-11-27", time:"7:30 PM", tz:"EST" },
         { show:"The Rivals", date:"2026-11-28", time:"7:30 PM", tz:"EST" },
         { show:"The Rivals", date:"2026-11-29", time:"2:00 PM", tz:"EST" },
-
         { show:"God of Carnage", date:"2027-01-14", time:"7:30 PM", tz:"EST" },
         { show:"God of Carnage", date:"2027-01-15", time:"7:30 PM", tz:"EST" },
         { show:"God of Carnage", date:"2027-01-16", time:"7:30 PM", tz:"EST" },
@@ -159,7 +148,6 @@ const SUPABASE_ANON_KEY = "sb_publishable_xfsIVVSH8vcUz9XfZgirwA_wl-GSYOw";
         { show:"God of Carnage", date:"2027-01-29", time:"7:30 PM", tz:"EST" },
         { show:"God of Carnage", date:"2027-01-30", time:"7:30 PM", tz:"EST" },
         { show:"God of Carnage", date:"2027-01-31", time:"2:00 PM", tz:"EST" },
-
         { show:"Bare", date:"2027-02-18", time:"7:30 PM", tz:"EST" },
         { show:"Bare", date:"2027-02-19", time:"7:30 PM", tz:"EST" },
         { show:"Bare", date:"2027-02-20", time:"7:30 PM", tz:"EST" },
@@ -172,7 +160,6 @@ const SUPABASE_ANON_KEY = "sb_publishable_xfsIVVSH8vcUz9XfZgirwA_wl-GSYOw";
         { show:"Bare", date:"2027-03-05", time:"7:30 PM", tz:"EST" },
         { show:"Bare", date:"2027-03-06", time:"7:30 PM", tz:"EST" },
         { show:"Bare", date:"2027-03-07", time:"2:00 PM", tz:"EST" },
-
         { show:"A Midsummer Night's Dream", date:"2027-03-25", time:"7:30 PM", tz:"EDT" },
         { show:"A Midsummer Night's Dream", date:"2027-03-26", time:"7:30 PM", tz:"EDT" },
         { show:"A Midsummer Night's Dream", date:"2027-03-27", time:"7:30 PM", tz:"EDT" },
@@ -185,7 +172,6 @@ const SUPABASE_ANON_KEY = "sb_publishable_xfsIVVSH8vcUz9XfZgirwA_wl-GSYOw";
         { show:"A Midsummer Night's Dream", date:"2027-04-09", time:"7:30 PM", tz:"EDT" },
         { show:"A Midsummer Night's Dream", date:"2027-04-10", time:"7:30 PM", tz:"EDT" },
         { show:"A Midsummer Night's Dream", date:"2027-04-11", time:"2:00 PM", tz:"EDT" },
-
         { show:"Fences by August Wilson", date:"2027-04-22", time:"7:30 PM", tz:"EDT" },
         { show:"Fences by August Wilson", date:"2027-04-23", time:"7:30 PM", tz:"EDT" },
         { show:"Fences by August Wilson", date:"2027-04-24", time:"7:30 PM", tz:"EDT" },
@@ -202,33 +188,25 @@ const SUPABASE_ANON_KEY = "sb_publishable_xfsIVVSH8vcUz9XfZgirwA_wl-GSYOw";
 
       const PERFORMANCE_DATES = MASTER_PERFORMANCES.map(p => `${p.date} ${p.time}`);
       const PERF_BY_DATE = Object.fromEntries(MASTER_PERFORMANCES.map(p => [p.date, p]));
-      const SHIFT_COUNTS = { box_office: 1, usher: 2, concessions: 1 };
 
-      // DOM
       const monthTitleEl = document.getElementById("month-title");
       const gridEl = document.getElementById("calendar-grid");
       const detailTitleEl = document.getElementById("detail-title");
       const detailBodyEl = document.getElementById("detail-body");
       const msgEl = document.getElementById("msg");
       const nameInput = document.getElementById("volunteer-name");
+      const supabaseUrlInput = document.getElementById("supabase-url-input");
+      const supabaseKeyInput = document.getElementById("supabase-key-input");
 
-      if (!monthTitleEl || !gridEl || !detailTitleEl || !detailBodyEl || !msgEl || !nameInput) {
-        console.error("Missing required DOM ids.");
-        return;
-      }
-
-      // safety for hidden calendars by external css
-      gridEl.style.display = "grid";
-      gridEl.style.gridTemplateColumns = "repeat(7,minmax(0,1fr))";
-      gridEl.style.gap = "6px";
-      gridEl.style.minHeight = "460px";
-
-      // State
+      let supabase = null;
       let visibleMonth = new Date("2026-08-01T00:00:00");
       let selectedDateKey = null;
       let volunteerName = (localStorage.getItem("lab_volunteer_name") || "").trim();
-      nameInput.value = volunteerName;
       let schedule = defaultSchedule();
+
+      nameInput.value = volunteerName;
+      supabaseUrlInput.value = localStorage.getItem("lab_supabase_url") || "https://izytzrxrgnahyvgwqhgd.supabase.co";
+      supabaseKeyInput.value = localStorage.getItem("lab_supabase_key") || "sb_publishable_xfsIVVSH8vcUz9XfZgirwA_wl-GSYOw";
 
       function setMsg(text, isError = false) {
         msgEl.className = "notice " + (isError ? "err" : "ok");
@@ -236,12 +214,12 @@ const SUPABASE_ANON_KEY = "sb_publishable_xfsIVVSH8vcUz9XfZgirwA_wl-GSYOw";
       }
 
       function mmddyyyy(isoDate) {
-        const [y,m,d] = isoDate.split("-");
+        const [y, m, d] = isoDate.split("-");
         return `${m}-${d}-${y}`;
       }
 
       function fmtKey(d) {
-        return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+        return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
       }
 
       function roleLabel(role) {
@@ -255,6 +233,7 @@ const SUPABASE_ANON_KEY = "sb_publishable_xfsIVVSH8vcUz9XfZgirwA_wl-GSYOw";
         for (const p of MASTER_PERFORMANCES) {
           out[p.date] = {
             performance_date: `${p.date} ${p.time}`,
+            shift_date: p.date,
             box_office: [null],
             usher: [null, null],
             concessions: [null]
@@ -272,7 +251,7 @@ const SUPABASE_ANON_KEY = "sb_publishable_xfsIVVSH8vcUz9XfZgirwA_wl-GSYOw";
       function normalizeFromRows(rows) {
         const fresh = defaultSchedule();
         for (const r of rows || []) {
-          const key = (r.performance_date || "").split(" ")[0];
+          const key = r.shift_date || (r.performance_date || "").split(" ")[0];
           if (!fresh[key]) continue;
           if (!(r.role in fresh[key])) continue;
           if (typeof r.slot_index !== "number") continue;
@@ -282,16 +261,36 @@ const SUPABASE_ANON_KEY = "sb_publishable_xfsIVVSH8vcUz9XfZgirwA_wl-GSYOw";
         return fresh;
       }
 
-      async function testSupabaseConnection() {
-        if (!supabase) {
-          setMsg("Supabase not configured yet (replace URL/key placeholders).", true);
+      function initSupabase() {
+        const url = (localStorage.getItem("lab_supabase_url") || supabaseUrlInput.value || "").trim();
+        const key = (localStorage.getItem("lab_supabase_key") || supabaseKeyInput.value || "").trim();
+
+        if (!url || !key) {
+          supabase = null;
           return false;
         }
-        try {
-          const { error } = await supabase
-            .from(TABLE_NAME)
-            .select("id", { count: "exact", head: true });
 
+        try {
+          supabase = window.supabase.createClient(url, key, {
+            auth: { persistSession: false }
+          });
+          return true;
+        } catch (e) {
+          console.error("Supabase init error:", e);
+          setMsg(`Supabase init error: ${e.message || e}`, true);
+          supabase = null;
+          return false;
+        }
+      }
+
+      async function testSupabaseConnection() {
+        if (!supabase) {
+          setMsg("Supabase not configured. Enter URL and anon key above.", true);
+          return false;
+        }
+
+        try {
+          const { error } = await supabase.from(TABLE_NAME).select("id", { count: "exact", head: true });
           if (error) {
             setMsg(`Supabase error: ${error.message}`, true);
             return false;
@@ -305,9 +304,10 @@ const SUPABASE_ANON_KEY = "sb_publishable_xfsIVVSH8vcUz9XfZgirwA_wl-GSYOw";
 
       async function ensureSeedDataExists() {
         if (!supabase) return;
+
         const { data: existing, error: readErr } = await supabase
           .from(TABLE_NAME)
-          .select("performance_date, role, slot_index")
+          .select("performance_date, shift_date, role, slot_index")
           .in("performance_date", PERFORMANCE_DATES);
 
         if (readErr) throw readErr;
@@ -323,6 +323,7 @@ const SUPABASE_ANON_KEY = "sb_publishable_xfsIVVSH8vcUz9XfZgirwA_wl-GSYOw";
               if (!existingSet.has(key)) {
                 toInsert.push({
                   performance_date: perfRaw,
+                  shift_date: p.date,
                   role,
                   shift_name: roleLabel(role),
                   slot_index: i,
@@ -353,7 +354,7 @@ const SUPABASE_ANON_KEY = "sb_publishable_xfsIVVSH8vcUz9XfZgirwA_wl-GSYOw";
 
           const { data, error } = await supabase
             .from(TABLE_NAME)
-            .select("performance_date, role, slot_index, assigned_to")
+            .select("performance_date, shift_date, role, slot_index, assigned_to")
             .in("performance_date", PERFORMANCE_DATES);
 
           if (error) throw error;
@@ -396,6 +397,7 @@ const SUPABASE_ANON_KEY = "sb_publishable_xfsIVVSH8vcUz9XfZgirwA_wl-GSYOw";
                 shift_name: roleLabel(role)
               })
               .eq("performance_date", perfRaw)
+              .eq("shift_date", perf.date)
               .eq("role", role)
               .eq("slot_index", slotIndex)
               .is("assigned_to", null)
@@ -429,7 +431,7 @@ const SUPABASE_ANON_KEY = "sb_publishable_xfsIVVSH8vcUz9XfZgirwA_wl-GSYOw";
         try {
           const { data, error } = await supabase
             .from(TABLE_NAME)
-            .select("performance_date, role, slot_index")
+            .select("performance_date, shift_date, role, slot_index")
             .eq("assigned_to", volunteerName);
 
           if (error) throw error;
@@ -587,7 +589,6 @@ const SUPABASE_ANON_KEY = "sb_publishable_xfsIVVSH8vcUz9XfZgirwA_wl-GSYOw";
         });
       }
 
-      // Controls
       document.getElementById("prev-month-btn").addEventListener("click", () => {
         visibleMonth = new Date(visibleMonth.getFullYear(), visibleMonth.getMonth() - 1, 1);
         renderCalendar();
@@ -612,11 +613,47 @@ const SUPABASE_ANON_KEY = "sb_publishable_xfsIVVSH8vcUz9XfZgirwA_wl-GSYOw";
 
       document.getElementById("cancel-mine-btn").addEventListener("click", cancelMySignups);
 
-      // Initial render (always), then data
+      document.getElementById("save-supabase-btn").addEventListener("click", () => {
+        const url = (supabaseUrlInput.value || "").trim();
+        const key = (supabaseKeyInput.value || "").trim();
+
+        localStorage.setItem("lab_supabase_url", url);
+        localStorage.setItem("lab_supabase_key", key);
+
+        if (initSupabase()) {
+          setMsg("Supabase settings saved.");
+          loadFromSupabase();
+        } else {
+          setMsg("Supabase settings saved, but connection could not be initialized.", true);
+        }
+      });
+
+      document.getElementById("clear-supabase-btn").addEventListener("click", () => {
+        localStorage.removeItem("lab_supabase_url");
+        localStorage.removeItem("lab_supabase_key");
+        supabaseUrlInput.value = "";
+        supabaseKeyInput.value = "";
+        supabase = null;
+        schedule = defaultSchedule();
+        setMsg("Supabase settings cleared.");
+        renderCalendar();
+        renderDetail();
+      });
+
+      gridEl.style.display = "grid";
+      gridEl.style.gridTemplateColumns = "repeat(7,minmax(0,1fr))";
+      gridEl.style.gap = "6px";
+      gridEl.style.minHeight = "460px";
+
       renderCalendar();
       renderDetail();
-      setMsg("Calendar rendered.");
-      loadFromSupabase();
+
+      if (initSupabase()) {
+        setMsg("Calendar rendered. Syncing schedule...");
+        loadFromSupabase();
+      } else {
+        setMsg("Calendar rendered. Enter your Supabase URL and anon key to sync.");
+      }
     })();
   </script>
 </body>
