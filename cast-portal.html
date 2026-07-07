@@ -6,20 +6,11 @@
   <title>Cast Portal | The Laboratory Theater of Florida</title>
   <link rel="stylesheet" href="style.css" />
   <style>
-    .show-card {
-      background: var(--card-bg);
-      padding: 1.25rem;
-      border-radius: 8px;
-      border: 1px solid #333;
-      margin-bottom: 1rem;
-    }
-    .show-card h3 { margin-top: 0; color: var(--accent); }
-    .show-meta { margin: 0.5rem 0 0.25rem; font-size: 0.95rem; color: #ddd; }
     .notice { padding: 0.8rem 1rem; border-radius: 6px; margin: 0.75rem 0; font-weight: 600; }
     .notice.success { background: #2b9a4a; color: #fff; }
     .notice.error { background: #a33131; color: #fff; }
     .portal-login {
-      max-width: 520px;
+      max-width: 440px;
       margin: 1.5rem auto 2rem;
       background: var(--card-bg);
       border: 1px solid #333;
@@ -33,13 +24,19 @@
     }
     .portal-login select,
     .portal-login input {
+      display: block;
       width: 100%;
-      padding: 0.8rem 0.9rem;
+      max-width: 100%;
+      padding: 0.75rem 0.85rem;
       border-radius: 8px;
       border: 1px solid #444;
       background: #101010;
       color: #fff;
       margin-bottom: 1rem;
+      font-size: 1rem;
+    }
+    .portal-login input {
+      letter-spacing: 0.02em;
     }
     .portal-actions {
       display: flex;
@@ -87,11 +84,6 @@
         </div>
       </form>
     </section>
-
-    <section id="my-shows">
-      <h2>Available Cast Pages</h2>
-      <div id="cast-show-container" class="production-grid"></div>
-    </section>
   </main>
 
   <script>
@@ -122,10 +114,6 @@
       sessionStorage.setItem(getSessionKey(showTitle), "granted");
     }
 
-    function hasShowAccess(showTitle) {
-      return sessionStorage.getItem(getSessionKey(showTitle)) === "granted";
-    }
-
     function clearAllAccess() {
       SHOWS.forEach((show) => sessionStorage.removeItem(getSessionKey(show.title)));
     }
@@ -137,36 +125,6 @@
         option.value = show.title;
         option.textContent = show.title;
         select.appendChild(option);
-      });
-    }
-
-    function renderShows() {
-      const container = document.getElementById("cast-show-container");
-      container.innerHTML = SHOWS.map((show) => `
-        <article class="show-card">
-          <h3>${show.title}</h3>
-          <p class="show-meta"><strong>Access:</strong> ${hasShowAccess(show.title) ? "Unlocked for this session" : "Password protected"}</p>
-          <button class="btn primary cast-open-btn" data-title="${show.title}" data-href="${show.href}">
-            ${hasShowAccess(show.title) ? "Open Cast Page" : "Unlock & Open"}
-          </button>
-        </article>
-      `).join("");
-
-      container.querySelectorAll(".cast-open-btn").forEach((button) => {
-        button.addEventListener("click", () => {
-          const title = button.getAttribute("data-title");
-          const href = button.getAttribute("data-href");
-          const select = document.getElementById("show-select");
-          select.value = title;
-          document.getElementById("show-password").focus();
-
-          if (hasShowAccess(title)) {
-            window.location.href = href;
-            return;
-          }
-
-          showMessage(`Enter the password for ${title} above, then click Enter Portal.`, "success");
-        });
       });
     }
 
@@ -189,7 +147,6 @@
       }
 
       grantShowAccess(show.title);
-      renderShows();
       showMessage(`${show.title} unlocked for this session. Redirecting...`, "success");
       document.getElementById("show-password").value = "";
       window.location.href = show.href;
@@ -197,7 +154,6 @@
 
     function handleClearAccess() {
       clearAllAccess();
-      renderShows();
       clearMessage();
       document.getElementById("cast-login-form").reset();
       showMessage("Saved cast access cleared for this session.", "success");
@@ -205,7 +161,6 @@
 
     window.addEventListener("load", () => {
       populateShowSelect();
-      renderShows();
       document.getElementById("cast-login-form").addEventListener("submit", handleLogin);
       document.getElementById("clear-access-btn").addEventListener("click", handleClearAccess);
     });
