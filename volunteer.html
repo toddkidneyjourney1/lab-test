@@ -61,6 +61,8 @@
       margin-top: .4rem;
       background: #0f0f0f;
       font-size: .92rem;
+      gap: .5rem;
+      flex-wrap: wrap;
     }
 
     .slot.filled {
@@ -95,6 +97,10 @@
       color: #fff;
     }
 
+    .button.secondary {
+      background: #444;
+    }
+
     .button[disabled] {
       opacity: 0.5;
       cursor: not-allowed;
@@ -114,6 +120,19 @@
       font-size: .9rem;
       color: #bfbfbf;
       margin-top: .5rem;
+    }
+
+    .toolbar {
+      display: flex;
+      gap: .5rem;
+      flex-wrap: wrap;
+      margin-top: .75rem;
+    }
+
+    .sync-meta {
+      margin-top: .5rem;
+      font-size: .85rem;
+      color: #aaa;
     }
   </style>
 </head>
@@ -150,15 +169,28 @@
         <strong>2 Ushers</strong>.
       </p>
       <p class="legend">Filled slots are automatically locked.</p>
+      <div class="toolbar">
+        <button id="refresh-btn" class="button secondary" type="button">Refresh from Supabase</button>
+      </div>
+      <div id="sync-meta" class="sync-meta"></div>
       <div id="message"></div>
     </section>
 
     <section id="schedule-root"></section>
   </main>
 
+  <!-- Supabase JS (hardwired client-side setup as requested) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
+    // ============================================================
+    // HARDWIRED SUPABASE CONFIG
+    // Replace these with your real project credentials.
+    // ============================================================
+    const SUPABASE_URL = "https://YOUR_PROJECT_ID.supabase.co";
+    const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
     // ---- CONFIG ----
-    // Replace with your real performance dates as needed:
     const PERFORMANCE_DATES = [
       "2026-07-10 7:30 PM",
       "2026-07-11 7:30 PM",
@@ -174,52 +206,20 @@
       usher: { label: "Usher", slots: 2 }
     };
 
-    // ---- STORAGE ----
-    const STORAGE_KEY = "lab_volunteer_shift_signups_v1";
-
-    function defaultSchedule() {
-      const obj = {};
-      for (const date of PERFORMANCE_DATES) {
-        obj[date] = {
-          box_office: Array(SHIFT_TEMPLATE.box_office.slots).fill(null),
-          concessions: Array(SHIFT_TEMPLATE.concessions.slots).fill(null),
-          usher: Array(SHIFT_TEMPLATE.usher.slots).fill(null)
-        };
-      }
-      return obj;
-    }
-
-    function loadSchedule() {
-      try {
-        const raw = localStorage.getItem(STORAGE_KEY);
-        if (!raw) return defaultSchedule();
-        const parsed = JSON.parse(raw);
-
-        // Keep only configured dates and ensure required structure exists
-        const fresh = defaultSchedule();
-        for (const date of PERFORMANCE_DATES) {
-          if (parsed[date]) {
-            for (const role of Object.keys(SHIFT_TEMPLATE)) {
-              if (Array.isArray(parsed[date][role])) {
-                const expected = SHIFT_TEMPLATE[role].slots;
-                fresh[date][role] = parsed[date][role].slice(0, expected);
-                while (fresh[date][role].length < expected) fresh[date][role].push(null);
-              }
-            }
-          }
-        }
-        return fresh;
-      } catch {
-        return defaultSchedule();
-      }
-    }
-
-    function saveSchedule(schedule) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(schedule));
-    }
+    // ---- SUPABASE TABLE ----
+    // Expected table schema:
+    // volunteer_shifts (
+    //   id bigint generated always as identity primary key,
+    //   performance_date text not null,
+    //   role text not null,
+    //   slot_index int not null,
+    //   assigned_to text null,
+    //   updated_at timestamptz not null default now(),
+    //   unique(performance_date, role, slot_index)
+    // )
+    const TABLE_NAME = "volunteer_shifts";
 
     // ---- VOLUNTEER IDENTITY ----
-    // In production, replace with real signed-in user identity.
     function getVolunteerName() {
       const existing = localStorage.getItem("lab_volunteer_name");
       if (existing) return existing;
@@ -233,41 +233,176 @@
     // ---- UI ----
     const messageEl = document.getElementById("message");
     const root = document.getElementById("schedule-root");
-    let schedule = loadSchedule();
+    const syncMetaEl = document.getElementById("sync-meta");
+    const refreshBtn = document.getElementById("refresh-btn");
+
     const volunteerName = getVolunteerName();
+    let schedule = defaultSchedule();
+    let lastLoadedAt = null;
 
     function showMessage(text, type = "success") {
       messageEl.innerHTML = `<div class="notice ${type}">${text}</div>`;
-      setTimeout(() => (messageEl.innerHTML = ""), 3500);
+      setTimeout(() => (messageEl.innerHTML = ""), 4000);
+    }
+
+    function setSyncMeta(text) {
+      syncMetaEl.textContent = text || "";
+    }
+
+    function defaultSchedule() {
+      const obj = {};
+      for (const date of PERFORMANCE_DATES) {
+        obj[date] = {
+          box_office: Array(SHIFT_TEMPLATE.box_office.slots).fill(null),
+          concessions: Array(SHIFT_TEMPLATE.concessions.slots).fill(null),
+          usher: Array(SHIFT_TEMPLATE.usher.slots).fill(null)
+        };
+      }
+      return obj;
+    }
+
+    function normalizeScheduleFromRows(rows) {
+      const fresh = defaultSchedule();
+
+      for (const row of rows || []) {
+        const date = row.performance_date;
+        const role = row.role;
+        const slotIndex = row.slot_index;
+        const assigned = row.assigned_to ?? null;
+
+        if (!fresh[date]) continue;
+        if (!Object.prototype.hasOwnProperty.call(fresh[date], role)) continue;
+        if (typeof slotIndex !== "number") continue;
+        if (slotIndex < 0 || slotIndex >= fresh[date][role].length) continue;
+
+        fresh[date][role][slotIndex] = assigned;
+      }
+
+      return fresh;
     }
 
     function alreadySignedForDate(date, name) {
       const day = schedule[date];
+      if (!day) return false;
       for (const role of Object.keys(day)) {
         if (day[role].includes(name)) return true;
       }
       return false;
     }
 
-    function signUp(date, role, slotIndex) {
-      const day = schedule[date];
-      if (!day || !day[role]) return;
+    async function ensureSeedDataExists() {
+      // Read existing rows for configured dates
+      const { data: existing, error: readErr } = await supabase
+        .from(TABLE_NAME)
+        .select("performance_date, role, slot_index")
+        .in("performance_date", PERFORMANCE_DATES);
 
-      if (day[role][slotIndex]) {
-        showMessage("That slot is already filled.", "error");
-        return;
+      if (readErr) throw readErr;
+
+      const existingSet = new Set(
+        (existing || []).map(r => `${r.performance_date}||${r.role}||${r.slot_index}`)
+      );
+
+      const toInsert = [];
+      for (const date of PERFORMANCE_DATES) {
+        for (const role of Object.keys(SHIFT_TEMPLATE)) {
+          for (let slotIndex = 0; slotIndex < SHIFT_TEMPLATE[role].slots; slotIndex++) {
+            const key = `${date}||${role}||${slotIndex}`;
+            if (!existingSet.has(key)) {
+              toInsert.push({
+                performance_date: date,
+                role,
+                slot_index: slotIndex,
+                assigned_to: null
+              });
+            }
+          }
+        }
       }
 
-      // Optional rule: one role per volunteer per performance date
-      if (alreadySignedForDate(date, volunteerName)) {
-        showMessage("You are already signed up for this performance date.", "error");
-        return;
-      }
+      if (toInsert.length > 0) {
+        const { error: insertErr } = await supabase
+          .from(TABLE_NAME)
+          .insert(toInsert);
 
-      day[role][slotIndex] = volunteerName;
-      saveSchedule(schedule);
-      render();
-      showMessage(`Signed up: ${SHIFT_TEMPLATE[role].label} on ${date}`, "success");
+        if (insertErr) throw insertErr;
+      }
+    }
+
+    async function loadScheduleFromSupabase() {
+      try {
+        setSyncMeta("Syncing from Supabase...");
+        await ensureSeedDataExists();
+
+        const { data, error } = await supabase
+          .from(TABLE_NAME)
+          .select("performance_date, role, slot_index, assigned_to, updated_at")
+          .in("performance_date", PERFORMANCE_DATES)
+          .order("performance_date", { ascending: true })
+          .order("role", { ascending: true })
+          .order("slot_index", { ascending: true });
+
+        if (error) throw error;
+
+        schedule = normalizeScheduleFromRows(data);
+        lastLoadedAt = new Date();
+        render();
+
+        const stamp = lastLoadedAt.toLocaleString();
+        setSyncMeta(`Last synced: ${stamp}`);
+      } catch (err) {
+        console.error(err);
+        showMessage(`Failed to load shifts from Supabase: ${err.message || err}`, "error");
+        setSyncMeta("Sync failed");
+      }
+    }
+
+    async function signUp(date, role, slotIndex) {
+      try {
+        // Always refresh first to minimize stale writes
+        await loadScheduleFromSupabase();
+
+        const day = schedule[date];
+        if (!day || !day[role]) return;
+
+        if (day[role][slotIndex]) {
+          showMessage("That slot is already filled.", "error");
+          return;
+        }
+
+        // Optional rule: one role per volunteer per performance date
+        if (alreadySignedForDate(date, volunteerName)) {
+          showMessage("You are already signed up for this performance date.", "error");
+          return;
+        }
+
+        // Optimistic concurrency: only update when currently unassigned
+        const { data, error } = await supabase
+          .from(TABLE_NAME)
+          .update({
+            assigned_to: volunteerName,
+            updated_at: new Date().toISOString()
+          })
+          .eq("performance_date", date)
+          .eq("role", role)
+          .eq("slot_index", slotIndex)
+          .is("assigned_to", null)
+          .select("performance_date, role, slot_index, assigned_to");
+
+        if (error) throw error;
+
+        if (!data || data.length === 0) {
+          showMessage("That slot was just taken by someone else. Please pick another.", "error");
+          await loadScheduleFromSupabase();
+          return;
+        }
+
+        showMessage(`Signed up: ${SHIFT_TEMPLATE[role].label} on ${date}`, "success");
+        await loadScheduleFromSupabase();
+      } catch (err) {
+        console.error(err);
+        showMessage(`Signup failed: ${err.message || err}`, "error");
+      }
     }
 
     function render() {
@@ -331,7 +466,11 @@
       });
     }
 
-    render();
+    refreshBtn.addEventListener("click", loadScheduleFromSupabase);
+
+    // Initial load
+    render(); // immediate skeleton using default empty schedule
+    loadScheduleFromSupabase();
   </script>
 </body>
 </html>
