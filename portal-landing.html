@@ -42,8 +42,7 @@
       margin-bottom: 1rem;
     }
 
-    .auth-card h1,
-    .auth-card h2 {
+    .auth-card h1, .auth-card h2 {
       margin-top: 0;
     }
 
@@ -187,10 +186,10 @@
       border: 1px solid #2d2d2d;
       border-radius: 6px;
       padding: 0.1rem 0.35rem;
-      word-break: break-all;
     }
   </style>
 
+  <!-- Supabase JS -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
@@ -237,30 +236,6 @@
       </form>
     </section>
 
-    <section class="auth-card">
-      <h2>Connection Setup</h2>
-      <p class="muted" style="margin-top: 0;">
-        Your page wasn't working because Supabase credentials were placeholders.  
-        Paste your real values below and click <strong>Save Config</strong>.
-      </p>
-
-      <div class="grid">
-        <div>
-          <label for="sb-url">Supabase URL</label>
-          <input id="sb-url" type="text" placeholder="https://YOUR_PROJECT_ID.supabase.co" />
-        </div>
-        <div>
-          <label for="sb-anon">Supabase Anon Key</label>
-          <input id="sb-anon" type="password" placeholder="YOUR_SUPABASE_ANON_KEY" />
-        </div>
-      </div>
-
-      <div class="actions">
-        <button id="save-config-btn" class="btn" type="button">Save Config</button>
-        <button id="clear-config-btn" class="btn" type="button">Clear Config</button>
-      </div>
-    </section>
-
     <section id="portal-section" class="auth-card hidden">
       <h2>Choose Your Portal</h2>
       <p class="muted">You are signed in. Select a destination below.</p>
@@ -281,7 +256,18 @@
   </main>
 
   <script>
-    const STORAGE_KEY = "labtheater_supabase_config_v1";
+    // ==========================
+    // REQUIRED: Replace these with your real values from Supabase
+    // ==========================
+    const SUPABASE_URL = "https://izytzrxrgnahyvgwqhgd.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml6eXR6cnhyZ25haHl2Z3dxaGdkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI4OTkwNjMsImV4cCI6MjA5ODQ3NTA2M30.eRJDTZVj122qnzGPQxWWE2gxCmVXuCTukWOkfckRkMk";
+
+    // Guard against unconfigured credentials
+    const isConfigured =
+      SUPABASE_URL &&
+      SUPABASE_ANON_KEY &&
+      !SUPABASE_URL.includes("YOUR_PROJECT_ID") &&
+      !SUPABASE_ANON_KEY.includes("YOUR_SUPABASE_ANON_KEY");
 
     const statusEl = document.getElementById("status");
     const loginForm = document.getElementById("login-form");
@@ -291,11 +277,6 @@
     const logoutBtn = document.getElementById("logout-btn");
     const portalSection = document.getElementById("portal-section");
     const userEmailEl = document.getElementById("user-email");
-
-    const sbUrlInput = document.getElementById("sb-url");
-    const sbAnonInput = document.getElementById("sb-anon");
-    const saveConfigBtn = document.getElementById("save-config-btn");
-    const clearConfigBtn = document.getElementById("clear-config-btn");
 
     let supabase = null;
 
@@ -333,86 +314,40 @@
       passwordInput.value = "";
     }
 
-    function readConfig() {
-      try {
-        const raw = localStorage.getItem(STORAGE_KEY);
-        if (!raw) return { url: "", anon: "" };
-        const parsed = JSON.parse(raw);
-        return {
-          url: (parsed?.url || "").trim(),
-          anon: (parsed?.anon || "").trim()
-        };
-      } catch {
-        return { url: "", anon: "" };
-      }
-    }
-
-    function writeConfig(url, anon) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({ url, anon }));
-    }
-
-    function clearConfig() {
-      localStorage.removeItem(STORAGE_KEY);
-    }
-
-    function isValidSupabaseConfig(url, anon) {
-      return /^https:\/\/[a-z0-9-]+\.supabase\.co$/i.test(url) && anon.length > 20;
-    }
-
-    function ensureClientFromConfig() {
-      const { url, anon } = readConfig();
-
-      sbUrlInput.value = url;
-      sbAnonInput.value = anon;
-
-      if (!isValidSupabaseConfig(url, anon)) {
-        supabase = null;
-        loginBtn.disabled = true;
-        showStatus("Enter your Supabase URL + anon key, then click Save Config.", "error");
-        setSignedOutUI();
-        return false;
-      }
-
-      try {
-        supabase = window.supabase.createClient(url, anon);
-        loginBtn.disabled = false;
-        return true;
-      } catch {
-        supabase = null;
-        loginBtn.disabled = true;
-        showStatus("Could not initialize Supabase. Check your URL and key.", "error");
-        setSignedOutUI();
-        return false;
-      }
-    }
-
     async function bootstrapAuth() {
-      clearStatus();
+      if (!isConfigured) {
+        showStatus(
+          "Supabase is not configured yet. Add your project URL and anon key in this file to enable login.",
+          "error"
+        );
+        loginBtn.disabled = true;
+        return;
+      }
 
-      const ok = ensureClientFromConfig();
-      if (!ok) return;
+      supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+      // Check existing session on load
       const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
-
       if (sessionError) {
-        showStatus("Could not check session. Verify your Supabase credentials.", "error");
+        showStatus("Could not check session. Please refresh and try again.", "error");
         return;
       }
 
       const user = sessionData?.session?.user || null;
       if (user) {
         setSignedInUI(user);
-        emailInput.value = user.email || "";
         showStatus("Welcome back! Choose a portal below.", "success");
+        emailInput.value = user.email || "";
       } else {
         setSignedOutUI();
       }
 
+      // Listen for auth state changes (login/logout/refresh)
       supabase.auth.onAuthStateChange((_event, session) => {
         if (session?.user) {
           setSignedInUI(session.user);
-          emailInput.value = session.user.email || "";
           showStatus("Login successful. Choose your portal.", "success");
+          emailInput.value = session.user.email || "";
         } else {
           setSignedOutUI();
           showStatus("You are logged out.", "success");
@@ -420,38 +355,12 @@
       });
     }
 
-    saveConfigBtn.addEventListener("click", async () => {
-      clearStatus();
-
-      const url = sbUrlInput.value.trim();
-      const anon = sbAnonInput.value.trim();
-
-      if (!isValidSupabaseConfig(url, anon)) {
-        showStatus("Please enter a valid Supabase URL and anon key.", "error");
-        return;
-      }
-
-      writeConfig(url, anon);
-      showStatus("Config saved. Testing connection...", "success");
-      await bootstrapAuth();
-    });
-
-    clearConfigBtn.addEventListener("click", () => {
-      clearConfig();
-      sbUrlInput.value = "";
-      sbAnonInput.value = "";
-      supabase = null;
-      setSignedOutUI();
-      loginBtn.disabled = true;
-      showStatus("Saved config cleared.", "success");
-    });
-
     loginForm.addEventListener("submit", async (event) => {
       event.preventDefault();
       clearStatus();
 
       if (!supabase) {
-        showStatus("Set and save your Supabase config first.", "error");
+        showStatus("Supabase is not configured. Please add credentials first.", "error");
         return;
       }
 
@@ -465,7 +374,10 @@
 
       setLoading(true);
       try {
-        const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email,
+          password
+        });
 
         if (error) {
           showStatus(error.message || "Login failed.", "error");
@@ -478,7 +390,7 @@
         } else {
           showStatus("Login failed. Please try again.", "error");
         }
-      } catch {
+      } catch (err) {
         showStatus("Unexpected error while logging in.", "error");
       } finally {
         setLoading(false);
