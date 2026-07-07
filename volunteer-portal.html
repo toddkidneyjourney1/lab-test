@@ -69,6 +69,12 @@
     <section class="portal-card" id="auth-card">
       <h3>Authentication</h3>
       <p class="muted">Use your account email and password.</p>
+
+      <!-- New account CTA -->
+      <div class="portal-actions" style="margin-bottom: 0.75rem;">
+        <button id="signup-btn" class="btn btn-secondary" type="button">Create New Account</button>
+      </div>
+
       <form id="login-form">
         <label for="email">Email</label><br />
         <input id="email" class="field" type="email" required placeholder="you@example.com" />
@@ -88,7 +94,7 @@
       <h3>Your Portals</h3>
       <p class="muted">Buttons enable based on your profile permissions.</p>
       <div class="portal-actions">
-        <a id="volunteer-link" class="btn btn-secondary" href="volunteer-portal.html" aria-disabled="true">Volunteer Portal</a>
+        <a id="volunteer-link" class="btn btn-secondary" href="volunteer-signup.html" aria-disabled="true">Volunteer Signup</a>
         <a id="cast-link" class="btn btn-secondary" href="cast-portal.html" aria-disabled="true">Cast Portal</a>
       </div>
     </section>
@@ -105,6 +111,7 @@
     const messageContainer = document.getElementById("message-container");
     const loginForm = document.getElementById("login-form");
     const logoutBtn = document.getElementById("logout-btn");
+    const signupBtn = document.getElementById("signup-btn");
     const volunteerLink = document.getElementById("volunteer-link");
     const castLink = document.getElementById("cast-link");
 
@@ -154,6 +161,7 @@
       if (error || !user) {
         logoutBtn.classList.add("hidden");
         loginForm.classList.remove("hidden");
+        signupBtn.classList.remove("hidden");
         localStorage.removeItem("labPortalUserId");
         return;
       }
@@ -161,14 +169,17 @@
       localStorage.setItem("labPortalUserId", user.id);
       logoutBtn.classList.remove("hidden");
       loginForm.classList.add("hidden");
+      signupBtn.classList.add("hidden");
 
       const access = await fetchAccess(user.id);
 
-      if (access.isVolunteer) enablePortalLink(volunteerLink);
-      if (access.isCast) enablePortalLink(castLink);
+      // Authenticated users should have options to proceed
+      enablePortalLink(volunteerLink);
+      enablePortalLink(castLink);
 
+      // Optional: if no role assigned yet, keep notice (but still allow volunteer signup path)
       if (!access.isVolunteer && !access.isCast) {
-        showMessage("Signed in, but no portal permissions found for this account.", "error");
+        showMessage("Signed in successfully. You can start with Volunteer Signup or continue to Cast Portal if assigned.", "success");
       }
     }
 
@@ -191,6 +202,26 @@
 
       showMessage("Signed in successfully.", "success");
       await refreshUIFromSession();
+    });
+
+    signupBtn.addEventListener("click", async () => {
+      const email = prompt("Enter new user's email:");
+      if (!email) return;
+      const password = prompt("Enter temporary password (min 6 chars):");
+      if (!password) return;
+
+      const cleanEmail = email.trim();
+      if (!cleanEmail || !password || password.length < 6) {
+        showMessage("Valid email and password (min 6 chars) are required.", "error");
+        return;
+      }
+
+      const { error } = await supabase.auth.signUp({ email: cleanEmail, password });
+      if (error) {
+        showMessage(error.message || "Sign up failed.", "error");
+        return;
+      }
+      showMessage("Account created. Ask the user to verify email if required, then sign in.", "success");
     });
 
     logoutBtn.addEventListener("click", async () => {
