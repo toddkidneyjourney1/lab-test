@@ -7,132 +7,42 @@
   <style>
     :root { color-scheme: dark; }
     * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #0f0f10;
-      color: #f1f1f1;
-    }
+    body { margin:0; font-family:Arial,sans-serif; background:#0f0f10; color:#f1f1f1; }
+    .wrap { max-width:1100px; margin:0 auto; padding:18px; }
+    .panel { background:#181818; border:1px solid #333; border-radius:12px; padding:14px; }
+    .row { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+    .btn { border:0; border-radius:8px; padding:8px 12px; background:#d72638; color:#fff; font-weight:700; cursor:pointer; }
+    .btn.gray { background:#444; }
+    .btn:disabled { opacity:.55; cursor:not-allowed; }
 
-    .wrap {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 18px;
-    }
+    .layout { margin-top:12px; display:grid; grid-template-columns:1.25fr .9fr; gap:12px; }
+    @media (max-width:900px) { .layout { grid-template-columns:1fr; } }
 
-    .panel {
-      background: #181818;
-      border: 1px solid #333;
-      border-radius: 12px;
-      padding: 14px;
-    }
+    .dow { display:grid; grid-template-columns:repeat(7,1fr); gap:6px; margin-bottom:6px; }
+    .dow div { text-align:center; color:#a9a9a9; font-size:12px; }
 
-    .row {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-      flex-wrap: wrap;
-    }
+    #calendar-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:6px; min-height:460px; }
 
-    .btn {
-      border: 0;
-      border-radius: 8px;
-      padding: 8px 12px;
-      background: #d72638;
-      color: #fff;
-      font-weight: 700;
-      cursor: pointer;
-    }
-    .btn.gray { background: #444; }
+    .day { border:1px solid #3a3a3a; border-radius:10px; min-height:92px; background:#121212; padding:6px; }
+    .day.outside { opacity:.35; }
+    .day.has-show.open { box-shadow: inset 0 0 0 1px rgba(60,180,95,.55); }
+    .day.has-show.full { box-shadow: inset 0 0 0 1px rgba(190,65,65,.55); }
+    .day.selected { outline:2px solid #d72638; }
 
-    .layout {
-      margin-top: 12px;
-      display: grid;
-      grid-template-columns: 1.25fr .9fr;
-      gap: 12px;
-    }
+    .day-btn { width:100%; min-height:78px; border:0; background:transparent; color:inherit; text-align:left; padding:0; cursor:pointer; }
+    .num { display:block; font-size:12px; color:#bdbdbd; margin-bottom:4px; }
+    .pill { display:inline-block; font-size:11px; border-radius:999px; padding:2px 7px; border:1px solid #4a4a4a; margin-bottom:4px; }
+    .pill.open { border-color:#2b8d48; color:#9fe0b0; }
+    .pill.full { border-color:#9b3a3a; color:#efb0b0; }
+    .show-mini { font-size:11px; color:#d1d1d1; line-height:1.2; max-height:2.5em; overflow:hidden; }
 
-    @media (max-width: 900px) {
-      .layout { grid-template-columns: 1fr; }
-    }
-
-    .dow {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 6px;
-      margin-bottom: 6px;
-    }
-
-    .dow div {
-      text-align: center;
-      color: #a9a9a9;
-      font-size: 12px;
-    }
-
-    #calendar-grid {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 6px;
-      min-height: 460px;
-    }
-
-    .day {
-      border: 1px solid #3a3a3a;
-      border-radius: 10px;
-      min-height: 92px;
-      background: #121212;
-      padding: 6px;
-    }
-
-    .day.outside { opacity: .35; }
-    .day.has-show.open { box-shadow: inset 0 0 0 1px rgba(60,180,95,.5); }
-    .day.has-show.full { box-shadow: inset 0 0 0 1px rgba(180,70,70,.5); }
-    .day.selected { outline: 2px solid #d72638; }
-
-    .day-btn {
-      width: 100%;
-      min-height: 78px;
-      border: 0;
-      background: transparent;
-      color: inherit;
-      text-align: left;
-      padding: 0;
-      cursor: pointer;
-    }
-
-    .num {
-      display: block;
-      font-size: 12px;
-      color: #bdbdbd;
-      margin-bottom: 4px;
-    }
-
-    .pill {
-      display: inline-block;
-      font-size: 11px;
-      border-radius: 999px;
-      padding: 2px 7px;
-      border: 1px solid #4a4a4a;
-      margin-bottom: 4px;
-    }
-    .pill.open { border-color: #2b8d48; color: #9fe0b0; }
-    .pill.full { border-color: #9b3a3a; color: #efb0b0; }
-
-    .show-mini {
-      font-size: 11px;
-      color: #d1d1d1;
-      line-height: 1.2;
-      max-height: 2.5em;
-      overflow: hidden;
-    }
-
-    .empty {
-      border: 1px dashed #555;
-      border-radius: 10px;
-      padding: 10px;
-      color: #c7c7c7;
-      background: #131313;
-    }
+    .empty { border:1px dashed #555; border-radius:10px; padding:10px; color:#c7c7c7; background:#131313; }
+    .slot { border:1px solid #3d3d3d; border-radius:10px; padding:10px; background:#141414; margin-top:8px; }
+    .slot-title { font-weight:700; margin-bottom:4px; }
+    .muted { color:#b5b5b5; font-size:12px; }
+    .notice { margin-top:10px; font-size:13px; color:#ddd; }
+    .ok { color:#9fe0b0; }
+    .err { color:#efb0b0; }
   </style>
 </head>
 <body>
@@ -145,7 +55,12 @@
         <button id="next-month-btn" class="btn gray" type="button">Next</button>
         <strong id="month-title">Month</strong>
       </div>
-      <div id="msg" style="margin-top:8px;color:#bdbdbd;">Initializing…</div>
+      <div class="row" style="margin-top:8px;">
+        <label for="volunteer-name">Volunteer Name:</label>
+        <input id="volunteer-name" style="padding:8px;border-radius:8px;border:1px solid #444;background:#101010;color:#fff;" />
+        <button id="save-name-btn" class="btn gray" type="button">Save Name</button>
+      </div>
+      <div id="msg" class="notice">Initializing…</div>
     </div>
 
     <div class="layout">
@@ -163,7 +78,19 @@
     </div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
+    // =========================
+    // Supabase config
+    // =========================
+    const SUPABASE_URL = "https://YOUR_PROJECT_ID.supabase.co";
+    const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
+    const TABLE_NAME = "volunteer_shifts";
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // =========================
+    // Master schedule (83)
+    // =========================
     const MASTER_PERFORMANCES = [
       { show:"Waiting for Godot", date:"2026-08-20", time:"7:30 PM", tz:"EDT" },
       { show:"Waiting for Godot", date:"2026-08-21", time:"7:30 PM", tz:"EDT" },
@@ -257,29 +184,177 @@
     ];
 
     const PERF_BY_DATE = Object.fromEntries(MASTER_PERFORMANCES.map(p => [p.date, p]));
+    const PERFORMANCE_DATES = MASTER_PERFORMANCES.map(p => `${p.date} ${p.time}`);
 
-    let visibleMonth = new Date("2026-08-01T00:00:00");
-    let selectedDateKey = null;
-
+    // DOM
     const monthTitleEl = document.getElementById("month-title");
     const gridEl = document.getElementById("calendar-grid");
     const detailTitleEl = document.getElementById("detail-title");
     const detailBodyEl = document.getElementById("detail-body");
     const msgEl = document.getElementById("msg");
+    const volunteerNameInput = document.getElementById("volunteer-name");
+
+    // state
+    let visibleMonth = new Date("2026-08-01T00:00:00");
+    let selectedDateKey = null;
+    let volunteerName = localStorage.getItem("lab_volunteer_name") || "";
+    volunteerNameInput.value = volunteerName;
+
+    let schedule = defaultSchedule();
+
+    function mmddyyyy(isoDate) {
+      const [y,m,d] = isoDate.split("-");
+      return `${m}-${d}-${y}`;
+    }
 
     function fmtKey(d) {
       return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
     }
 
-    function renderDetail() {
-      if (!selectedDateKey || !PERF_BY_DATE[selectedDateKey]) {
-        detailTitleEl.textContent = "Select a performance date";
-        detailBodyEl.textContent = "Click a highlighted date in the calendar.";
-        return;
+    function setMsg(text, ok = true) {
+      msgEl.className = "notice " + (ok ? "ok":"err");
+      msgEl.textContent = text;
+    }
+
+    function roleLabel(role) {
+      if (role === "box_office") return "Box Office";
+      if (role === "usher") return "Usher";
+      return "Concessions";
+    }
+
+    function defaultSchedule() {
+      const out = {};
+      for (const p of MASTER_PERFORMANCES) {
+        out[p.date] = {
+          performance_date: `${p.date} ${p.time}`,
+          show: p.show,
+          tz: p.tz,
+          box_office: [null],
+          usher: [null, null],
+          concessions: [null]
+        };
       }
-      const p = PERF_BY_DATE[selectedDateKey];
-      detailTitleEl.textContent = `${p.date} ${p.time}`;
-      detailBodyEl.innerHTML = `<strong>${p.show}</strong> (${p.tz})<br/>Click handling works.`;
+      return out;
+    }
+
+    function countOpenSlots(dateKey) {
+      const d = schedule[dateKey];
+      if (!d) return 0;
+      return [...d.box_office, ...d.usher, ...d.concessions].filter(v => !v).length;
+    }
+
+    function normalizeFromRows(rows) {
+      const fresh = defaultSchedule();
+      for (const r of rows || []) {
+        const dateKey = (r.performance_date || "").split(" ")[0];
+        if (!fresh[dateKey]) continue;
+        if (!(r.role in fresh[dateKey])) continue;
+        if (typeof r.slot_index !== "number") continue;
+        if (r.slot_index < 0 || r.slot_index >= fresh[dateKey][r.role].length) continue;
+        fresh[dateKey][r.role][r.slot_index] = r.assigned_to ?? null;
+      }
+      return fresh;
+    }
+
+    async function ensureSeedDataExists() {
+      const { data: existing, error: readErr } = await supabase
+        .from(TABLE_NAME)
+        .select("performance_date, role, slot_index")
+        .in("performance_date", PERFORMANCE_DATES);
+
+      if (readErr) throw readErr;
+
+      const existingSet = new Set((existing || []).map(r => `${r.performance_date}|${r.role}|${r.slot_index}`));
+      const toInsert = [];
+
+      for (const p of MASTER_PERFORMANCES) {
+        const perfRaw = `${p.date} ${p.time}`;
+        ["box_office", "usher", "concessions"].forEach(role => {
+          const slots = role === "usher" ? 2 : 1;
+          for (let slotIndex = 0; slotIndex < slots; slotIndex++) {
+            const key = `${perfRaw}|${role}|${slotIndex}`;
+            if (!existingSet.has(key)) {
+              toInsert.push({
+                performance_date: perfRaw,
+                role,
+                shift_name: roleLabel(role),
+                slot_index: slotIndex,
+                assigned_to: null
+              });
+            }
+          }
+        });
+      }
+
+      if (toInsert.length) {
+        const { error: insErr } = await supabase.from(TABLE_NAME).insert(toInsert);
+        if (insErr) throw insErr;
+      }
+    }
+
+    async function loadFromSupabase() {
+      try {
+        setMsg("Syncing schedule…", true);
+        await ensureSeedDataExists();
+
+        const { data, error } = await supabase
+          .from(TABLE_NAME)
+          .select("performance_date, role, slot_index, assigned_to")
+          .in("performance_date", PERFORMANCE_DATES);
+
+        if (error) throw error;
+
+        schedule = normalizeFromRows(data || []);
+        setMsg(`Loaded ${MASTER_PERFORMANCES.length} performances.`, true);
+        renderCalendar();
+        renderDetail();
+      } catch (e) {
+        console.error(e);
+        setMsg("Supabase sync failed. Calendar still visible locally.", false);
+        schedule = defaultSchedule();
+        renderCalendar();
+        renderDetail();
+      }
+    }
+
+    async function signUp(dateKey, role, slotIndex) {
+      try {
+        const name = (volunteerName || "").trim();
+        if (!name) {
+          alert("Please enter and save your volunteer name first.");
+          return;
+        }
+
+        const perf = PERF_BY_DATE[dateKey];
+        if (!perf) return;
+        const perfRaw = `${perf.date} ${perf.time}`;
+
+        const { data, error } = await supabase
+          .from(TABLE_NAME)
+          .update({
+            assigned_to: name,
+            shift_name: roleLabel(role)
+          })
+          .eq("performance_date", perfRaw)
+          .eq("role", role)
+          .eq("slot_index", slotIndex)
+          .is("assigned_to", null)
+          .select("performance_date");
+
+        if (error) throw error;
+        if (!data || data.length === 0) {
+          alert("That slot was just taken. Please choose another.");
+          await loadFromSupabase();
+          return;
+        }
+
+        await loadFromSupabase();
+        selectedDateKey = dateKey;
+        renderDetail();
+      } catch (e) {
+        console.error(e);
+        alert("Signup failed: " + (e.message || e));
+      }
     }
 
     function renderCalendar() {
@@ -311,11 +386,15 @@
         const key = fmtKey(cell.d);
         const perf = PERF_BY_DATE[key];
         const hasShow = !!perf;
+        const open = hasShow ? countOpenSlots(key) : 0;
+        const full = hasShow && open === 0;
 
         const day = document.createElement("div");
         day.className = "day";
         if (cell.outside) day.classList.add("outside");
-        if (hasShow) day.classList.add("has-show", "open");
+        if (hasShow) day.classList.add("has-show");
+        if (hasShow && !full) day.classList.add("open");
+        if (full) day.classList.add("full");
         if (selectedDateKey === key) day.classList.add("selected");
 
         const btn = document.createElement("button");
@@ -325,8 +404,8 @@
 
         if (hasShow) {
           const pill = document.createElement("span");
-          pill.className = "pill open";
-          pill.textContent = "Show";
+          pill.className = "pill " + (full ? "full" : "open");
+          pill.textContent = full ? "Full" : `${open} open`;
           btn.appendChild(pill);
 
           const mini = document.createElement("div");
@@ -348,6 +427,58 @@
       }
     }
 
+    function renderRoleBlock(dateKey, role, slots) {
+      const assigned = schedule[dateKey][role];
+      const openCount = assigned.filter(v => !v).length;
+      const lines = [];
+
+      for (let i = 0; i < slots; i++) {
+        const takenBy = assigned[i];
+        if (takenBy) {
+          lines.push(`<div class="muted">Slot ${i + 1}: Taken by ${takenBy}</div>`);
+        } else {
+          lines.push(`<button class="btn" data-signup-role="${role}" data-signup-slot="${i}" type="button">Sign Up Slot ${i + 1}</button>`);
+        }
+      }
+
+      return `
+        <div class="slot">
+          <div class="slot-title">${roleLabel(role)} (${openCount}/${slots} available)</div>
+          ${lines.join("<div style='height:6px'></div>")}
+        </div>
+      `;
+    }
+
+    function renderDetail() {
+      if (!selectedDateKey || !PERF_BY_DATE[selectedDateKey]) {
+        detailTitleEl.textContent = "Select a performance date";
+        detailBodyEl.className = "empty";
+        detailBodyEl.innerHTML = "Click a highlighted date in the calendar.";
+        return;
+      }
+
+      const p = PERF_BY_DATE[selectedDateKey];
+      const mmdd = mmddyyyy(selectedDateKey);
+
+      detailTitleEl.textContent = `${mmdd} • ${p.time}`;
+      detailBodyEl.className = "";
+      detailBodyEl.innerHTML = `
+        <div class="slot"><strong>${p.show}</strong> (${p.tz})</div>
+        ${renderRoleBlock(selectedDateKey, "box_office", 1)}
+        ${renderRoleBlock(selectedDateKey, "usher", 2)}
+        ${renderRoleBlock(selectedDateKey, "concessions", 1)}
+      `;
+
+      detailBodyEl.querySelectorAll("[data-signup-role]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const role = btn.getAttribute("data-signup-role");
+          const slot = Number(btn.getAttribute("data-signup-slot"));
+          signUp(selectedDateKey, role, slot);
+        });
+      });
+    }
+
+    // nav events
     document.getElementById("prev-month-btn").addEventListener("click", () => {
       visibleMonth = new Date(visibleMonth.getFullYear(), visibleMonth.getMonth() - 1, 1);
       renderCalendar();
@@ -364,9 +495,16 @@
       renderCalendar();
     });
 
+    document.getElementById("save-name-btn").addEventListener("click", () => {
+      volunteerName = (volunteerNameInput.value || "").trim();
+      localStorage.setItem("lab_volunteer_name", volunteerName);
+      setMsg(volunteerName ? `Name saved: ${volunteerName}` : "Name cleared.", !!volunteerName);
+    });
+
+    // init
     renderCalendar();
     renderDetail();
-    msgEl.textContent = `Loaded ${MASTER_PERFORMANCES.length} performances.`;
+    loadFromSupabase();
   </script>
 </body>
 </html>
