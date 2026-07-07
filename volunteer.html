@@ -228,6 +228,15 @@
         return "Concessions";
       }
 
+      function splitTimeParts(timeText) {
+        const match = String(timeText || "").trim().match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i);
+        if (!match) return { start_time: timeText, meridiem: null };
+        return {
+          start_time: `${match[1]}:${match[2]}`,
+          meridiem: match[3].toUpperCase()
+        };
+      }
+
       function defaultSchedule() {
         const out = {};
         for (const p of MASTER_PERFORMANCES) {
@@ -317,6 +326,7 @@
 
         for (const p of MASTER_PERFORMANCES) {
           const perfRaw = `${p.date} ${p.time}`;
+          const timeParts = splitTimeParts(p.time);
           for (const role of Object.keys(SHIFT_COUNTS)) {
             for (let i = 0; i < SHIFT_COUNTS[role]; i++) {
               const key = `${perfRaw}|${role}|${i}`;
@@ -324,6 +334,8 @@
                 toInsert.push({
                   performance_date: perfRaw,
                   shift_date: p.date,
+                  start_time: timeParts.start_time,
+                  meridiem: timeParts.meridiem,
                   role,
                   shift_name: roleLabel(role),
                   slot_index: i,
