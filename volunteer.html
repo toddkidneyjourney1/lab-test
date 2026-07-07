@@ -19,81 +19,110 @@
     .sync-meta { margin-top:.5rem; font-size:.85rem; color:#aaa; }
     .identity { margin-top:.45rem; font-size:.92rem; color:#d9d9d9; }
 
-    .calendar-wrap { display:grid; grid-template-columns: 1.25fr .95fr; gap:1rem; align-items:start; }
+    .calendar-wrap { display:grid !important; grid-template-columns: 1.25fr .95fr !important; gap:1rem !important; align-items:start !important; }
     .calendar-card, .detail-card {
-      background:#1a1a1a; border:1px solid #333; border-radius:12px; padding:.9rem;
+      display:block !important;
+      visibility:visible !important;
+      opacity:1 !important;
+      background:#1a1a1a !important;
+      border:1px solid #333 !important;
+      border-radius:12px !important;
+      padding:.9rem !important;
+      min-height: 200px;
     }
 
-    .calendar-head { display:flex; justify-content:space-between; align-items:center; gap:.6rem; margin-bottom:.8rem; flex-wrap:wrap; }
-    .month-title { margin:0; font-size:1.1rem; }
+    .calendar-head { display:flex !important; justify-content:space-between !important; align-items:center !important; gap:.6rem !important; margin-bottom:.8rem !important; flex-wrap:wrap !important; }
+    .month-title { margin:0 !important; font-size:1.1rem !important; }
 
-    .legend { display:flex; gap:.6rem; flex-wrap:wrap; font-size:.82rem; color:#c8c8c8; margin-bottom:.7rem; }
-    .dot { display:inline-block; width:.62rem; height:.62rem; border-radius:999px; margin-right:.3rem; vertical-align:middle; }
-    .dot.open { background:#33a852; }
-    .dot.full { background:#7a2f2f; }
-    .dot.none { background:#555; }
+    .legend { display:flex !important; gap:.6rem !important; flex-wrap:wrap !important; font-size:.82rem !important; color:#c8c8c8 !important; margin-bottom:.7rem !important; }
+    .dot { display:inline-block !important; width:.62rem !important; height:.62rem !important; border-radius:999px !important; margin-right:.3rem !important; vertical-align:middle !important; }
+    .dot.open { background:#33a852 !important; }
+    .dot.full { background:#7a2f2f !important; }
+    .dot.none { background:#555 !important; }
 
-    .dow, .grid { display:grid; grid-template-columns: repeat(7, minmax(0,1fr)); gap:.35rem; }
-    .dow div { text-align:center; font-size:.78rem; color:#acacac; padding-bottom:.2rem; }
+    .dow {
+      display:grid !important;
+      grid-template-columns: repeat(7, minmax(0,1fr)) !important;
+      gap:.35rem !important;
+      margin-bottom: .35rem !important;
+    }
+    .dow div {
+      display:block !important;
+      text-align:center !important;
+      font-size:.78rem !important;
+      color:#acacac !important;
+      padding-bottom:.2rem !important;
+    }
+
+    #calendar-grid {
+      display:grid !important;
+      grid-template-columns: repeat(7, minmax(0,1fr)) !important;
+      gap:.35rem !important;
+      min-height: 420px !important;
+      visibility: visible !important;
+    }
 
     .day {
-      border:1px solid #363636; border-radius:10px; min-height:92px; background:#111;
-      padding:.4rem; text-align:left; color:#ddd; position:relative;
+      display:block !important;
+      border:1px solid #363636 !important;
+      border-radius:10px !important;
+      min-height:92px !important;
+      background:#111 !important;
+      padding:.4rem !important;
+      text-align:left !important;
+      color:#ddd !important;
+      position:relative !important;
     }
 
     .day-btn {
-      width:100%;
-      height:100%;
-      border:0;
-      background:transparent;
-      color:inherit;
-      padding:0;
-      text-align:left;
-      cursor:pointer;
+      display:block !important;
+      width:100% !important;
+      min-height:82px !important;
+      border:0 !important;
+      background:transparent !important;
+      color:inherit !important;
+      padding:0 !important;
+      text-align:left !important;
+      cursor:pointer !important;
     }
 
-    .day .num { font-size:.84rem; color:#bdbdbd; display:block; margin-bottom:.15rem; }
-    .day.outside { opacity:.34; background:#0e0e0e; }
-    .day.has-show { border-color:#4a4a4a; }
-    .day.has-show.open { box-shadow: inset 0 0 0 1px rgba(51,168,82,.3); }
-    .day.has-show.full { box-shadow: inset 0 0 0 1px rgba(122,47,47,.35); }
-    .day.selected { outline:2px solid #d72638; }
+    .day .num { display:block !important; font-size:.84rem !important; color:#bdbdbd !important; margin-bottom:.15rem !important; }
+    .day.outside { opacity:.34 !important; background:#0e0e0e !important; }
+    .day.has-show { border-color:#4a4a4a !important; }
+    .day.has-show.open { box-shadow: inset 0 0 0 1px rgba(51,168,82,.3) !important; }
+    .day.has-show.full { box-shadow: inset 0 0 0 1px rgba(122,47,47,.35) !important; }
+    .day.selected { outline:2px solid #d72638 !important; }
 
     .pill {
-      display:inline-block; margin-top:.22rem; font-size:.72rem; border-radius:999px;
-      padding:.12rem .42rem; border:1px solid #3f3f3f; background:#1f1f1f; color:#ddd;
-      white-space:nowrap;
+      display:inline-block !important;
+      margin-top:.22rem !important;
+      font-size:.72rem !important;
+      border-radius:999px !important;
+      padding:.12rem .42rem !important;
+      border:1px solid #3f3f3f !important;
+      background:#1f1f1f !important;
+      color:#ddd !important;
+      white-space:nowrap !important;
     }
-    .pill.open { border-color:#2a7d40; color:#9de4b0; }
-    .pill.full { border-color:#7a2f2f; color:#f0b3b3; }
+    .pill.open { border-color:#2a7d40 !important; color:#9de4b0 !important; }
+    .pill.full { border-color:#7a2f2f !important; color:#f0b3b3 !important; }
 
-    .show-mini {
-      margin-top:.26rem;
-      font-size:.72rem;
-      color:#cfcfcf;
-      line-height:1.2;
-      max-height:2.5em;
-      overflow:hidden;
-    }
+    .show-mini { margin-top:.26rem !important; font-size:.72rem !important; color:#cfcfcf !important; line-height:1.2 !important; max-height:2.5em !important; overflow:hidden !important; }
 
-    .detail-card h2 { margin:0 0 .55rem 0; font-size:1.02rem; }
-    .detail-sub { font-size:.88rem; color:#bdbdbd; margin-bottom:.7rem; }
-    .show-name { font-size:.9rem; color:#dcdcdc; margin-bottom:.5rem; }
-    .role-list { display:grid; gap:.45rem; margin-top:.45rem; }
+    .detail-card h2 { margin:0 0 .55rem 0 !important; font-size:1.02rem !important; }
+    .detail-sub { font-size:.88rem !important; color:#bdbdbd !important; margin-bottom:.7rem !important; }
+    .show-name { font-size:.9rem !important; color:#dcdcdc !important; margin-bottom:.5rem !important; }
+    .role-list { display:grid !important; gap:.45rem !important; margin-top:.45rem !important; }
 
     .role-row {
-      display:flex; justify-content:space-between; align-items:center; gap:.5rem; flex-wrap:wrap;
-      border:1px solid #353535; border-radius:9px; background:#111; padding:.5rem .55rem;
+      display:flex !important; justify-content:space-between !important; align-items:center !important; gap:.5rem !important; flex-wrap:wrap !important;
+      border:1px solid #353535 !important; border-radius:9px !important; background:#111 !important; padding:.5rem .55rem !important;
     }
 
-    .role-meta { font-size:.84rem; color:#b7b7b7; }
+    .role-meta { font-size:.84rem !important; color:#b7b7b7 !important; }
+    .empty { border:1px dashed #464646 !important; border-radius:10px !important; padding:.7rem !important; color:#c4c4c4 !important; background:#131313 !important; font-size:.92rem !important; }
 
-    .empty {
-      border:1px dashed #464646; border-radius:10px; padding:.7rem;
-      color:#c4c4c4; background:#131313; font-size:.92rem;
-    }
-
-    @media (max-width: 920px) { .calendar-wrap { grid-template-columns: 1fr; } }
+    @media (max-width: 920px) { .calendar-wrap { grid-template-columns: 1fr !important; } }
   </style>
 </head>
 <body>
@@ -121,14 +150,12 @@
     <section class="intro">
       <h1>Volunteer Calendar</h1>
       <p>Select a performance date from the calendar, then claim one open role.</p>
-      <div class="identity" id="identity-line"></div>
-
+      <div id="identity-line" class="identity"></div>
       <div class="toolbar">
         <button id="refresh-btn" class="button secondary" type="button">Refresh</button>
         <button id="change-name-btn" class="button subtle" type="button">Change Name</button>
         <button id="cancel-mine-btn" class="button subtle" type="button">Cancel My Signup(s)</button>
       </div>
-
       <div id="sync-meta" class="sync-meta"></div>
       <div id="message"></div>
     </section>
@@ -136,7 +163,7 @@
     <section class="calendar-wrap">
       <article class="calendar-card">
         <div class="calendar-head">
-          <h2 id="month-title" class="month-title">Month</h2>
+          <h2 id="month-title" class="month-title">Calendar</h2>
           <div class="toolbar">
             <button id="prev-month-btn" class="button secondary" type="button">Prev</button>
             <button id="today-month-btn" class="button secondary" type="button">This Month</button>
@@ -153,12 +180,13 @@
         <div class="dow">
           <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
         </div>
-        <div id="calendar-grid" class="grid"></div>
+
+        <div id="calendar-grid"></div>
       </article>
 
       <article class="detail-card">
         <h2 id="detail-title">Select a performance date</h2>
-        <div id="detail-sub" class="detail-sub">Click a highlighted date in the calendar.</div>
+        <div id="detail-sub" class="detail-sub">Click a highlighted date.</div>
         <div id="detail-body" class="empty">No date selected yet.</div>
       </article>
     </section>
@@ -166,11 +194,17 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
+    // =========================
+    // Supabase config
+    // =========================
     const SUPABASE_URL = "https://YOUR_PROJECT_ID.supabase.co";
     const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     const TABLE_NAME = "volunteer_shifts";
 
+    // =========================
+    // Master performance schedule (83)
+    // =========================
     const MASTER_PERFORMANCES = [
       { show:"Waiting for Godot", date:"2026-08-20", time:"7:30 PM", tz:"EDT" },
       { show:"Waiting for Godot", date:"2026-08-21", time:"7:30 PM", tz:"EDT" },
@@ -400,7 +434,7 @@
               toInsert.push({
                 performance_date: perfRaw,
                 role,
-                shift_name: roleToShiftName(role),
+                shift_name: roleToShiftName(role), // legacy compatibility
                 slot_index: slotIndex,
                 assigned_to: null
               });
@@ -599,7 +633,7 @@
     function renderDetailPanel() {
       if (!selectedDateKey || !schedule[selectedDateKey]) {
         detailTitleEl.textContent = "Select a performance date";
-        detailSubEl.textContent = "Click a highlighted date in the calendar.";
+        detailSubEl.textContent = "Click a highlighted date.";
         detailBodyEl.className = "empty";
         detailBodyEl.innerHTML = "No date selected yet.";
         return;
