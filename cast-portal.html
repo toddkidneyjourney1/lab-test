@@ -1,152 +1,133 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cast Portal | The Laboratory Theater of Florida</title>
-    <link rel="stylesheet" href="style.css">
-    <style>
-        .cast-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 1.5rem;
-            padding: 1rem 0;
-        }
-
-        .cast-card {
-            background: #1a1a1a;
-            border: 1px solid #333;
-            border-radius: 12px;
-            padding: 1.5rem;
-            transition: transform 0.3s ease, border-color 0.3s ease;
-        }
-
-        .cast-card:hover {
-            transform: translateY(-4px);
-            border-color: #ff3366;
-        }
-
-        .cast-card h3 {
-            margin-bottom: 0.75rem;
-        }
-
-        .cast-card p {
-            color: #ccc;
-            margin-bottom: 1rem;
-        }
-
-        /* Hero image: bigger without scaling whole page */
-        .hero img,
-        .hero-image,
-        .hero-photo {
-            width: min(720px, 92vw);
-            max-width: 100%;
-            height: auto;
-            display: block;
-            margin: 0 auto;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cast Portal | The Laboratory Theater of Florida</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .show-card {
+      background: var(--card-bg);
+      padding: 1.25rem;
+      border-radius: 8px;
+      border: 1px solid #333;
+      margin-bottom: 1rem;
+    }
+    .show-card h3 { margin-top: 0; color: var(--accent); }
+    .show-meta { margin: 0.5rem 0 0.25rem; font-size: 0.95rem; color: #ddd; }
+    .notice { padding: 0.8rem 1rem; border-radius: 6px; margin: 0.75rem 0; font-weight: 600; }
+    .notice.success { background: #2b9a4a; color: #fff; }
+    .notice.error { background: #a33131; color: #fff; }
+    .loading { text-align: center; padding: 1.5rem; color: #ddd; }
+  </style>
 </head>
 <body>
+  <input type="checkbox" id="nav-toggle" class="nav-toggle" />
+  <label for="nav-toggle" class="nav-toggle-label"><span></span></label>
+  <nav class="hamburger-menu">
+    <a href="about.html">Origin Story</a>
+    <a href="archive25.html">Past Experiments</a>
+    <a href="index.html">Back to the Slab</a>
+    <a href="plan.html">Lab Protocols</a>
+    <a href="portal-landing.html">Portal Landing</a>
+    <a href="support.html">Fuel the Innovation</a>
+    <a href="sponsors.html">Core Collaborators</a>
+  </nav>
 
-    <header class="main-header">
-        <div class="logo">
-            THE <span>LAB</span>
-            <p class="tagline">Intentionally innovative live theater</p>
-        </div>
+  <header>
+    <div class="logo">THE <span>LAB</span><p class="tagline">Intentionally innovative live theater</p></div>
+  </header>
 
-        <div class="hamburger-container">
-            <input type="checkbox" id="nav-toggle" class="nav-toggle">
-            <label for="nav-toggle" class="nav-toggle-label">
-                <span></span>
-            </label>
-             <nav class="hamburger-menu">
-        <a href="about.html">Origin Story</a>
-        <a href="archive25.html">Past Experiments</a>
-        <a href="index.html">Back to the Slab</a>
-        <a href="plan.html">Lab Protocols</a>
-        
-        <a href="portal-landing.html">Portal Landing</a>
-        <a href="support.html">Fuel the Innovation</a>
-        <a href="sponsors.html">Core Collaborators</a>
-    </nav>
-            </nav>
-        </div>
-    </header>
+  <main id="cast-content">
+    <h1>Cast Portal</h1>
+    <p>Shows assigned to you.</p>
+    <div id="message-container"></div>
+    <section id="my-shows">
+      <h2>My Shows</h2>
+      <div id="cast-show-container" class="production-grid"><p class="loading">Loading your shows...</p></div>
+    </section>
+  </main>
 
-    <main>
-        <h1>Cast Portal</h1>
-        <p>Select your production below to view the cast page.</p>
+  <script type="module">
+    import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-        <!-- Replace your existing <li>...</li> menu item with this: -->
+    // Replace with your real project values
+    const SUPABASE_URL = "https://YOUR_PROJECT.supabase.co";
+    const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-<div class="audition-button-container">
-    <a href="audition-portal.html" class="audition-btn">Auditions Portal</a>
-</div>
+    let currentUser = null;
 
-<style>
-    .audition-btn {
-        display: inline-block;
-        padding: 12px 24px;
-        background-color: #007bff; /* Change this color to match your site's branding */
-        color: white;
-        text-decoration: none;
-        border-radius: 5px;
-        font-weight: bold;
-        transition: background-color 0.3s;
+    function showMessage(text, type = "error") {
+      const container = document.getElementById("message-container");
+      container.innerHTML = `<div class="notice ${type}">${text}</div>`;
     }
 
-    .audition-btn:hover {
-        background-color: #0056b3; /* Darker shade on hover */
+    function renderShows(shows) {
+      const container = document.getElementById("cast-show-container");
+
+      if (!shows.length) {
+        container.innerHTML = "<p>No assigned shows found.</p>";
+        return;
+      }
+
+      container.innerHTML = shows.map((show) => `
+        <article class="show-card">
+          <h3>${show.title ?? "Untitled Show"}</h3>
+          <p class="show-meta"><strong>Date:</strong> ${show.show_date ?? "TBD"}</p>
+          <p class="show-meta"><strong>Venue:</strong> ${show.venue ?? "TBD"}</p>
+          <p class="show-meta"><strong>Role:</strong> ${show.cast_role ?? "Assigned Cast"}</p>
+        </article>
+      `).join("");
     }
-</style>
-        <section class="cast-grid">
-            <article class="cast-card">
-                <h3>Waiting for Godot</h3>
-                <p>View cast details and production-specific information.</p>
-                <a href="cast-godot.html" class="button">Open Cast Page</a>
-            </article>
 
-            <article class="cast-card">
-                <h3>The Pillowman</h3>
-                <p>View cast details and production-specific information.</p>
-                <a href="cast-pillowman.html" class="button">Open Cast Page</a>
-            </article>
+    async function loadCastShows() {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session?.user) {
+        window.location.href = "portal-landing.html";
+        return;
+      }
 
-            <article class="cast-card">
-                <h3>The Rivals</h3>
-                <p>View cast details and production-specific information.</p>
-                <a href="cast-rivals.html" class="button">Open Cast Page</a>
-            </article>
+      currentUser = session.user;
 
-            <article class="cast-card">
-                <h3>God of Carnage</h3>
-                <p>View cast details and production-specific information.</p>
-                <a href="cast-godofcarnage.html" class="button">Open Cast Page</a>
-            </article>
+      const { data: assignments, error: assignmentError } = await supabase
+        .from("cast_assignments")
+        .select("show_id, cast_role")
+        .eq("user_id", currentUser.id);
 
-            <article class="cast-card">
-                <h3>Bare</h3>
-                <p>View cast details and production-specific information.</p>
-                <a href="cast-bare.html" class="button">Open Cast Page</a>
-            </article>.
-            <article class="cast-card">
-                <h3>Midsummer Night's Dream</h3>
-                <p>View cast details and production-specific information.</p>
-                <a href="cast-misdummer.html" class="button">Open Cast Page</a>
-            </article>
+      if (assignmentError) {
+        showMessage("Could not load cast assignments.");
+        return;
+      }
 
-            <article class="cast-card">
-                <h3>Fences</h3>
-                <p>View cast details and production-specific information.</p>
-                <a href="cast-fences.html" class="button">Open Cast Page</a>
-            </article>
-        </section>
-    </main>
+      const showIds = [...new Set((assignments || []).map((a) => a.show_id).filter(Boolean))];
 
-    <footer>
-        <p>&copy; 2026 The Laboratory Theater of Florida</p>
-    </footer>
+      if (!showIds.length) {
+        renderShows([]);
+        return;
+      }
 
+      const { data: shows, error: showsError } = await supabase
+        .from("shows")
+        .select("id, title, show_date, venue")
+        .in("id", showIds)
+        .order("show_date", { ascending: true });
+
+      if (showsError) {
+        showMessage("Could not load shows.");
+        return;
+      }
+
+      const roleMap = new Map((assignments || []).map((a) => [a.show_id, a.cast_role]));
+      const merged = (shows || []).map((s) => ({
+        ...s,
+        cast_role: roleMap.get(s.id) || null
+      }));
+
+      renderShows(merged);
+    }
+
+    window.addEventListener("load", loadCastShows);
+  </script>
 </body>
 </html>
