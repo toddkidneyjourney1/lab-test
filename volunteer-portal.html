@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Volunteer Portal | The Laboratory Theater of Florida</title>
   <link rel="stylesheet" href="style.css" />
-  <script src="https://cdn.jsdelivr.net/npm/@clerk/clerk-js@latest/dist/clerk.browser.js" async></script>
   <style>
     .shift-card {
       background: var(--card-bg);
@@ -29,7 +28,6 @@
     .notice.success { background: #2b9a4a; color: #fff; }
     .notice.error { background: #a33131; color: #fff; }
     .loading { text-align: center; padding: 1.5rem; color: #ddd; }
-    #user-button { position: absolute; top: 1rem; right: 2rem; }
   </style>
 </head>
 <body>
@@ -49,9 +47,7 @@
     <div class="logo">THE <span>LAB</span><p class="tagline">Intentionally innovative live theater</p></div>
   </header>
 
-  <div id="clerk-auth"></div>
-
-  <main id="portal-content" style="display: none">
+  <main id="portal-content">
     <h1>Volunteer Portal</h1>
     <p>Sign up for volunteer shifts by date and role.</p>
     <div id="message-container"></div>
@@ -62,7 +58,6 @@
   </main>
 
   <script>
-    const PUBLISHABLE_KEY = "pk_test_bGVhcm5pbmctbWFzdG9kb24tMzUuY2xlcmsuYWNjb3VudHMuZGV2JA";
     const SHIFT_SCHEDULE = [
       { id: "s1", date: "DATE_PLACEHOLDER_1", type: "Ushering", spots: 4 },
       { id: "s2", date: "DATE_PLACEHOLDER_2", type: "Concessions", spots: 3 },
@@ -74,56 +69,41 @@
       { id: "s8", date: "DATE_PLACEHOLDER_8", type: "Behind the Scenes", spots: 5 }
     ];
     const STORAGE_KEY = "labVolunteerPortalSignups";
-    let clerkUser = null;
 
-    window.addEventListener("load", async () => {
-      const waitForClerk = setInterval(() => {
-        if (window.Clerk) {
-          clearInterval(waitForClerk);
-          initClerk();
-        }
-      }, 100);
-    });
-
-    async function initClerk() {
-      const Clerk = window.Clerk;
-      try {
-        await Clerk.load({ publishableKey: PUBLISHABLE_KEY });
-        if (Clerk.user) {
-          clerkUser = Clerk.user;
-          document.getElementById("portal-content").style.display = "block";
-          document.getElementById("clerk-auth").innerHTML = '<div id="user-button"></div>';
-          Clerk.mountUserButton(document.getElementById("user-button"));
-          renderShifts();
-        } else {
-          document.getElementById("clerk-auth").innerHTML = '<div id="sign-in"></div>';
-          Clerk.mountSignIn(document.getElementById("sign-in"));
-        }
-      } catch (error) {
-        console.error("Clerk initialization failed:", error);
-        showMessage("Failed to initialize authentication.", "error");
-      }
+    // User identity should already be established on portal-landing.html (Supabase flow)
+    function getCurrentUserKey() {
+      return localStorage.getItem("labPortalUserId") || "anonymous";
     }
 
     function getSignups() {
       try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}"); } catch { return {}; }
     }
-    function saveSignups(signups) { localStorage.setItem(STORAGE_KEY, JSON.stringify(signups)); }
-    function getCurrentUserKey() { return clerkUser?.id || "anonymous"; }
+
+    function saveSignups(signups) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(signups));
+    }
 
     function renderShifts() {
       const container = document.getElementById("shift-container");
       const signups = getSignups();
+      const currentUserKey = getCurrentUserKey();
 
       container.innerHTML = SHIFT_SCHEDULE.map((shift) => {
         const signedUsers = signups[shift.id] || [];
-        const isSignedUp = signedUsers.includes(getCurrentUserKey());
+        const isSignedUp = signedUsers.includes(currentUserKey);
         const remaining = Math.max(0, shift.spots - signedUsers.length);
         const isFull = remaining === 0;
+
         let statusClass = "status-open";
         let statusLabel = `Open (${remaining} spot${remaining === 1 ? "" : "s"} left)`;
-        if (isSignedUp) { statusClass = "status-signed"; statusLabel = "You are signed up"; }
-        else if (isFull) { statusClass = "status-full"; statusLabel = "Shift Full"; }
+
+        if (isSignedUp) {
+          statusClass = "status-signed";
+          statusLabel = "You are signed up";
+        } else if (isFull) {
+          statusClass = "status-full";
+          statusLabel = "Shift Full";
+        }
 
         return `
           <article class="shift-card">
@@ -141,13 +121,22 @@
 
     function signupForShift(shiftId) {
       const userKey = getCurrentUserKey();
-      if (!userKey || userKey === "anonymous") return showMessage("Please sign in to sign up for shifts.", "error");
+      if (!userKey || userKey === "anonymous") {
+        return showMessage("No active portal session found. Please return to Portal Landing.", "error");
+      }
+
       const signups = getSignups();
       const shift = SHIFT_SCHEDULE.find((s) => s.id === shiftId);
       if (!shift) return;
+
       const signedUsers = signups[shiftId] || [];
-      if (signedUsers.includes(userKey)) return showMessage("You are already signed up for this shift.", "error");
-      if (signedUsers.length >= shift.spots) return showMessage("This shift is already full.", "error");
+      if (signedUsers.includes(userKey)) {
+        return showMessage("You are already signed up for this shift.", "error");
+      }
+      if (signedUsers.length >= shift.spots) {
+        return showMessage("This shift is already full.", "error");
+      }
+
       signups[shiftId] = [...signedUsers, userKey];
       saveSignups(signups);
       showMessage("Signup successful!", "success");
@@ -169,6 +158,10 @@
       container.innerHTML = `<div class="notice ${type}">${text}</div>`;
       setTimeout(() => { container.innerHTML = ""; }, 3500);
     }
+
+    window.addEventListener("load", () => {
+      renderShifts();
+    });
   </script>
 </body>
 </html>
