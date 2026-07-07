@@ -19,133 +19,92 @@
     .sync-meta { margin-top:.5rem; font-size:.85rem; color:#aaa; }
     .identity { margin-top:.45rem; font-size:.92rem; color:#d9d9d9; }
 
-    .calendar-wrap { display:grid !important; grid-template-columns: 1.25fr .95fr !important; gap:1rem !important; align-items:start !important; }
-    .calendar-card, .detail-card {
-      display:block !important;
-      visibility:visible !important;
-      opacity:1 !important;
-      background:#1a1a1a !important;
-      border:1px solid #333 !important;
-      border-radius:12px !important;
-      padding:.9rem !important;
-      min-height: 200px;
-    }
+    .calendar-wrap { display:grid; grid-template-columns: 1.25fr .95fr; gap:1rem; align-items:start; }
+    .calendar-card, .detail-card { background:#1a1a1a; border:1px solid #333; border-radius:12px; padding:.9rem; }
 
-    .calendar-head { display:flex !important; justify-content:space-between !important; align-items:center !important; gap:.6rem !important; margin-bottom:.8rem !important; flex-wrap:wrap !important; }
-    .month-title { margin:0 !important; font-size:1.1rem !important; }
+    .calendar-head { display:flex; justify-content:space-between; align-items:center; gap:.6rem; margin-bottom:.8rem; flex-wrap:wrap; }
+    .month-title { margin:0; font-size:1.1rem; }
 
-    .legend { display:flex !important; gap:.6rem !important; flex-wrap:wrap !important; font-size:.82rem !important; color:#c8c8c8 !important; margin-bottom:.7rem !important; }
-    .dot { display:inline-block !important; width:.62rem !important; height:.62rem !important; border-radius:999px !important; margin-right:.3rem !important; vertical-align:middle !important; }
-    .dot.open { background:#33a852 !important; }
-    .dot.full { background:#7a2f2f !important; }
-    .dot.none { background:#555 !important; }
+    .legend { display:flex; gap:.6rem; flex-wrap:wrap; font-size:.82rem; color:#c8c8c8; margin-bottom:.7rem; }
+    .dot { display:inline-block; width:.62rem; height:.62rem; border-radius:999px; margin-right:.3rem; vertical-align:middle; }
+    .dot.open { background:#33a852; }
+    .dot.full { background:#7a2f2f; }
+    .dot.none { background:#555; }
 
-    .dow {
+    .dow, #calendar-grid {
       display:grid !important;
       grid-template-columns: repeat(7, minmax(0,1fr)) !important;
       gap:.35rem !important;
-      margin-bottom: .35rem !important;
-    }
-    .dow div {
-      display:block !important;
-      text-align:center !important;
-      font-size:.78rem !important;
-      color:#acacac !important;
-      padding-bottom:.2rem !important;
     }
 
-    #calendar-grid {
-      display:grid !important;
-      grid-template-columns: repeat(7, minmax(0,1fr)) !important;
-      gap:.35rem !important;
-      min-height: 420px !important;
-      visibility: visible !important;
-    }
+    .dow div { text-align:center; font-size:.78rem; color:#acacac; padding-bottom:.2rem; }
+
+    #calendar-grid { min-height: 420px; }
 
     .day {
-      display:block !important;
-      border:1px solid #363636 !important;
-      border-radius:10px !important;
-      min-height:92px !important;
-      background:#111 !important;
-      padding:.4rem !important;
-      text-align:left !important;
-      color:#ddd !important;
-      position:relative !important;
+      border:1px solid #363636;
+      border-radius:10px;
+      min-height:92px;
+      background:#111;
+      padding:.4rem;
+      text-align:left;
+      color:#ddd;
+      position:relative;
+      display:block;
     }
 
     .day-btn {
-      display:block !important;
-      width:100% !important;
-      min-height:82px !important;
-      border:0 !important;
-      background:transparent !important;
-      color:inherit !important;
-      padding:0 !important;
-      text-align:left !important;
-      cursor:pointer !important;
+      width:100%;
+      min-height:82px;
+      border:0;
+      background:transparent;
+      color:inherit;
+      padding:0;
+      text-align:left;
+      cursor:pointer;
+      display:block;
     }
 
-    .day .num { display:block !important; font-size:.84rem !important; color:#bdbdbd !important; margin-bottom:.15rem !important; }
-    .day.outside { opacity:.34 !important; background:#0e0e0e !important; }
-    .day.has-show { border-color:#4a4a4a !important; }
-    .day.has-show.open { box-shadow: inset 0 0 0 1px rgba(51,168,82,.3) !important; }
-    .day.has-show.full { box-shadow: inset 0 0 0 1px rgba(122,47,47,.35) !important; }
-    .day.selected { outline:2px solid #d72638 !important; }
+    .day .num { display:block; font-size:.84rem; color:#bdbdbd; margin-bottom:.15rem; }
+    .day.outside { opacity:.34; background:#0e0e0e; }
+    .day.has-show { border-color:#4a4a4a; }
+    .day.has-show.open { box-shadow: inset 0 0 0 1px rgba(51,168,82,.3); }
+    .day.has-show.full { box-shadow: inset 0 0 0 1px rgba(122,47,47,.35); }
+    .day.selected { outline:2px solid #d72638; }
 
     .pill {
-      display:inline-block !important;
-      margin-top:.22rem !important;
-      font-size:.72rem !important;
-      border-radius:999px !important;
-      padding:.12rem .42rem !important;
-      border:1px solid #3f3f3f !important;
-      background:#1f1f1f !important;
-      color:#ddd !important;
-      white-space:nowrap !important;
+      display:inline-block;
+      margin-top:.22rem;
+      font-size:.72rem;
+      border-radius:999px;
+      padding:.12rem .42rem;
+      border:1px solid #3f3f3f;
+      background:#1f1f1f;
+      color:#ddd;
+      white-space:nowrap;
     }
-    .pill.open { border-color:#2a7d40 !important; color:#9de4b0 !important; }
-    .pill.full { border-color:#7a2f2f !important; color:#f0b3b3 !important; }
+    .pill.open { border-color:#2a7d40; color:#9de4b0; }
+    .pill.full { border-color:#7a2f2f; color:#f0b3b3; }
 
-    .show-mini { margin-top:.26rem !important; font-size:.72rem !important; color:#cfcfcf !important; line-height:1.2 !important; max-height:2.5em !important; overflow:hidden !important; }
+    .show-mini { margin-top:.26rem; font-size:.72rem; color:#cfcfcf; line-height:1.2; max-height:2.5em; overflow:hidden; }
 
-    .detail-card h2 { margin:0 0 .55rem 0 !important; font-size:1.02rem !important; }
-    .detail-sub { font-size:.88rem !important; color:#bdbdbd !important; margin-bottom:.7rem !important; }
-    .show-name { font-size:.9rem !important; color:#dcdcdc !important; margin-bottom:.5rem !important; }
-    .role-list { display:grid !important; gap:.45rem !important; margin-top:.45rem !important; }
+    .detail-card h2 { margin:0 0 .55rem 0; font-size:1.02rem; }
+    .detail-sub { font-size:.88rem; color:#bdbdbd; margin-bottom:.7rem; }
+    .show-name { font-size:.9rem; color:#dcdcdc; margin-bottom:.5rem; }
+    .role-list { display:grid; gap:.45rem; margin-top:.45rem; }
 
     .role-row {
-      display:flex !important; justify-content:space-between !important; align-items:center !important; gap:.5rem !important; flex-wrap:wrap !important;
-      border:1px solid #353535 !important; border-radius:9px !important; background:#111 !important; padding:.5rem .55rem !important;
+      display:flex; justify-content:space-between; align-items:center; gap:.5rem; flex-wrap:wrap;
+      border:1px solid #353535; border-radius:9px; background:#111; padding:.5rem .55rem;
     }
 
-    .role-meta { font-size:.84rem !important; color:#b7b7b7 !important; }
-    .empty { border:1px dashed #464646 !important; border-radius:10px !important; padding:.7rem !important; color:#c4c4c4 !important; background:#131313 !important; font-size:.92rem !important; }
+    .role-meta { font-size:.84rem; color:#b7b7b7; }
+    .empty { border:1px dashed #464646; border-radius:10px; padding:.7rem; color:#c4c4c4; background:#131313; font-size:.92rem; }
 
-    @media (max-width: 920px) { .calendar-wrap { grid-template-columns: 1fr !important; } }
+    @media (max-width: 920px) { .calendar-wrap { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
-  <input type="checkbox" id="nav-toggle" class="nav-toggle" />
-  <label for="nav-toggle" class="nav-toggle-label"><span></span></label>
-
-  <nav class="hamburger-menu">
-    <a href="about.html">Origin Story</a>
-    <a href="archive25.html">Past Experiments</a>
-    <a href="index.html">Back to the Slab</a>
-    <a href="plan.html">Lab Protocols</a>
-    <a href="volunteer.html">Volunteer Portal</a>
-    <a href="support.html">Fuel the Innovation</a>
-    <a href="sponsors.html">Core Collaborators</a>
-  </nav>
-
-  <header>
-    <div class="logo">
-      THE <span>LAB</span>
-      <p class="tagline">Intentionally innovative live theater</p>
-    </div>
-  </header>
-
   <main class="volunteer-wrap">
     <section class="intro">
       <h1>Volunteer Calendar</h1>
@@ -194,17 +153,11 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    // =========================
-    // Supabase config
-    // =========================
     const SUPABASE_URL = "https://YOUR_PROJECT_ID.supabase.co";
     const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     const TABLE_NAME = "volunteer_shifts";
 
-    // =========================
-    // Master performance schedule (83)
-    // =========================
     const MASTER_PERFORMANCES = [
       { show:"Waiting for Godot", date:"2026-08-20", time:"7:30 PM", tz:"EDT" },
       { show:"Waiting for Godot", date:"2026-08-21", time:"7:30 PM", tz:"EDT" },
@@ -434,7 +387,7 @@
               toInsert.push({
                 performance_date: perfRaw,
                 role,
-                shift_name: roleToShiftName(role), // legacy compatibility
+                shift_name: roleToShiftName(role),
                 slot_index: slotIndex,
                 assigned_to: null
               });
@@ -466,7 +419,6 @@
 
         schedule = normalizeScheduleFromRows(data || []);
         setSyncMeta(`Last synced: ${new Date().toLocaleString()}`);
-
         renderCalendar();
         renderDetailPanel();
       } catch (err) {
