@@ -5,145 +5,328 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Volunteer Calendar</title>
   <style>
-    body { background:#0f0f0f; color:#f3f3f3; font-family:Arial,sans-serif; margin:0; }
-    .wrap { max-width:1100px; margin:0 auto; padding:20px; }
-    .card { background:#171717; border:1px solid #303030; border-radius:12px; padding:14px; }
-    .row { display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
-    .btn { border:0; border-radius:8px; padding:8px 12px; background:#d72638; color:#fff; cursor:pointer; font-weight:700; }
-    .btn.gray { background:#444; }
-    .grid-wrap { display:grid; grid-template-columns:1.3fr .9fr; gap:12px; margin-top:12px; }
-    .dow, #calendar-grid { display:grid; grid-template-columns:repeat(7, minmax(0,1fr)); gap:6px; }
-    .dow div { text-align:center; color:#aaa; font-size:12px; }
-    #calendar-grid { min-height:420px; }
-    .day { border:1px solid #353535; background:#121212; border-radius:10px; min-height:86px; padding:6px; }
-    .outside { opacity:.35; }
-    .has-show.open { box-shadow: inset 0 0 0 1px rgba(56,171,87,.45); }
-    .has-show.full { box-shadow: inset 0 0 0 1px rgba(160,55,55,.45); }
-    .selected { outline:2px solid #d72638; }
-    .day-btn { width:100%; border:0; background:transparent; color:inherit; text-align:left; cursor:pointer; padding:0; }
-    .num { font-size:12px; color:#bbb; }
-    .pill { display:inline-block; margin-top:4px; font-size:11px; border-radius:999px; padding:2px 7px; border:1px solid #3f3f3f; }
-    .pill.open { border-color:#2f8a49; color:#a7e9b6; }
-    .pill.full { border-color:#8a3434; color:#f3b7b7; }
-    .show-mini { margin-top:5px; font-size:11px; color:#d0d0d0; line-height:1.2; max-height:2.4em; overflow:hidden; }
-    .detail h3 { margin:0 0 8px; }
-    .empty { border:1px dashed #484848; border-radius:10px; padding:10px; color:#c8c8c8; background:#131313; }
-    @media (max-width:900px){ .grid-wrap{ grid-template-columns:1fr; } }
+    :root { color-scheme: dark; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #0f0f10;
+      color: #f1f1f1;
+    }
+
+    .wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 18px;
+    }
+
+    .panel {
+      background: #181818;
+      border: 1px solid #333;
+      border-radius: 12px;
+      padding: 14px;
+    }
+
+    .row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      border: 0;
+      border-radius: 8px;
+      padding: 8px 12px;
+      background: #d72638;
+      color: #fff;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .btn.gray { background: #444; }
+
+    .layout {
+      margin-top: 12px;
+      display: grid;
+      grid-template-columns: 1.25fr .9fr;
+      gap: 12px;
+    }
+
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+    }
+
+    .dow {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 6px;
+      margin-bottom: 6px;
+    }
+
+    .dow div {
+      text-align: center;
+      color: #a9a9a9;
+      font-size: 12px;
+    }
+
+    #calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 6px;
+      min-height: 460px;
+    }
+
+    .day {
+      border: 1px solid #3a3a3a;
+      border-radius: 10px;
+      min-height: 92px;
+      background: #121212;
+      padding: 6px;
+    }
+
+    .day.outside { opacity: .35; }
+    .day.has-show.open { box-shadow: inset 0 0 0 1px rgba(60,180,95,.5); }
+    .day.has-show.full { box-shadow: inset 0 0 0 1px rgba(180,70,70,.5); }
+    .day.selected { outline: 2px solid #d72638; }
+
+    .day-btn {
+      width: 100%;
+      min-height: 78px;
+      border: 0;
+      background: transparent;
+      color: inherit;
+      text-align: left;
+      padding: 0;
+      cursor: pointer;
+    }
+
+    .num {
+      display: block;
+      font-size: 12px;
+      color: #bdbdbd;
+      margin-bottom: 4px;
+    }
+
+    .pill {
+      display: inline-block;
+      font-size: 11px;
+      border-radius: 999px;
+      padding: 2px 7px;
+      border: 1px solid #4a4a4a;
+      margin-bottom: 4px;
+    }
+    .pill.open { border-color: #2b8d48; color: #9fe0b0; }
+    .pill.full { border-color: #9b3a3a; color: #efb0b0; }
+
+    .show-mini {
+      font-size: 11px;
+      color: #d1d1d1;
+      line-height: 1.2;
+      max-height: 2.5em;
+      overflow: hidden;
+    }
+
+    .empty {
+      border: 1px dashed #555;
+      border-radius: 10px;
+      padding: 10px;
+      color: #c7c7c7;
+      background: #131313;
+    }
   </style>
 </head>
 <body>
   <div class="wrap">
-    <div class="card">
-      <h1 style="margin:0 0 8px;">Volunteer Calendar</h1>
+    <div class="panel">
+      <h1 style="margin:0 0 10px;">Volunteer Calendar</h1>
       <div class="row">
-        <button id="prev-month-btn" class="btn gray">Prev</button>
-        <button id="today-month-btn" class="btn gray">This Month</button>
-        <button id="next-month-btn" class="btn gray">Next</button>
+        <button id="prev-month-btn" class="btn gray" type="button">Prev</button>
+        <button id="today-month-btn" class="btn gray" type="button">This Month</button>
+        <button id="next-month-btn" class="btn gray" type="button">Next</button>
         <strong id="month-title">Month</strong>
       </div>
-      <div id="msg" style="margin-top:8px;color:#bdbdbd;"></div>
+      <div id="msg" style="margin-top:8px;color:#bdbdbd;">Initializing…</div>
     </div>
 
-    <div class="grid-wrap">
-      <div class="card">
+    <div class="layout">
+      <div class="panel">
         <div class="dow">
           <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
         </div>
         <div id="calendar-grid"></div>
       </div>
 
-      <div class="card detail">
-        <h3 id="detail-title">Select a performance date</h3>
+      <div class="panel">
+        <h3 id="detail-title" style="margin-top:0;">Select a performance date</h3>
         <div id="detail-body" class="empty">Click a highlighted date in the calendar.</div>
       </div>
     </div>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    // ====== CONFIG ======
-    const SUPABASE_URL = "https://YOUR_PROJECT_ID.supabase.co";
-    const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
-    const TABLE_NAME = "volunteer_shifts";
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-    // Minimal schedule sample (replace with your full 83 if desired)
     const MASTER_PERFORMANCES = [
       { show:"Waiting for Godot", date:"2026-08-20", time:"7:30 PM", tz:"EDT" },
       { show:"Waiting for Godot", date:"2026-08-21", time:"7:30 PM", tz:"EDT" },
       { show:"Waiting for Godot", date:"2026-08-22", time:"7:30 PM", tz:"EDT" },
-      { show:"Waiting for Godot", date:"2026-08-23", time:"2:00 PM", tz:"EDT" }
+      { show:"Waiting for Godot", date:"2026-08-23", time:"2:00 PM", tz:"EDT" },
+      { show:"Waiting for Godot", date:"2026-08-27", time:"7:30 PM", tz:"EDT" },
+      { show:"Waiting for Godot", date:"2026-08-28", time:"7:30 PM", tz:"EDT" },
+      { show:"Waiting for Godot", date:"2026-08-29", time:"2:00 PM", tz:"EDT" },
+      { show:"Waiting for Godot", date:"2026-08-30", time:"2:00 PM", tz:"EDT" },
+      { show:"Waiting for Godot", date:"2026-09-03", time:"7:30 PM", tz:"EDT" },
+      { show:"Waiting for Godot", date:"2026-09-04", time:"7:30 PM", tz:"EDT" },
+      { show:"Waiting for Godot", date:"2026-09-05", time:"7:30 PM", tz:"EDT" },
+      { show:"Waiting for Godot", date:"2026-09-06", time:"2:00 PM", tz:"EDT" },
+
+      { show:"The Pillowman", date:"2026-10-08", time:"7:30 PM", tz:"EDT" },
+      { show:"The Pillowman", date:"2026-10-09", time:"7:30 PM", tz:"EDT" },
+      { show:"The Pillowman", date:"2026-10-10", time:"7:30 PM", tz:"EDT" },
+      { show:"The Pillowman", date:"2026-10-11", time:"2:00 PM", tz:"EDT" },
+      { show:"The Pillowman", date:"2026-10-15", time:"7:30 PM", tz:"EDT" },
+      { show:"The Pillowman", date:"2026-10-16", time:"7:30 PM", tz:"EDT" },
+      { show:"The Pillowman", date:"2026-10-17", time:"2:00 PM", tz:"EDT" },
+      { show:"The Pillowman", date:"2026-10-18", time:"2:00 PM", tz:"EDT" },
+      { show:"The Pillowman", date:"2026-10-22", time:"7:30 PM", tz:"EDT" },
+      { show:"The Pillowman", date:"2026-10-23", time:"7:30 PM", tz:"EDT" },
+      { show:"The Pillowman", date:"2026-10-24", time:"7:30 PM", tz:"EDT" },
+      { show:"The Pillowman", date:"2026-10-25", time:"2:00 PM", tz:"EDT" },
+
+      { show:"The Rivals", date:"2026-11-12", time:"7:30 PM", tz:"EST" },
+      { show:"The Rivals", date:"2026-11-13", time:"7:30 PM", tz:"EST" },
+      { show:"The Rivals", date:"2026-11-14", time:"7:30 PM", tz:"EST" },
+      { show:"The Rivals", date:"2026-11-15", time:"2:00 PM", tz:"EST" },
+      { show:"The Rivals", date:"2026-11-19", time:"7:30 PM", tz:"EST" },
+      { show:"The Rivals", date:"2026-11-20", time:"7:30 PM", tz:"EST" },
+      { show:"The Rivals", date:"2026-11-21", time:"2:00 PM", tz:"EST" },
+      { show:"The Rivals", date:"2026-11-22", time:"2:00 PM", tz:"EST" },
+      { show:"The Rivals", date:"2026-11-27", time:"7:30 PM", tz:"EST" },
+      { show:"The Rivals", date:"2026-11-28", time:"7:30 PM", tz:"EST" },
+      { show:"The Rivals", date:"2026-11-29", time:"2:00 PM", tz:"EST" },
+
+      { show:"God of Carnage", date:"2027-01-14", time:"7:30 PM", tz:"EST" },
+      { show:"God of Carnage", date:"2027-01-15", time:"7:30 PM", tz:"EST" },
+      { show:"God of Carnage", date:"2027-01-16", time:"7:30 PM", tz:"EST" },
+      { show:"God of Carnage", date:"2027-01-17", time:"2:00 PM", tz:"EST" },
+      { show:"God of Carnage", date:"2027-01-21", time:"7:30 PM", tz:"EST" },
+      { show:"God of Carnage", date:"2027-01-22", time:"7:30 PM", tz:"EST" },
+      { show:"God of Carnage", date:"2027-01-23", time:"2:00 PM", tz:"EST" },
+      { show:"God of Carnage", date:"2027-01-24", time:"2:00 PM", tz:"EST" },
+      { show:"God of Carnage", date:"2027-01-28", time:"7:30 PM", tz:"EST" },
+      { show:"God of Carnage", date:"2027-01-29", time:"7:30 PM", tz:"EST" },
+      { show:"God of Carnage", date:"2027-01-30", time:"7:30 PM", tz:"EST" },
+      { show:"God of Carnage", date:"2027-01-31", time:"2:00 PM", tz:"EST" },
+
+      { show:"Bare", date:"2027-02-18", time:"7:30 PM", tz:"EST" },
+      { show:"Bare", date:"2027-02-19", time:"7:30 PM", tz:"EST" },
+      { show:"Bare", date:"2027-02-20", time:"7:30 PM", tz:"EST" },
+      { show:"Bare", date:"2027-02-21", time:"2:00 PM", tz:"EST" },
+      { show:"Bare", date:"2027-02-25", time:"7:30 PM", tz:"EST" },
+      { show:"Bare", date:"2027-02-26", time:"7:30 PM", tz:"EST" },
+      { show:"Bare", date:"2027-02-27", time:"2:00 PM", tz:"EST" },
+      { show:"Bare", date:"2027-02-28", time:"2:00 PM", tz:"EST" },
+      { show:"Bare", date:"2027-03-04", time:"7:30 PM", tz:"EST" },
+      { show:"Bare", date:"2027-03-05", time:"7:30 PM", tz:"EST" },
+      { show:"Bare", date:"2027-03-06", time:"7:30 PM", tz:"EST" },
+      { show:"Bare", date:"2027-03-07", time:"2:00 PM", tz:"EST" },
+
+      { show:"A Midsummer Night's Dream", date:"2027-03-25", time:"7:30 PM", tz:"EDT" },
+      { show:"A Midsummer Night's Dream", date:"2027-03-26", time:"7:30 PM", tz:"EDT" },
+      { show:"A Midsummer Night's Dream", date:"2027-03-27", time:"7:30 PM", tz:"EDT" },
+      { show:"A Midsummer Night's Dream", date:"2027-03-28", time:"2:00 PM", tz:"EDT" },
+      { show:"A Midsummer Night's Dream", date:"2027-04-01", time:"7:30 PM", tz:"EDT" },
+      { show:"A Midsummer Night's Dream", date:"2027-04-02", time:"7:30 PM", tz:"EDT" },
+      { show:"A Midsummer Night's Dream", date:"2027-04-03", time:"2:00 PM", tz:"EDT" },
+      { show:"A Midsummer Night's Dream", date:"2027-04-04", time:"2:00 PM", tz:"EDT" },
+      { show:"A Midsummer Night's Dream", date:"2027-04-08", time:"7:30 PM", tz:"EDT" },
+      { show:"A Midsummer Night's Dream", date:"2027-04-09", time:"7:30 PM", tz:"EDT" },
+      { show:"A Midsummer Night's Dream", date:"2027-04-10", time:"7:30 PM", tz:"EDT" },
+      { show:"A Midsummer Night's Dream", date:"2027-04-11", time:"2:00 PM", tz:"EDT" },
+
+      { show:"Fences by August Wilson", date:"2027-04-22", time:"7:30 PM", tz:"EDT" },
+      { show:"Fences by August Wilson", date:"2027-04-23", time:"7:30 PM", tz:"EDT" },
+      { show:"Fences by August Wilson", date:"2027-04-24", time:"7:30 PM", tz:"EDT" },
+      { show:"Fences by August Wilson", date:"2027-04-25", time:"2:00 PM", tz:"EDT" },
+      { show:"Fences by August Wilson", date:"2027-04-29", time:"7:30 PM", tz:"EDT" },
+      { show:"Fences by August Wilson", date:"2027-04-30", time:"7:30 PM", tz:"EDT" },
+      { show:"Fences by August Wilson", date:"2027-05-01", time:"2:00 PM", tz:"EDT" },
+      { show:"Fences by August Wilson", date:"2027-05-02", time:"2:00 PM", tz:"EDT" },
+      { show:"Fences by August Wilson", date:"2027-05-06", time:"7:30 PM", tz:"EDT" },
+      { show:"Fences by August Wilson", date:"2027-05-07", time:"7:30 PM", tz:"EDT" },
+      { show:"Fences by August Wilson", date:"2027-05-08", time:"7:30 PM", tz:"EDT" },
+      { show:"Fences by August Wilson", date:"2027-05-09", time:"2:00 PM", tz:"EDT" }
     ];
 
-    const SHIFT_TEMPLATE = { box_office:1, concessions:1, usher:2 };
-    const PERFORMANCE_DATES = MASTER_PERFORMANCES.map(p => `${p.date} ${p.time}`);
-    const LOOKUP = Object.fromEntries(MASTER_PERFORMANCES.map(p => [p.date, p]));
+    const PERF_BY_DATE = Object.fromEntries(MASTER_PERFORMANCES.map(p => [p.date, p]));
+
+    let visibleMonth = new Date("2026-08-01T00:00:00");
+    let selectedDateKey = null;
 
     const monthTitleEl = document.getElementById("month-title");
-    const calendarGridEl = document.getElementById("calendar-grid");
+    const gridEl = document.getElementById("calendar-grid");
     const detailTitleEl = document.getElementById("detail-title");
     const detailBodyEl = document.getElementById("detail-body");
     const msgEl = document.getElementById("msg");
 
-    let visibleMonth = new Date("2026-08-01T00:00:00");
-    let selectedDateKey = null;
-    let schedule = defaultSchedule();
+    function fmtKey(d) {
+      return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+    }
 
-    function defaultSchedule(){
-      const o = {};
-      for(const p of MASTER_PERFORMANCES){
-        o[p.date] = {
-          display: `${p.date} ${p.time}`,
-          show: p.show,
-          box_office:[null],
-          concessions:[null],
-          usher:[null,null]
-        };
+    function renderDetail() {
+      if (!selectedDateKey || !PERF_BY_DATE[selectedDateKey]) {
+        detailTitleEl.textContent = "Select a performance date";
+        detailBodyEl.textContent = "Click a highlighted date in the calendar.";
+        return;
       }
-      return o;
+      const p = PERF_BY_DATE[selectedDateKey];
+      detailTitleEl.textContent = `${p.date} ${p.time}`;
+      detailBodyEl.innerHTML = `<strong>${p.show}</strong> (${p.tz})<br/>Click handling works.`;
     }
 
-    function countOpen(dateKey){
-      const d = schedule[dateKey]; if(!d) return 0;
-      return [...d.box_office, ...d.concessions, ...d.usher].filter(v => !v).length;
-    }
+    function renderCalendar() {
+      const y = visibleMonth.getFullYear();
+      const m = visibleMonth.getMonth();
+      const first = new Date(y, m, 1);
+      const last = new Date(y, m + 1, 0);
 
-    function renderCalendar(){
-      const y = visibleMonth.getFullYear(), m = visibleMonth.getMonth();
-      const first = new Date(y,m,1), last = new Date(y,m+1,0);
-      monthTitleEl.textContent = first.toLocaleString(undefined, {month:'long', year:'numeric'});
+      monthTitleEl.textContent = first.toLocaleString(undefined, { month: "long", year: "numeric" });
 
-      const start = first.getDay();
+      const startWeekday = first.getDay();
       const daysInMonth = last.getDate();
-      const prevLast = new Date(y,m,0).getDate();
+      const prevLast = new Date(y, m, 0).getDate();
 
       const cells = [];
-      for(let i=0;i<start;i++) cells.push({d:new Date(y,m-1,prevLast-start+i+1), outside:true});
-      for(let d=1;d<=daysInMonth;d++) cells.push({d:new Date(y,m,d), outside:false});
-      while(cells.length % 7 !== 0) cells.push({d:new Date(y,m+1,cells.length-(start+daysInMonth)+1), outside:true});
+      for (let i = 0; i < startWeekday; i++) {
+        cells.push({ d: new Date(y, m - 1, prevLast - startWeekday + i + 1), outside: true });
+      }
+      for (let d = 1; d <= daysInMonth; d++) {
+        cells.push({ d: new Date(y, m, d), outside: false });
+      }
+      while (cells.length < 42) {
+        cells.push({ d: new Date(y, m + 1, cells.length - (startWeekday + daysInMonth) + 1), outside: true });
+      }
 
-      calendarGridEl.innerHTML = "";
-      for(const c of cells){
-        const d = c.d;
-        const key = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
-        const perf = schedule[key];
-        const isPerf = !!perf;
-        const open = isPerf ? countOpen(key) : 0;
-        const full = isPerf && open===0;
+      gridEl.innerHTML = "";
+
+      for (const cell of cells) {
+        const key = fmtKey(cell.d);
+        const perf = PERF_BY_DATE[key];
+        const hasShow = !!perf;
 
         const day = document.createElement("div");
-        day.className = "day" + (c.outside ? " outside":"") + (isPerf ? " has-show":"") + (isPerf && open>0 ? " open":"") + (full ? " full":"") + (selectedDateKey===key ? " selected":"");
+        day.className = "day";
+        if (cell.outside) day.classList.add("outside");
+        if (hasShow) day.classList.add("has-show", "open");
+        if (selectedDateKey === key) day.classList.add("selected");
 
         const btn = document.createElement("button");
-        btn.className = "day-btn";
         btn.type = "button";
-        btn.disabled = !isPerf;
-        btn.innerHTML = `<span class="num">${d.getDate()}</span>`;
+        btn.className = "day-btn";
+        btn.innerHTML = `<span class="num">${cell.d.getDate()}</span>`;
 
-        if(isPerf){
+        if (hasShow) {
           const pill = document.createElement("span");
-          pill.className = "pill " + (open>0 ? "open":"full");
-          pill.textContent = open>0 ? `${open} open` : "Full";
+          pill.className = "pill open";
+          pill.textContent = "Show";
           btn.appendChild(pill);
 
           const mini = document.createElement("div");
@@ -151,378 +334,39 @@
           mini.textContent = perf.show;
           btn.appendChild(mini);
 
-          btn.onclick = () => {
+          btn.addEventListener("click", () => {
             selectedDateKey = key;
             renderCalendar();
             renderDetail();
-          };
+          });
+        } else {
+          btn.disabled = true;
         }
 
         day.appendChild(btn);
-        calendarGridEl.appendChild(day);
+        gridEl.appendChild(day);
       }
     }
 
-    function renderDetail(){
-      if(!selectedDateKey || !schedule[selectedDateKey]){
-        detailTitleEl.textContent = "Select a performance date";
-        detailBodyEl.className = "empty";
-        detailBodyEl.textContent = "Click a highlighted date in the calendar.";
-        return;
-      }
-      const s = schedule[selectedDateKey];
-      detailTitleEl.textContent = s.display;
-      detailBodyEl.className = "empty";
-      detailBodyEl.innerHTML = `<strong>${s.show}</strong><br>${countOpen(selectedDateKey)} open slots`;
-    }
-
-    async function loadFromSupabase(){
-      try{
-        msgEl.textContent = "Loading...";
-        const { data, error } = await supabase
-          .from(TABLE_NAME)
-          .select("performance_date, role, slot_index, assigned_to")
-          .in("performance_date", PERFORMANCE_DATES);
-
-        if(error) throw error;
-
-        schedule = defaultSchedule();
-        for(const r of (data || [])){
-          const key = (r.performance_date || "").split(" ")[0];
-          if(!schedule[key] || !schedule[key][r.role]) continue;
-          if(r.slot_index < 0 || r.slot_index >= schedule[key][r.role].length) continue;
-          schedule[key][r.role][r.slot_index] = r.assigned_to ?? null;
-        }
-
-        msgEl.textContent = `Loaded ${data?.length || 0} rows`;
-        renderCalendar();
-        renderDetail();
-      }catch(e){
-        console.error(e);
-        msgEl.textContent = "Supabase load failed. Showing local calendar only.";
-        renderCalendar();
-        renderDetail();
-      }
-    }
-
-    document.getElementById("prev-month-btn").onclick = () => {
-      visibleMonth = new Date(visibleMonth.getFullYear(), visibleMonth.getMonth()-1, 1);
+    document.getElementById("prev-month-btn").addEventListener("click", () => {
+      visibleMonth = new Date(visibleMonth.getFullYear(), visibleMonth.getMonth() - 1, 1);
       renderCalendar();
-    };
-    document.getElementById("next-month-btn").onclick = () => {
-      visibleMonth = new Date(visibleMonth.getFullYear(), visibleMonth.getMonth()+1, 1);
-      renderCalendar();
-    };
-    document.getElementById("today-month-btn").onclick = () => {
-      const t = new Date();
-      visibleMonth = new Date(t.getFullYear(), t.getMonth(), 1);
-      renderCalendar();
-    };
+    });
 
-    // guaranteed first paint
+    document.getElementById("next-month-btn").addEventListener("click", () => {
+      visibleMonth = new Date(visibleMonth.getFullYear(), visibleMonth.getMonth() + 1, 1);
+      renderCalendar();
+    });
+
+    document.getElementById("today-month-btn").addEventListener("click", () => {
+      const now = new Date();
+      visibleMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+      renderCalendar();
+    });
+
     renderCalendar();
     renderDetail();
-    loadFromSupabase();
+    msgEl.textContent = `Loaded ${MASTER_PERFORMANCES.length} performances.`;
   </script>
-</body><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-  // =========================
-  // Supabase config
-  // =========================
-  const SUPABASE_URL = "https://YOUR_PROJECT_ID.supabase.co";
-  const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
-  const TABLE_NAME = "volunteer_shifts";
-  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-  // =========================
-  // Master performances (83)
-  // =========================
-  const MASTER_PERFORMANCES = [
-    { show:"Waiting for Godot", date:"2026-08-20", time:"7:30 PM", tz:"EDT" },
-    { show:"Waiting for Godot", date:"2026-08-21", time:"7:30 PM", tz:"EDT" },
-    { show:"Waiting for Godot", date:"2026-08-22", time:"7:30 PM", tz:"EDT" },
-    { show:"Waiting for Godot", date:"2026-08-23", time:"2:00 PM", tz:"EDT" },
-    { show:"Waiting for Godot", date:"2026-08-27", time:"7:30 PM", tz:"EDT" },
-    { show:"Waiting for Godot", date:"2026-08-28", time:"7:30 PM", tz:"EDT" },
-    { show:"Waiting for Godot", date:"2026-08-29", time:"2:00 PM", tz:"EDT" },
-    { show:"Waiting for Godot", date:"2026-08-30", time:"2:00 PM", tz:"EDT" },
-    { show:"Waiting for Godot", date:"2026-09-03", time:"7:30 PM", tz:"EDT" },
-    { show:"Waiting for Godot", date:"2026-09-04", time:"7:30 PM", tz:"EDT" },
-    { show:"Waiting for Godot", date:"2026-09-05", time:"7:30 PM", tz:"EDT" },
-    { show:"Waiting for Godot", date:"2026-09-06", time:"2:00 PM", tz:"EDT" },
-
-    { show:"The Pillowman", date:"2026-10-08", time:"7:30 PM", tz:"EDT" },
-    { show:"The Pillowman", date:"2026-10-09", time:"7:30 PM", tz:"EDT" },
-    { show:"The Pillowman", date:"2026-10-10", time:"7:30 PM", tz:"EDT" },
-    { show:"The Pillowman", date:"2026-10-11", time:"2:00 PM", tz:"EDT" },
-    { show:"The Pillowman", date:"2026-10-15", time:"7:30 PM", tz:"EDT" },
-    { show:"The Pillowman", date:"2026-10-16", time:"7:30 PM", tz:"EDT" },
-    { show:"The Pillowman", date:"2026-10-17", time:"2:00 PM", tz:"EDT" },
-    { show:"The Pillowman", date:"2026-10-18", time:"2:00 PM", tz:"EDT" },
-    { show:"The Pillowman", date:"2026-10-22", time:"7:30 PM", tz:"EDT" },
-    { show:"The Pillowman", date:"2026-10-23", time:"7:30 PM", tz:"EDT" },
-    { show:"The Pillowman", date:"2026-10-24", time:"7:30 PM", tz:"EDT" },
-    { show:"The Pillowman", date:"2026-10-25", time:"2:00 PM", tz:"EDT" },
-
-    { show:"The Rivals", date:"2026-11-12", time:"7:30 PM", tz:"EST" },
-    { show:"The Rivals", date:"2026-11-13", time:"7:30 PM", tz:"EST" },
-    { show:"The Rivals", date:"2026-11-14", time:"7:30 PM", tz:"EST" },
-    { show:"The Rivals", date:"2026-11-15", time:"2:00 PM", tz:"EST" },
-    { show:"The Rivals", date:"2026-11-19", time:"7:30 PM", tz:"EST" },
-    { show:"The Rivals", date:"2026-11-20", time:"7:30 PM", tz:"EST" },
-    { show:"The Rivals", date:"2026-11-21", time:"2:00 PM", tz:"EST" },
-    { show:"The Rivals", date:"2026-11-22", time:"2:00 PM", tz:"EST" },
-    { show:"The Rivals", date:"2026-11-27", time:"7:30 PM", tz:"EST" },
-    { show:"The Rivals", date:"2026-11-28", time:"7:30 PM", tz:"EST" },
-    { show:"The Rivals", date:"2026-11-29", time:"2:00 PM", tz:"EST" },
-
-    { show:"God of Carnage", date:"2027-01-14", time:"7:30 PM", tz:"EST" },
-    { show:"God of Carnage", date:"2027-01-15", time:"7:30 PM", tz:"EST" },
-    { show:"God of Carnage", date:"2027-01-16", time:"7:30 PM", tz:"EST" },
-    { show:"God of Carnage", date:"2027-01-17", time:"2:00 PM", tz:"EST" },
-    { show:"God of Carnage", date:"2027-01-21", time:"7:30 PM", tz:"EST" },
-    { show:"God of Carnage", date:"2027-01-22", time:"7:30 PM", tz:"EST" },
-    { show:"God of Carnage", date:"2027-01-23", time:"2:00 PM", tz:"EST" },
-    { show:"God of Carnage", date:"2027-01-24", time:"2:00 PM", tz:"EST" },
-    { show:"God of Carnage", date:"2027-01-28", time:"7:30 PM", tz:"EST" },
-    { show:"God of Carnage", date:"2027-01-29", time:"7:30 PM", tz:"EST" },
-    { show:"God of Carnage", date:"2027-01-30", time:"7:30 PM", tz:"EST" },
-    { show:"God of Carnage", date:"2027-01-31", time:"2:00 PM", tz:"EST" },
-
-    { show:"Bare", date:"2027-02-18", time:"7:30 PM", tz:"EST" },
-    { show:"Bare", date:"2027-02-19", time:"7:30 PM", tz:"EST" },
-    { show:"Bare", date:"2027-02-20", time:"7:30 PM", tz:"EST" },
-    { show:"Bare", date:"2027-02-21", time:"2:00 PM", tz:"EST" },
-    { show:"Bare", date:"2027-02-25", time:"7:30 PM", tz:"EST" },
-    { show:"Bare", date:"2027-02-26", time:"7:30 PM", tz:"EST" },
-    { show:"Bare", date:"2027-02-27", time:"2:00 PM", tz:"EST" },
-    { show:"Bare", date:"2027-02-28", time:"2:00 PM", tz:"EST" },
-    { show:"Bare", date:"2027-03-04", time:"7:30 PM", tz:"EST" },
-    { show:"Bare", date:"2027-03-05", time:"7:30 PM", tz:"EST" },
-    { show:"Bare", date:"2027-03-06", time:"7:30 PM", tz:"EST" },
-    { show:"Bare", date:"2027-03-07", time:"2:00 PM", tz:"EST" },
-
-    { show:"A Midsummer Night's Dream", date:"2027-03-25", time:"7:30 PM", tz:"EDT" },
-    { show:"A Midsummer Night's Dream", date:"2027-03-26", time:"7:30 PM", tz:"EDT" },
-    { show:"A Midsummer Night's Dream", date:"2027-03-27", time:"7:30 PM", tz:"EDT" },
-    { show:"A Midsummer Night's Dream", date:"2027-03-28", time:"2:00 PM", tz:"EDT" },
-    { show:"A Midsummer Night's Dream", date:"2027-04-01", time:"7:30 PM", tz:"EDT" },
-    { show:"A Midsummer Night's Dream", date:"2027-04-02", time:"7:30 PM", tz:"EDT" },
-    { show:"A Midsummer Night's Dream", date:"2027-04-03", time:"2:00 PM", tz:"EDT" },
-    { show:"A Midsummer Night's Dream", date:"2027-04-04", time:"2:00 PM", tz:"EDT" },
-    { show:"A Midsummer Night's Dream", date:"2027-04-08", time:"7:30 PM", tz:"EDT" },
-    { show:"A Midsummer Night's Dream", date:"2027-04-09", time:"7:30 PM", tz:"EDT" },
-    { show:"A Midsummer Night's Dream", date:"2027-04-10", time:"7:30 PM", tz:"EDT" },
-    { show:"A Midsummer Night's Dream", date:"2027-04-11", time:"2:00 PM", tz:"EDT" },
-
-    { show:"Fences by August Wilson", date:"2027-04-22", time:"7:30 PM", tz:"EDT" },
-    { show:"Fences by August Wilson", date:"2027-04-23", time:"7:30 PM", tz:"EDT" },
-    { show:"Fences by August Wilson", date:"2027-04-24", time:"7:30 PM", tz:"EDT" },
-    { show:"Fences by August Wilson", date:"2027-04-25", time:"2:00 PM", tz:"EDT" },
-    { show:"Fences by August Wilson", date:"2027-04-29", time:"7:30 PM", tz:"EDT" },
-    { show:"Fences by August Wilson", date:"2027-04-30", time:"7:30 PM", tz:"EDT" },
-    { show:"Fences by August Wilson", date:"2027-05-01", time:"2:00 PM", tz:"EDT" },
-    { show:"Fences by August Wilson", date:"2027-05-02", time:"2:00 PM", tz:"EDT" },
-    { show:"Fences by August Wilson", date:"2027-05-06", time:"7:30 PM", tz:"EDT" },
-    { show:"Fences by August Wilson", date:"2027-05-07", time:"7:30 PM", tz:"EDT" },
-    { show:"Fences by August Wilson", date:"2027-05-08", time:"7:30 PM", tz:"EDT" },
-    { show:"Fences by August Wilson", date:"2027-05-09", time:"2:00 PM", tz:"EDT" }
-  ];
-
-  const SHIFT_TEMPLATE = { box_office: 1, concessions: 1, usher: 2 };
-
-  const PERFORMANCE_DATES = MASTER_PERFORMANCES.map(p => `${p.date} ${p.time}`);
-  const PERF_BY_DATE = Object.fromEntries(MASTER_PERFORMANCES.map(p => [p.date, p]));
-
-  const monthTitleEl = document.getElementById("month-title");
-  const calendarGridEl = document.getElementById("calendar-grid");
-  const detailTitleEl = document.getElementById("detail-title");
-  const detailBodyEl = document.getElementById("detail-body");
-  const msgEl = document.getElementById("message") || document.getElementById("msg");
-
-  let visibleMonth = new Date("2026-08-01T00:00:00");
-  let selectedDateKey = null;
-  let schedule = defaultSchedule();
-
-  function setMsg(text) {
-    if (msgEl) msgEl.textContent = text;
-  }
-
-  function defaultSchedule() {
-    const out = {};
-    for (const p of MASTER_PERFORMANCES) {
-      out[p.date] = {
-        display: `${p.date} ${p.time}`,
-        show: p.show,
-        tz: p.tz,
-        box_office: [null],
-        concessions: [null],
-        usher: [null, null]
-      };
-    }
-    return out;
-  }
-
-  function countOpenSlots(dateKey) {
-    const d = schedule[dateKey];
-    if (!d) return 0;
-    return [...d.box_office, ...d.concessions, ...d.usher].filter(v => !v).length;
-  }
-
-  function fmtKey(d) {
-    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
-  }
-
-  function normalizeFromRows(rows) {
-    const fresh = defaultSchedule();
-    for (const r of rows || []) {
-      const key = (r.performance_date || "").split(" ")[0];
-      if (!fresh[key]) continue;
-      if (!(r.role in fresh[key])) continue;
-      if (typeof r.slot_index !== "number") continue;
-      if (r.slot_index < 0 || r.slot_index >= fresh[key][r.role].length) continue;
-      fresh[key][r.role][r.slot_index] = r.assigned_to ?? null;
-    }
-    return fresh;
-  }
-
-  function renderDetail() {
-    if (!selectedDateKey || !schedule[selectedDateKey]) {
-      detailTitleEl.textContent = "Select a performance date";
-      detailBodyEl.innerHTML = "Click a highlighted date in the calendar.";
-      return;
-    }
-    const p = PERF_BY_DATE[selectedDateKey];
-    const open = countOpenSlots(selectedDateKey);
-
-    detailTitleEl.textContent = `${selectedDateKey} ${p.time}`;
-    detailBodyEl.innerHTML = `
-      <strong>${p.show}</strong> (${p.tz})<br/>
-      ${open > 0 ? `${open} open slot(s)` : "Fully staffed"}
-    `;
-  }
-
-  function renderCalendar() {
-    // always paint 42 clickable day cells
-    const y = visibleMonth.getFullYear();
-    const m = visibleMonth.getMonth();
-
-    const first = new Date(y, m, 1);
-    const last = new Date(y, m + 1, 0);
-
-    monthTitleEl.textContent = first.toLocaleString(undefined, { month: "long", year: "numeric" });
-
-    const startWeekday = first.getDay();
-    const daysInMonth = last.getDate();
-    const prevMonthLast = new Date(y, m, 0).getDate();
-
-    const cells = [];
-
-    // leading
-    for (let i = 0; i < startWeekday; i++) {
-      const dayNum = prevMonthLast - startWeekday + i + 1;
-      cells.push({ dateObj: new Date(y, m - 1, dayNum), outside: true });
-    }
-
-    // current month
-    for (let day = 1; day <= daysInMonth; day++) {
-      cells.push({ dateObj: new Date(y, m, day), outside: false });
-    }
-
-    // trailing to full 6 weeks
-    while (cells.length < 42) {
-      const day = cells.length - (startWeekday + daysInMonth) + 1;
-      cells.push({ dateObj: new Date(y, m + 1, day), outside: true });
-    }
-
-    calendarGridEl.innerHTML = "";
-
-    for (const cell of cells) {
-      const key = fmtKey(cell.dateObj);
-      const perf = schedule[key];
-      const hasShow = !!perf;
-      const open = hasShow ? countOpenSlots(key) : 0;
-      const full = hasShow && open === 0;
-      const selected = selectedDateKey === key;
-
-      const day = document.createElement("div");
-      day.className = "day";
-      if (cell.outside) day.classList.add("outside");
-      if (hasShow) day.classList.add("has-show");
-      if (hasShow && !full) day.classList.add("open");
-      if (full) day.classList.add("full");
-      if (selected) day.classList.add("selected");
-
-      const btn = document.createElement("button");
-      btn.type = "button";
-      btn.className = "day-btn";
-      btn.innerHTML = `<span class="num">${cell.dateObj.getDate()}</span>`;
-
-      if (hasShow) {
-        const pill = document.createElement("span");
-        pill.className = "pill " + (full ? "full" : "open");
-        pill.textContent = full ? "Full" : `${open} open`;
-        btn.appendChild(pill);
-
-        const mini = document.createElement("div");
-        mini.className = "show-mini";
-        mini.textContent = perf.show;
-        btn.appendChild(mini);
-
-        btn.addEventListener("click", () => {
-          selectedDateKey = key;
-          renderCalendar();
-          renderDetail();
-        });
-      } else {
-        btn.disabled = true;
-      }
-
-      day.appendChild(btn);
-      calendarGridEl.appendChild(day);
-    }
-  }
-
-  async function loadFromSupabase() {
-    try {
-      setMsg("Loading...");
-      const { data, error } = await supabase
-        .from(TABLE_NAME)
-        .select("performance_date, role, slot_index, assigned_to")
-        .in("performance_date", PERFORMANCE_DATES);
-
-      if (error) throw error;
-      schedule = normalizeFromRows(data || []);
-      setMsg(`Loaded ${data?.length || 0} rows`);
-      renderCalendar();
-      renderDetail();
-    } catch (e) {
-      console.error(e);
-      setMsg("Supabase load failed. Showing calendar from local schedule.");
-      schedule = defaultSchedule();
-      renderCalendar();
-      renderDetail();
-    }
-  }
-
-  document.getElementById("prev-month-btn")?.addEventListener("click", () => {
-    visibleMonth = new Date(visibleMonth.getFullYear(), visibleMonth.getMonth() - 1, 1);
-    renderCalendar();
-  });
-
-  document.getElementById("next-month-btn")?.addEventListener("click", () => {
-    visibleMonth = new Date(visibleMonth.getFullYear(), visibleMonth.getMonth() + 1, 1);
-    renderCalendar();
-  });
-
-  document.getElementById("today-month-btn")?.addEventListener("click", () => {
-    const t = new Date();
-    visibleMonth = new Date(t.getFullYear(), t.getMonth(), 1);
-    renderCalendar();
-  });
-
-  // Guaranteed first paint
-  renderCalendar();
-  renderDetail();
-  loadFromSupabase();
-</script></html>
+</body>
+</html>
