@@ -599,5 +599,135 @@
     renderDetail();
     loadFromSupabase();
   </script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(() => {
+  const monthTitleEl = document.getElementById("month-title");
+  const gridEl = document.getElementById("calendar-grid");
+  const detailTitleEl = document.getElementById("detail-title");
+  const detailBodyEl = document.getElementById("detail-body");
+  const msgEl = document.getElementById("msg");
+  const nameInput = document.getElementById("volunteer-name");
+
+  if (!monthTitleEl || !gridEl || !detailTitleEl || !detailBodyEl) {
+    console.error("Missing required IDs.");
+    return;
+  }
+
+  // Force visible grid even if external CSS breaks it
+  gridEl.style.display = "grid";
+  gridEl.style.gridTemplateColumns = "repeat(7,minmax(0,1fr))";
+  gridEl.style.gap = "6px";
+  gridEl.style.minHeight = "460px";
+
+  const MASTER_PERFORMANCES = [
+    { show:"Waiting for Godot", date:"2026-08-20", time:"7:30 PM", tz:"EDT" },
+    { show:"Waiting for Godot", date:"2026-08-21", time:"7:30 PM", tz:"EDT" },
+    { show:"Waiting for Godot", date:"2026-08-22", time:"7:30 PM", tz:"EDT" },
+    { show:"Waiting for Godot", date:"2026-08-23", time:"2:00 PM", tz:"EDT" },
+    { show:"Waiting for Godot", date:"2026-08-27", time:"7:30 PM", tz:"EDT" },
+    { show:"Waiting for Godot", date:"2026-08-28", time:"7:30 PM", tz:"EDT" }
+  ];
+
+  const PERF_BY_DATE = Object.fromEntries(MASTER_PERFORMANCES.map(p => [p.date, p]));
+  let visibleMonth = new Date("2026-08-01T00:00:00");
+  let selectedDateKey = null;
+
+  function setMsg(t){ if (msgEl) msgEl.textContent = t; }
+  function fmtKey(d){ return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`; }
+
+  function renderDetail(){
+    if (!selectedDateKey || !PERF_BY_DATE[selectedDateKey]) {
+      detailTitleEl.textContent = "Select a performance date";
+      detailBodyEl.textContent = "Click a highlighted date.";
+      return;
+    }
+    const p = PERF_BY_DATE[selectedDateKey];
+    detailTitleEl.textContent = `${p.show} — ${selectedDateKey}`;
+    detailBodyEl.textContent = `${p.time} ${p.tz}`;
+  }
+
+  function renderCalendar(){
+    const y = visibleMonth.getFullYear(), m = visibleMonth.getMonth();
+    const first = new Date(y,m,1), last = new Date(y,m+1,0);
+    monthTitleEl.textContent = first.toLocaleString(undefined, { month:"long", year:"numeric" });
+
+    const start = first.getDay();
+    const dim = last.getDate();
+    const prevLast = new Date(y,m,0).getDate();
+
+    const cells = [];
+    for (let i=0;i<start;i++) cells.push({ d:new Date(y,m-1,prevLast-start+i+1), outside:true });
+    for (let d=1; d<=dim; d++) cells.push({ d:new Date(y,m,d), outside:false });
+    while (cells.length < 42) cells.push({ d:new Date(y,m+1,cells.length-(start+dim)+1), outside:true });
+
+    gridEl.innerHTML = "";
+    for (const c of cells) {
+      const key = fmtKey(c.d);
+      const perf = PERF_BY_DATE[key];
+      const day = document.createElement("div");
+      day.className = "day" + (c.outside ? " outside":"") + (perf ? " has-show open":"") + (selectedDateKey===key ? " selected":"");
+
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "day-btn";
+      btn.innerHTML = `<span class="num">${c.d.getDate()}</span>`;
+
+      if (perf) {
+        const pill = document.createElement("span");
+        pill.className = "pill open";
+        pill.textContent = "Available";
+        btn.appendChild(pill);
+
+        const mini = document.createElement("div");
+        mini.className = "show-mini";
+        mini.textContent = perf.show;
+        btn.appendChild(mini);
+
+        btn.addEventListener("click", () => {
+          selectedDateKey = key;
+          renderCalendar();
+          renderDetail();
+        });
+      } else {
+        btn.disabled = true;
+      }
+
+      day.appendChild(btn);
+      gridEl.appendChild(day);
+    }
+  }
+
+  document.getElementById("prev-month-btn")?.addEventListener("click", () => {
+    visibleMonth = new Date(visibleMonth.getFullYear(), visibleMonth.getMonth()-1, 1);
+    renderCalendar();
+  });
+  document.getElementById("next-month-btn")?.addEventListener("click", () => {
+    visibleMonth = new Date(visibleMonth.getFullYear(), visibleMonth.getMonth()+1, 1);
+    renderCalendar();
+  });
+  document.getElementById("today-month-btn")?.addEventListener("click", () => {
+    const n = new Date();
+    visibleMonth = new Date(n.getFullYear(), n.getMonth(), 1);
+    renderCalendar();
+  });
+
+  // render FIRST no matter what
+  renderCalendar();
+  renderDetail();
+  setMsg("Calendar rendered.");
+
+  // optional: Supabase init after render (won't kill calendar if it fails)
+  try {
+    const SUPABASE_URL = "https://YOUR_PROJECT_ID.supabase.co";
+    const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
+    if (!SUPABASE_URL.includes("YOUR_PROJECT_ID") && !SUPABASE_ANON_KEY.includes("YOUR_SUPABASE_ANON_KEY")) {
+      window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    }
+  } catch (e) {
+    console.warn("Supabase init failed but calendar remains visible.", e);
+  }
+})();
+</script>
 </body>
 </html>
