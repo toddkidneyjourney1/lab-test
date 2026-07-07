@@ -3,257 +3,88 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Portal Landing | The Laboratory Theater of Florida</title>
+  <title>Portal Login | The Laboratory Theater of Florida</title>
   <link rel="stylesheet" href="style.css" />
   <style>
-    .portal-card {
-      background: var(--card-bg);
-      padding: 1.25rem;
-      border-radius: 8px;
-      border: 1px solid #333;
-      margin-bottom: 1rem;
-    }
-    .portal-card h3 { margin-top: 0; color: var(--accent); }
-    .portal-actions { display: grid; gap: 0.75rem; margin-top: 0.75rem; }
-    .btn {
-      display: inline-block;
-      text-align: center;
-      padding: 0.7rem 0.9rem;
-      border: 0;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: 700;
-      text-decoration: none;
-    }
-    .btn-primary { background: var(--accent); color: #fff; }
-    .btn-secondary { background: #666; color: #fff; }
-    .btn:disabled { background: #555; cursor: not-allowed; opacity: 0.8; }
-    .notice { padding: 0.8rem 1rem; border-radius: 6px; margin: 0.75rem 0; font-weight: 600; }
-    .notice.success { background: #2b9a4a; color: #fff; }
-    .notice.error { background: #a33131; color: #fff; }
-    .muted { color: #bbb; font-size: 0.95rem; }
-    .hidden { display: none !important; }
-    .field {
-      width: 100%;
-      max-width: 420px;
-      padding: 0.65rem;
-      border-radius: 6px;
-      border: 1px solid #444;
-      background: #111;
-      color: #fff;
-    }
-    .statusline {
-      margin-top: 0.5rem;
-      font-size: 0.9rem;
-      color: #ddd;
-    }
+    .card { background: var(--card-bg, #1a1a1a); border: 1px solid #333; border-radius: 10px; padding: 1.2rem; max-width: 520px; margin: 2rem auto; }
+    .field { width: 100%; padding: .65rem; border-radius: 6px; border: 1px solid #444; background: #111; color: #fff; margin-top: .35rem; }
+    .btn { display: inline-block; border: 0; border-radius: 6px; padding: .7rem .95rem; font-weight: 700; cursor: pointer; text-decoration: none; }
+    .btn-primary { background: var(--accent, #d72638); color: #fff; }
+    .btn-secondary { background: #5d6475; color: #fff; }
+    .actions { display: flex; gap: .6rem; margin-top: 1rem; flex-wrap: wrap; }
+    .notice { margin-top: .85rem; padding: .7rem .85rem; border-radius: 6px; font-weight: 600; }
+    .success { background: #2b9a4a; color: #fff; }
+    .error { background: #a33131; color: #fff; }
   </style>
 </head>
 <body>
-  <input type="checkbox" id="nav-toggle" class="nav-toggle" />
-  <label for="nav-toggle" class="nav-toggle-label"><span></span></label>
-  <nav class="hamburger-menu">
-    <a href="about.html">Origin Story</a>
-    <a href="archive25.html">Past Experiments</a>
-    <a href="index.html">Back to the Slab</a>
-    <a href="plan.html">Lab Protocols</a>
-    <a href="portal-landing.html">Portal Landing</a>
-    <a href="support.html">Fuel the Innovation</a>
-    <a href="sponsors.html">Core Collaborators</a>
-  </nav>
+  <main class="card">
+    <h1>Portal Login</h1>
+    <p>Sign in or create a new account.</p>
+    <div id="message"></div>
 
-  <header>
-    <div class="logo">THE <span>LAB</span><p class="tagline">Intentionally innovative live theater</p></div>
-  </header>
+    <form id="login-form">
+      <label for="email">Email</label>
+      <input id="email" class="field" type="email" required />
 
-  <main>
-    <h1>Portal Landing</h1>
-    <p>Sign in to access your authorized portals.</p>
-    <div id="message-container"></div>
+      <label for="password" style="margin-top:.85rem;display:block;">Password</label>
+      <input id="password" class="field" type="password" required />
 
-    <section class="portal-card" id="auth-card">
-      <h3>Sign In</h3>
-      <p class="muted">Use your account email and password.</p>
-
-      <form id="login-form">
-        <label for="email">Email</label><br />
-        <input id="email" class="field" type="email" required placeholder="you@example.com" />
-
-        <br /><br />
-        <label for="password">Password</label><br />
-        <input id="password" class="field" type="password" required placeholder="••••••••" />
-
-        <div class="portal-actions">
-          <button id="signin-btn" class="btn btn-primary" type="submit">Sign In</button>
-        </div>
-      </form>
-
-      <button id="logout-btn" class="btn btn-secondary hidden" type="button">Sign Out</button>
-      <div id="session-status" class="statusline">Checking session…</div>
-    </section>
-
-    <section class="portal-card">
-      <h3>Your Portals</h3>
-      <p class="muted">Buttons only unlock when your account is authorized.</p>
-      <div class="portal-actions">
-        <a id="volunteer-link" class="btn btn-secondary" href="volunteer-portal.html" aria-disabled="true">Volunteer Portal</a>
-        <a id="cast-link" class="btn btn-secondary" href="cast-portal.html" aria-disabled="true">Cast Portal</a>
+      <div class="actions">
+        <button class="btn btn-primary" type="submit">Sign In</button>
+        <button id="create-btn" class="btn btn-secondary" type="button">New Account</button>
       </div>
-    </section>
+    </form>
   </main>
 
   <script type="module">
     import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-    // IMPORTANT: replace with real values
     const SUPABASE_URL = "https://izytzrxrgnahyvgwqhgd.supabase.co";
-    const SUPABASE_ANON_KEY = "sb_publishable_xfsIVVSH8vcUz9XfZgirwA_wl-GSYOw";
+    const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    const messageContainer = document.getElementById("message-container");
-    const loginForm = document.getElementById("login-form");
-    const logoutBtn = document.getElementById("logout-btn");
-    const signinBtn = document.getElementById("signin-btn");
-    const volunteerLink = document.getElementById("volunteer-link");
-    const castLink = document.getElementById("cast-link");
-    const sessionStatus = document.getElementById("session-status");
+    const form = document.getElementById("login-form");
+    const createBtn = document.getElementById("create-btn");
+    const message = document.getElementById("message");
 
     function showMessage(text, type = "error") {
-      messageContainer.innerHTML = `<div class="notice ${type}">${text}</div>`;
-      setTimeout(() => { messageContainer.innerHTML = ""; }, 5000);
+      message.innerHTML = `<div class="notice ${type}">${text}</div>`;
+      setTimeout(() => message.innerHTML = "", 4500);
     }
 
-    function setStatus(text) {
-      sessionStatus.textContent = text;
+    async function goIfAuthenticated() {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) window.location.href = "portal-selector.html";
     }
 
-    function preventWhenDisabled(e) {
-      if (e.currentTarget.getAttribute("aria-disabled") === "true") {
-        e.preventDefault();
-        showMessage("You are not authorized for that portal.", "error");
-      }
-    }
-
-    function disablePortalLink(linkEl) {
-      linkEl.classList.remove("btn-primary");
-      linkEl.classList.add("btn-secondary");
-      linkEl.setAttribute("aria-disabled", "true");
-      linkEl.addEventListener("click", preventWhenDisabled);
-    }
-
-    function enablePortalLink(linkEl) {
-      linkEl.classList.remove("btn-secondary");
-      linkEl.classList.add("btn-primary");
-      linkEl.setAttribute("aria-disabled", "false");
-      linkEl.removeEventListener("click", preventWhenDisabled);
-    }
-
-    disablePortalLink(volunteerLink);
-    disablePortalLink(castLink);
-
-    let supabase;
-    try {
-      if (!SUPABASE_URL || !SUPABASE_ANON_KEY || SUPABASE_URL.includes("YOUR_") || SUPABASE_ANON_KEY.includes("YOUR_")) {
-        throw new Error("Supabase config is still using placeholder values.");
-      }
-      supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    } catch (e) {
-      setStatus("Configuration error");
-      showMessage(`Configuration error: ${e.message}`, "error");
-      throw e;
-    }
-
-    async function fetchAccess(userId) {
-      const [{ data: profile, error: profileErr }, { data: castRows, error: castErr }] = await Promise.all([
-        supabase.from("profiles").select("is_volunteer").eq("id", userId).maybeSingle(),
-        supabase.from("cast_assignments").select("show_id").eq("user_id", userId).limit(1)
-      ]);
-
-      if (profileErr) console.error("profiles lookup error:", profileErr);
-      if (castErr) console.error("cast lookup error:", castErr);
-
-      const isVolunteer = !!profile?.is_volunteer;
-      const isCast = Array.isArray(castRows) && castRows.length > 0;
-      return { isVolunteer, isCast };
-    }
-
-    async function refreshUIFromSession() {
-      disablePortalLink(volunteerLink);
-      disablePortalLink(castLink);
-
-      const { data: { user }, error } = await supabase.auth.getUser();
-      if (error) {
-        console.error("getUser error:", error);
-        setStatus("Not signed in");
-        loginForm.classList.remove("hidden");
-        logoutBtn.classList.add("hidden");
-        localStorage.removeItem("labPortalUserId");
-        return;
-      }
-
-      if (!user) {
-        setStatus("Not signed in");
-        loginForm.classList.remove("hidden");
-        logoutBtn.classList.add("hidden");
-        localStorage.removeItem("labPortalUserId");
-        return;
-      }
-
-      localStorage.setItem("labPortalUserId", user.id);
-      loginForm.classList.add("hidden");
-      logoutBtn.classList.remove("hidden");
-      setStatus(`Signed in as ${user.email || user.id}`);
-
-      const access = await fetchAccess(user.id);
-      if (access.isVolunteer) enablePortalLink(volunteerLink);
-      if (access.isCast) enablePortalLink(castLink);
-
-      if (!access.isVolunteer && !access.isCast) {
-        showMessage("Signed in, but no portal permissions found for this account.", "error");
-      }
-    }
-
-    loginForm.addEventListener("submit", async (e) => {
+    form.addEventListener("submit", async (e) => {
       e.preventDefault();
-
       const email = document.getElementById("email").value.trim();
       const password = document.getElementById("password").value;
 
-      if (!email || !password) {
-        showMessage("Email and password are required.", "error");
-        return;
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) return showMessage(error.message || "Login failed.", "error");
+
+      showMessage("Signed in. Redirecting...", "success");
+      setTimeout(() => window.location.href = "portal-selector.html", 350);
+    });
+
+    createBtn.addEventListener("click", async () => {
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+
+      if (!email || !password || password.length < 6) {
+        return showMessage("Enter email + password (minimum 6 characters) to create account.", "error");
       }
 
-      signinBtn.disabled = true;
-      setStatus("Signing in...");
+      const { error } = await supabase.auth.signUp({ email, password });
+      if (error) return showMessage(error.message || "Sign up failed.", "error");
 
-      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-
-      signinBtn.disabled = false;
-
-      if (error) {
-        console.error("signInWithPassword error:", error);
-        setStatus("Sign-in failed");
-        showMessage(error.message || "Login failed.", "error");
-        return;
-      }
-
-      console.log("signInWithPassword success:", data);
-      showMessage("Signed in successfully.", "success");
-      await refreshUIFromSession();
+      showMessage("Account created. Check email for verification if enabled, then sign in.", "success");
     });
 
-    logoutBtn.addEventListener("click", async () => {
-      await supabase.auth.signOut();
-      localStorage.removeItem("labPortalUserId");
-      showMessage("Signed out.", "success");
-      await refreshUIFromSession();
-    });
-
-    supabase.auth.onAuthStateChange(async () => {
-      await refreshUIFromSession();
-    });
-
-    window.addEventListener("load", refreshUIFromSession);
+    goIfAuthenticated();
   </script>
 </body>
 </html>
