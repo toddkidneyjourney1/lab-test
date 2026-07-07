@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,18 +5,68 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Auditions Portal - The Laboratory Theater of Florida</title>
     <style>
-        body { font-family: sans-serif; line-height: 1.6; max-width: 800px; margin: 20px auto; padding: 0 20px; }
-        section { margin-bottom: 40px; border-bottom: 1px solid #ccc; padding-bottom: 20px; }
-        form { display: flex; flex-direction: column; gap: 10px; }
-        input, textarea { padding: 8px; width: 100%; box-sizing: border-box; }
-        button { padding: 10px; cursor: pointer; background: #007bff; color: white; border: none; }
+        :root {
+            --primary-color: #007bff;
+            --secondary-color: #f8f9fa;
+            --text-color: #333;
+            --border-color: #dee2e6;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
+            background-color: #fff;
+        }
+
+        h1 { border-bottom: 2px solid var(--primary-color); padding-bottom: 10px; }
+        h2 { margin-top: 30px; color: var(--primary-color); }
+
+        section {
+            background: var(--secondary-color);
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            border: 1px solid var(--border-color);
+        }
+
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 12px 24px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        button:hover { background-color: #0056b3; }
+
+        ul { padding-left: 20px; }
+        li { margin-bottom: 10px; }
     </style>
 </head>
 <body>
 
     <h1>Auditions Portal</h1>
 
-    <!-- Upcoming Auditions Listing -->
     <section>
         <h2>Upcoming Auditions</h2>
         <ul>
@@ -26,21 +75,28 @@
         </ul>
     </section>
 
-    <!-- Video Submission Form -->
     <section>
         <h2>Submit Audition Video</h2>
         <form action="/submit-audition" method="POST">
-            <label for="name">Full Name:</label>
-            <input type="text" id="name" name="name" required>
+            <div class="form-group">
+                <label for="name">Full Name</label>
+                <input type="text" id="name" name="name" required>
+            </div>
 
-            <label for="play">Auditioning For:</label>
-            <input type="text" id="play" name="play" required>
+            <div class="form-group">
+                <label for="play">Auditioning For</label>
+                <input type="text" id="play" name="play" required>
+            </div>
 
-            <label for="video-link">Link to Audition Video (YouTube/Vimeo):</label>
-            <input type="url" id="video-link" name="video-link" placeholder="https://..." required>
+            <div class="form-group">
+                <label for="video-link">Link to Audition Video (YouTube/Vimeo)</label>
+                <input type="url" id="video-link" name="video-link" placeholder="https://..." required>
+            </div>
 
-            <label for="notes">Additional Notes:</label>
-            <textarea id="notes" name="notes"></textarea>
+            <div class="form-group">
+                <label for="notes">Additional Notes</label>
+                <textarea id="notes" name="notes" rows="4"></textarea>
+            </div>
 
             <button type="submit">Submit Audition</button>
         </form>
