@@ -15,12 +15,26 @@
     }
     .shift-card h3 { margin-top: 0; color: var(--accent); }
     .shift-meta { margin: 0.5rem 0 0.75rem; font-size: 0.95rem; color: #ddd; }
-    .status-badge { display: inline-block; padding: 0.3rem 0.75rem; border-radius: 999px; font-size: 0.8rem; font-weight: 700; margin-bottom: 0.75rem; }
+    .status-badge {
+      display: inline-block;
+      padding: 0.3rem 0.75rem;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+    }
     .status-open { background: #2b9a4a; color: #fff; }
     .status-full { background: #a33131; color: #fff; }
     .status-signed { background: var(--accent); color: #fff; }
     .shift-actions { display: flex; gap: 0.75rem; margin-top: 0.5rem; }
-    .btn { flex: 1; padding: 0.7rem 0.9rem; border: 0; border-radius: 6px; cursor: pointer; font-weight: 700; }
+    .btn {
+      flex: 1;
+      padding: 0.7rem 0.9rem;
+      border: 0;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 700;
+    }
     .btn-primary { background: var(--accent); color: #fff; }
     .btn-secondary { background: #666; color: #fff; }
     .btn:disabled { background: #555; cursor: not-allowed; opacity: 0.8; }
@@ -57,7 +71,14 @@
     </section>
   </main>
 
-  <script>
+  <script type="module">
+    import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+    // Replace with your real project values
+    const SUPABASE_URL = "https://YOUR_PROJECT.supabase.co";
+    const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
     const SHIFT_SCHEDULE = [
       { id: "s1", date: "DATE_PLACEHOLDER_1", type: "Ushering", spots: 4 },
       { id: "s2", date: "DATE_PLACEHOLDER_2", type: "Concessions", spots: 3 },
@@ -68,11 +89,14 @@
       { id: "s7", date: "DATE_PLACEHOLDER_7", type: "Box Office", spots: 2 },
       { id: "s8", date: "DATE_PLACEHOLDER_8", type: "Behind the Scenes", spots: 5 }
     ];
-    const STORAGE_KEY = "labVolunteerPortalSignups";
 
-    // User identity should already be established on portal-landing.html (Supabase flow)
-    function getCurrentUserKey() {
-      return localStorage.getItem("labPortalUserId") || "anonymous";
+    const STORAGE_KEY = "labVolunteerPortalSignups";
+    let currentUser = null;
+
+    function showMessage(text, type) {
+      const container = document.getElementById("message-container");
+      container.innerHTML = `<div class="notice ${type}">${text}</div>`;
+      setTimeout(() => { container.innerHTML = ""; }, 3500);
     }
 
     function getSignups() {
@@ -81,6 +105,36 @@
 
     function saveSignups(signups) {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(signups));
+    }
+
+    function getCurrentUserKey() {
+      return currentUser?.id || "anonymous";
+    }
+
+    async function requireVolunteerAccess() {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session?.user) {
+        window.location.href = "portal-landing.html";
+        return false;
+      }
+
+      currentUser = session.user;
+
+      const { data: profile, error } = await supabase
+        .from("profiles")
+        .select("is_volunteer")
+        .eq("id", currentUser.id)
+        .single();
+
+      if (error || !profile?.is_volunteer) {
+        showMessage("Access denied. Volunteer authorization required.", "error");
+        setTimeout(() => {
+          window.location.href = "portal-landing.html";
+        }, 1200);
+        return false;
+      }
+
+      return true;
     }
 
     function renderShifts() {
@@ -119,10 +173,10 @@
       }).join("");
     }
 
-    function signupForShift(shiftId) {
+    window.signupForShift = function signupForShift(shiftId) {
       const userKey = getCurrentUserKey();
       if (!userKey || userKey === "anonymous") {
-        return showMessage("No active portal session found. Please return to Portal Landing.", "error");
+        return showMessage("No active session found. Please return to Portal Landing.", "error");
       }
 
       const signups = getSignups();
@@ -130,20 +184,16 @@
       if (!shift) return;
 
       const signedUsers = signups[shiftId] || [];
-      if (signedUsers.includes(userKey)) {
-        return showMessage("You are already signed up for this shift.", "error");
-      }
-      if (signedUsers.length >= shift.spots) {
-        return showMessage("This shift is already full.", "error");
-      }
+      if (signedUsers.includes(userKey)) return showMessage("You are already signed up for this shift.", "error");
+      if (signedUsers.length >= shift.spots) return showMessage("This shift is already full.", "error");
 
       signups[shiftId] = [...signedUsers, userKey];
       saveSignups(signups);
       showMessage("Signup successful!", "success");
       renderShifts();
-    }
+    };
 
-    function cancelShift(shiftId) {
+    window.cancelShift = function cancelShift(shiftId) {
       const userKey = getCurrentUserKey();
       const signups = getSignups();
       const signedUsers = signups[shiftId] || [];
@@ -151,15 +201,11 @@
       saveSignups(signups);
       showMessage("Signup canceled.", "success");
       renderShifts();
-    }
+    };
 
-    function showMessage(text, type) {
-      const container = document.getElementById("message-container");
-      container.innerHTML = `<div class="notice ${type}">${text}</div>`;
-      setTimeout(() => { container.innerHTML = ""; }, 3500);
-    }
-
-    window.addEventListener("load", () => {
+    window.addEventListener("load", async () => {
+      const allowed = await requireVolunteerAccess();
+      if (!allowed) return;
       renderShifts();
     });
   </script>
