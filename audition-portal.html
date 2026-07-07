@@ -1,1 +1,50 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auditions Portal - The Laboratory Theater of Florida</title>
+    <style>
+        body { font-family: sans-serif; line-height: 1.6; max-width: 800px; margin: 20px auto; padding: 0 20px; }
+        section { margin-bottom: 40px; border-bottom: 1px solid #ccc; padding-bottom: 20px; }
+        form { display: flex; flex-direction: column; gap: 10px; }
+        input, textarea { padding: 8px; width: 100%; box-sizing: border-box; }
+        button { padding: 10px; cursor: pointer; background: #007bff; color: white; border: none; }
+    </style>
+</head>
+<body>
+
+    <h1>Auditions Portal</h1>
+
+    <!-- Upcoming Auditions Listing -->
+    <section>
+        <h2>Upcoming Auditions</h2>
+        <ul>
+            <li><strong>[Play Title]</strong> - Date: [Date] | Location: [Location]</li>
+            <li><strong>[Play Title]</strong> - Date: [Date] | Location: [Location]</li>
+        </ul>
+    </section>
+
+    <!-- Video Submission Form -->
+    <section>
+        <h2>Submit Audition Video</h2>
+        <form action="/submit-audition" method="POST">
+            <label for="name">Full Name:</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="play">Auditioning For:</label>
+            <input type="text" id="play" name="play" required>
+
+            <label for="video-link">Link to Audition Video (YouTube/Vimeo):</label>
+            <input type="url" id="video-link" name="video-link" placeholder="https://..." required>
+
+            <label for="notes">Additional Notes:</label>
+            <textarea id="notes" name="notes"></textarea>
+
+            <button type="submit">Submit Audition</button>
+        </form>
+    </section>
+
+</body>
+</html>
