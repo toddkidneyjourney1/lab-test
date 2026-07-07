@@ -33,6 +33,15 @@
     .notice.error { background: #a33131; color: #fff; }
     .muted { color: #bbb; font-size: 0.95rem; }
     .hidden { display: none !important; }
+    .field {
+      width: 100%;
+      max-width: 420px;
+      padding: 0.65rem;
+      border-radius: 6px;
+      border: 1px solid #444;
+      background: #111;
+      color: #fff;
+    }
   </style>
 </head>
 <body>
@@ -59,12 +68,17 @@
 
     <section class="portal-card" id="auth-card">
       <h3>Authentication</h3>
-      <p class="muted">Use your email to sign in. You’ll receive a magic link.</p>
+      <p class="muted">Use your account email and password.</p>
       <form id="login-form">
         <label for="email">Email</label><br />
-        <input id="email" type="email" required placeholder="you@example.com" style="width:100%;max-width:420px;padding:.65rem;border-radius:6px;border:1px solid #444;background:#111;color:#fff;" />
+        <input id="email" class="field" type="email" required placeholder="you@example.com" />
+
+        <br /><br />
+        <label for="password">Password</label><br />
+        <input id="password" class="field" type="password" required placeholder="••••••••" />
+
         <div class="portal-actions">
-          <button class="btn btn-primary" type="submit">Send Magic Link</button>
+          <button class="btn btn-primary" type="submit">Sign In</button>
         </div>
       </form>
       <button id="logout-btn" class="btn btn-secondary hidden" type="button">Sign Out</button>
@@ -84,7 +98,7 @@
     import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
     // MUST match across all portal pages
-    const SUPABASE_URL = "https://izytzrxrgnahyvgwqhgd.supabase.co)";
+    const SUPABASE_URL = "https://izytzrxrgnahyvgwqhgd.supabase.co";
     const SUPABASE_ANON_KEY = "sb_publishable_xfsIVVSH8vcUz9XfZgirwA_wl-GSYOw";
     const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
@@ -121,9 +135,6 @@
     }
 
     async function fetchAccess(userId) {
-      // defaults requested:
-      // profiles(id, is_volunteer)
-      // cast_assignments(user_id, show_id)
       const [{ data: profile, error: profileErr }, { data: castRows, error: castErr }] = await Promise.all([
         supabase.from("profiles").select("is_volunteer").eq("id", userId).single(),
         supabase.from("cast_assignments").select("show_id").eq("user_id", userId).limit(1)
@@ -155,27 +166,31 @@
 
       if (access.isVolunteer) enablePortalLink(volunteerLink);
       if (access.isCast) enablePortalLink(castLink);
+
+      if (!access.isVolunteer && !access.isCast) {
+        showMessage("Signed in, but no portal permissions found for this account.", "error");
+      }
     }
 
     loginForm.addEventListener("submit", async (e) => {
       e.preventDefault();
       const email = document.getElementById("email").value.trim();
-      if (!email) return;
+      const password = document.getElementById("password").value;
 
-      const { error } = await supabase.auth.signInWithOtp({
-        email,
-        options: {
-          // keep user on this page after magic-link auth
-          emailRedirectTo: `${window.location.origin}${window.location.pathname}`
-        }
-      });
-
-      if (error) {
-        showMessage(error.message || "Could not send magic link.", "error");
+      if (!email || !password) {
+        showMessage("Email and password are required.", "error");
         return;
       }
 
-      showMessage("Magic link sent. Check your email, then return here.", "success");
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+
+      if (error) {
+        showMessage(error.message || "Login failed.", "error");
+        return;
+      }
+
+      showMessage("Signed in successfully.", "success");
+      await refreshUIFromSession();
     });
 
     logoutBtn.addEventListener("click", async () => {
