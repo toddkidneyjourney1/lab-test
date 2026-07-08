@@ -7,80 +7,23 @@
   <style>
     :root { color-scheme: dark; }
     * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #0f0f10;
-      color: #f1f1f1;
-    }
-
-    .wrap {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 18px;
-    }
-
-    .panel {
-      background: #181818;
-      border: 1px solid #333;
-      border-radius: 12px;
-      padding: 14px;
-      margin-bottom: 12px;
-    }
-
-    .row {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-
-    .btn {
-      border: 0;
-      border-radius: 8px;
-      padding: 8px 12px;
-      background: #d72638;
-      color: #fff;
-      font-weight: 700;
-      cursor: pointer;
-    }
-
-    .btn.gray { background: #444; }
-    .btn:disabled { opacity: .55; cursor: not-allowed; }
-
-    input, textarea, select {
-      width: 100%;
-      padding: 8px;
-      border: 1px solid #444;
-      border-radius: 8px;
-      background: #101010;
-      color: #fff;
-    }
-
-    textarea { min-height: 90px; resize: vertical; }
-
-    .grid {
-      display: grid;
-      gap: 12px;
-      grid-template-columns: 1fr 1fr;
-    }
-
-    @media (max-width: 900px) {
-      .grid { grid-template-columns: 1fr; }
-    }
-
-    .muted { color: #bdbdbd; font-size: 12px; }
-    .ok { color: #9fe0b0; }
-    .err { color: #efb0b0; }
-
-    .list {
-      border: 1px solid #333;
-      border-radius: 8px;
-      padding: 10px;
-      background: #131313;
-    }
-
-    .hidden { display: none !important; }
+    body { margin:0; font-family:Arial,sans-serif; background:#0f0f10; color:#f1f1f1; }
+    .wrap { max-width:1100px; margin:0 auto; padding:18px; }
+    .panel { background:#181818; border:1px solid #333; border-radius:12px; padding:14px; margin-bottom:12px; }
+    .row { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+    .btn { border:0; border-radius:8px; padding:8px 12px; background:#d72638; color:#fff; font-weight:700; cursor:pointer; }
+    .btn.gray { background:#444; }
+    .btn:disabled { opacity:.55; cursor:not-allowed; }
+    .grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    @media (max-width:900px){ .grid{ grid-template-columns:1fr; } }
+    .hidden { display:none !important; }
+    .muted { color:#bdbdbd; font-size:12px; }
+    .ok { color:#9fe0b0; }
+    .err { color:#efb0b0; }
+    input, textarea { width:100%; padding:8px; border:1px solid #444; border-radius:8px; background:#101010; color:#fff; }
+    textarea { min-height:90px; resize:vertical; }
+    .list { border:1px solid #333; border-radius:8px; background:#131313; padding:10px; }
+    .ticker { font-weight:700; color:#fff; padding:10px; border:1px solid #333; border-radius:8px; background:#121212; }
   </style>
 </head>
 <body>
@@ -95,111 +38,97 @@
       <div id="msg" class="muted" style="margin-top:8px;">Ready.</div>
     </div>
 
-    <!-- Admin-only section -->
+    <div class="panel">
+      <h3 style="margin-top:0;">Shows Ticker</h3>
+      <div id="public-ticker" class="ticker">Loading ticker...</div>
+    </div>
+
+    <div class="panel">
+      <h3 style="margin-top:0;">Cast List</h3>
+      <div id="public-cast-list" class="list muted">Loading cast list...</div>
+    </div>
+
+    <div class="panel">
+      <h3 style="margin-top:0;">Performance Calendar</h3>
+      <div id="public-calendar-list" class="list muted">Loading calendar...</div>
+    </div>
+
+    <!-- ADMIN ONLY -->
     <div id="admin-root" class="hidden">
       <div class="grid">
         <div class="panel">
-          <h3 style="margin-top:0;">Shows Ticker (Admin)</h3>
-          <label for="ticker-input" class="muted">Ticker Text</label>
-          <textarea id="ticker-input" placeholder="Enter shows ticker text..."></textarea>
+          <h3 style="margin-top:0;">Edit Shows Ticker (Admin)</h3>
+          <textarea id="ticker-input" placeholder="Ticker text..."></textarea>
           <div class="row" style="margin-top:8px;">
             <button id="save-ticker-btn" class="btn" type="button">Save Ticker</button>
           </div>
-          <div class="muted" style="margin-top:8px;">Stored in table: <code>portal_settings</code> key: <code>shows_ticker</code></div>
         </div>
 
         <div class="panel">
-          <h3 style="margin-top:0;">Cast List (Admin)</h3>
-          <label for="cast-input" class="muted">Cast List (one per line)</label>
-          <textarea id="cast-input" placeholder="Role — Actor Name"></textarea>
+          <h3 style="margin-top:0;">Edit Cast List (Admin)</h3>
+          <textarea id="cast-input" placeholder="One role per line"></textarea>
           <div class="row" style="margin-top:8px;">
             <button id="save-cast-btn" class="btn" type="button">Save Cast List</button>
           </div>
-          <div class="muted" style="margin-top:8px;">Stored in table: <code>portal_settings</code> key: <code>cast_list</code></div>
         </div>
       </div>
 
       <div class="panel">
-        <h3 style="margin-top:0;">Calendar Editor (Admin)</h3>
+        <h3 style="margin-top:0;">Edit Calendar (Admin)</h3>
         <div class="grid">
           <div>
-            <label for="show-name" class="muted">Show Name</label>
+            <label class="muted" for="show-name">Show</label>
             <input id="show-name" placeholder="Show title" />
           </div>
           <div>
-            <label for="show-date" class="muted">Date</label>
+            <label class="muted" for="show-date">Date</label>
             <input id="show-date" type="date" />
           </div>
           <div>
-            <label for="show-time" class="muted">Time</label>
+            <label class="muted" for="show-time">Time</label>
             <input id="show-time" placeholder="7:30 PM" />
           </div>
           <div>
-            <label for="show-tz" class="muted">Time Zone</label>
-            <input id="show-tz" placeholder="EDT / EST" />
+            <label class="muted" for="show-tz">TZ</label>
+            <input id="show-tz" placeholder="EDT" />
           </div>
         </div>
         <div class="row" style="margin-top:10px;">
-          <button id="add-calendar-btn" class="btn" type="button">Add / Update Entry</button>
-          <button id="delete-calendar-btn" class="btn gray" type="button">Delete Entry</button>
+          <button id="save-calendar-btn" class="btn" type="button">Add / Update</button>
+          <button id="delete-calendar-btn" class="btn gray" type="button">Delete (date+time)</button>
         </div>
-        <div class="muted" style="margin-top:8px;">Table: <code>cast_calendar</code> (show, date, time, tz)</div>
       </div>
-
-      <div class="panel">
-        <h3 style="margin-top:0;">Current Calendar Entries</h3>
-        <div id="calendar-list" class="list muted">Loading…</div>
-      </div>
-    </div>
-
-    <!-- Non-admin fallback (no admin content visible) -->
-    <div id="not-admin-note" class="panel">
-      <h3 style="margin-top:0;">Cast Portal</h3>
-      <div class="muted">Please log in with an admin account.</div>
     </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    // =========================
-    // CONFIG
-    // =========================
     const SUPABASE_URL = "https://YOUR_PROJECT_ID.supabase.co";
     const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
 
-    // Admin emails allowed to manage portal
-    const ADMIN_EMAILS = [
-      "admin@example.com"
-      // add more admin emails here
-    ];
+    const ADMIN_EMAILS = ["admin@example.com"];
 
-    // Tables
-    const SETTINGS_TABLE = "portal_settings"; // columns: key (text pk), value (text), updated_at
-    const CALENDAR_TABLE = "cast_calendar";   // columns: show (text), date (date), time (text), tz (text)
-
+    const SETTINGS_TABLE = "portal_settings";
+    const CALENDAR_TABLE = "cast_calendar";
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // DOM
     const loginBtn = document.getElementById("login-btn");
     const logoutBtn = document.getElementById("logout-btn");
     const authStatus = document.getElementById("auth-status");
     const msgEl = document.getElementById("msg");
-
     const adminRoot = document.getElementById("admin-root");
-    const notAdminNote = document.getElementById("not-admin-note");
+
+    const publicTicker = document.getElementById("public-ticker");
+    const publicCastList = document.getElementById("public-cast-list");
+    const publicCalendarList = document.getElementById("public-calendar-list");
 
     const tickerInput = document.getElementById("ticker-input");
     const castInput = document.getElementById("cast-input");
-    const saveTickerBtn = document.getElementById("save-ticker-btn");
-    const saveCastBtn = document.getElementById("save-cast-btn");
 
     const showName = document.getElementById("show-name");
     const showDate = document.getElementById("show-date");
     const showTime = document.getElementById("show-time");
     const showTz = document.getElementById("show-tz");
-    const addCalendarBtn = document.getElementById("add-calendar-btn");
-    const deleteCalendarBtn = document.getElementById("delete-calendar-btn");
-    const calendarList = document.getElementById("calendar-list");
 
     let currentUser = null;
     let isAdmin = false;
@@ -209,45 +138,36 @@
       msgEl.textContent = text;
     }
 
-    function updateVisibility() {
-      if (currentUser && isAdmin) {
-        adminRoot.classList.remove("hidden");
-        notAdminNote.classList.add("hidden");
-        loginBtn.classList.add("hidden");
-        logoutBtn.classList.remove("hidden");
-        authStatus.textContent = `Signed in as ${currentUser.email} (admin)`;
-      } else if (currentUser && !isAdmin) {
-        adminRoot.classList.add("hidden");
-        notAdminNote.classList.remove("hidden");
-        loginBtn.classList.add("hidden");
-        logoutBtn.classList.remove("hidden");
-        authStatus.textContent = `Signed in as ${currentUser.email} (not admin)`;
-      } else {
-        adminRoot.classList.add("hidden");
-        notAdminNote.classList.remove("hidden");
+    function updateAuthUI() {
+      if (!currentUser) {
+        authStatus.textContent = "Not signed in";
         loginBtn.classList.remove("hidden");
         logoutBtn.classList.add("hidden");
-        authStatus.textContent = "Not signed in";
+        adminRoot.classList.add("hidden");
+        return;
       }
-    }
 
-    function requireAdmin() {
-      if (!currentUser || !isAdmin) {
-        setMsg("Access denied: admin only.", false);
-        return false;
-      }
-      return true;
+      authStatus.textContent = `Signed in: ${currentUser.email}`;
+      loginBtn.classList.add("hidden");
+      logoutBtn.classList.remove("hidden");
+
+      if (isAdmin) adminRoot.classList.remove("hidden");
+      else adminRoot.classList.add("hidden");
     }
 
     async function refreshAuth() {
       const { data: { session } } = await supabase.auth.getSession();
       currentUser = session?.user || null;
       isAdmin = !!(currentUser?.email && ADMIN_EMAILS.includes(currentUser.email.toLowerCase()));
-      updateVisibility();
+      updateAuthUI();
+    }
 
-      if (currentUser && isAdmin) {
-        await Promise.all([loadSettings(), loadCalendar()]);
+    function requireAdmin() {
+      if (!currentUser || !isAdmin) {
+        setMsg("Admin only.", false);
+        return false;
       }
+      return true;
     }
 
     async function login() {
@@ -257,81 +177,86 @@
       if (!password) return;
 
       const { error } = await supabase.auth.signInWithPassword({ email, password });
-      if (error) {
-        setMsg(`Login failed: ${error.message}`, false);
-        return;
-      }
+      if (error) return setMsg("Login failed: " + error.message, false);
 
-      setMsg("Login successful.", true);
+      setMsg("Login successful.");
       await refreshAuth();
+      await loadAll();
     }
 
     async function logout() {
       const { error } = await supabase.auth.signOut();
-      if (error) {
-        setMsg(`Logout failed: ${error.message}`, false);
-        return;
-      }
+      if (error) return setMsg("Logout failed: " + error.message, false);
+
       currentUser = null;
       isAdmin = false;
-      updateVisibility();
-      setMsg("Logged out.", true);
+      updateAuthUI();
+      setMsg("Logged out.");
     }
 
     async function loadSettings() {
-      if (!requireAdmin()) return;
       const { data, error } = await supabase
         .from(SETTINGS_TABLE)
         .select("key, value")
         .in("key", ["shows_ticker", "cast_list"]);
 
       if (error) {
-        setMsg(`Failed to load settings: ${error.message}`, false);
+        setMsg("Settings load failed: " + error.message, false);
         return;
       }
 
       const map = Object.fromEntries((data || []).map(r => [r.key, r.value || ""]));
-      tickerInput.value = map.shows_ticker || "";
-      castInput.value = map.cast_list || "";
-    }
+      const ticker = map.shows_ticker || "No ticker text set.";
+      const cast = map.cast_list || "No cast list set.";
 
-    async function upsertSetting(key, value) {
-      if (!requireAdmin()) return;
-      const { error } = await supabase
-        .from(SETTINGS_TABLE)
-        .upsert([{ key, value }], { onConflict: "key" });
+      publicTicker.textContent = ticker;
+      publicCastList.innerHTML = cast
+        .split("\n")
+        .filter(Boolean)
+        .map(line => `<div>${line}</div>`)
+        .join("") || "<div>No cast list set.</div>";
 
-      if (error) {
-        setMsg(`Save failed (${key}): ${error.message}`, false);
-        return;
+      if (isAdmin) {
+        tickerInput.value = map.shows_ticker || "";
+        castInput.value = map.cast_list || "";
       }
-      setMsg(`Saved ${key}.`, true);
     }
 
     async function loadCalendar() {
-      if (!requireAdmin()) return;
       const { data, error } = await supabase
         .from(CALENDAR_TABLE)
         .select("show, date, time, tz")
         .order("date", { ascending: true });
 
       if (error) {
-        setMsg(`Failed to load calendar: ${error.message}`, false);
-        calendarList.textContent = "Failed to load.";
+        setMsg("Calendar load failed: " + error.message, false);
+        publicCalendarList.textContent = "Failed to load.";
         return;
       }
 
-      if (!data || data.length === 0) {
-        calendarList.textContent = "No calendar entries yet.";
+      if (!data || !data.length) {
+        publicCalendarList.textContent = "No calendar entries.";
         return;
       }
 
-      calendarList.innerHTML = data
-        .map(r => `<div>${r.date} • ${r.time} (${r.tz}) — <strong>${r.show}</strong></div>`)
-        .join("");
+      publicCalendarList.innerHTML = data.map(r =>
+        `<div>${r.date} • ${r.time} (${r.tz}) — <strong>${r.show}</strong></div>`
+      ).join("");
     }
 
-    async function addOrUpdateCalendar() {
+    async function saveSetting(key, value) {
+      if (!requireAdmin()) return;
+
+      const { error } = await supabase
+        .from(SETTINGS_TABLE)
+        .upsert([{ key, value }], { onConflict: "key" });
+
+      if (error) return setMsg(`Save failed (${key}): ` + error.message, false);
+      setMsg(`Saved ${key}.`);
+      await loadSettings();
+    }
+
+    async function saveCalendarEntry() {
       if (!requireAdmin()) return;
 
       const payload = {
@@ -340,35 +265,26 @@
         time: (showTime.value || "").trim(),
         tz: (showTz.value || "").trim()
       };
-
       if (!payload.show || !payload.date || !payload.time || !payload.tz) {
-        setMsg("Please fill show/date/time/tz.", false);
-        return;
+        return setMsg("Fill show/date/time/tz.", false);
       }
 
-      // Upsert by date+time expected unique key in DB (recommended)
       const { error } = await supabase
         .from(CALENDAR_TABLE)
         .upsert([payload], { onConflict: "date,time" });
 
-      if (error) {
-        setMsg(`Calendar save failed: ${error.message}`, false);
-        return;
-      }
+      if (error) return setMsg("Calendar save failed: " + error.message, false);
 
-      setMsg("Calendar entry saved.", true);
+      setMsg("Calendar saved.");
       await loadCalendar();
     }
 
-    async function deleteCalendar() {
+    async function deleteCalendarEntry() {
       if (!requireAdmin()) return;
 
       const date = (showDate.value || "").trim();
       const time = (showTime.value || "").trim();
-      if (!date || !time) {
-        setMsg("Provide date + time to delete.", false);
-        return;
-      }
+      if (!date || !time) return setMsg("Provide date+time to delete.", false);
 
       const { error } = await supabase
         .from(CALENDAR_TABLE)
@@ -376,31 +292,34 @@
         .eq("date", date)
         .eq("time", time);
 
-      if (error) {
-        setMsg(`Calendar delete failed: ${error.message}`, false);
-        return;
-      }
+      if (error) return setMsg("Calendar delete failed: " + error.message, false);
 
-      setMsg("Calendar entry deleted.", true);
+      setMsg("Calendar entry deleted.");
       await loadCalendar();
     }
 
-    // Events
+    async function loadAll() {
+      await Promise.all([loadSettings(), loadCalendar()]);
+    }
+
     loginBtn.addEventListener("click", login);
     logoutBtn.addEventListener("click", logout);
 
-    saveTickerBtn.addEventListener("click", () => upsertSetting("shows_ticker", tickerInput.value));
-    saveCastBtn.addEventListener("click", () => upsertSetting("cast_list", castInput.value));
-
-    addCalendarBtn.addEventListener("click", addOrUpdateCalendar);
-    deleteCalendarBtn.addEventListener("click", deleteCalendar);
+    document.getElementById("save-ticker-btn").addEventListener("click", () => saveSetting("shows_ticker", tickerInput.value));
+    document.getElementById("save-cast-btn").addEventListener("click", () => saveSetting("cast_list", castInput.value));
+    document.getElementById("save-calendar-btn").addEventListener("click", saveCalendarEntry);
+    document.getElementById("delete-calendar-btn").addEventListener("click", deleteCalendarEntry);
 
     supabase.auth.onAuthStateChange(async () => {
       await refreshAuth();
+      await loadAll();
     });
 
-    // Init
-    refreshAuth().then(() => setMsg("Portal loaded.", true));
+    (async function init(){
+      await refreshAuth();
+      await loadAll();
+      setMsg("Cast portal loaded.");
+    })();
   </script>
 </body>
 </html>
