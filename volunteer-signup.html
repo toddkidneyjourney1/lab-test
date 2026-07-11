@@ -277,51 +277,5 @@
         last_name: form.last_name.value.trim(),
         email: form.email.value.trim().toLowerCase(),
         phone: normalizePhone(form.phone.value),
-        interests: form.interests.value,
-        availability_notes: form.availability.value.trim()
-      };
-
-      if (!payload.first_name || !payload.last_name || !payload.email || !payload.interests) {
-        showMessage("Please complete all required fields.", "error");
-        return;
-      }
-
-      submitBtn.disabled = true;
-      submitBtn.textContent = "Submitting...";
-
-      const { data: authData } = await supabase.auth.getUser();
-      const userId = authData?.user?.id ?? null;
-
-      const { error } = await supabase
-        .from("volunteer_signups")
-        .insert([{
-          user_id: userId,
-          first_name: payload.first_name,
-          last_name: payload.last_name,
-          email: payload.email,
-          phone: payload.phone || null,
-          interests: payload.interests,
-          availability_notes: payload.availability_notes || null
-        }]);
-
-      if (error) {
-        showMessage(error.message || "Could not submit signup. Please try again.", "error");
-        submitBtn.disabled = false;
-        submitBtn.textContent = "Submit Signup";
-        return;
-      }
-
-      form.reset();
-      showMessage("Thanks! Your volunteer signup was submitted successfully.", "success");
-      submitBtn.disabled = false;
-      submitBtn.textContent = "Submit Signup";
-    });
-
-    enforcePickShiftRole();
-
-    supabase.auth.onAuthStateChange(async () => {
-      await enforcePickShiftRole();
-    });
-  </script>
-</body>
-</html>
+        interests
+
