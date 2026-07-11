@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Show Admin Dashboard</title>
+  <title>Show Admin Dashboard (Static)</title>
   <style>
     :root{
       --bg:#0b1020; --panel:#121a30; --text:#e7ecff; --muted:#a9b5dc;
       --accent:#60a5fa; --accent2:#a78bfa; --border:#2a3866;
-      --ok:#4ade80; --danger:#f87171;
+      --ok:#4ade80; --danger:#f87171; --warn:#f59e0b;
     }
     *{box-sizing:border-box;margin:0;padding:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
     body{
@@ -23,7 +23,7 @@
     header{border-bottom:1px solid var(--border)}
     footer{border-top:1px solid var(--border);text-align:center;color:var(--muted);font-size:.82rem;padding:.95rem}
     .topbar{
-      max-width:1200px;margin:0 auto;padding:.9rem 1rem;
+      max-width:1280px;margin:0 auto;padding:.9rem 1rem;
       display:flex;align-items:center;justify-content:space-between;gap:.7rem;flex-wrap:wrap;
     }
     .brand{display:flex;align-items:center;gap:.6rem;font-weight:700}
@@ -38,7 +38,7 @@
     }
 
     main{
-      max-width:1200px;width:100%;margin:0 auto;padding:1rem;
+      max-width:1280px;width:100%;margin:0 auto;padding:1rem;
       display:grid;grid-template-columns:300px 1fr;gap:1rem;
     }
     .sidebar,.panel{
@@ -53,6 +53,7 @@
     .nav-link:hover{background:rgba(96,165,250,.1);border-color:#4068a8}
     .nav-link.active{background:rgba(167,139,250,.14);border-color:#5a4a9d}
     .status{margin-top:.9rem;border:1px dashed #425b9e;border-radius:12px;padding:.65rem;color:#becaf0;font-size:.84rem}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
 
     .content{display:grid;gap:1rem}
     .hero{display:grid;grid-template-columns:1.2fr 1fr;gap:1rem}
@@ -64,7 +65,7 @@
     .kpi .value{font-size:1.03rem;font-weight:700;margin-top:.2rem}
 
     .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
-    .section-title{display:flex;align-items:center;justify-content:space-between;gap:.5rem;margin-bottom:.7rem}
+    .section-title{display:flex;align-items:center;justify-content:space-between;gap:.5rem;margin-bottom:.7rem;flex-wrap:wrap}
     .section-title h2{font-size:1rem}
     .stack{display:grid;gap:.55rem}
     .list{display:grid;gap:.55rem}
@@ -75,11 +76,13 @@
     .badge{font-size:.74rem;font-weight:700;padding:.2rem .48rem;border-radius:999px;border:1px solid}
     .b-info{color:#c7d2fe;border-color:#4f46e5;background:rgba(99,102,241,.16)}
     .b-ok{color:#bbf7d0;border-color:#2d7b4a;background:rgba(34,197,94,.15)}
+    .b-warn{color:#fde68a;border-color:#946300;background:rgba(245,158,11,.18)}
 
     .table-wrap{overflow:auto;border:1px solid #364b8a;border-radius:12px}
     table{width:100%;border-collapse:collapse;min-width:640px;background:rgba(12,20,42,.72)}
     th,td{padding:.62rem .68rem;border-bottom:1px solid #2e4179;text-align:left;font-size:.86rem;vertical-align:top}
     th{font-size:.78rem;color:#bec9ef;text-transform:uppercase;letter-spacing:.65px;background:rgba(19,31,63,.95)}
+    tr:hover td{background:rgba(96,165,250,.06)}
 
     label{font-size:.82rem;color:#c9d4f5;display:block;margin-bottom:.3rem}
     input,select,textarea{
@@ -91,11 +94,13 @@
       border:1px solid var(--border);background:#121b34;color:var(--text);
       border-radius:10px;padding:.52rem .76rem;font-size:.88rem;cursor:pointer;text-decoration:none;
     }
+    button:hover,.btn:hover{border-color:#4b67b2;background:#172448}
     .btn-primary{border:none;background:linear-gradient(135deg,#60a5fa,#a78bfa);color:#0f1f49;font-weight:700}
     .btn-danger{border:1px solid #7f1d1d;color:#fecaca;background:rgba(248,113,113,.15)}
+    .btn-danger:hover{background:rgba(248,113,113,.24)}
     .msg{min-height:1.2rem;font-size:.84rem;color:var(--muted)}
     .msg.error{color:var(--danger)} .msg.success{color:var(--ok)}
-    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+    .small{font-size:.8rem;color:var(--muted)}
 
     @media (max-width:1020px){
       main{grid-template-columns:1fr}
@@ -114,11 +119,15 @@
       <div class="brand">
         <div class="logo">TP</div>
         <span>Show Admin Dashboard</span>
-        <span class="pill">NO AUTH REDIRECT</span>
+        <span class="pill">STATIC SITE</span>
       </div>
       <div class="actions">
         <select id="show-selector" aria-label="Select show"></select>
         <button id="btn-new-show">New Show</button>
+        <button id="btn-export">Export Data</button>
+        <label class="btn" for="import-file" style="margin:0;">Import Data</label>
+        <input id="import-file" type="file" accept="application/json" style="display:none;" />
+        <button id="btn-reset-show" class="btn-danger">Reset Current Show</button>
         <button id="btn-refresh">Refresh</button>
       </div>
     </div>
@@ -137,14 +146,15 @@
         <a class="nav-link" href="#links">Links</a>
       </nav>
       <div class="status" id="show-status">Show: loading...</div>
-      <div class="status mono" id="show-password-note">Password: (not set)</div>
+      <div class="status mono" id="show-password-note">Admin key: (blank)</div>
+      <div class="status small">Static mode: data is saved in this browser only. Use Export/Import to move data.</div>
     </aside>
 
     <section class="content">
       <article class="panel hero" id="overview">
         <div>
           <h1 id="show-title">Show Operations Center</h1>
-          <p class="sub">All data is isolated per show. Switching shows loads that show’s own cast, contacts, calendar, ticker, and call sheet.</p>
+          <p class="sub">Data is isolated per show and stored in localStorage. This works on GitHub Pages/static hosting without a backend.</p>
           <div class="kpis">
             <div class="kpi"><div class="label">Cast Members</div><div class="value" id="kpi-cast">0</div></div>
             <div class="kpi"><div class="label">Contacts</div><div class="value" id="kpi-contacts">0</div></div>
@@ -156,6 +166,7 @@
           <div class="section-title"><h2>Quick Actions</h2></div>
           <div class="list">
             <a class="btn btn-primary" href="#cast">Manage Cast</a>
+            <a class="btn" href="#contacts">Manage Contacts</a>
             <a class="btn" href="#calendar">Edit Calendar</a>
             <a class="btn" href="#ticker">Edit Ticker</a>
             <a class="btn" href="#callsheet">Edit Call Sheet</a>
@@ -168,18 +179,9 @@
         <article class="panel" id="cast">
           <div class="section-title"><h2>Cast List</h2></div>
           <form id="cast-form" class="stack" novalidate>
-            <div>
-              <label for="cast-name">Name</label>
-              <input id="cast-name" required />
-            </div>
-            <div>
-              <label for="cast-role">Role</label>
-              <input id="cast-role" required />
-            </div>
-            <div>
-              <label for="cast-notes">Notes</label>
-              <input id="cast-notes" />
-            </div>
+            <div><label for="cast-name">Name</label><input id="cast-name" required /></div>
+            <div><label for="cast-role">Role</label><input id="cast-role" required /></div>
+            <div><label for="cast-notes">Notes</label><input id="cast-notes" /></div>
             <button class="btn-primary" type="submit">Add Cast Member</button>
             <p class="msg" id="cast-msg"></p>
           </form>
@@ -274,10 +276,10 @@
     </section>
   </main>
 
-  <footer>© <span id="year"></span> Theater Portal · Show Admin</footer>
+  <footer>© <span id="year"></span> Theater Portal · Static Admin Dashboard</footer>
 
   <script>
-    const STORAGE_KEY = 'show_admin_dashboard_data_v3';
+    const STORAGE_KEY = 'show_admin_dashboard_static_v2';
 
     const SHOWS = [
       { id: 'fences', name: 'Fences', password: 'Legacy', castPage: './cast-fences.html' },
@@ -292,7 +294,7 @@
     const $ = (id) => document.getElementById(id);
 
     function uuid() {
-      return (crypto && crypto.randomUUID) ? crypto.randomUUID() : 'id-' + Math.random().toString(36).slice(2) + Date.now();
+      return (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : 'id-' + Math.random().toString(36).slice(2) + Date.now();
     }
 
     function todayISO() {
@@ -302,12 +304,14 @@
       return d.getFullYear() + '-' + mm + '-' + dd;
     }
 
+    function esc(v){ return String(v == null ? '' : v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+
     function defaultShowData(show) {
       return {
         id: show.id,
         name: show.name,
         password: show.password || '',
-        castPage: show.castPage,
+        castPage: show.castPage || '#',
         cast: [],
         contacts: [],
         calendar: [{ id: uuid(), date: todayISO(), time: '18:00', title: 'Rehearsal', notes: '' }],
@@ -325,37 +329,41 @@
       return base;
     }
 
+    function normalizeStore(parsed) {
+      const out = (parsed && typeof parsed === 'object') ? parsed : {};
+      out.shows = Array.isArray(out.shows) ? out.shows : [];
+
+      SHOWS.forEach(seed => {
+        if (!out.shows.find(s => s.id === seed.id)) out.shows.push(defaultShowData(seed));
+      });
+
+      out.shows = out.shows.map(s => ({
+        id: s.id,
+        name: s.name || (SHOWS.find(x => x.id === s.id)?.name || s.id),
+        password: typeof s.password === 'string' ? s.password : '',
+        castPage: s.castPage || (SHOWS.find(x => x.id === s.id)?.castPage || '#'),
+        cast: Array.isArray(s.cast) ? s.cast : [],
+        contacts: Array.isArray(s.contacts) ? s.contacts : [],
+        calendar: Array.isArray(s.calendar) ? s.calendar : [],
+        ticker: typeof s.ticker === 'string' ? s.ticker : '',
+        callsheet: Array.isArray(s.callsheet) ? s.callsheet : []
+      }));
+
+      if (!out.selectedShowId || !out.shows.find(s => s.id === out.selectedShowId)) {
+        out.selectedShowId = out.shows[0]?.id || SHOWS[0].id;
+      }
+
+      return out;
+    }
+
     function loadStore() {
       try {
         const raw = localStorage.getItem(STORAGE_KEY);
         if (!raw) return initStore();
         const parsed = JSON.parse(raw);
-        if (!parsed || !Array.isArray(parsed.shows)) return initStore();
-
-        // ensure all required shows exist
-        SHOWS.forEach(seed => {
-          if (!parsed.shows.find(s => s.id === seed.id)) parsed.shows.push(defaultShowData(seed));
-        });
-
-        // normalize
-        parsed.shows = parsed.shows.map(s => ({
-          id: s.id,
-          name: s.name || (SHOWS.find(x => x.id === s.id)?.name || s.id),
-          password: typeof s.password === 'string' ? s.password : '',
-          castPage: s.castPage || (SHOWS.find(x => x.id === s.id)?.castPage || '#'),
-          cast: Array.isArray(s.cast) ? s.cast : [],
-          contacts: Array.isArray(s.contacts) ? s.contacts : [],
-          calendar: Array.isArray(s.calendar) ? s.calendar : [],
-          ticker: typeof s.ticker === 'string' ? s.ticker : '',
-          callsheet: Array.isArray(s.callsheet) ? s.callsheet : []
-        }));
-
-        if (!parsed.selectedShowId || !parsed.shows.find(s => s.id === parsed.selectedShowId)) {
-          parsed.selectedShowId = parsed.shows[0].id;
-        }
-
-        saveStore(parsed);
-        return parsed;
+        const normalized = normalizeStore(parsed);
+        saveStore(normalized);
+        return normalized;
       } catch (_) {
         return initStore();
       }
@@ -363,7 +371,12 @@
 
     function saveStore(store) { localStorage.setItem(STORAGE_KEY, JSON.stringify(store)); }
     function getShow(store) { return store.shows.find(s => s.id === store.selectedShowId) || store.shows[0]; }
-    function esc(v){ return String(v == null ? '' : v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+
+    function setMsg(id, text, type) {
+      const el = $(id);
+      el.textContent = text || '';
+      el.className = 'msg' + (type ? ' ' + type : '');
+    }
 
     function renderSelector() {
       const store = loadStore();
@@ -384,7 +397,7 @@
 
       $('show-title').textContent = show.name + ' — Operations Center';
       $('show-status').textContent = 'Current show: ' + show.name;
-      $('show-password-note').textContent = 'Password: ' + (show.password || '(blank)');
+      $('show-password-note').textContent = 'Admin key: ' + (show.password || '(blank)');
       $('kpi-cast').textContent = String(show.cast.length);
       $('kpi-contacts').textContent = String(show.contacts.length);
       $('kpi-calendar').textContent = String(show.calendar.length);
@@ -400,7 +413,6 @@
       $('rehearsal-report-link').href = rr;
       $('rehearsal-report-link-2').href = rr;
 
-      // cast
       const castBody = $('cast-tbody');
       castBody.innerHTML = '';
       show.cast.forEach(row => {
@@ -409,7 +421,6 @@
         castBody.appendChild(tr);
       });
 
-      // contacts
       const contactsBody = $('contacts-tbody');
       contactsBody.innerHTML = '';
       show.contacts.forEach(row => {
@@ -418,7 +429,6 @@
         contactsBody.appendChild(tr);
       });
 
-      // calendar
       const calList = $('calendar-list');
       calList.innerHTML = '';
       show.calendar.slice().sort((a,b)=>(a.date+'T'+a.time).localeCompare(b.date+'T'+b.time)).forEach(ev => {
@@ -435,7 +445,6 @@
         calList.appendChild(div);
       });
 
-      // callsheet
       const csList = $('callsheet-list');
       csList.innerHTML = '';
       show.callsheet.forEach(it => {
@@ -444,7 +453,7 @@
         div.innerHTML = `
           <div class="item-top">
             <div class="item-title">${esc(it.dept)}</div>
-            <span class="badge b-info">${esc(it.time)}</span>
+            <span class="badge b-warn">${esc(it.time)}</span>
           </div>
           <div class="item-meta">${esc(it.task)}</div>
           <div style="margin-top:.45rem;"><button class="btn-danger" data-rm-call="${it.id}">Remove</button></div>
@@ -463,8 +472,66 @@
       renderAll();
     }
 
+    function exportData() {
+      const store = loadStore();
+      const json = JSON.stringify(store, null, 2);
+      const blob = new Blob([json], { type: 'application/json;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      const stamp = new Date().toISOString().replace(/[:.]/g, '-');
+      a.href = url;
+      a.download = 'show-dashboard-backup-' + stamp + '.json';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    function importData(file) {
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        try {
+          const parsed = JSON.parse(String(reader.result || '{}'));
+          const normalized = normalizeStore(parsed);
+          saveStore(normalized);
+          renderAll();
+          alert('Import successful.');
+        } catch (e) {
+          alert('Import failed: invalid JSON file.');
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    function resetCurrentShow() {
+      if (!confirm('Reset current show data? This cannot be undone (unless you exported a backup).')) return;
+      mutate((show) => {
+        const seed = SHOWS.find(s => s.id === show.id);
+        const fresh = defaultShowData({
+          id: show.id,
+          name: show.name,
+          password: show.password,
+          castPage: show.castPage || (seed ? seed.castPage : '#')
+        });
+        show.cast = fresh.cast;
+        show.contacts = fresh.contacts;
+        show.calendar = fresh.calendar;
+        show.ticker = fresh.ticker;
+        show.callsheet = fresh.callsheet;
+      });
+    }
+
     function bind() {
       $('btn-refresh').addEventListener('click', () => location.reload());
+      $('btn-export').addEventListener('click', exportData);
+      $('btn-reset-show').addEventListener('click', resetCurrentShow);
+
+      $('import-file').addEventListener('change', (e) => {
+        const file = e.target.files && e.target.files[0];
+        importData(file);
+        e.target.value = '';
+      });
 
       $('show-selector').addEventListener('change', (e) => {
         const store = loadStore();
@@ -476,10 +543,11 @@
       $('btn-new-show').addEventListener('click', () => {
         const name = prompt('Enter show name:');
         if (!name || !name.trim()) return;
+        const castPage = prompt('Enter cast page filename (example: ./cast-newshow.html):', './cast-newshow.html') || '#';
         const store = loadStore();
         const id = 'show-' + uuid().slice(0,8);
         store.shows.push({
-          id, name: name.trim(), password:'', castPage:'#',
+          id, name: name.trim(), password:'', castPage: castPage.trim() || '#',
           cast:[], contacts:[], calendar:[], ticker:'', callsheet:[]
         });
         store.selectedShowId = id;
@@ -492,10 +560,10 @@
         const name = $('cast-name').value.trim();
         const role = $('cast-role').value.trim();
         const notes = $('cast-notes').value.trim();
-        if (!name || !role) { $('cast-msg').className='msg error'; $('cast-msg').textContent='Name and role required.'; return; }
+        if (!name || !role) return setMsg('cast-msg', 'Name and role required.', 'error');
         mutate(show => show.cast.unshift({ id: uuid(), name, role, notes }));
         e.target.reset();
-        $('cast-msg').className='msg success'; $('cast-msg').textContent='Cast member added.';
+        setMsg('cast-msg', 'Cast member added.', 'success');
       });
 
       $('cast-tbody').addEventListener('click', (e) => {
@@ -511,10 +579,10 @@
         const type = $('contact-type').value.trim();
         const email = $('contact-email').value.trim();
         const phone = $('contact-phone').value.trim();
-        if (!name || !type || !email || !phone) { $('contact-msg').className='msg error'; $('contact-msg').textContent='All fields required.'; return; }
+        if (!name || !type || !email || !phone) return setMsg('contact-msg', 'All fields required.', 'error');
         mutate(show => show.contacts.unshift({ id: uuid(), name, type, email, phone }));
         e.target.reset();
-        $('contact-msg').className='msg success'; $('contact-msg').textContent='Contact added.';
+        setMsg('contact-msg', 'Contact added.', 'success');
       });
 
       $('contacts-tbody').addEventListener('click', (e) => {
@@ -530,10 +598,10 @@
         const time = $('calendar-time').value;
         const title = $('calendar-title').value.trim();
         const notes = $('calendar-notes').value.trim();
-        if (!date || !time || !title) { $('calendar-msg').className='msg error'; $('calendar-msg').textContent='Date, time, title required.'; return; }
+        if (!date || !time || !title) return setMsg('calendar-msg', 'Date, time, title required.', 'error');
         mutate(show => show.calendar.push({ id: uuid(), date, time, title, notes }));
         e.target.reset();
-        $('calendar-msg').className='msg success'; $('calendar-msg').textContent='Calendar event added.';
+        setMsg('calendar-msg', 'Calendar event added.', 'success');
       });
 
       $('calendar-list').addEventListener('click', (e) => {
@@ -547,7 +615,7 @@
         e.preventDefault();
         const val = $('ticker-input').value.trim();
         mutate(show => show.ticker = val);
-        $('ticker-msg').className='msg success'; $('ticker-msg').textContent='Ticker saved.';
+        setMsg('ticker-msg', 'Ticker saved.', 'success');
       });
 
       $('callsheet-form').addEventListener('submit', (e) => {
@@ -555,10 +623,10 @@
         const dept = $('callsheet-dept').value.trim();
         const time = $('callsheet-time').value;
         const task = $('callsheet-task').value.trim();
-        if (!dept || !time || !task) { $('callsheet-msg').className='msg error'; $('callsheet-msg').textContent='Department, time, task required.'; return; }
+        if (!dept || !time || !task) return setMsg('callsheet-msg', 'Department, time, task required.', 'error');
         mutate(show => show.callsheet.unshift({ id: uuid(), dept, time, task }));
         e.target.reset();
-        $('callsheet-msg').className='msg success'; $('callsheet-msg').textContent='Call sheet item added.';
+        setMsg('callsheet-msg', 'Call sheet item added.', 'success');
       });
 
       $('callsheet-list').addEventListener('click', (e) => {
