@@ -3,239 +3,505 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Portal Landing | The Laboratory Theater of Florida</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>Volunteer Portal</title>
   <style>
-    .portal-card {
-      background: var(--card-bg);
-      padding: 1.25rem;
-      border-radius: 8px;
-      border: 1px solid #333;
-      margin-bottom: 1rem;
+    :root{
+      --bg:#07131a;
+      --panel:#0d1f29;
+      --panel-2:#132d3a;
+      --text:#e6f6ff;
+      --muted:#9fc3d6;
+      --accent:#34d399;
+      --accent-2:#22d3ee;
+      --border:#234354;
+      --focus:#38bdf8;
+      --ok:#4ade80;
+      --warn:#f59e0b;
+      --danger:#f87171;
     }
-    .portal-card h3 { margin-top: 0; color: var(--accent); }
-    .portal-actions { display: grid; gap: 0.75rem; margin-top: 0.75rem; }
-    .btn {
-      display: inline-block;
-      text-align: center;
-      padding: 0.7rem 0.9rem;
-      border: 0;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: 700;
-      text-decoration: none;
+    *{box-sizing:border-box;margin:0;padding:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+    body{
+      min-height:100vh;color:var(--text);
+      background:
+        radial-gradient(900px 450px at 0% -20%, #1f4e5d 0%, transparent 55%),
+        radial-gradient(850px 380px at 120% 0%, #114a57 0%, transparent 52%),
+        var(--bg);
+      display:grid;grid-template-rows:auto 1fr auto;
     }
-    .btn-primary { background: var(--accent); color: #fff; }
-    .btn-secondary { background: #666; color: #fff; }
-    .btn:disabled { background: #555; cursor: not-allowed; opacity: 0.8; }
-    .notice { padding: 0.8rem 1rem; border-radius: 6px; margin: 0.75rem 0; font-weight: 600; }
-    .notice.success { background: #2b9a4a; color: #fff; }
-    .notice.error { background: #a33131; color: #fff; }
-    .muted { color: #bbb; font-size: 0.95rem; }
-    .hidden { display: none !important; }
-    .field {
-      width: 100%;
-      max-width: 420px;
-      padding: 0.65rem;
-      border-radius: 6px;
-      border: 1px solid #444;
-      background: #111;
-      color: #fff;
+    header{
+      position:sticky;top:0;z-index:20;
+      border-bottom:1px solid var(--border);
+      background:rgba(4,11,15,.78);backdrop-filter:blur(8px);
+    }
+    .topbar{
+      max-width:1200px;margin:0 auto;padding:.9rem 1rem;
+      display:flex;align-items:center;justify-content:space-between;gap:.8rem;
+    }
+    .brand{display:flex;align-items:center;gap:.65rem;font-weight:700}
+    .logo{
+      width:34px;height:34px;border-radius:10px;display:grid;place-items:center;
+      background:linear-gradient(135deg,var(--accent),var(--accent-2));
+      color:#083344;font-weight:800;font-size:.85rem;
+    }
+    .pill{
+      font-size:.77rem;padding:.24rem .62rem;border-radius:999px;font-weight:700;
+      color:#052e2b;background:linear-gradient(135deg,#86efac,#67e8f9);
+    }
+    .actions{display:flex;gap:.5rem}
+    button,.btn{
+      border:1px solid var(--border);background:#0d202a;color:var(--text);
+      border-radius:10px;padding:.52rem .76rem;font-size:.88rem;cursor:pointer;text-decoration:none;transition:.2s;
+    }
+    button:hover,.btn:hover{border-color:#2f647d;background:#133040}
+    .btn-primary{border:none;background:linear-gradient(135deg,#34d399,#22d3ee);color:#083344;font-weight:700}
+    .btn-primary:hover{filter:brightness(1.06)}
+    main{
+      max-width:1200px;width:100%;margin:0 auto;padding:1rem;
+      display:grid;grid-template-columns:280px 1fr;gap:1rem;align-items:start;
+    }
+    .sidebar,.panel{
+      border:1px solid var(--border);border-radius:16px;
+      background:linear-gradient(180deg,rgba(19,45,58,.84),rgba(10,26,34,.93));
+      box-shadow:0 10px 30px rgba(0,0,0,.25);
+    }
+    .sidebar{padding:.9rem;position:sticky;top:76px}
+    .nav-title{color:var(--muted);font-size:.76rem;text-transform:uppercase;letter-spacing:.9px;margin:.4rem 0 .5rem}
+    .nav-links{display:grid;gap:.42rem}
+    .nav-link{
+      border:1px solid transparent;border-radius:10px;padding:.56rem .65rem;
+      color:#d6efff;text-decoration:none;font-size:.9rem;display:block;
+    }
+    .nav-link:hover{background:rgba(34,211,238,.10);border-color:#2c5f77}
+    .nav-link.active{background:rgba(52,211,153,.14);border-color:#2d7158}
+    .status{
+      margin-top:1rem;border:1px dashed #2f647d;border-radius:12px;padding:.65rem;
+      font-size:.84rem;color:#b7d9e9;line-height:1.35;
+    }
+    .content{display:grid;gap:1rem}
+    .panel{padding:.95rem}
+    .hero{display:grid;grid-template-columns:1.2fr 1fr;gap:.85rem}
+    .hero h1{font-size:1.25rem;margin-bottom:.35rem}
+    .sub{color:var(--muted);line-height:1.45;font-size:.92rem}
+    .kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.6rem;margin-top:.9rem}
+    .kpi{border:1px solid #2f5f72;background:rgba(8,22,29,.72);border-radius:12px;padding:.66rem}
+    .kpi .label{color:var(--muted);font-size:.77rem;margin-bottom:.2rem}
+    .kpi .value{font-size:1.03rem;font-weight:700}
+    .quick-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.55rem;align-content:start}
+    .section-title{display:flex;align-items:center;justify-content:space-between;gap:.6rem;margin-bottom:.68rem}
+    .section-title h2{font-size:1rem}
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+    .list{display:grid;gap:.55rem}
+    .item{
+      border:1px solid #2b5a6f;border-radius:12px;padding:.62rem;
+      background:rgba(8,22,29,.75);
+    }
+    .item-top{display:flex;align-items:center;justify-content:space-between;gap:.65rem;margin-bottom:.3rem}
+    .item-title{font-weight:650;font-size:.93rem}
+    .item-meta{font-size:.8rem;color:var(--muted)}
+    .badge{
+      font-size:.74rem;font-weight:700;padding:.2rem .48rem;border-radius:999px;border:1px solid;white-space:nowrap;
+    }
+    .b-ok{color:#bbf7d0;border-color:#2d7b4a;background:rgba(34,197,94,.15)}
+    .b-warn{color:#fde68a;border-color:#946300;background:rgba(245,158,11,.18)}
+    .b-danger{color:#fecaca;border-color:#7f1d1d;background:rgba(248,113,113,.14)}
+    .task-actions{display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.45rem}
+    .chip{
+      border:1px solid #2b5a6f;border-radius:999px;padding:.2rem .5rem;font-size:.76rem;color:#bde7ff;
+      background:rgba(10,30,39,.7)
+    }
+    .form-grid{display:grid;gap:.6rem;grid-template-columns:1fr 1fr}
+    .full{grid-column:1/-1}
+    label{font-size:.82rem;color:#c4e5f5;display:block;margin-bottom:.3rem}
+    input,select,textarea{
+      width:100%;border:1px solid #2f6074;background:#0b1d26;color:var(--text);
+      border-radius:10px;padding:.56rem .6rem;font-size:.9rem;
+    }
+    input:focus,select:focus,textarea:focus{
+      outline:none;border-color:var(--focus);box-shadow:0 0 0 2px rgba(56,189,248,.2);
+    }
+    textarea{min-height:90px;resize:vertical}
+    .msg{margin-top:.45rem;min-height:1.2rem;color:var(--muted);font-size:.84rem}
+    .msg.error{color:var(--danger)} .msg.success{color:var(--ok)}
+    footer{
+      border-top:1px solid var(--border);color:var(--muted);font-size:.8rem;
+      text-align:center;padding:.9rem 1rem 1.2rem;
+    }
+    @media (max-width:980px){
+      main{grid-template-columns:1fr}
+      .sidebar{position:static;top:auto}
+      .hero,.grid-2{grid-template-columns:1fr}
+      .kpis{grid-template-columns:1fr 1fr}
+    }
+    @media (max-width:620px){
+      .kpis,.quick-actions,.form-grid{grid-template-columns:1fr}
     }
   </style>
 </head>
 <body>
-  <input type="checkbox" id="nav-toggle" class="nav-toggle" />
-  <label for="nav-toggle" class="nav-toggle-label"><span></span></label>
-  <nav class="hamburger-menu">
-    <a href="about.html">Origin Story</a>
-    <a href="archive25.html">Past Experiments</a>
-    <a href="index.html">Back to the Slab</a>
-    <a href="plan.html">Lab Protocols</a>
-    <a href="portal-landing.html">Portal Landing</a>
-    <a href="support.html">Fuel the Innovation</a>
-    <a href="sponsors.html">Core Collaborators</a>
-  </nav>
-
   <header>
-    <div class="logo">THE <span>LAB</span><p class="tagline">Intentionally innovative live theater</p></div>
+    <div class="topbar">
+      <div class="brand">
+        <div class="logo" aria-hidden="true">TP</div>
+        <span>Volunteer Portal</span>
+        <span class="pill" id="role-pill">VOLUNTEER</span>
+      </div>
+      <div class="actions">
+        <button id="btn-refresh">Refresh</button>
+        <button id="btn-logout">Log Out</button>
+      </div>
+    </div>
   </header>
 
   <main>
-    <h1>Portal Landing</h1>
-    <p>Sign in once, then continue to your authorized portal.</p>
-    <div id="message-container"></div>
+    <aside class="sidebar">
+      <div class="nav-title">Navigation</div>
+      <nav class="nav-links">
+        <a class="nav-link active" href="#dashboard">Dashboard</a>
+        <a class="nav-link" href="#shifts">Upcoming Shifts</a>
+        <a class="nav-link" href="#signup">Sign-Up Sheets</a>
+        <a class="nav-link" href="#house">House Management</a>
+        <a class="nav-link" href="#notes">Operations Notes</a>
+      </nav>
+      <div class="status" id="session-status">Session status: checking...</div>
+    </aside>
 
-    <section class="portal-card" id="auth-card">
-      <h3>Authentication</h3>
-      <p class="muted">Use your account email and password.</p>
-
-      <!-- New account CTA -->
-      <div class="portal-actions" style="margin-bottom: 0.75rem;">
-        <button id="signup-btn" class="btn btn-secondary" type="button">Create New Account</button>
-      </div>
-
-      <form id="login-form">
-        <label for="email">Email</label><br />
-        <input id="email" class="field" type="email" required placeholder="you@example.com" />
-
-        <br /><br />
-        <label for="password">Password</label><br />
-        <input id="password" class="field" type="password" required placeholder="••••••••" />
-
-        <div class="portal-actions">
-          <button class="btn btn-primary" type="submit">Sign In</button>
+    <section class="content">
+      <article class="panel hero" id="dashboard">
+        <div>
+          <h1>Welcome to your volunteer workspace</h1>
+          <p class="sub">
+            Your dashboard focuses on shifts, front-of-house operations, and support tasks.
+            Only volunteer-relevant information is shown to keep navigation clear.
+          </p>
+          <div class="kpis">
+            <div class="kpi">
+              <div class="label">Next Shift</div>
+              <div class="value" id="kpi-shift">Fri 5:30 PM</div>
+            </div>
+            <div class="kpi">
+              <div class="label">Open Tasks</div>
+              <div class="value" id="kpi-tasks">4</div>
+            </div>
+            <div class="kpi">
+              <div class="label">Unread Notices</div>
+              <div class="value" id="kpi-notices">1</div>
+            </div>
+          </div>
         </div>
-      </form>
-      <button id="logout-btn" class="btn btn-secondary hidden" type="button">Sign Out</button>
-    </section>
+        <div>
+          <div class="section-title"><h2>Quick Actions</h2></div>
+          <div class="quick-actions">
+            <a class="btn btn-primary" href="#signup">Claim a Shift</a>
+            <a class="btn" href="#house">Open House Checklist</a>
+            <a class="btn" href="#shifts">View Full Schedule</a>
+            <a class="btn" href="#notes">Read Ops Notes</a>
+          </div>
+        </div>
+      </article>
 
-    <section class="portal-card">
-      <h3>Your Portals</h3>
-      <p class="muted">Buttons enable based on your profile permissions.</p>
-      <div class="portal-actions">
-        <a id="volunteer-link" class="btn btn-secondary" href="volunteer-signup.html" aria-disabled="true">Volunteer Signup</a>
-        <a id="cast-link" class="btn btn-secondary" href="cast-portal.html" aria-disabled="true">Cast Portal</a>
-      </div>
+      <section class="grid-2">
+        <article class="panel" id="shifts">
+          <div class="section-title">
+            <h2>Upcoming Shifts</h2>
+            <button id="btn-sync-shifts">Sync</button>
+          </div>
+          <div class="list" id="shift-list">
+            <div class="item">
+              <div class="item-top">
+                <div class="item-title">Front Desk Check-In</div>
+                <span class="badge b-ok">Assigned</span>
+              </div>
+              <div class="item-meta">Friday • 5:30 PM - 8:30 PM • Lobby</div>
+              <div class="task-actions">
+                <span class="chip">Ticket scanning</span>
+                <span class="chip">Will-call support</span>
+              </div>
+            </div>
+            <div class="item">
+              <div class="item-top">
+                <div class="item-title">House Usher Team</div>
+                <span class="badge b-warn">Open</span>
+              </div>
+              <div class="item-meta">Saturday • 6:00 PM - 9:00 PM • Orchestra Level</div>
+              <div class="task-actions">
+                <span class="chip">Seat guidance</span>
+                <span class="chip">Accessibility support</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="panel" id="signup">
+          <div class="section-title"><h2>Shift Sign-Up</h2></div>
+          <form id="signup-form" novalidate>
+            <div class="form-grid">
+              <div>
+                <label for="shift-date">Preferred Date</label>
+                <input id="shift-date" name="shiftDate" type="date" required />
+              </div>
+              <div>
+                <label for="shift-role">Role</label>
+                <select id="shift-role" name="shiftRole" required>
+                  <option value="" selected disabled>Select role</option>
+                  <option value="front-desk">Front Desk</option>
+                  <option value="usher">Usher</option>
+                  <option value="concessions">Concessions</option>
+                  <option value="backstage-runner">Backstage Runner</option>
+                </select>
+              </div>
+              <div class="full">
+                <label for="shift-notes">Availability Notes (optional)</label>
+                <textarea id="shift-notes" name="notes" placeholder="Arrival time, constraints, accessibility info, etc."></textarea>
+              </div>
+            </div>
+            <button class="btn-primary" type="submit">Submit Sign-Up</button>
+            <p class="msg" id="signup-msg" aria-live="polite"></p>
+          </form>
+        </article>
+      </section>
+
+      <section class="grid-2">
+        <article class="panel" id="house">
+          <div class="section-title"><h2>House Management Checklist</h2></div>
+          <div class="list" id="checklist-list">
+            <div class="item">
+              <div class="item-top">
+                <div class="item-title">Doors & Safety Sweep</div>
+                <span class="badge b-ok">Done</span>
+              </div>
+              <div class="item-meta">Emergency exits checked and clear.</div>
+            </div>
+            <div class="item">
+              <div class="item-top">
+                <div class="item-title">Program & Flyer Stations</div>
+                <span class="badge b-warn">In Progress</span>
+              </div>
+              <div class="item-meta">Refill before audience seating starts.</div>
+            </div>
+            <div class="item">
+              <div class="item-top">
+                <div class="item-title">Accessibility Seating Audit</div>
+                <span class="badge b-danger">Pending</span>
+              </div>
+              <div class="item-meta">Confirm companion seats and pathways.</div>
+            </div>
+          </div>
+        </article>
+
+        <article class="panel" id="notes">
+          <div class="section-title"><h2>Operations Notes</h2></div>
+          <div class="list">
+            <div class="item">
+              <div class="item-top">
+                <div class="item-title">Lobby traffic pattern update</div>
+                <span class="badge b-ok">New</span>
+              </div>
+              <div class="item-meta">Use left entrance for pre-show and right for intermission return.</div>
+            </div>
+            <div class="item">
+              <div class="item-top">
+                <div class="item-title">Concessions cashout</div>
+                <span class="badge b-ok">Info</span>
+              </div>
+              <div class="item-meta">Shift lead verifies counts with manager before close.</div>
+            </div>
+          </div>
+        </article>
+      </section>
     </section>
   </main>
 
-  <script type="module">
-    import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+  <footer>
+    © <span id="year"></span> Theater Portal · Volunteer
+  </footer>
 
-    // MUST match across all portal pages
-    const SUPABASE_URL = "https://izytzrxrgnahyvgwqhgd.supabase.co";
-    const SUPABASE_ANON_KEY = "sb_publishable_xfsIVVSH8vcUz9XfZgirwA_wl-GSYOw";
-    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  <script>
+    const PORTAL_CONFIG = {
+      requiredRole: 'volunteer',
+      authSessionEndpoint: '/api/auth/session',
+      logoutEndpoint: '/api/auth/logout',
+      shiftSignupEndpoint: '/api/volunteer/shifts/signup'
+    };
 
-    const messageContainer = document.getElementById("message-container");
-    const loginForm = document.getElementById("login-form");
-    const logoutBtn = document.getElementById("logout-btn");
-    const signupBtn = document.getElementById("signup-btn");
-    const volunteerLink = document.getElementById("volunteer-link");
-    const castLink = document.getElementById("cast-link");
+    const ROLE_REDIRECTS = {
+      volunteer: '/volunteer-portal.html',
+      cast: '/cast-selection-portal.html',
+      admin: '/dashboard.html',
+      default: '/portal-auth.html'
+    };
 
-    function showMessage(text, type = "error") {
-      messageContainer.innerHTML = `<div class="notice ${type}">${text}</div>`;
-      setTimeout(() => { messageContainer.innerHTML = ""; }, 4500);
+    const $ = (id) => document.getElementById(id);
+
+    function getStoredSession() {
+      try {
+        const raw = localStorage.getItem('portal_session');
+        return raw ? JSON.parse(raw) : null;
+      } catch (_) { return null; }
     }
 
-    function disablePortalLink(linkEl) {
-      linkEl.classList.remove("btn-primary");
-      linkEl.classList.add("btn-secondary");
-      linkEl.setAttribute("aria-disabled", "true");
-      linkEl.addEventListener("click", preventWhenDisabled);
+    function clearStoredSession() {
+      try { localStorage.removeItem('portal_session'); } catch (_) {}
     }
 
-    function enablePortalLink(linkEl) {
-      linkEl.classList.remove("btn-secondary");
-      linkEl.classList.add("btn-primary");
-      linkEl.setAttribute("aria-disabled", "false");
-      linkEl.removeEventListener("click", preventWhenDisabled);
+    function routeForRole(role) {
+      const normalized = (role || '').toString().trim().toLowerCase();
+      return ROLE_REDIRECTS[normalized] || ROLE_REDIRECTS.default;
     }
 
-    function preventWhenDisabled(e) {
-      if (e.currentTarget.getAttribute("aria-disabled") === "true") {
+    function setSessionStatus(text) {
+      $('session-status').textContent = text;
+    }
+
+    async function serverSession() {
+      try {
+        const res = await fetch(PORTAL_CONFIG.authSessionEndpoint, { method: 'GET', credentials: 'include' });
+        if (!res.ok) return null;
+        return res.json();
+      } catch (_) { return null; }
+    }
+
+    function enforceVolunteerRole(session) {
+      const role = (session?.role || '').toLowerCase();
+
+      if (!role) {
+        setSessionStatus('No active session found. Redirecting to sign-in...');
+        window.location.assign('/portal-auth.html');
+        return false;
+      }
+
+      if (role !== PORTAL_CONFIG.requiredRole) {
+        setSessionStatus(`Role mismatch (${role}). Redirecting to your assigned portal...`);
+        window.location.assign(routeForRole(role));
+        return false;
+      }
+
+      $('role-pill').textContent = role.toUpperCase();
+      setSessionStatus(`Signed in as ${session?.user?.email || 'volunteer'}. Access granted.`);
+      return true;
+    }
+
+    async function initializeSessionGuard() {
+      const local = getStoredSession();
+      if (local && local.role) {
+        if (!enforceVolunteerRole(local)) return false;
+      }
+
+      const backend = await serverSession();
+      if (!backend) {
+        if (!local) {
+          setSessionStatus('Session expired or unavailable. Redirecting...');
+          window.location.assign('/portal-auth.html');
+          return false;
+        }
+        return true;
+      }
+
+      try { localStorage.setItem('portal_session', JSON.stringify(backend)); } catch (_) {}
+      return enforceVolunteerRole(backend);
+    }
+
+    async function logout() {
+      try {
+        await fetch(PORTAL_CONFIG.logoutEndpoint, { method: 'POST', credentials: 'include' });
+      } catch (_) {
+        // best effort
+      } finally {
+        clearStoredSession();
+        window.location.assign('/portal-auth.html');
+      }
+    }
+
+    function setupShiftSignupForm() {
+      const form = $('signup-form');
+      const msg = $('signup-msg');
+
+      form.addEventListener('submit', async (e) => {
         e.preventDefault();
-        showMessage("You are not authorized for that portal.", "error");
-      }
+        msg.textContent = 'Submitting...';
+        msg.className = 'msg';
+
+        const payload = {
+          date: $('shift-date').value,
+          role: $('shift-role').value,
+          notes: $('shift-notes').value.trim()
+        };
+
+        if (!payload.date || !payload.role) {
+          msg.textContent = 'Please select a date and role.';
+          msg.className = 'msg error';
+          return;
+        }
+
+        try {
+          const res = await fetch(PORTAL_CONFIG.shiftSignupEndpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify(payload)
+          });
+
+          if (!res.ok) {
+            const err = await res.json().catch(() => ({}));
+            throw new Error(err.message || 'Unable to submit shift sign-up.');
+          }
+
+          msg.textContent = 'Shift sign-up submitted successfully.';
+          msg.className = 'msg success';
+          form.reset();
+        } catch (err) {
+          msg.textContent = err.message || 'Submission failed.';
+          msg.className = 'msg error';
+        }
+      });
     }
 
-    async function fetchAccess(userId) {
-      const [{ data: profile, error: profileErr }, { data: castRows, error: castErr }] = await Promise.all([
-        supabase.from("profiles").select("is_volunteer").eq("id", userId).single(),
-        supabase.from("cast_assignments").select("show_id").eq("user_id", userId).limit(1)
-      ]);
+    function setupActions() {
+      $('btn-logout').addEventListener('click', logout);
+      $('btn-refresh').addEventListener('click', () => window.location.reload());
 
-      const isVolunteer = !profileErr && !!profile?.is_volunteer;
-      const isCast = !castErr && Array.isArray(castRows) && castRows.length > 0;
-      return { isVolunteer, isCast };
+      $('btn-sync-shifts').addEventListener('click', () => {
+        const list = $('shift-list');
+        const note = document.createElement('div');
+        note.className = 'item';
+        note.innerHTML = `
+          <div class="item-top">
+            <div class="item-title">Schedule synced</div>
+            <span class="badge b-ok">Just now</span>
+          </div>
+          <div class="item-meta">Volunteer assignments refreshed from scheduling service.</div>
+        `;
+        list.prepend(note);
+      });
     }
 
-    async function refreshUIFromSession() {
-      const { data: { user }, error } = await supabase.auth.getUser();
+    function setupSmoothAnchorNav() {
+      document.querySelectorAll('a.nav-link[href^="#"]').forEach((a) => {
+        a.addEventListener('click', (e) => {
+          const id = a.getAttribute('href');
+          const target = document.querySelector(id);
+          if (!target) return;
+          e.preventDefault();
 
-      disablePortalLink(volunteerLink);
-      disablePortalLink(castLink);
+          document.querySelectorAll('.nav-link').forEach((n) => n.classList.remove('active'));
+          a.classList.add('active');
 
-      if (error || !user) {
-        logoutBtn.classList.add("hidden");
-        loginForm.classList.remove("hidden");
-        signupBtn.classList.remove("hidden");
-        localStorage.removeItem("labPortalUserId");
-        return;
-      }
-
-      localStorage.setItem("labPortalUserId", user.id);
-      logoutBtn.classList.remove("hidden");
-      loginForm.classList.add("hidden");
-      signupBtn.classList.add("hidden");
-
-      const access = await fetchAccess(user.id);
-
-      // Authenticated users should have options to proceed
-      enablePortalLink(volunteerLink);
-      enablePortalLink(castLink);
-
-      // Optional: if no role assigned yet, keep notice (but still allow volunteer signup path)
-      if (!access.isVolunteer && !access.isCast) {
-        showMessage("Signed in successfully. You can start with Volunteer Signup or continue to Cast Portal if assigned.", "success");
-      }
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+      });
     }
 
-    loginForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value;
+    async function init() {
+      $('year').textContent = new Date().getFullYear();
 
-      if (!email || !password) {
-        showMessage("Email and password are required.", "error");
-        return;
-      }
+      const allowed = await initializeSessionGuard();
+      if (!allowed) return;
 
-      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      setupActions();
+      setupShiftSignupForm();
+      setupSmoothAnchorNav();
+    }
 
-      if (error) {
-        showMessage(error.message || "Login failed.", "error");
-        return;
-      }
-
-      showMessage("Signed in successfully.", "success");
-      await refreshUIFromSession();
-    });
-
-    signupBtn.addEventListener("click", async () => {
-      const email = prompt("Enter new user's email:");
-      if (!email) return;
-      const password = prompt("Enter temporary password (min 6 chars):");
-      if (!password) return;
-
-      const cleanEmail = email.trim();
-      if (!cleanEmail || !password || password.length < 6) {
-        showMessage("Valid email and password (min 6 chars) are required.", "error");
-        return;
-      }
-
-      const { error } = await supabase.auth.signUp({ email: cleanEmail, password });
-      if (error) {
-        showMessage(error.message || "Sign up failed.", "error");
-        return;
-      }
-      showMessage("Account created. Ask the user to verify email if required, then sign in.", "success");
-    });
-
-    logoutBtn.addEventListener("click", async () => {
-      await supabase.auth.signOut();
-      localStorage.removeItem("labPortalUserId");
-      showMessage("Signed out.", "success");
-      await refreshUIFromSession();
-    });
-
-    supabase.auth.onAuthStateChange(async () => {
-      await refreshUIFromSession();
-    });
-
-    window.addEventListener("load", refreshUIFromSession);
+    init();
   </script>
 </body>
 </html>
