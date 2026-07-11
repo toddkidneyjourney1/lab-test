@@ -203,7 +203,7 @@
 
         <div class="actions">
           <button id="submit-btn" class="btn btn-primary" type="submit">Submit Signup</button>
-          <a id="pick-shift-btn" class="btn btn-secondary" href="portal-landing.html" aria-disabled="true" title="Sign in required">Pick Your Shift</a>
+          <a id="pick-shift-btn" class="btn btn-secondary" href="portal-landing.html" aria-disabled="true" title="Volunteer login required">Pick Your Shift</a>
           <a class="btn btn-secondary" href="portal-landing.html">Back to Portal Landing</a>
         </div>
 
@@ -216,7 +216,6 @@
   <script type="module">
     import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-    // Keep these consistent across your portal pages
     const SUPABASE_URL = "https://izytzrxrgnahyvgwqhgd.supabase.co";
     const SUPABASE_ANON_KEY = "sb_publishable_xfsIVVSH8vcUz9XfZgirwA_wl-GSYOw";
     const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -235,21 +234,39 @@
       return (phone || "").replace(/[^\d+()-.\s]/g, "").trim();
     }
 
-    function setPickShiftAccess(isAuthenticated) {
-      if (isAuthenticated) {
-        pickShiftBtn.href = "volunteer.html";
-        pickShiftBtn.removeAttribute("aria-disabled");
-        pickShiftBtn.removeAttribute("title");
-      } else {
-        pickShiftBtn.href = "portal-landing.html";
-        pickShiftBtn.setAttribute("aria-disabled", "true");
-        pickShiftBtn.setAttribute("title", "Sign in required");
-      }
+    function disablePickShift(reason = "Volunteer login required") {
+      pickShiftBtn.href = "portal-landing.html";
+      pickShiftBtn.setAttribute("aria-disabled", "true");
+      pickShiftBtn.setAttribute("title", reason);
     }
 
-    async function enforcePickShiftAuth() {
-      const { data: { user } } = await supabase.auth.getUser();
-      setPickShiftAccess(!!user);
+    function enablePickShift() {
+      pickShiftBtn.href = "volunteer.html";
+      pickShiftBtn.removeAttribute("aria-disabled");
+      pickShiftBtn.removeAttribute("title");
+    }
+
+    async function userIsVolunteer() {
+      const { data: { user }, error: userErr } = await supabase.auth.getUser();
+      if (userErr || !user) return false;
+
+      const { data: profile, error: profileErr } = await supabase
+        .from("profiles")
+        .select("role")
+        .eq("id", user.id)
+        .maybeSingle();
+
+      if (profileErr || !profile) return false;
+      return profile.role === "volunteer";
+    }
+
+    async function enforcePickShiftRole() {
+      const isVolunteer = await userIsVolunteer();
+      if (isVolunteer) {
+        enablePickShift();
+      } else {
+        disablePickShift("Volunteer login required");
+      }
     }
 
     form.addEventListener("submit", async (e) => {
@@ -272,7 +289,6 @@
       submitBtn.disabled = true;
       submitBtn.textContent = "Submitting...";
 
-      // Optional: attach auth user if logged in
       const { data: authData } = await supabase.auth.getUser();
       const userId = authData?.user?.id ?? null;
 
@@ -301,10 +317,10 @@
       submitBtn.textContent = "Submit Signup";
     });
 
-    enforcePickShiftAuth();
+    enforcePickShiftRole();
 
-    supabase.auth.onAuthStateChange((_event, session) => {
-      setPickShiftAccess(!!session?.user);
+    supabase.auth.onAuthStateChange(async () => {
+      await enforcePickShiftRole();
     });
   </script>
 </body>
