@@ -88,21 +88,26 @@
       box-shadow: var(--shadow);
       display: flex;
       flex-direction: column;
-      min-height: 320px;
+      min-height: 360px;
     }
 
     .show-image-wrap {
       width: 100%;
-      height: 170px;
-      background: #0e0f14;
+      height: 220px;
+      background: #0b0c10;
       border-bottom: 1px solid var(--border);
-      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.5rem;
+      box-sizing: border-box;
     }
 
     .show-image {
       width: 100%;
       height: 100%;
-      object-fit: cover;
+      object-fit: contain;   /* full image visible */
+      object-position: center;
       display: block;
     }
 
@@ -153,24 +158,6 @@
       background: var(--accent-hover);
     }
 
-    .btn-secondary {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      text-decoration: none;
-      background: transparent;
-      color: #d5d9e6;
-      border: 1px solid #4f566f;
-      border-radius: 9px;
-      padding: 0.56rem 0.82rem;
-      font-weight: 600;
-      font-size: 0.9rem;
-    }
-
-    .btn-secondary:hover {
-      background: rgba(255,255,255,0.05);
-    }
-
     .footer-note {
       margin-top: 1.25rem;
       text-align: center;
@@ -204,7 +191,6 @@
           <p class="show-meta">Cast access for BARE production materials.</p>
           <div class="show-actions">
             <a class="btn-login" href="cast-bare.html">Login</a>
-            <a class="btn-secondary" href="cast-bare.html">Open Page</a>
           </div>
         </div>
       </article>
@@ -218,7 +204,6 @@
           <p class="show-meta">Cast access for FENCES rehearsal and show documents.</p>
           <div class="show-actions">
             <a class="btn-login" href="cast-fences.html">Login</a>
-            <a class="btn-secondary" href="cast-fences.html">Open Page</a>
           </div>
         </div>
       </article>
@@ -232,7 +217,6 @@
           <p class="show-meta">Cast access for GOD OF CARNAGE production updates.</p>
           <div class="show-actions">
             <a class="btn-login" href="cast-godofcarnage.html">Login</a>
-            <a class="btn-secondary" href="cast-godofcarnage.html">Open Page</a>
           </div>
         </div>
       </article>
@@ -246,7 +230,6 @@
           <p class="show-meta">Cast access for GODOT rehearsal and communication hub.</p>
           <div class="show-actions">
             <a class="btn-login" href="cast-godot.html">Login</a>
-            <a class="btn-secondary" href="cast-godot.html">Open Page</a>
           </div>
         </div>
       </article>
@@ -260,7 +243,6 @@
           <p class="show-meta">Cast access for MIDSUMMER schedules and resources.</p>
           <div class="show-actions">
             <a class="btn-login" href="cast-midsummer.html">Login</a>
-            <a class="btn-secondary" href="cast-midsummer.html">Open Page</a>
           </div>
         </div>
       </article>
@@ -274,7 +256,6 @@
           <p class="show-meta">Cast access for PILLOWMAN call sheets and notes.</p>
           <div class="show-actions">
             <a class="btn-login" href="cast-pillowman.html">Login</a>
-            <a class="btn-secondary" href="cast-pillowman.html">Open Page</a>
           </div>
         </div>
       </article>
@@ -288,7 +269,6 @@
           <p class="show-meta">Cast access for RIVALS production and rehearsal info.</p>
           <div class="show-actions">
             <a class="btn-login" href="cast-rivals.html">Login</a>
-            <a class="btn-secondary" href="cast-rivals.html">Open Page</a>
           </div>
         </div>
       </article>
