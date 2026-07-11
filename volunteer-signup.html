@@ -134,6 +134,8 @@
       border-radius: 8px;
       padding: 0.75rem 0.85rem;
       font-weight: 600;
+      white-space: pre-wrap;
+      word-break: break-word;
     }
 
     .notice.success { background: var(--success); color: #fff; }
@@ -156,7 +158,7 @@
   <main>
     <section class="card">
       <h1>Volunteer Signup</h1>
-      <p class="sub">Complete this form to join the volunteer team.</p>
+      <p class="sub">Create your volunteer account to access the volunteer portal.</p>
 
       <form id="volunteer-form" novalidate>
         <div class="grid">
@@ -215,7 +217,7 @@
           <a class="btn btn-secondary" href="portal-landing.html">Back to Portal Landing</a>
         </div>
 
-        <div class="small">By submitting, your information is securely stored in our volunteer signup database.</div>
+        <div class="small">Your password is handled securely by Supabase Auth and is never stored in plain text in your custom tables.</div>
         <div id="message"></div>
       </form>
     </section>
@@ -234,11 +236,23 @@
 
     function showMessage(text, type = "error") {
       messageEl.innerHTML = `<div class="notice ${type}">${text}</div>`;
-      setTimeout(() => { messageEl.innerHTML = ""; }, 7000);
     }
 
     function normalizePhone(phone) {
       return (phone || "").replace(/[^\d+()-.\s]/g, "").trim();
+    }
+
+    function isValidEmail(email) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+
+    function formatAuthError(err) {
+      const parts = [];
+      if (err?.status) parts.push(`status=${err.status}`);
+      if (err?.code) parts.push(`code=${err.code}`);
+      if (err?.name) parts.push(`name=${err.name}`);
+      if (err?.message) parts.push(`message=${err.message}`);
+      return parts.join(" | ") || "Unknown auth error";
     }
 
     async function upsertVolunteerProfile(userId) {
@@ -248,7 +262,24 @@
           { id: userId, role: "volunteer", updated_at: new Date().toISOString() },
           { onConflict: "id" }
         );
-      if (error) throw error;
+
+      if (error) throw new Error(`Profile upsert failed: ${error.message}`);
+    }
+
+    async function insertVolunteerSignupRow({ userId, payload }) {
+      const { error } = await supabase
+        .from("volunteer_signups")
+        .insert([{
+          user_id: userId,
+          first_name: payload.first_name,
+          last_name: payload.last_name,
+          email: payload.email,
+          phone: payload.phone || null,
+          interests: payload.interests,
+          availability_notes: payload.availability_notes || null
+        }]);
+
+      if (error) throw new Error(`Signup row insert failed: ${error.message}`);
     }
 
     form.addEventListener("submit", async (e) => {
@@ -270,6 +301,11 @@
         return;
       }
 
+      if (!isValidEmail(payload.email)) {
+        showMessage("Please enter a valid email address.", "error");
+        return;
+      }
+
       if (payload.password.length < 8) {
         showMessage("Password must be at least 8 characters.", "error");
         return;
@@ -282,56 +318,44 @@
 
       submitBtn.disabled = true;
       submitBtn.textContent = "Creating account...";
+      showMessage("Creating account...", "success");
 
       try {
-        // 1) Create auth account
+        // 1) Create auth user
         const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
           email: payload.email,
-          password: payload.password
+          password: payload.password,
+          options: {
+            data: {
+              first_name: payload.first_name,
+              last_name: payload.last_name,
+              role: "volunteer"
+            }
+          }
         });
 
-        if (signUpError) throw signUpError;
+        if (signUpError) {
+          console.error("Supabase signUp error object:", signUpError);
+          throw new Error(`Auth signup failed: ${formatAuthError(signUpError)}`);
+        }
 
-        const userId = signUpData?.user?.id || null;
+        console.log("Supabase signUp success:", signUpData);
 
-        // 2) If user record is available immediately, write profile + signup row
+        const userId = signUpData?.user?.id ?? null;
+
+        // 2) Create profile row when user id is available
         if (userId) {
           await upsertVolunteerProfile(userId);
-
-          const { error: insertError } = await supabase
-            .from("volunteer_signups")
-            .insert([{
-              user_id: userId,
-              first_name: payload.first_name,
-              last_name: payload.last_name,
-              email: payload.email,
-              phone: payload.phone || null,
-              interests: payload.interests,
-              availability_notes: payload.availability_notes || null
-            }]);
-
-          if (insertError) throw insertError;
-        } else {
-          // If confirm-email flow defers user creation details
-          const { error: insertError } = await supabase
-            .from("volunteer_signups")
-            .insert([{
-              user_id: null,
-              first_name: payload.first_name,
-              last_name: payload.last_name,
-              email: payload.email,
-              phone: payload.phone || null,
-              interests: payload.interests,
-              availability_notes: payload.availability_notes || null
-            }]);
-
-          if (insertError) throw insertError;
         }
+
+        // 3) Store volunteer application row
+        await insertVolunteerSignupRow({ userId, payload });
 
         form.reset();
         showMessage("Account created! Check your email to verify, then sign in.", "success");
-      } catch (error) {
-        showMessage(error.message || "Could not create account. Please try again.", "error");
+      } catch (err) {
+        console.error("Signup flow error:", err);
+        showMessage(err.message || "Could not create account. Please try again.", "error");
       } finally {
         submitBtn.disabled = false;
         submitBtn.textContent = "Create Volunteer Account";
