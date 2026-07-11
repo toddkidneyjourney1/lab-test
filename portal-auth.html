@@ -192,8 +192,6 @@
     </section>
   </main>
 
-  <!-- Footer removed per request -->
-
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
   <script>
     const SUPABASE_URL = "https://izytzrxrgnahyvgwqhgd.supabase.co";
@@ -204,6 +202,7 @@
       throw new Error("Supabase library not loaded");
     }
 
+    // Declare once only
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     const $ = (id) => document.getElementById(id);
