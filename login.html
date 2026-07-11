@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self' https:;" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://cdn.jsdelivr.net; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self' https:; frame-ancestors 'none'; base-uri 'self'; form-action 'self';" />
   <title>Cast Portal Login</title>
   <link rel="stylesheet" href="style.css" />
   <style>
@@ -155,6 +155,7 @@
     const form = document.getElementById('login-form');
     const context = document.getElementById('login-context');
     const destinationPreview = document.getElementById('destination-preview');
+    const resetPasswordButton = document.getElementById('reset-password');
     const params = new URLSearchParams(window.location.search);
     const requestedRole = params.get('role') || sessionStorage.getItem('intendedRole') || 'cast';
     const requestedShow = params.get('show') || sessionStorage.getItem('intendedShow') || '';
@@ -193,7 +194,9 @@
     if (!hasValidConfig()) {
       configNotice.style.display = 'block';
       Array.from(form.elements).forEach((element) => {
-        element.disabled = true;
+        if (element.tagName !== 'A') {
+          element.disabled = true;
+        }
       });
     } else {
       supabase = window.supabase.createClient(config.SUPABASE_URL, config.SUPABASE_ANON_KEY);
@@ -220,13 +223,13 @@
       event.preventDefault();
 
       if (!supabase) {
-        showError('Supabase is not configured.');
+        showError('Supabase is not configured. Update supabase-config.js first.');
         return;
       }
 
       const formData = new FormData(form);
-      const email = formData.get('email');
-      const password = formData.get('password');
+      const email = String(formData.get('email') || '').trim();
+      const password = String(formData.get('password') || '');
 
       try {
         const { data, error } = await supabase.auth.signInWithPassword({ email, password });
@@ -259,9 +262,9 @@
       }
     });
 
-    document.getElementById('reset-password').addEventListener('click', async () => {
+    resetPasswordButton.addEventListener('click', async () => {
       if (!supabase) {
-        showError('Supabase is not configured.');
+        showError('Supabase is not configured. Update supabase-config.js first.');
         return;
       }
 
