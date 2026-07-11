@@ -4,8 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-  <!-- Security Headers -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://*.supabase.co" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self' https:;" />
   <meta http-equiv="X-Content-Type-Options" content="nosniff" />
   <meta http-equiv="X-Frame-Options" content="SAMEORIGIN" />
   <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
@@ -26,6 +25,7 @@
       --shadow: 0 12px 28px rgba(0, 0, 0, 0.28);
       --success: #22c55e;
       --error: #ef4444;
+      --warning: #f59e0b;
     }
 
     body {
@@ -156,50 +156,51 @@
       align-items: flex-end;
     }
 
-    .btn-login {
+    .btn-login,
+    .btn-admin,
+    .primary-button,
+    .secondary-button {
       display: inline-flex;
       align-items: center;
       justify-content: center;
       text-decoration: none;
-      background: var(--accent);
       color: #fff;
       font-weight: 700;
       border-radius: 9px;
       padding: 0.6rem 0.9rem;
-      border: 1px solid #8e1a26;
       min-width: 100px;
       cursor: pointer;
       transition: background 0.2s ease;
       font-size: 0.9rem;
+      border: 1px solid transparent;
     }
 
-    .btn-login:hover {
+    .btn-login,
+    .primary-button {
+      background: var(--accent);
+      border-color: #8e1a26;
+    }
+
+    .btn-login:hover,
+    .primary-button:hover {
       background: var(--accent-hover);
     }
 
-    .btn-admin {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      text-decoration: none;
+    .btn-admin,
+    .secondary-button {
       background: var(--accent-secondary);
-      color: #fff;
-      font-weight: 700;
-      border-radius: 9px;
-      padding: 0.6rem 0.9rem;
-      border: 1px solid #1e3f6f;
-      min-width: 100px;
-      cursor: pointer;
-      transition: background 0.2s ease;
-      font-size: 0.9rem;
+      border-color: #1e3f6f;
     }
 
-    .btn-admin:hover {
+    .btn-admin:hover,
+    .secondary-button:hover {
       background: var(--accent-secondary-hover);
     }
 
     .btn-admin:disabled,
-    .btn-login:disabled {
+    .btn-login:disabled,
+    .primary-button:disabled,
+    .secondary-button:disabled {
       opacity: 0.5;
       cursor: not-allowed;
     }
@@ -235,28 +236,6 @@
       font-size: 0.87rem;
     }
 
-    .loading {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .spinner {
-      display: inline-block;
-      width: 14px;
-      height: 14px;
-      border: 2px solid rgba(255, 255, 255, 0.3);
-      border-top-color: #fff;
-      border-radius: 50%;
-      animation: spin 0.6s linear infinite;
-    }
-
-    @keyframes spin {
-      to {
-        transform: rotate(360deg);
-      }
-    }
-
     .alert {
       padding: 1rem;
       border-radius: 9px;
@@ -279,6 +258,29 @@
       border: 1px solid var(--success);
       color: #86efac;
     }
+
+    .alert-warning {
+      background: rgba(245, 158, 11, 0.1);
+      border: 1px solid var(--warning);
+      color: #fcd34d;
+    }
+
+    .setup-panel {
+      margin: 1rem auto 0;
+      max-width: 900px;
+      border: 1px solid #5c4a14;
+      background: rgba(245, 158, 11, 0.08);
+      color: #fde68a;
+      border-radius: 12px;
+      padding: 1rem;
+      line-height: 1.5;
+    }
+
+    .setup-panel code {
+      background: rgba(0, 0, 0, 0.25);
+      padding: 0.15rem 0.35rem;
+      border-radius: 6px;
+    }
   </style>
 </head>
 <body>
@@ -291,14 +293,16 @@
 
       <div class="toolbar">
         <a href="index.html">Back to Home</a>
+        <a href="login.html">Open Login Page</a>
         <button id="logout-btn" style="display: none;">Logout</button>
       </div>
+
+      <div id="setup-panel" class="setup-panel" style="display: none;"></div>
     </header>
 
     <div id="alert-container"></div>
 
     <section class="show-grid" aria-label="Cast show login cards">
-      <!-- BARE Show Card -->
       <article class="show-card" data-show="bare">
         <div class="show-image-wrap">
           <img class="show-image" src="assets/bare.jpg" alt="BARE show artwork" loading="lazy" />
@@ -307,17 +311,12 @@
           <h2 class="show-title">BARE</h2>
           <p class="show-meta">Access production materials and rehearsal information.</p>
           <div class="show-actions">
-            <button class="btn-login" data-show="bare" data-role="cast">
-              Cast <span class="cast-badge">Login</span>
-            </button>
-            <button class="btn-admin" data-show="bare" data-role="admin">
-              Admin <span class="admin-badge">Login</span>
-            </button>
+            <button class="btn-login" data-show="bare" data-role="cast">Cast <span class="cast-badge">Login</span></button>
+            <button class="btn-admin" data-show="bare" data-role="admin">Admin <span class="admin-badge">Login</span></button>
           </div>
         </div>
       </article>
 
-      <!-- FENCES Show Card -->
       <article class="show-card" data-show="fences">
         <div class="show-image-wrap">
           <img class="show-image" src="assets/fences.jpg" alt="FENCES show artwork" loading="lazy" />
@@ -326,17 +325,12 @@
           <h2 class="show-title">FENCES</h2>
           <p class="show-meta">Rehearsal and show documents management.</p>
           <div class="show-actions">
-            <button class="btn-login" data-show="fences" data-role="cast">
-              Cast <span class="cast-badge">Login</span>
-            </button>
-            <button class="btn-admin" data-show="fences" data-role="admin">
-              Admin <span class="admin-badge">Login</span>
-            </button>
+            <button class="btn-login" data-show="fences" data-role="cast">Cast <span class="cast-badge">Login</span></button>
+            <button class="btn-admin" data-show="fences" data-role="admin">Admin <span class="admin-badge">Login</span></button>
           </div>
         </div>
       </article>
 
-      <!-- GOD OF CARNAGE Show Card -->
       <article class="show-card" data-show="godofcarnage">
         <div class="show-image-wrap">
           <img class="show-image" src="assets/godofcarnage.jpg" alt="GOD OF CARNAGE show artwork" loading="lazy" />
@@ -345,17 +339,12 @@
           <h2 class="show-title">GOD OF CARNAGE</h2>
           <p class="show-meta">Production updates and announcements.</p>
           <div class="show-actions">
-            <button class="btn-login" data-show="godofcarnage" data-role="cast">
-              Cast <span class="cast-badge">Login</span>
-            </button>
-            <button class="btn-admin" data-show="godofcarnage" data-role="admin">
-              Admin <span class="admin-badge">Login</span>
-            </button>
+            <button class="btn-login" data-show="godofcarnage" data-role="cast">Cast <span class="cast-badge">Login</span></button>
+            <button class="btn-admin" data-show="godofcarnage" data-role="admin">Admin <span class="admin-badge">Login</span></button>
           </div>
         </div>
       </article>
 
-      <!-- GODOT Show Card -->
       <article class="show-card" data-show="godot">
         <div class="show-image-wrap">
           <img class="show-image" src="assets/godot.jpg" alt="GODOT show artwork" loading="lazy" />
@@ -364,17 +353,12 @@
           <h2 class="show-title">GODOT</h2>
           <p class="show-meta">Rehearsal hub and communication center.</p>
           <div class="show-actions">
-            <button class="btn-login" data-show="godot" data-role="cast">
-              Cast <span class="cast-badge">Login</span>
-            </button>
-            <button class="btn-admin" data-show="godot" data-role="admin">
-              Admin <span class="admin-badge">Login</span>
-            </button>
+            <button class="btn-login" data-show="godot" data-role="cast">Cast <span class="cast-badge">Login</span></button>
+            <button class="btn-admin" data-show="godot" data-role="admin">Admin <span class="admin-badge">Login</span></button>
           </div>
         </div>
       </article>
 
-      <!-- MIDSUMMER Show Card -->
       <article class="show-card" data-show="midsummer">
         <div class="show-image-wrap">
           <img class="show-image" src="assets/midsummer.jpg" alt="MIDSUMMER show artwork" loading="lazy" />
@@ -383,17 +367,12 @@
           <h2 class="show-title">MIDSUMMER</h2>
           <p class="show-meta">Schedules and resource management.</p>
           <div class="show-actions">
-            <button class="btn-login" data-show="midsummer" data-role="cast">
-              Cast <span class="cast-badge">Login</span>
-            </button>
-            <button class="btn-admin" data-show="midsummer" data-role="admin">
-              Admin <span class="admin-badge">Login</span>
-            </button>
+            <button class="btn-login" data-show="midsummer" data-role="cast">Cast <span class="cast-badge">Login</span></button>
+            <button class="btn-admin" data-show="midsummer" data-role="admin">Admin <span class="admin-badge">Login</span></button>
           </div>
         </div>
       </article>
 
-      <!-- PILLOWMAN Show Card -->
       <article class="show-card" data-show="pillowman">
         <div class="show-image-wrap">
           <img class="show-image" src="assets/pillowman.jpg" alt="PILLOWMAN show artwork" loading="lazy" />
@@ -402,17 +381,12 @@
           <h2 class="show-title">PILLOWMAN</h2>
           <p class="show-meta">Call sheets and production notes.</p>
           <div class="show-actions">
-            <button class="btn-login" data-show="pillowman" data-role="cast">
-              Cast <span class="cast-badge">Login</span>
-            </button>
-            <button class="btn-admin" data-show="pillowman" data-role="admin">
-              Admin <span class="admin-badge">Login</span>
-            </button>
+            <button class="btn-login" data-show="pillowman" data-role="cast">Cast <span class="cast-badge">Login</span></button>
+            <button class="btn-admin" data-show="pillowman" data-role="admin">Admin <span class="admin-badge">Login</span></button>
           </div>
         </div>
       </article>
 
-      <!-- RIVALS Show Card -->
       <article class="show-card" data-show="rivals">
         <div class="show-image-wrap">
           <img class="show-image" src="assets/rivals.jpg" alt="RIVALS show artwork" loading="lazy" />
@@ -421,12 +395,8 @@
           <h2 class="show-title">RIVALS</h2>
           <p class="show-meta">Production and rehearsal information.</p>
           <div class="show-actions">
-            <button class="btn-login" data-show="rivals" data-role="cast">
-              Cast <span class="cast-badge">Login</span>
-            </button>
-            <button class="btn-admin" data-show="rivals" data-role="admin">
-              Admin <span class="admin-badge">Login</span>
-            </button>
+            <button class="btn-login" data-show="rivals" data-role="cast">Cast <span class="cast-badge">Login</span></button>
+            <button class="btn-admin" data-show="rivals" data-role="admin">Admin <span class="admin-badge">Login</span></button>
           </div>
         </div>
       </article>
@@ -435,91 +405,73 @@
     <p class="footer-note">If your show is missing, contact production staff for access.</p>
   </main>
 
-  <!-- Supabase Client Library -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  
+  <script src="supabase-config.js"></script>
   <script>
-    /**
-     * Cast Portal Authentication Manager
-     * Uses Supabase for backend authentication and role management
-     * 
-     * Flow:
-     * 1. User clicks Cast or Admin button on show card
-     * 2. Opens login modal (login.html or separate modal)
-     * 3. User authenticates with Supabase
-     * 4. Backend validates role for specific show
-     * 5. User is redirected based on role:
-     *    - Cast: /cast-{showname}.html
-     *    - Admin: /admin-{showname}.html
-     */
-
     class CastPortalAuth {
       constructor() {
-        // Initialize Supabase client
-        // Replace with your actual Supabase URL and Anon Key
-        const SUPABASE_URL = process.env.SUPABASE_URL || 'https://your-project.supabase.co';
-        const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY || 'your-anon-key';
-
-        this.supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        this.config = window.APP_CONFIG || {};
+        this.supabase = null;
         this.currentUser = null;
+        this.profile = null;
         this.currentRole = null;
         this.currentShow = null;
+        this.availableShows = ['bare', 'fences', 'godofcarnage', 'godot', 'midsummer', 'pillowman', 'rivals'];
 
         this.init();
       }
 
-      /**
-       * Initialize auth manager
-       */
       async init() {
-        await this.checkAuthStatus();
         this.attachEventListeners();
-      }
 
-      /**
-       * Check if user is already authenticated
-       */
-      async checkAuthStatus() {
-        try {
-          const { data: { session } } = await this.supabase.auth.getSession();
-          
-          if (session) {
-            this.currentUser = session.user;
-            await this.fetchUserRole();
-            this.showLogoutButton();
-          }
-        } catch (error) {
-          console.error('Error checking auth status:', error);
+        if (!this.hasValidConfig()) {
+          this.disableLoginButtons();
+          this.renderSetupNotice();
+          return;
         }
+
+        this.supabase = window.supabase.createClient(
+          this.config.SUPABASE_URL,
+          this.config.SUPABASE_ANON_KEY
+        );
+
+        await this.checkAuthStatus();
       }
 
-      /**
-       * Fetch user role from custom claims or profiles table
-       */
-      async fetchUserRole() {
-        try {
-          const { data, error } = await this.supabase
-            .from('user_profiles')
-            .select('role, shows')
-            .eq('id', this.currentUser.id)
-            .single();
+      hasValidConfig() {
+        const url = this.config.SUPABASE_URL;
+        const key = this.config.SUPABASE_ANON_KEY;
 
-          if (error) throw error;
-
-          this.currentRole = data?.role || 'cast';
-        } catch (error) {
-          console.error('Error fetching user role:', error);
-          this.currentRole = 'cast';
-        }
+        return Boolean(
+          url &&
+          key &&
+          !url.includes('YOUR-PROJECT') &&
+          !key.includes('YOUR_SUPABASE_ANON_KEY')
+        );
       }
 
-      /**
-       * Attach click listeners to all login buttons
-       */
+      renderSetupNotice() {
+        const panel = document.getElementById('setup-panel');
+        if (!panel) return;
+
+        panel.style.display = 'block';
+        panel.innerHTML = `
+          <strong>Setup required:</strong> Add your Supabase project values in <code>supabase-config.js</code> before login will work.<br />
+          Then create the tables in <code>supabase-setup.sql</code> and add users in your Supabase dashboard.
+        `;
+      }
+
+      disableLoginButtons() {
+        document.querySelectorAll('.btn-login, .btn-admin').forEach((button) => {
+          button.disabled = true;
+          button.title = 'Configure Supabase first';
+        });
+      }
+
       attachEventListeners() {
         const loginButtons = document.querySelectorAll('.btn-login, .btn-admin');
-        loginButtons.forEach(button => {
-          button.addEventListener('click', (e) => this.handleLoginClick(e));
+        loginButtons.forEach((button) => {
+          button.addEventListener('click', (event) => this.handleLoginClick(event));
         });
 
         const logoutBtn = document.getElementById('logout-btn');
@@ -528,44 +480,93 @@
         }
       }
 
-      /**
-       * Handle login button clicks
-       */
+      async checkAuthStatus() {
+        try {
+          const { data: { session }, error } = await this.supabase.auth.getSession();
+          if (error) throw error;
+
+          if (session?.user) {
+            this.currentUser = session.user;
+            await this.fetchUserProfile();
+            this.showLogoutButton();
+          }
+
+          this.listenForAuthChanges();
+        } catch (error) {
+          console.error('Error checking auth status:', error);
+          this.showAlert('Could not connect to authentication service.', 'error');
+        }
+      }
+
+      listenForAuthChanges() {
+        this.supabase.auth.onAuthStateChange(async (_event, session) => {
+          this.currentUser = session?.user || null;
+
+          if (this.currentUser) {
+            await this.fetchUserProfile();
+            this.showLogoutButton();
+          } else {
+            this.profile = null;
+            this.currentRole = null;
+            this.hideLogoutButton();
+          }
+        });
+      }
+
+      async fetchUserProfile() {
+        if (!this.currentUser) return;
+
+        try {
+          const { data, error } = await this.supabase
+            .from('user_profiles')
+            .select('id, full_name, default_role')
+            .eq('id', this.currentUser.id)
+            .maybeSingle();
+
+          if (error) throw error;
+
+          this.profile = data || null;
+          this.currentRole = data?.default_role || 'cast';
+        } catch (error) {
+          console.error('Error fetching user profile:', error);
+          this.currentRole = 'cast';
+        }
+      }
+
       async handleLoginClick(event) {
-        const button = event.target.closest('button');
+        const button = event.currentTarget;
         const showName = button.dataset.show;
         const role = button.dataset.role;
 
         this.currentShow = showName;
         this.currentRole = role;
 
-        if (this.currentUser) {
-          // User already authenticated, check role and redirect
-          await this.validateAndRedirect(role, showName);
-        } else {
-          // User not authenticated, open login modal
-          this.openLoginModal(role, showName);
+        if (!this.availableShows.includes(showName)) {
+          this.showAlert('Unknown show selected.', 'error');
+          return;
         }
+
+        if (!this.supabase) {
+          this.showAlert('Supabase is not configured yet.', 'warning');
+          return;
+        }
+
+        if (this.currentUser) {
+          await this.validateAndRedirect(role, showName);
+          return;
+        }
+
+        this.openLoginPage(role, showName);
       }
 
-      /**
-       * Open login modal/redirect to login page
-       */
-      openLoginModal(role, showName) {
-        // Store intended destination in sessionStorage
+      openLoginPage(role, showName) {
         sessionStorage.setItem('intendedRole', role);
         sessionStorage.setItem('intendedShow', showName);
-
-        // Redirect to login page (you'll need to create this)
-        window.location.href = `login.html?role=${role}&show=${showName}`;
+        window.location.href = `login.html?role=${encodeURIComponent(role)}&show=${encodeURIComponent(showName)}`;
       }
 
-      /**
-       * Validate user role and redirect appropriately
-       */
       async validateAndRedirect(role, showName) {
         try {
-          // Verify user has permission for this show and role
           const hasAccess = await this.verifyAccess(role, showName);
 
           if (!hasAccess) {
@@ -573,65 +574,57 @@
             return;
           }
 
-          // Redirect based on role
-          if (role === 'admin') {
-            window.location.href = `admin-${showName}.html`;
-          } else {
-            window.location.href = `cast-${showName}.html`;
-          }
+          window.location.href = this.getDestinationPath(role, showName);
         } catch (error) {
           console.error('Error during redirect:', error);
-          this.showAlert('An error occurred. Please try again.', 'error');
+          this.showAlert('An error occurred while opening your portal.', 'error');
         }
       }
 
-      /**
-       * Verify user has access to show with specific role
-       */
+      getDestinationPath(role, showName) {
+        return role === 'admin' ? `admin-${showName}.html` : `cast-${showName}.html`;
+      }
+
       async verifyAccess(role, showName) {
         try {
           const { data, error } = await this.supabase
             .from('show_access')
-            .select('*')
+            .select('id, role, show_name')
             .eq('user_id', this.currentUser.id)
             .eq('show_name', showName)
             .eq('role', role)
-            .single();
+            .maybeSingle();
 
-          if (error && error.code !== 'PGRST116') throw error;
-
-          return !!data;
+          if (error) throw error;
+          return Boolean(data);
         } catch (error) {
           console.error('Error verifying access:', error);
           return false;
         }
       }
 
-      /**
-       * Logout user
-       */
       async logout() {
+        if (!this.supabase) return;
+
         try {
           const { error } = await this.supabase.auth.signOut();
           if (error) throw error;
 
           this.currentUser = null;
+          this.profile = null;
           this.currentRole = null;
           this.hideLogoutButton();
-          this.showAlert('Logged out successfully', 'success');
+          this.showAlert('Logged out successfully.', 'success');
 
           setTimeout(() => {
             window.location.href = 'cast-portal.html';
-          }, 1000);
+          }, 800);
         } catch (error) {
           console.error('Error logging out:', error);
-          this.showAlert('Error logging out', 'error');
+          this.showAlert('Error logging out.', 'error');
         }
       }
 
-      /**
-       * Show/hide logout button
-       */
       showLogoutButton() {
         const logoutBtn = document.getElementById('logout-btn');
         if (logoutBtn) logoutBtn.style.display = 'inline-block';
@@ -642,14 +635,12 @@
         if (logoutBtn) logoutBtn.style.display = 'none';
       }
 
-      /**
-       * Show alert message
-       */
       showAlert(message, type = 'info') {
         const container = document.getElementById('alert-container');
         const alert = document.createElement('div');
         alert.className = `alert alert-${type} show`;
         alert.textContent = message;
+        container.innerHTML = '';
         container.appendChild(alert);
 
         setTimeout(() => {
@@ -658,7 +649,6 @@
       }
     }
 
-    // Initialize on page load
     document.addEventListener('DOMContentLoaded', () => {
       new CastPortalAuth();
     });
