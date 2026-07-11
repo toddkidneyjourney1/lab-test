@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cast Portal | The Laboratory Theater of Florida</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    :root {
+      --bg: #0f0f12;
+      --surface: #17181f;
+      --surface-2: #1f212a;
+      --text: #f4f4f6;
+      --muted: #b8bcc8;
+      --accent: #d72638;
+      --accent-hover: #b71f2f;
+      --border: #323644;
+      --shadow: 0 12px 28px rgba(0, 0, 0, 0.28);
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    }
+
+    .page-wrap {
+      max-width: 1150px;
+      margin: 0 auto;
+      padding: 2rem 1rem 3rem;
+    }
+
+    .portal-header {
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+
+    .portal-title {
+      margin: 0;
+      font-size: clamp(1.6rem, 2.2vw, 2.3rem);
+      letter-spacing: 0.2px;
+    }
+
+    .portal-subtitle {
+      margin: 0.55rem auto 0;
+      color: var(--muted);
+      max-width: 760px;
+      line-height: 1.45;
+      font-size: 0.98rem;
+    }
+
+    .toolbar {
+      margin-top: 1.25rem;
+      display: flex;
+      gap: 0.6rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .toolbar a {
+      text-decoration: none;
+      color: #fff;
+      background: #3f4557;
+      border: 1px solid #59607a;
+      padding: 0.56rem 0.82rem;
+      border-radius: 9px;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .toolbar a:hover {
+      filter: brightness(1.08);
+    }
+
+    .show-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(235px, 1fr));
+      gap: 0.95rem;
+      margin-top: 1.4rem;
+    }
+
+    .show-card {
+      background: linear-gradient(180deg, var(--surface), var(--surface-2));
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      min-height: 360px;
+    }
+
+    .show-image-wrap {
+      width: 100%;
+      height: 220px;
+      background: #0b0c10;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.5rem;
+      box-sizing: border-box;
+    }
+
+    .show-image {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center;
+      display: block;
+    }
+
+    .show-content {
+      padding: 0.95rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+      flex: 1;
+    }
+
+    .show-title {
+      margin: 0;
+      font-size: 1.05rem;
+      line-height: 1.25;
+    }
+
+    .show-meta {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.4;
+      min-height: 2.2em;
+    }
+
+    .show-actions {
+      margin-top: auto;
+      display: flex;
+      gap: 0.55rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-login {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      background: var(--accent);
+      color: #fff;
+      font-weight: 700;
+      border-radius: 9px;
+      padding: 0.6rem 0.9rem;
+      border: 1px solid #8e1a26;
+      min-width: 108px;
+    }
+
+    .btn-login:hover {
+      background: var(--accent-hover);
+    }
+
+    .footer-note {
+      margin-top: 1.25rem;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.87rem;
+    }
+  </style>
+</head>
+<body>
+  <main class="page-wrap">
+    <header class="portal-header">
+      <h1 class="portal-title">Cast Portal</h1>
+      <p class="portal-subtitle">
+        Select your show card and click <strong>Login</strong> to access cast resources, rehearsal details, and production updates.
+      </p>
+
+      <div class="toolbar">
+        <a href="index.html">Back to Home</a>
+        <a href="dashboard.html">Admin Login</a>
+        <a href="support.html">Need Help?</a>
+      </div>
+    </header>
+
+    <section class="show-grid" aria-label="Cast show login cards">
+      <article class="show-card">
+        <div class="show-image-wrap">
+          <img class="show-image" src="assets/bare.jpg" alt="BARE show artwork" loading="lazy" />
+        </div>
+        <div class="show-content">
+          <h2 class="show-title">BARE</h2>
+          <p class="show-meta">Cast access for BARE production materials.</p>
+          <div class="show-actions">
+            <a class="btn-login" href="cast-bare.html">Login</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="show-card">
+        <div class="show-image-wrap">
+          <img class="show-image" src="assets/fences.jpg" alt="FENCES show artwork" loading="lazy" />
+        </div>
+        <div class="show-content">
+          <h2 class="show-title">FENCES</h2>
+          <p class="show-meta">Cast access for FENCES rehearsal and show documents.</p>
+          <div class="show-actions">
+            <a class="btn-login" href="cast-fences.html">Login</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="show-card">
+        <div class="show-image-wrap">
+          <img class="show-image" src="assets/godofcarnage.jpg" alt="GOD OF CARNAGE show artwork" loading="lazy" />
+        </div>
+        <div class="show-content">
+          <h2 class="show-title">GOD OF CARNAGE</h2>
+          <p class="show-meta">Cast access for GOD OF CARNAGE production updates.</p>
+          <div class="show-actions">
+            <a class="btn-login" href="cast-godofcarnage.html">Login</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="show-card">
+        <div class="show-image-wrap">
+          <img class="show-image" src="assets/godot.jpg" alt="GODOT show artwork" loading="lazy" />
+        </div>
+        <div class="show-content">
+          <h2 class="show-title">GODOT</h2>
+          <p class="show-meta">Cast access for GODOT rehearsal and communication hub.</p>
+          <div class="show-actions">
+            <a class="btn-login" href="cast-godot.html">Login</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="show-card">
+        <div class="show-image-wrap">
+          <img class="show-image" src="assets/midsummer.jpg" alt="MIDSUMMER show artwork" loading="lazy" />
+        </div>
+        <div class="show-content">
+          <h2 class="show-title">MIDSUMMER</h2>
+          <p class="show-meta">Cast access for MIDSUMMER schedules and resources.</p>
+          <div class="show-actions">
+            <a class="btn-login" href="cast-midsummer.html">Login</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="show-card">
+        <div class="show-image-wrap">
+          <img class="show-image" src="assets/pillowman.jpg" alt="PILLOWMAN show artwork" loading="lazy" />
+        </div>
+        <div class="show-content">
+          <h2 class="show-title">PILLOWMAN</h2>
+          <p class="show-meta">Cast access for PILLOWMAN call sheets and notes.</p>
+          <div class="show-actions">
+            <a class="btn-login" href="cast-pillowman.html">Login</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="show-card">
+        <div class="show-image-wrap">
+          <img class="show-image" src="assets/rivals.jpg" alt="RIVALS show artwork" loading="lazy" />
+        </div>
+        <div class="show-content">
+          <h2 class="show-title">RIVALS</h2>
+          <p class="show-meta">Cast access for RIVALS production and rehearsal info.</p>
+          <div class="show-actions">
+            <a class="btn-login" href="cast-rivals.html">Login</a>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <p class="footer-note">If your show is missing, contact production staff for access.</p>
+  </main>
+</body>
+</html>
