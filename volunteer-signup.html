@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Volunteer Signup | The Laboratory Theater of Florida</title>
   <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="favicon.ico" />
   <style>
     :root {
       --bg: #0f0f12;
@@ -16,13 +17,14 @@
       --border: #333846;
       --success: #1f8f4e;
       --error: #a33131;
+      --warn: #9a6b11;
     }
 
     body {
       margin: 0;
       color: var(--text);
       background: var(--bg);
-      font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       line-height: 1.4;
     }
 
@@ -140,6 +142,7 @@
 
     .notice.success { background: var(--success); color: #fff; }
     .notice.error { background: var(--error); color: #fff; }
+    .notice.warn { background: var(--warn); color: #fff; }
 
     .small {
       color: var(--muted);
@@ -148,9 +151,7 @@
     }
 
     @media (max-width: 700px) {
-      .grid {
-        grid-template-columns: 1fr;
-      }
+      .grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -217,7 +218,7 @@
           <a class="btn btn-secondary" href="portal-landing.html">Back to Portal Landing</a>
         </div>
 
-        <div class="small">Your password is handled securely by Supabase Auth and is never stored in plain text in your custom tables.</div>
+        <div class="small">Passwords are handled by Supabase Auth and never stored as plain text in your custom tables.</div>
         <div id="message"></div>
       </form>
     </section>
@@ -234,6 +235,9 @@
     const submitBtn = document.getElementById("submit-btn");
     const messageEl = document.getElementById("message");
 
+    let cooldownTimer = null;
+    let cooldownRemaining = 0;
+
     function showMessage(text, type = "error") {
       messageEl.innerHTML = `<div class="notice ${type}">${text}</div>`;
     }
@@ -242,17 +246,43 @@
       return (phone || "").replace(/[^\d+()-.\s]/g, "").trim();
     }
 
+    function cleanEmail(email) {
+      return String(email || "").trim().toLowerCase().replace(/\u200B/g, "");
+    }
+
     function isValidEmail(email) {
       return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
     }
 
-    function formatAuthError(err) {
-      const parts = [];
-      if (err?.status) parts.push(`status=${err.status}`);
-      if (err?.code) parts.push(`code=${err.code}`);
-      if (err?.name) parts.push(`name=${err.name}`);
-      if (err?.message) parts.push(`message=${err.message}`);
-      return parts.join(" | ") || "Unknown auth error";
+    function startCooldown(seconds = 60) {
+      clearInterval(cooldownTimer);
+      cooldownRemaining = seconds;
+      submitBtn.disabled = true;
+      submitBtn.textContent = `Please wait (${cooldownRemaining}s)`;
+
+      cooldownTimer = setInterval(() => {
+        cooldownRemaining -= 1;
+        if (cooldownRemaining <= 0) {
+          clearInterval(cooldownTimer);
+          submitBtn.disabled = false;
+          submitBtn.textContent = "Create Volunteer Account";
+          return;
+        }
+        submitBtn.textContent = `Please wait (${cooldownRemaining}s)`;
+      }, 1000);
+    }
+
+    function mapAuthError(err) {
+      const code = err?.code || "";
+      const msg = err?.message || "Signup failed.";
+
+      if (code === "signup_disabled") return { text: "Signup is disabled in Supabase Auth. Please contact admin.", type: "error" };
+      if (code === "email_address_invalid") return { text: "This email is being rejected by Auth settings. Try another email or adjust allowed domains in Supabase.", type: "error" };
+      if (code === "user_already_exists" || /already/i.test(msg)) return { text: "An account with this email already exists. Please sign in instead.", type: "warn" };
+      if (code === "weak_password" || /password/i.test(msg)) return { text: "Password does not meet policy requirements.", type: "error" };
+      if (code === "over_email_send_rate_limit") return { text: "Too many signup attempts. Please wait 60 seconds and try again.", type: "warn" };
+
+      return { text: `Auth signup failed: ${msg}`, type: "error" };
     }
 
     async function upsertVolunteerProfile(userId) {
@@ -285,10 +315,15 @@
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
 
+      if (cooldownRemaining > 0) {
+        showMessage(`Please wait ${cooldownRemaining}s before trying again.`, "warn");
+        return;
+      }
+
       const payload = {
         first_name: form.first_name.value.trim(),
         last_name: form.last_name.value.trim(),
-        email: form.email.value.trim().toLowerCase(),
+        email: cleanEmail(form.email.value),
         phone: normalizePhone(form.phone.value),
         password: form.password.value,
         confirm_password: form.confirm_password.value,
@@ -321,7 +356,6 @@
       showMessage("Creating account...", "success");
 
       try {
-        // 1) Create auth user
         const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
           email: payload.email,
           password: payload.password,
@@ -336,19 +370,24 @@
 
         if (signUpError) {
           console.error("Supabase signUp error object:", signUpError);
-          throw new Error(`Auth signup failed: ${formatAuthError(signUpError)}`);
-        }
 
-        console.log("Supabase signUp success:", signUpData);
+          const mapped = mapAuthError(signUpError);
+
+          if (signUpError.code === "over_email_send_rate_limit") {
+            showMessage(mapped.text, mapped.type);
+            startCooldown(60);
+            return;
+          }
+
+          throw new Error(mapped.text);
+        }
 
         const userId = signUpData?.user?.id ?? null;
 
-        // 2) Create profile row when user id is available
         if (userId) {
           await upsertVolunteerProfile(userId);
         }
 
-        // 3) Store volunteer application row
         await insertVolunteerSignupRow({ userId, payload });
 
         form.reset();
@@ -357,8 +396,10 @@
         console.error("Signup flow error:", err);
         showMessage(err.message || "Could not create account. Please try again.", "error");
       } finally {
-        submitBtn.disabled = false;
-        submitBtn.textContent = "Create Volunteer Account";
+        if (cooldownRemaining <= 0) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = "Create Volunteer Account";
+        }
       }
     });
   </script>
