@@ -5,6 +5,260 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Show Archive | The Laboratory Theater of Florida</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        .archive-hero {
+            padding: 3rem 0 2rem;
+        }
+
+        .archive-hero-content h1 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            margin-bottom: 1rem;
+            line-height: 0.95;
+        }
+
+        .archive-subtitle {
+            font-size: 1.25rem;
+            color: #ff5c8a;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+        }
+
+        .archive-description {
+            color: #d2d2d2;
+            max-width: 70ch;
+            line-height: 1.6;
+        }
+
+        .featured-season {
+            background: #151515;
+            border: 1px solid #2c2c2c;
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0 3rem;
+        }
+
+        .season-highlight {
+            position: relative;
+        }
+
+        .season-badge {
+            display: inline-block;
+            background: #ff5c8a;
+            color: #fff;
+            font-size: 0.85rem;
+            font-weight: 700;
+            padding: 0.4rem 0.8rem;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .season-highlight h2 {
+            font-size: 2rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .season-highlight p {
+            color: #d2d2d2;
+            margin-bottom: 1.5rem;
+            max-width: 65ch;
+            line-height: 1.6;
+        }
+
+        .archive-grid {
+            margin: 3rem 0;
+        }
+
+        .archive-grid-title {
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .archive-season-card {
+            background: #151515;
+            border: 1px solid #2c2c2c;
+            border-radius: 14px;
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .archive-season-card:hover {
+            border-color: #ff5c8a;
+            box-shadow: 0 8px 24px rgba(255, 92, 138, 0.15);
+        }
+
+        .archive-season-card a {
+            display: block;
+            padding: 1.75rem;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .archive-season-card:hover a {
+            color: #fff;
+        }
+
+        .season-year {
+            display: inline-block;
+            font-size: 0.9rem;
+            background: rgba(255, 92, 138, 0.15);
+            color: #ff5c8a;
+            padding: 0.35rem 0.75rem;
+            border-radius: 4px;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+        }
+
+        .archive-season-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .season-desc {
+            color: #b8b8b8;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        .season-link {
+            display: inline-block;
+            color: #ff5c8a;
+            font-weight: 600;
+            padding: 0.65rem 1.2rem;
+            border: 2px solid #ff5c8a;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .archive-season-card:hover .season-link {
+            background: #ff5c8a;
+            color: #fff;
+        }
+
+        .season-link-disabled {
+            display: inline-block;
+            color: #888;
+            font-weight: 600;
+            padding: 0.65rem 1.2rem;
+            border: 2px solid #444;
+            border-radius: 6px;
+            opacity: 0.6;
+        }
+
+        .archive-season-card-coming {
+            opacity: 0.75;
+        }
+
+        .archive-season-card-coming a {
+            cursor: not-allowed;
+        }
+
+        .archive-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+            padding: 2rem;
+            background: #151515;
+            border: 1px solid #2c2c2c;
+            border-radius: 14px;
+            text-align: center;
+        }
+
+        .info-item h4 {
+            font-size: 2.5rem;
+            color: #ff5c8a;
+            margin-bottom: 0.5rem;
+        }
+
+        .info-item p {
+            color: #d2d2d2;
+            font-size: 1rem;
+        }
+
+        .site-footer {
+            margin-top: 3rem;
+            background: #101010;
+            border-top: 1px solid #2c2c2c;
+            color: #e6e6e6;
+        }
+
+        .footer-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 2rem 1rem 1.25rem;
+            display: grid;
+            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        }
+
+        .footer-block h3,
+        .footer-block h4 {
+            margin: 0 0 0.75rem;
+            color: #fff;
+        }
+
+        .footer-block p {
+            margin: 0 0 0.75rem;
+            line-height: 1.5;
+            color: #d3d3d3;
+        }
+
+        .footer-block a {
+            color: #ff5c8a;
+            text-decoration: none;
+        }
+
+        .footer-block a:hover {
+            text-decoration: underline;
+        }
+
+        .social-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .social-links li + li {
+            margin-top: 0.4rem;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #2c2c2c;
+            text-align: center;
+            padding: 0.85rem 1rem 1.2rem;
+            font-size: 0.92rem;
+            color: #b8b8b8;
+        }
+
+        @media (max-width: 768px) {
+            .archive-hero-content h1 {
+                font-size: 1.75rem;
+            }
+
+            .season-highlight h2 {
+                font-size: 1.5rem;
+            }
+
+            .archive-grid-title {
+                font-size: 1.4rem;
+            }
+
+            .archive-season-card h3 {
+                font-size: 1.25rem;
+            }
+
+            .season-link,
+            .season-link-disabled {
+                display: block;
+                text-align: center;
+                padding: 0.75rem 1rem;
+            }
+        }
+    </style>
 </head>
 <body>
     <!-- Hamburger Menu -->
@@ -21,8 +275,7 @@
         <a href="archive25.html">Past Experiments</a>
         <a href="index.html">Back to the Slab</a>
         <a href="plan.html">Lab Protocols</a>
-        
-        <a href="portal-landing.html">Portal Landing</a>
+        <a href="cast-portal.html">The Portal Landing Pad</a>
         <a href="support.html">Fuel the Innovation</a>
         <a href="sponsors.html">Core Collaborators</a>
     </nav>
@@ -40,7 +293,7 @@
             <div class="archive-hero-content">
                 <h1>Show Archive</h1>
                 <p class="archive-subtitle">Explore our past productions and the legacy of creativity at The Lab</p>
-                <p class="archive-description">Revisit the experiments that shaped our theater. Each season represents bold artistic choices, unforgettable performances, and the collective spirit of our ensemble.</p>
+                <p class="archive-description">Revisit the experiments that shaped our theater. Each season represents bold artistic choices, unforgettable performances, and the collective spirit of our community.</p>
             </div>
         </section>
 
@@ -103,5 +356,33 @@
         </section>
     </main>
 
+    <footer class="site-footer">
+        <div class="footer-container">
+            <div class="footer-block">
+                <h3>The Laboratory Theater of Florida</h3>
+                <p>1634 Woodford Ave.<br>Fort Myers, FL 33901</p>
+                <p><a href="tel:+12392912905">(239) 291-2905</a></p>
+            </div>
+
+            <div class="footer-block">
+                <h4>Mailing Address</h4>
+                <p>P.O. Box 334<br>Fort Myers, FL 33902</p>
+            </div>
+
+            <div class="footer-block">
+                <h4>Follow Us</h4>
+                <ul class="social-links">
+                    <li><a href="#" aria-label="Facebook (placeholder)">Facebook</a></li>
+                    <li><a href="#" aria-label="Instagram (placeholder)">Instagram</a></li>
+                    <li><a href="#" aria-label="YouTube (placeholder)">YouTube</a></li>
+                    <li><a href="#" aria-label="X / Twitter (placeholder)">X / Twitter</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2026 The Laboratory Theater of Florida. All rights reserved.</p>
+        </div>
+    </footer>
 </body>
 </html>
