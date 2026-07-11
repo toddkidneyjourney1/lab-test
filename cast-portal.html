@@ -3,11 +3,6 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self' https:;" />
-  <meta http-equiv="X-Content-Type-Options" content="nosniff" />
-  <meta http-equiv="X-Frame-Options" content="SAMEORIGIN" />
-  <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
   <title>Cast Portal | The Laboratory Theater of Florida</title>
   <link rel="stylesheet" href="style.css" />
   <style>
@@ -19,13 +14,8 @@
       --muted: #b8bcc8;
       --accent: #d72638;
       --accent-hover: #b71f2f;
-      --accent-secondary: #2c5aa0;
-      --accent-secondary-hover: #1e3f6f;
       --border: #323644;
       --shadow: 0 12px 28px rgba(0, 0, 0, 0.28);
-      --success: #22c55e;
-      --error: #ef4444;
-      --warning: #f59e0b;
     }
 
     body {
@@ -68,8 +58,7 @@
       flex-wrap: wrap;
     }
 
-    .toolbar a,
-    .toolbar button {
+    .toolbar a {
       text-decoration: none;
       color: #fff;
       background: #3f4557;
@@ -78,12 +67,9 @@
       border-radius: 9px;
       font-weight: 600;
       font-size: 0.9rem;
-      cursor: pointer;
-      transition: filter 0.2s ease;
     }
 
-    .toolbar a:hover,
-    .toolbar button:hover {
+    .toolbar a:hover {
       filter: brightness(1.08);
     }
 
@@ -103,7 +89,6 @@
       display: flex;
       flex-direction: column;
       min-height: 360px;
-      position: relative;
     }
 
     .show-image-wrap {
@@ -121,7 +106,7 @@
     .show-image {
       width: 100%;
       height: 100%;
-      object-fit: contain;
+      object-fit: contain;   /* full image visible */
       object-position: center;
       display: block;
     }
@@ -153,80 +138,24 @@
       display: flex;
       gap: 0.55rem;
       flex-wrap: wrap;
-      align-items: flex-end;
     }
 
-    .btn-login,
-    .btn-admin,
-    .primary-button,
-    .secondary-button {
+    .btn-login {
       display: inline-flex;
       align-items: center;
       justify-content: center;
       text-decoration: none;
+      background: var(--accent);
       color: #fff;
       font-weight: 700;
       border-radius: 9px;
       padding: 0.6rem 0.9rem;
-      min-width: 100px;
-      cursor: pointer;
-      transition: background 0.2s ease;
-      font-size: 0.9rem;
-      border: 1px solid transparent;
+      border: 1px solid #8e1a26;
+      min-width: 108px;
     }
 
-    .btn-login,
-    .primary-button {
-      background: var(--accent);
-      border-color: #8e1a26;
-    }
-
-    .btn-login:hover,
-    .primary-button:hover {
+    .btn-login:hover {
       background: var(--accent-hover);
-    }
-
-    .btn-admin,
-    .secondary-button {
-      background: var(--accent-secondary);
-      border-color: #1e3f6f;
-    }
-
-    .btn-admin:hover,
-    .secondary-button:hover {
-      background: var(--accent-secondary-hover);
-    }
-
-    .btn-admin:disabled,
-    .btn-login:disabled,
-    .primary-button:disabled,
-    .secondary-button:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-
-    .admin-badge {
-      display: inline-block;
-      background: var(--accent-secondary);
-      color: #fff;
-      font-size: 0.7rem;
-      padding: 0.25rem 0.5rem;
-      border-radius: 4px;
-      margin-left: 0.4rem;
-      font-weight: 600;
-      text-transform: uppercase;
-    }
-
-    .cast-badge {
-      display: inline-block;
-      background: var(--accent);
-      color: #fff;
-      font-size: 0.7rem;
-      padding: 0.25rem 0.5rem;
-      border-radius: 4px;
-      margin-left: 0.4rem;
-      font-weight: 600;
-      text-transform: uppercase;
     }
 
     .footer-note {
@@ -235,52 +164,6 @@
       color: var(--muted);
       font-size: 0.87rem;
     }
-
-    .alert {
-      padding: 1rem;
-      border-radius: 9px;
-      margin-bottom: 1rem;
-      display: none;
-    }
-
-    .alert.show {
-      display: block;
-    }
-
-    .alert-error {
-      background: rgba(239, 68, 68, 0.1);
-      border: 1px solid var(--error);
-      color: #fca5a5;
-    }
-
-    .alert-success {
-      background: rgba(34, 197, 94, 0.1);
-      border: 1px solid var(--success);
-      color: #86efac;
-    }
-
-    .alert-warning {
-      background: rgba(245, 158, 11, 0.1);
-      border: 1px solid var(--warning);
-      color: #fcd34d;
-    }
-
-    .setup-panel {
-      margin: 1rem auto 0;
-      max-width: 900px;
-      border: 1px solid #5c4a14;
-      background: rgba(245, 158, 11, 0.08);
-      color: #fde68a;
-      border-radius: 12px;
-      padding: 1rem;
-      line-height: 1.5;
-    }
-
-    .setup-panel code {
-      background: rgba(0, 0, 0, 0.25);
-      padding: 0.15rem 0.35rem;
-      border-radius: 6px;
-    }
   </style>
 </head>
 <body>
@@ -288,115 +171,104 @@
     <header class="portal-header">
       <h1 class="portal-title">Cast Portal</h1>
       <p class="portal-subtitle">
-        Select your show and login as Cast or Admin to access resources, rehearsal details, and production updates.
+        Select your show card and click <strong>Login</strong> to access cast resources, rehearsal details, and production updates.
       </p>
 
       <div class="toolbar">
         <a href="index.html">Back to Home</a>
-        <a href="login.html">Open Login Page</a>
-        <button id="logout-btn" style="display: none;">Logout</button>
+        <a href="portal-auth.html">General Portal Login</a>
+        <a href="support.html">Need Help?</a>
       </div>
-
-      <div id="setup-panel" class="setup-panel" style="display: none;"></div>
     </header>
 
-    <div id="alert-container"></div>
-
     <section class="show-grid" aria-label="Cast show login cards">
-      <article class="show-card" data-show="bare">
+      <article class="show-card">
         <div class="show-image-wrap">
           <img class="show-image" src="assets/bare.jpg" alt="BARE show artwork" loading="lazy" />
         </div>
         <div class="show-content">
           <h2 class="show-title">BARE</h2>
-          <p class="show-meta">Access production materials and rehearsal information.</p>
+          <p class="show-meta">Cast access for BARE production materials.</p>
           <div class="show-actions">
-            <button class="btn-login" data-show="bare" data-role="cast">Cast <span class="cast-badge">Login</span></button>
-            <button class="btn-admin" data-show="bare" data-role="admin">Admin <span class="admin-badge">Login</span></button>
+            <a class="btn-login" href="cast-bare.html">Login</a>
           </div>
         </div>
       </article>
 
-      <article class="show-card" data-show="fences">
+      <article class="show-card">
         <div class="show-image-wrap">
           <img class="show-image" src="assets/fences.jpg" alt="FENCES show artwork" loading="lazy" />
         </div>
         <div class="show-content">
           <h2 class="show-title">FENCES</h2>
-          <p class="show-meta">Rehearsal and show documents management.</p>
+          <p class="show-meta">Cast access for FENCES rehearsal and show documents.</p>
           <div class="show-actions">
-            <button class="btn-login" data-show="fences" data-role="cast">Cast <span class="cast-badge">Login</span></button>
-            <button class="btn-admin" data-show="fences" data-role="admin">Admin <span class="admin-badge">Login</span></button>
+            <a class="btn-login" href="cast-fences.html">Login</a>
           </div>
         </div>
       </article>
 
-      <article class="show-card" data-show="godofcarnage">
+      <article class="show-card">
         <div class="show-image-wrap">
           <img class="show-image" src="assets/godofcarnage.jpg" alt="GOD OF CARNAGE show artwork" loading="lazy" />
         </div>
         <div class="show-content">
           <h2 class="show-title">GOD OF CARNAGE</h2>
-          <p class="show-meta">Production updates and announcements.</p>
+          <p class="show-meta">Cast access for GOD OF CARNAGE production updates.</p>
           <div class="show-actions">
-            <button class="btn-login" data-show="godofcarnage" data-role="cast">Cast <span class="cast-badge">Login</span></button>
-            <button class="btn-admin" data-show="godofcarnage" data-role="admin">Admin <span class="admin-badge">Login</span></button>
+            <a class="btn-login" href="cast-godofcarnage.html">Login</a>
           </div>
         </div>
       </article>
 
-      <article class="show-card" data-show="godot">
+      <article class="show-card">
         <div class="show-image-wrap">
           <img class="show-image" src="assets/godot.jpg" alt="GODOT show artwork" loading="lazy" />
         </div>
         <div class="show-content">
           <h2 class="show-title">GODOT</h2>
-          <p class="show-meta">Rehearsal hub and communication center.</p>
+          <p class="show-meta">Cast access for GODOT rehearsal and communication hub.</p>
           <div class="show-actions">
-            <button class="btn-login" data-show="godot" data-role="cast">Cast <span class="cast-badge">Login</span></button>
-            <button class="btn-admin" data-show="godot" data-role="admin">Admin <span class="admin-badge">Login</span></button>
+            <a class="btn-login" href="cast-godot.html">Login</a>
           </div>
         </div>
       </article>
 
-      <article class="show-card" data-show="midsummer">
+      <article class="show-card">
         <div class="show-image-wrap">
           <img class="show-image" src="assets/midsummer.jpg" alt="MIDSUMMER show artwork" loading="lazy" />
         </div>
         <div class="show-content">
           <h2 class="show-title">MIDSUMMER</h2>
-          <p class="show-meta">Schedules and resource management.</p>
+          <p class="show-meta">Cast access for MIDSUMMER schedules and resources.</p>
           <div class="show-actions">
-            <button class="btn-login" data-show="midsummer" data-role="cast">Cast <span class="cast-badge">Login</span></button>
-            <button class="btn-admin" data-show="midsummer" data-role="admin">Admin <span class="admin-badge">Login</span></button>
+            <a class="btn-login" href="cast-midsummer.html">Login</a>
           </div>
         </div>
       </article>
 
-      <article class="show-card" data-show="pillowman">
+      <article class="show-card">
         <div class="show-image-wrap">
           <img class="show-image" src="assets/pillowman.jpg" alt="PILLOWMAN show artwork" loading="lazy" />
         </div>
         <div class="show-content">
           <h2 class="show-title">PILLOWMAN</h2>
-          <p class="show-meta">Call sheets and production notes.</p>
+          <p class="show-meta">Cast access for PILLOWMAN call sheets and notes.</p>
           <div class="show-actions">
-            <button class="btn-login" data-show="pillowman" data-role="cast">Cast <span class="cast-badge">Login</span></button>
-            <button class="btn-admin" data-show="pillowman" data-role="admin">Admin <span class="admin-badge">Login</span></button>
+            <a class="btn-login" href="cast-pillowman.html">Login</a>
           </div>
         </div>
       </article>
 
-      <article class="show-card" data-show="rivals">
+      <article class="show-card">
         <div class="show-image-wrap">
           <img class="show-image" src="assets/rivals.jpg" alt="RIVALS show artwork" loading="lazy" />
         </div>
         <div class="show-content">
           <h2 class="show-title">RIVALS</h2>
-          <p class="show-meta">Production and rehearsal information.</p>
+          <p class="show-meta">Cast access for RIVALS production and rehearsal info.</p>
           <div class="show-actions">
-            <button class="btn-login" data-show="rivals" data-role="cast">Cast <span class="cast-badge">Login</span></button>
-            <button class="btn-admin" data-show="rivals" data-role="admin">Admin <span class="admin-badge">Login</span></button>
+            <a class="btn-login" href="cast-rivals.html">Login</a>
           </div>
         </div>
       </article>
@@ -404,254 +276,5 @@
 
     <p class="footer-note">If your show is missing, contact production staff for access.</p>
   </main>
-
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="supabase-config.js"></script>
-  <script>
-    class CastPortalAuth {
-      constructor() {
-        this.config = window.APP_CONFIG || {};
-        this.supabase = null;
-        this.currentUser = null;
-        this.profile = null;
-        this.currentRole = null;
-        this.currentShow = null;
-        this.availableShows = ['bare', 'fences', 'godofcarnage', 'godot', 'midsummer', 'pillowman', 'rivals'];
-
-        this.init();
-      }
-
-      async init() {
-        this.attachEventListeners();
-
-        if (!this.hasValidConfig()) {
-          this.disableLoginButtons();
-          this.renderSetupNotice();
-          return;
-        }
-
-        this.supabase = window.supabase.createClient(
-          this.config.SUPABASE_URL,
-          this.config.SUPABASE_ANON_KEY
-        );
-
-        await this.checkAuthStatus();
-      }
-
-      hasValidConfig() {
-        const url = this.config.SUPABASE_URL;
-        const key = this.config.SUPABASE_ANON_KEY;
-
-        return Boolean(
-          url &&
-          key &&
-          !url.includes('YOUR-PROJECT') &&
-          !key.includes('YOUR_SUPABASE_ANON_KEY')
-        );
-      }
-
-      renderSetupNotice() {
-        const panel = document.getElementById('setup-panel');
-        if (!panel) return;
-
-        panel.style.display = 'block';
-        panel.innerHTML = `
-          <strong>Setup required:</strong> Add your Supabase project values in <code>supabase-config.js</code> before login will work.<br />
-          Then create the tables in <code>supabase-setup.sql</code> and add users in your Supabase dashboard.
-        `;
-      }
-
-      disableLoginButtons() {
-        document.querySelectorAll('.btn-login, .btn-admin').forEach((button) => {
-          button.disabled = true;
-          button.title = 'Configure Supabase first';
-        });
-      }
-
-      attachEventListeners() {
-        const loginButtons = document.querySelectorAll('.btn-login, .btn-admin');
-        loginButtons.forEach((button) => {
-          button.addEventListener('click', (event) => this.handleLoginClick(event));
-        });
-
-        const logoutBtn = document.getElementById('logout-btn');
-        if (logoutBtn) {
-          logoutBtn.addEventListener('click', () => this.logout());
-        }
-      }
-
-      async checkAuthStatus() {
-        try {
-          const { data: { session }, error } = await this.supabase.auth.getSession();
-          if (error) throw error;
-
-          if (session?.user) {
-            this.currentUser = session.user;
-            await this.fetchUserProfile();
-            this.showLogoutButton();
-          }
-
-          this.listenForAuthChanges();
-        } catch (error) {
-          console.error('Error checking auth status:', error);
-          this.showAlert('Could not connect to authentication service.', 'error');
-        }
-      }
-
-      listenForAuthChanges() {
-        this.supabase.auth.onAuthStateChange(async (_event, session) => {
-          this.currentUser = session?.user || null;
-
-          if (this.currentUser) {
-            await this.fetchUserProfile();
-            this.showLogoutButton();
-          } else {
-            this.profile = null;
-            this.currentRole = null;
-            this.hideLogoutButton();
-          }
-        });
-      }
-
-      async fetchUserProfile() {
-        if (!this.currentUser) return;
-
-        try {
-          const { data, error } = await this.supabase
-            .from('user_profiles')
-            .select('id, full_name, default_role')
-            .eq('id', this.currentUser.id)
-            .maybeSingle();
-
-          if (error) throw error;
-
-          this.profile = data || null;
-          this.currentRole = data?.default_role || 'cast';
-        } catch (error) {
-          console.error('Error fetching user profile:', error);
-          this.currentRole = 'cast';
-        }
-      }
-
-      async handleLoginClick(event) {
-        const button = event.currentTarget;
-        const showName = button.dataset.show;
-        const role = button.dataset.role;
-
-        this.currentShow = showName;
-        this.currentRole = role;
-
-        if (!this.availableShows.includes(showName)) {
-          this.showAlert('Unknown show selected.', 'error');
-          return;
-        }
-
-        if (!this.supabase) {
-          this.showAlert('Supabase is not configured yet.', 'warning');
-          return;
-        }
-
-        if (this.currentUser) {
-          await this.validateAndRedirect(role, showName);
-          return;
-        }
-
-        this.openLoginPage(role, showName);
-      }
-
-      openLoginPage(role, showName) {
-        sessionStorage.setItem('intendedRole', role);
-        sessionStorage.setItem('intendedShow', showName);
-        window.location.href = `login.html?role=${encodeURIComponent(role)}&show=${encodeURIComponent(showName)}`;
-      }
-
-      async validateAndRedirect(role, showName) {
-        try {
-          const hasAccess = await this.verifyAccess(role, showName);
-
-          if (!hasAccess) {
-            this.showAlert('You do not have permission to access this area.', 'error');
-            return;
-          }
-
-          window.location.href = this.getDestinationPath(role, showName);
-        } catch (error) {
-          console.error('Error during redirect:', error);
-          this.showAlert('An error occurred while opening your portal.', 'error');
-        }
-      }
-
-      getDestinationPath(role, showName) {
-        return role === 'admin' ? `admin-${showName}.html` : `cast-${showName}.html`;
-      }
-
-      async verifyAccess(role, showName) {
-        try {
-          const { data, error } = await this.supabase
-            .from('show_access')
-            .select('id, role, show_name')
-            .eq('user_id', this.currentUser.id)
-            .eq('show_name', showName)
-            .eq('role', role)
-            .maybeSingle();
-
-          if (error) throw error;
-          return Boolean(data);
-        } catch (error) {
-          console.error('Error verifying access:', error);
-          return false;
-        }
-      }
-
-      async logout() {
-        if (!this.supabase) return;
-
-        try {
-          const { error } = await this.supabase.auth.signOut();
-          if (error) throw error;
-
-          this.currentUser = null;
-          this.profile = null;
-          this.currentRole = null;
-          this.hideLogoutButton();
-          this.showAlert('Logged out successfully.', 'success');
-
-          setTimeout(() => {
-            window.location.href = 'cast-portal.html';
-          }, 800);
-        } catch (error) {
-          console.error('Error logging out:', error);
-          this.showAlert('Error logging out.', 'error');
-        }
-      }
-
-      showLogoutButton() {
-        const logoutBtn = document.getElementById('logout-btn');
-        if (logoutBtn) logoutBtn.style.display = 'inline-block';
-      }
-
-      hideLogoutButton() {
-        const logoutBtn = document.getElementById('logout-btn');
-        if (logoutBtn) logoutBtn.style.display = 'none';
-      }
-
-      showAlert(message, type = 'info') {
-        const container = document.getElementById('alert-container');
-        const alert = document.createElement('div');
-        alert.className = `alert alert-${type} show`;
-        alert.textContent = message;
-        container.innerHTML = '';
-        container.appendChild(alert);
-
-        setTimeout(() => {
-          alert.remove();
-        }, 5000);
-      }
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-      new CastPortalAuth();
-    });
-  </script>
 </body>
 </html>
