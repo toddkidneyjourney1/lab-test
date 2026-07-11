@@ -194,144 +194,143 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
   <script>
-    const SUPABASE_URL = "https://izytzrxrgnahyvgwqhgd.supabase.co";
-    const SUPABASE_ANON_KEY = "sb_publishable_xfsIVVSH8vcUz9XfZgirwA_wl-GSYOw";
+    (() => {
+      const SUPABASE_URL = "https://izytzrxrgnahyvgwqhgd.supabase.co";
+      const SUPABASE_ANON_KEY = "sb_publishable_xfsIVVSH8vcUz9XfZgirwA_wl-GSYOw";
 
-    if (!window.supabase || !window.supabase.createClient) {
-      alert("Supabase failed to load. Please refresh and try again.");
-      throw new Error("Supabase library not loaded");
-    }
+      if (!window.supabase || !window.supabase.createClient) {
+        alert("Supabase failed to load. Please refresh and try again.");
+        throw new Error("Supabase library not loaded");
+      }
 
-    // Declare once only
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    const $ = (id) => document.getElementById(id);
+      const $ = (id) => document.getElementById(id);
 
-    function setMessage(el, text, type = "") {
-      el.textContent = text;
-      el.className = `message ${type}`.trim();
-    }
+      function setMessage(el, text, type = "") {
+        el.textContent = text;
+        el.className = `message ${type}`.trim();
+      }
 
-    function normalizeRole(role) {
-      return String(role || "").trim().toLowerCase();
-    }
+      function normalizeRole(role) {
+        return String(role || "").trim().toLowerCase();
+      }
 
-    async function getProfileRole(userId) {
-      const { data, error } = await supabase
-        .from("profiles")
-        .select("role")
-        .eq("id", userId)
-        .maybeSingle();
+      async function getProfileRole(userId) {
+        const { data, error } = await client
+          .from("profiles")
+          .select("role")
+          .eq("id", userId)
+          .maybeSingle();
 
-      if (error) throw error;
-      return normalizeRole(data?.role);
-    }
+        if (error) throw error;
+        return normalizeRole(data?.role);
+      }
 
-    function setupPasswordToggle() {
-      document.querySelectorAll(".pw-toggle").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          const target = document.getElementById(btn.getAttribute("data-target"));
-          if (!target) return;
-          const hidden = target.type === "password";
-          target.type = hidden ? "text" : "password";
-          btn.textContent = hidden ? "Hide" : "Show";
-        });
-      });
-    }
-
-    function setupForgotPassword() {
-      const link = $("forgot-link");
-      const msg = $("signin-message");
-
-      link.addEventListener("click", async (e) => {
-        e.preventDefault();
-        const email = $("signin-email").value.trim();
-
-        if (!email) {
-          setMessage(msg, "Enter your email first, then click Forgot Password.", "error");
-          return;
-        }
-
-        try {
-          const { error } = await supabase.auth.resetPasswordForEmail(email, {
-            redirectTo: window.location.origin + "/portal-auth.html"
+      function setupPasswordToggle() {
+        document.querySelectorAll(".pw-toggle").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const target = document.getElementById(btn.getAttribute("data-target"));
+            if (!target) return;
+            const hidden = target.type === "password";
+            target.type = hidden ? "text" : "password";
+            btn.textContent = hidden ? "Hide" : "Show";
           });
-          if (error) throw error;
-          setMessage(msg, "Password reset email sent.", "success");
-        } catch (err) {
-          setMessage(msg, err.message || "Could not send reset email.", "error");
-        }
-      });
-    }
+        });
+      }
 
-    function setupSignInForm() {
-      const form = $("signin-form");
-      const msg = $("signin-message");
-      const loginBtn = $("login-btn");
+      function setupForgotPassword() {
+        const link = $("forgot-link");
+        const msg = $("signin-message");
 
-      form.addEventListener("submit", async (e) => {
-        e.preventDefault();
+        link.addEventListener("click", async (e) => {
+          e.preventDefault();
+          const email = $("signin-email").value.trim();
 
-        const email = $("signin-email").value.trim();
-        const password = $("signin-password").value;
-
-        if (!email || !password) {
-          setMessage(msg, "Email and password are required.", "error");
-          return;
-        }
-
-        loginBtn.disabled = true;
-        loginBtn.textContent = "Logging in...";
-        setMessage(msg, "Signing in...");
-
-        try {
-          const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-          if (error) throw error;
-
-          const user = data?.user;
-          if (!user) throw new Error("No user returned from sign in.");
-
-          const role = await getProfileRole(user.id);
-
-          if (role !== "volunteer") {
-            await supabase.auth.signOut();
-            throw new Error("This login is for volunteers only.");
+          if (!email) {
+            setMessage(msg, "Enter your email first, then click Forgot Password.", "error");
+            return;
           }
 
-          setMessage(msg, "Success! Redirecting...", "success");
-          window.location.assign("volunteer-portal.html");
-        } catch (err) {
-          setMessage(msg, err.message || "Sign in failed.", "error");
-          loginBtn.disabled = false;
-          loginBtn.textContent = "Log In";
-        }
-      });
-    }
-
-    async function redirectIfAlreadyLoggedIn() {
-      const { data, error } = await supabase.auth.getSession();
-      if (error) return;
-      const user = data?.session?.user;
-      if (!user) return;
-
-      try {
-        const role = await getProfileRole(user.id);
-        if (role === "volunteer") {
-          window.location.assign("volunteer-portal.html");
-        }
-      } catch (_) {
-        // stay on page if role check fails
+          try {
+            const { error } = await client.auth.resetPasswordForEmail(email, {
+              redirectTo: window.location.origin + "/portal-auth.html"
+            });
+            if (error) throw error;
+            setMessage(msg, "Password reset email sent.", "success");
+          } catch (err) {
+            setMessage(msg, err.message || "Could not send reset email.", "error");
+          }
+        });
       }
-    }
 
-    async function init() {
-      setupPasswordToggle();
-      setupForgotPassword();
-      setupSignInForm();
-      await redirectIfAlreadyLoggedIn();
-    }
+      function setupSignInForm() {
+        const form = $("signin-form");
+        const msg = $("signin-message");
+        const loginBtn = $("login-btn");
 
-    init();
+        form.addEventListener("submit", async (e) => {
+          e.preventDefault();
+
+          const email = $("signin-email").value.trim();
+          const password = $("signin-password").value;
+
+          if (!email || !password) {
+            setMessage(msg, "Email and password are required.", "error");
+            return;
+          }
+
+          loginBtn.disabled = true;
+          loginBtn.textContent = "Logging in...";
+          setMessage(msg, "Signing in...");
+
+          try {
+            const { data, error } = await client.auth.signInWithPassword({ email, password });
+            if (error) throw error;
+
+            const user = data?.user;
+            if (!user) throw new Error("No user returned from sign in.");
+
+            const role = await getProfileRole(user.id);
+
+            if (role !== "volunteer") {
+              await client.auth.signOut();
+              throw new Error("This login is for volunteers only.");
+            }
+
+            setMessage(msg, "Success! Redirecting...", "success");
+            window.location.assign("volunteer-portal.html");
+          } catch (err) {
+            setMessage(msg, err.message || "Sign in failed.", "error");
+            loginBtn.disabled = false;
+            loginBtn.textContent = "Log In";
+          }
+        });
+      }
+
+      async function redirectIfAlreadyLoggedIn() {
+        const { data, error } = await client.auth.getSession();
+        if (error) return;
+        const user = data?.session?.user;
+        if (!user) return;
+
+        try {
+          const role = await getProfileRole(user.id);
+          if (role === "volunteer") {
+            window.location.assign("volunteer-portal.html");
+          }
+        } catch (_) {}
+      }
+
+      async function init() {
+        setupPasswordToggle();
+        setupForgotPassword();
+        setupSignInForm();
+        await redirectIfAlreadyLoggedIn();
+      }
+
+      init();
+    })();
   </script>
 </body>
 </html>
