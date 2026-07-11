@@ -4,7 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://cdn.jsdelivr.net; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self' https:; frame-ancestors 'none'; base-uri 'self'; form-action 'self';" />
+  <meta
+    http-equiv="Content-Security-Policy"
+    content="default-src 'self' https://cdn.jsdelivr.net https://*.supabase.co; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self' https://*.supabase.co https://cdn.jsdelivr.net; frame-ancestors 'none'; base-uri 'self'; form-action 'self';"
+  />
   <title>Cast Portal Login</title>
   <link rel="stylesheet" href="style.css" />
   <style>
@@ -92,6 +95,7 @@
       background: rgba(245, 158, 11, 0.1);
       border: 1px solid #f59e0b;
       color: #fde68a;
+      display: none;
     }
 
     .error {
@@ -119,7 +123,7 @@
     <h1>Portal Login</h1>
     <p id="login-context">Sign in to continue to your cast or admin portal.</p>
 
-    <div id="config-notice" class="notice" style="display: none;">
+    <div id="config-notice" class="notice">
       Add your Supabase values to <strong>supabase-config.js</strong> before using this page.
     </div>
 
@@ -148,144 +152,160 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase-config.js"></script>
   <script>
-    const config = window.APP_CONFIG || {};
-    const errorBox = document.getElementById('error-message');
-    const successBox = document.getElementById('success-message');
-    const configNotice = document.getElementById('config-notice');
-    const form = document.getElementById('login-form');
-    const context = document.getElementById('login-context');
-    const destinationPreview = document.getElementById('destination-preview');
-    const resetPasswordButton = document.getElementById('reset-password');
-    const params = new URLSearchParams(window.location.search);
-    const requestedRole = params.get('role') || sessionStorage.getItem('intendedRole') || 'cast';
-    const requestedShow = params.get('show') || sessionStorage.getItem('intendedShow') || '';
+    (() => {
+      const config = window.APP_CONFIG || {};
+      const errorBox = document.getElementById('error-message');
+      const successBox = document.getElementById('success-message');
+      const configNotice = document.getElementById('config-notice');
+      const form = document.getElementById('login-form');
+      const context = document.getElementById('login-context');
+      const destinationPreview = document.getElementById('destination-preview');
+      const resetPasswordButton = document.getElementById('reset-password');
+      const params = new URLSearchParams(window.location.search);
+      const requestedRole = params.get('role') || sessionStorage.getItem('intendedRole') || 'cast';
+      const requestedShow = params.get('show') || sessionStorage.getItem('intendedShow') || '';
 
-    context.textContent = requestedShow
-      ? `Sign in to continue to the ${requestedShow.toUpperCase()} ${requestedRole} portal.`
-      : 'Sign in to continue to your cast or admin portal.';
+      context.textContent = requestedShow
+        ? `Sign in to continue to the ${requestedShow.toUpperCase()} ${requestedRole} portal.`
+        : 'Sign in to continue to your cast or admin portal.';
 
-    destinationPreview.textContent = requestedShow
-      ? `Requested destination: ${requestedRole === 'admin' ? 'admin' : 'cast'}-${requestedShow}.html`
-      : '';
+      destinationPreview.textContent = requestedShow
+        ? `Requested destination: ${requestedRole === 'admin' ? 'admin' : 'cast'}-${requestedShow}.html`
+        : '';
 
-    function showError(message) {
-      errorBox.style.display = 'block';
-      errorBox.textContent = message;
-      successBox.style.display = 'none';
-    }
-
-    function showSuccess(message) {
-      successBox.style.display = 'block';
-      successBox.textContent = message;
-      errorBox.style.display = 'none';
-    }
-
-    function hasValidConfig() {
-      return Boolean(
-        config.SUPABASE_URL &&
-        config.SUPABASE_ANON_KEY &&
-        !config.SUPABASE_URL.includes('YOUR-PROJECT') &&
-        !config.SUPABASE_ANON_KEY.includes('YOUR_SUPABASE_ANON_KEY')
-      );
-    }
-
-    let supabase = null;
-
-    if (!hasValidConfig()) {
-      configNotice.style.display = 'block';
-      Array.from(form.elements).forEach((element) => {
-        if (element.tagName !== 'A') {
-          element.disabled = true;
-        }
-      });
-    } else {
-      supabase = window.supabase.createClient(config.SUPABASE_URL, config.SUPABASE_ANON_KEY);
-    }
-
-    async function verifyAccess(userId, role, showName) {
-      const { data, error } = await supabase
-        .from('show_access')
-        .select('id')
-        .eq('user_id', userId)
-        .eq('role', role)
-        .eq('show_name', showName)
-        .maybeSingle();
-
-      if (error) throw error;
-      return Boolean(data);
-    }
-
-    function getDestinationPath(role, showName) {
-      return role === 'admin' ? `admin-${showName}.html` : `cast-${showName}.html`;
-    }
-
-    form.addEventListener('submit', async (event) => {
-      event.preventDefault();
-
-      if (!supabase) {
-        showError('Supabase is not configured. Update supabase-config.js first.');
-        return;
+      function showError(message) {
+        errorBox.style.display = 'block';
+        errorBox.textContent = message;
+        successBox.style.display = 'none';
       }
 
-      const formData = new FormData(form);
-      const email = String(formData.get('email') || '').trim();
-      const password = String(formData.get('password') || '');
+      function showSuccess(message) {
+        successBox.style.display = 'block';
+        successBox.textContent = message;
+        errorBox.style.display = 'none';
+      }
 
-      try {
-        const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+      function hasValidConfig() {
+        return Boolean(
+          config.SUPABASE_URL &&
+          config.SUPABASE_ANON_KEY &&
+          !config.SUPABASE_URL.includes('YOUR-PROJECT') &&
+          !config.SUPABASE_ANON_KEY.includes('YOUR_SUPABASE_ANON_KEY')
+        );
+      }
+
+      let supabaseClient = null;
+
+      if (!window.supabase || typeof window.supabase.createClient !== 'function') {
+        showError('Supabase library failed to load. Check the page security policy and internet connection.');
+      } else if (!hasValidConfig()) {
+        configNotice.style.display = 'block';
+      } else {
+        supabaseClient = window.supabase.createClient(
+          config.SUPABASE_URL,
+          config.SUPABASE_ANON_KEY
+        );
+      }
+
+      async function verifyAccess(userId, role, showName) {
+        const { data, error } = await supabaseClient
+          .from('show_access')
+          .select('id')
+          .eq('user_id', userId)
+          .eq('role', role)
+          .eq('show_name', showName)
+          .maybeSingle();
+
         if (error) throw error;
+        return Boolean(data);
+      }
 
-        const user = data?.user;
-        if (!user) {
-          showError('Login failed. No user returned.');
+      function getDestinationPath(role, showName) {
+        return role === 'admin' ? `admin-${showName}.html` : `cast-${showName}.html`;
+      }
+
+      form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        if (!window.supabase || typeof window.supabase.createClient !== 'function') {
+          showError('Supabase library failed to load.');
           return;
         }
 
-        if (requestedShow) {
-          const hasAccess = await verifyAccess(user.id, requestedRole, requestedShow);
-          if (!hasAccess) {
-            await supabase.auth.signOut();
-            showError('Your account does not have access to that show/role.');
+        if (!supabaseClient) {
+          showError('Supabase is not configured. Update supabase-config.js first.');
+          return;
+        }
+
+        const formData = new FormData(form);
+        const email = String(formData.get('email') || '').trim();
+        const password = String(formData.get('password') || '');
+
+        try {
+          const { data, error } = await supabaseClient.auth.signInWithPassword({
+            email,
+            password
+          });
+
+          if (error) throw error;
+
+          const user = data?.user;
+          if (!user) {
+            showError('Login failed. No user returned.');
             return;
           }
 
-          showSuccess('Login successful. Redirecting...');
-          window.location.href = getDestinationPath(requestedRole, requestedShow);
+          if (requestedShow) {
+            const hasAccess = await verifyAccess(user.id, requestedRole, requestedShow);
+            if (!hasAccess) {
+              await supabaseClient.auth.signOut();
+              showError('Your account does not have access to that show/role.');
+              return;
+            }
+
+            showSuccess('Login successful. Redirecting...');
+            window.location.href = getDestinationPath(requestedRole, requestedShow);
+            return;
+          }
+
+          showSuccess('Login successful. Redirecting to cast portal...');
+          window.location.href = 'cast-portal.html';
+        } catch (error) {
+          console.error(error);
+          showError(error.message || 'Unable to sign in.');
+        }
+      });
+
+      resetPasswordButton.addEventListener('click', async () => {
+        if (!window.supabase || typeof window.supabase.createClient !== 'function') {
+          showError('Supabase library failed to load.');
           return;
         }
 
-        showSuccess('Login successful. Redirecting to cast portal...');
-        window.location.href = 'cast-portal.html';
-      } catch (error) {
-        console.error(error);
-        showError(error.message || 'Unable to sign in.');
-      }
-    });
+        if (!supabaseClient) {
+          showError('Supabase is not configured. Update supabase-config.js first.');
+          return;
+        }
 
-    resetPasswordButton.addEventListener('click', async () => {
-      if (!supabase) {
-        showError('Supabase is not configured. Update supabase-config.js first.');
-        return;
-      }
+        const email = document.getElementById('email').value.trim();
+        if (!email) {
+          showError('Enter your email address first.');
+          return;
+        }
 
-      const email = document.getElementById('email').value.trim();
-      if (!email) {
-        showError('Enter your email address first.');
-        return;
-      }
+        try {
+          const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
+            redirectTo: `${window.location.origin}${window.location.pathname}`
+          });
 
-      try {
-        const { error } = await supabase.auth.resetPasswordForEmail(email, {
-          redirectTo: `${window.location.origin}${window.location.pathname}`
-        });
-
-        if (error) throw error;
-        showSuccess('Password reset email sent.');
-      } catch (error) {
-        console.error(error);
-        showError(error.message || 'Unable to send password reset email.');
-      }
-    });
+          if (error) throw error;
+          showSuccess('Password reset email sent.');
+        } catch (error) {
+          console.error(error);
+          showError(error.message || 'Unable to send password reset email.');
+        }
+      });
+    })();
   </script>
 </body>
 </html>
