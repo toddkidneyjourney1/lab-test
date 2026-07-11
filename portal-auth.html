@@ -34,6 +34,11 @@
       padding: 0.9rem 1rem;
       font-weight: 600;
       cursor: pointer;
+      text-align: center;
+      text-decoration: none;
+      font-family: inherit;
+      font-size: inherit;
+      line-height: inherit;
     }
 
     .auth-tab:hover { background: #1b1b1b; }
@@ -218,7 +223,7 @@
       <div class="auth-card" aria-label="Portal authentication">
         <div class="auth-tabs" role="tablist" aria-label="Auth tabs">
           <button class="auth-tab active" id="tab-signin" role="tab" aria-controls="panel-signin" aria-selected="true">Sign In</button>
-          <button class="auth-tab" id="tab-signup" role="tab" aria-controls="panel-signup" aria-selected="false">Sign Up</button>
+          <a class="auth-tab" id="tab-signup-link" href="volunteer-signup.html" role="button" aria-label="Go to Volunteer Signup">Sign Up</a>
         </div>
 
         <section class="auth-panel active" id="panel-signin" role="tabpanel" aria-labelledby="tab-signin">
@@ -239,32 +244,6 @@
               <a href="support.html">Need Help?</a>
             </div>
             <p class="message" id="signin-message" aria-live="polite"></p>
-          </form>
-        </section>
-
-        <section class="auth-panel" id="panel-signup" role="tabpanel" aria-labelledby="tab-signup">
-          <p class="auth-intro">Create an account and choose your role.</p>
-          <form id="signup-form" novalidate>
-            <div class="field">
-              <label for="signup-email">Email Address</label>
-              <input id="signup-email" type="email" autocomplete="email" required />
-            </div>
-            <div class="field pw-wrap">
-              <label for="signup-password">Password</label>
-              <input id="signup-password" type="password" autocomplete="new-password" minlength="8" required />
-              <button type="button" class="pw-toggle" data-target="signup-password">Show</button>
-            </div>
-            <div class="field">
-              <label for="signup-role">I am joining as</label>
-              <select id="signup-role" required>
-                <option value="" selected disabled>Select role</option>
-                <option value="volunteer">Volunteer</option>
-                <option value="cast">Cast Member</option>
-                <option value="admin">Admin / Staff</option>
-              </select>
-            </div>
-            <button type="submit" class="btn-auth">Create Account</button>
-            <p class="message" id="signup-message" aria-live="polite"></p>
           </form>
         </section>
       </div>
@@ -356,39 +335,14 @@
       return normalizeRole(data?.role) || "volunteer";
     }
 
-    async function setProfileRole(userId, role) {
-      const safeRole = normalizeRole(role) || "volunteer";
-      const { error } = await supabase
-        .from("profiles")
-        .upsert(
-          { id: userId, role: safeRole, updated_at: new Date().toISOString() },
-          { onConflict: "id" }
-        );
-
-      if (error) throw error;
-      return safeRole;
-    }
-
     function setupTabs() {
+      // Sign Up is now a direct link to volunteer-signup.html
       const tabSignIn = $("tab-signin");
-      const tabSignUp = $("tab-signup");
       const panelSignIn = $("panel-signin");
-      const panelSignUp = $("panel-signup");
 
-      const activate = (name) => {
-        const signInActive = name === "signin";
-        tabSignIn.classList.toggle("active", signInActive);
-        tabSignUp.classList.toggle("active", !signInActive);
-
-        tabSignIn.setAttribute("aria-selected", String(signInActive));
-        tabSignUp.setAttribute("aria-selected", String(!signInActive));
-
-        panelSignIn.classList.toggle("active", signInActive);
-        panelSignUp.classList.toggle("active", !signInActive);
-      };
-
-      tabSignIn.addEventListener("click", () => activate("signin"));
-      tabSignUp.addEventListener("click", () => activate("signup"));
+      tabSignIn.classList.add("active");
+      tabSignIn.setAttribute("aria-selected", "true");
+      panelSignIn.classList.add("active");
     }
 
     function setupPasswordToggles() {
@@ -429,9 +383,7 @@
 
     function setupForms() {
       const signinForm = $("signin-form");
-      const signupForm = $("signup-form");
       const signinMsg = $("signin-message");
-      const signupMsg = $("signup-message");
 
       signinForm.addEventListener("submit", async (e) => {
         e.preventDefault();
@@ -466,57 +418,6 @@
           window.location.assign(redirectForRole(role));
         } catch (err) {
           setMessage(signinMsg, err.message || "Sign in failed.", "error");
-        }
-      });
-
-      signupForm.addEventListener("submit", async (e) => {
-        e.preventDefault();
-        setMessage(signupMsg, "Creating account...");
-
-        const email = $("signup-email").value.trim();
-        const password = $("signup-password").value;
-        const role = $("signup-role").value;
-
-        if (!email || !password || !role) {
-          setMessage(signupMsg, "Please complete all fields.", "error");
-          return;
-        }
-
-        if (password.length < 8) {
-          setMessage(signupMsg, "Password must be at least 8 characters.", "error");
-          return;
-        }
-
-        try {
-          const { data, error } = await supabase.auth.signUp({ email, password });
-          if (error) throw error;
-
-          const user = data?.user;
-          const session = data?.session;
-
-          if (!user) {
-            setMessage(signupMsg, "Account created. Check email to verify, then sign in.", "success");
-            return;
-          }
-
-          const chosenRole = await setProfileRole(user.id, role);
-
-          saveSession({
-            user: { id: user.id, email: user.email },
-            role: chosenRole,
-            token: session?.access_token || null,
-            expiresAt: session?.expires_at || null
-          });
-
-          if (!session) {
-            setMessage(signupMsg, "Account created. Verify email, then sign in.", "success");
-            return;
-          }
-
-          setMessage(signupMsg, "Account created! Redirecting...", "success");
-          window.location.assign(redirectForRole(chosenRole));
-        } catch (err) {
-          setMessage(signupMsg, err.message || "Sign up failed.", "error");
         }
       });
     }
