@@ -1,1 +1,544 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin & Staff Dashboard</title>
+  <style>
+    :root{
+      --bg:#0b1020;
+      --panel:#121a30;
+      --panel-2:#1a2646;
+      --text:#e7ecff;
+      --muted:#a9b5dc;
+      --accent:#60a5fa;
+      --accent-2:#a78bfa;
+      --ok:#4ade80;
+      --warn:#f59e0b;
+      --danger:#f87171;
+      --border:#2a3866;
+      --focus:#38bdf8;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+    body{
+      min-height:100vh;color:var(--text);
+      background:
+        radial-gradient(1000px 460px at 0% -20%, #1a2b59 0%, transparent 56%),
+        radial-gradient(850px 380px at 120% 0%, #3a245f 0%, transparent 55%),
+        var(--bg);
+      display:grid;grid-template-rows:auto 1fr auto;
+    }
+    header{
+      position:sticky;top:0;z-index:20;
+      border-bottom:1px solid var(--border);
+      background:rgba(8,12,28,.78);backdrop-filter:blur(8px);
+    }
+    .topbar{
+      max-width:1240px;margin:0 auto;padding:.9rem 1rem;
+      display:flex;align-items:center;justify-content:space-between;gap:.8rem;
+    }
+    .brand{display:flex;align-items:center;gap:.65rem;font-weight:700}
+    .logo{
+      width:34px;height:34px;border-radius:10px;display:grid;place-items:center;
+      background:linear-gradient(135deg,var(--accent),var(--accent-2));
+      color:#102047;font-weight:800;font-size:.85rem;
+    }
+    .pill{
+      font-size:.77rem;padding:.24rem .62rem;border-radius:999px;font-weight:700;
+      color:#1e1b4b;background:linear-gradient(135deg,#bfdbfe,#ddd6fe);
+    }
+    .actions{display:flex;gap:.5rem}
+    button,.btn{
+      border:1px solid var(--border);background:#121b34;color:var(--text);
+      border-radius:10px;padding:.52rem .76rem;font-size:.88rem;cursor:pointer;text-decoration:none;transition:.2s;
+    }
+    button:hover,.btn:hover{border-color:#4b67b2;background:#172448}
+    .btn-primary{border:none;background:linear-gradient(135deg,#60a5fa,#a78bfa);color:#0f1f49;font-weight:700}
+    .btn-primary:hover{filter:brightness(1.06)}
+
+    main{
+      max-width:1240px;width:100%;margin:0 auto;padding:1rem;
+      display:grid;grid-template-columns:300px 1fr;gap:1rem;align-items:start;
+    }
+    .sidebar,.panel{
+      border:1px solid var(--border);border-radius:16px;
+      background:linear-gradient(180deg,rgba(26,38,70,.84),rgba(15,23,45,.93));
+      box-shadow:0 10px 30px rgba(0,0,0,.25);
+    }
+    .sidebar{padding:.95rem;position:sticky;top:76px}
+    .nav-title{color:var(--muted);font-size:.76rem;text-transform:uppercase;letter-spacing:.9px;margin:.4rem 0 .5rem}
+    .nav-links{display:grid;gap:.42rem}
+    .nav-link{
+      border:1px solid transparent;border-radius:10px;padding:.56rem .65rem;
+      color:#dae2ff;text-decoration:none;font-size:.9rem;display:block;
+    }
+    .nav-link:hover{background:rgba(96,165,250,.10);border-color:#4068a8}
+    .nav-link.active{background:rgba(167,139,250,.14);border-color:#5a4a9d}
+    .status{
+      margin-top:1rem;border:1px dashed #425b9e;border-radius:12px;padding:.65rem;
+      font-size:.84rem;color:#becaf0;line-height:1.35;
+    }
+
+    .content{display:grid;gap:1rem}
+    .panel{padding:1rem}
+    .hero{display:grid;grid-template-columns:1.2fr 1fr;gap:.9rem}
+    .hero h1{font-size:1.27rem;margin-bottom:.35rem}
+    .sub{color:var(--muted);line-height:1.45;font-size:.92rem}
+    .kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.62rem;margin-top:.9rem}
+    .kpi{border:1px solid #3a4f8f;background:rgba(12,20,42,.72);border-radius:12px;padding:.66rem}
+    .kpi .label{color:var(--muted);font-size:.77rem;margin-bottom:.2rem}
+    .kpi .value{font-size:1.03rem;font-weight:700}
+
+    .section-title{display:flex;align-items:center;justify-content:space-between;gap:.6rem;margin-bottom:.68rem}
+    .section-title h2{font-size:1rem}
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+    .list{display:grid;gap:.55rem}
+    .item{
+      border:1px solid #364b8a;border-radius:12px;padding:.62rem;
+      background:rgba(12,20,42,.76);
+    }
+    .item-top{display:flex;align-items:center;justify-content:space-between;gap:.65rem;margin-bottom:.3rem}
+    .item-title{font-weight:650;font-size:.93rem}
+    .item-meta{font-size:.8rem;color:var(--muted)}
+    .badge{
+      font-size:.74rem;font-weight:700;padding:.2rem .48rem;border-radius:999px;border:1px solid;white-space:nowrap;
+    }
+    .b-ok{color:#bbf7d0;border-color:#2d7b4a;background:rgba(34,197,94,.15)}
+    .b-warn{color:#fde68a;border-color:#946300;background:rgba(245,158,11,.18)}
+    .b-danger{color:#fecaca;border-color:#7f1d1d;background:rgba(248,113,113,.14)}
+    .b-info{color:#c7d2fe;border-color:#4f46e5;background:rgba(99,102,241,.16)}
+
+    .table-wrap{overflow:auto;border:1px solid #364b8a;border-radius:12px}
+    table{width:100%;border-collapse:collapse;min-width:640px;background:rgba(12,20,42,.72)}
+    th,td{padding:.62rem .68rem;border-bottom:1px solid #2e4179;text-align:left;font-size:.86rem}
+    th{font-size:.78rem;color:#bec9ef;text-transform:uppercase;letter-spacing:.65px;background:rgba(19,31,63,.95)}
+    tr:hover td{background:rgba(96,165,250,.06)}
+
+    .form-grid{display:grid;gap:.6rem;grid-template-columns:1fr 1fr}
+    .full{grid-column:1/-1}
+    label{font-size:.82rem;color:#c9d4f5;display:block;margin-bottom:.3rem}
+    input,select,textarea{
+      width:100%;border:1px solid #3b5496;background:#101a36;color:var(--text);
+      border-radius:10px;padding:.56rem .6rem;font-size:.9rem;
+    }
+    input:focus,select:focus,textarea:focus{
+      outline:none;border-color:var(--focus);box-shadow:0 0 0 2px rgba(56,189,248,.2);
+    }
+    textarea{min-height:96px;resize:vertical}
+    .msg{margin-top:.45rem;min-height:1.2rem;color:var(--muted);font-size:.84rem}
+    .msg.error{color:var(--danger)} .msg.success{color:var(--ok)}
+
+    footer{
+      border-top:1px solid var(--border);color:var(--muted);font-size:.8rem;
+      text-align:center;padding:.9rem 1rem 1.2rem;
+    }
+
+    @media (max-width:1020px){
+      main{grid-template-columns:1fr}
+      .sidebar{position:static;top:auto}
+      .hero,.grid-2{grid-template-columns:1fr}
+      .kpis{grid-template-columns:1fr 1fr}
+    }
+    @media (max-width:620px){
+      .kpis,.form-grid{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="topbar">
+      <div class="brand">
+        <div class="logo" aria-hidden="true">TP</div>
+        <span>Admin & Staff Dashboard</span>
+        <span class="pill" id="role-pill">ADMIN</span>
+      </div>
+      <div class="actions">
+        <button id="btn-refresh">Refresh</button>
+        <button id="btn-logout">Log Out</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <aside class="sidebar">
+      <div class="nav-title">Navigation</div>
+      <nav class="nav-links">
+        <a class="nav-link active" href="#overview">Overview</a>
+        <a class="nav-link" href="#users">User Management</a>
+        <a class="nav-link" href="#operations">Operations Board</a>
+        <a class="nav-link" href="#announcements">Announcements</a>
+        <a class="nav-link" href="#audit">Audit Log</a>
+      </nav>
+      <div class="status" id="session-status">Session status: checking...</div>
+    </aside>
+
+    <section class="content">
+      <article class="panel hero" id="overview">
+        <div>
+          <h1>Production administration center</h1>
+          <p class="sub">
+            Manage access, coordinate operations, publish updates, and monitor activity across volunteer and cast portals.
+          </p>
+          <div class="kpis">
+            <div class="kpi"><div class="label">Active Users</div><div class="value" id="kpi-users">38</div></div>
+            <div class="kpi"><div class="label">Open Tasks</div><div class="value" id="kpi-open">9</div></div>
+            <div class="kpi"><div class="label">Pending Approvals</div><div class="value" id="kpi-approvals">4</div></div>
+            <div class="kpi"><div class="label">Incidents</div><div class="value" id="kpi-incidents">0</div></div>
+          </div>
+        </div>
+        <div>
+          <div class="section-title"><h2>Quick Actions</h2></div>
+          <div class="list">
+            <a class="btn btn-primary" href="#users">Review Role Requests</a>
+            <a class="btn" href="#announcements">Publish Announcement</a>
+            <a class="btn" href="#operations">Open Operations Board</a>
+            <a class="btn" href="#audit">Export Activity Log</a>
+          </div>
+        </div>
+      </article>
+
+      <section class="grid-2">
+        <article class="panel" id="users">
+          <div class="section-title">
+            <h2>User Management</h2>
+            <button id="btn-sync-users">Sync</button>
+          </div>
+          <div class="table-wrap">
+            <table aria-label="Users table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Role</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="users-tbody">
+                <tr>
+                  <td>Alex Rivera</td>
+                  <td>alex@example.com</td>
+                  <td>Cast</td>
+                  <td><span class="badge b-ok">Active</span></td>
+                </tr>
+                <tr>
+                  <td>Jordan Lee</td>
+                  <td>jordan@example.com</td>
+                  <td>Volunteer</td>
+                  <td><span class="badge b-warn">Pending Role Change</span></td>
+                </tr>
+                <tr>
+                  <td>Priya N.</td>
+                  <td>priya@example.com</td>
+                  <td>Admin</td>
+                  <td><span class="badge b-info">Staff</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </article>
+
+        <article class="panel" id="operations">
+          <div class="section-title"><h2>Operations Board</h2></div>
+          <div class="list" id="ops-list">
+            <div class="item">
+              <div class="item-top">
+                <div class="item-title">Front-of-house staffing check</div>
+                <span class="badge b-ok">On Track</span>
+              </div>
+              <div class="item-meta">All Friday stations assigned.</div>
+            </div>
+            <div class="item">
+              <div class="item-top">
+                <div class="item-title">Costume intake backlog</div>
+                <span class="badge b-warn">Attention</span>
+              </div>
+              <div class="item-meta">4 cast members pending measurements.</div>
+            </div>
+            <div class="item">
+              <div class="item-top">
+                <div class="item-title">Ticket scanner battery rotation</div>
+                <span class="badge b-danger">Overdue</span>
+              </div>
+              <div class="item-meta">Complete before next house open.</div>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <section class="grid-2">
+        <article class="panel" id="announcements">
+          <div class="section-title"><h2>Publish Announcement</h2></div>
+          <form id="announce-form" novalidate>
+            <div class="form-grid">
+              <div>
+                <label for="announce-title">Title</label>
+                <input id="announce-title" name="title" required />
+              </div>
+              <div>
+                <label for="announce-audience">Audience</label>
+                <select id="announce-audience" name="audience" required>
+                  <option value="" selected disabled>Select audience</option>
+                  <option value="all">All Users</option>
+                  <option value="cast">Cast Only</option>
+                  <option value="volunteer">Volunteers Only</option>
+                  <option value="staff">Staff Only</option>
+                </select>
+              </div>
+              <div class="full">
+                <label for="announce-body">Message</label>
+                <textarea id="announce-body" name="body" required></textarea>
+              </div>
+            </div>
+            <button class="btn-primary" type="submit">Publish</button>
+            <p class="msg" id="announce-msg" aria-live="polite"></p>
+          </form>
+        </article>
+
+        <article class="panel" id="audit">
+          <div class="section-title">
+            <h2>Recent Audit Log</h2>
+            <button id="btn-export-audit">Export</button>
+          </div>
+          <div class="list" id="audit-list">
+            <div class="item">
+              <div class="item-top">
+                <div class="item-title">Role update approved</div>
+                <span class="badge b-info">10:14 AM</span>
+              </div>
+              <div class="item-meta">Jordan Lee moved from Volunteer → Cast.</div>
+            </div>
+            <div class="item">
+              <div class="item-top">
+                <div class="item-title">Announcement published</div>
+                <span class="badge b-info">Yesterday</span>
+              </div>
+              <div class="item-meta">“Script vCurrent uploaded” sent to cast.</div>
+            </div>
+          </div>
+        </article>
+      </section>
+    </section>
+  </main>
+
+  <footer>
+    © <span id="year"></span> Theater Portal · Admin/Staff
+  </footer>
+
+  <script>
+    const PORTAL_CONFIG = {
+      allowedRoles: ['admin', 'staff', 'manager'],
+      authSessionEndpoint: '/api/auth/session',
+      logoutEndpoint: '/api/auth/logout',
+      announcementsEndpoint: '/api/admin/announcements'
+    };
+
+    const ROLE_REDIRECTS = {
+      volunteer: '/volunteer-portal.html',
+      cast: '/cast-selection-portal.html',
+      admin: '/dashboard.html',
+      staff: '/dashboard.html',
+      manager: '/dashboard.html',
+      default: '/portal-auth.html'
+    };
+
+    const $ = (id) => document.getElementById(id);
+
+    function getStoredSession() {
+      try {
+        const raw = localStorage.getItem('portal_session');
+        return raw ? JSON.parse(raw) : null;
+      } catch (_) { return null; }
+    }
+
+    function clearStoredSession() {
+      try { localStorage.removeItem('portal_session'); } catch (_) {}
+    }
+
+    function routeForRole(role) {
+      const normalized = (role || '').toString().trim().toLowerCase();
+      return ROLE_REDIRECTS[normalized] || ROLE_REDIRECTS.default;
+    }
+
+    function setSessionStatus(text) {
+      $('session-status').textContent = text;
+    }
+
+    async function serverSession() {
+      try {
+        const res = await fetch(PORTAL_CONFIG.authSessionEndpoint, { method: 'GET', credentials: 'include' });
+        if (!res.ok) return null;
+        return res.json();
+      } catch (_) { return null; }
+    }
+
+    function enforceAdminAccess(session) {
+      const role = (session?.role || '').toLowerCase();
+
+      if (!role) {
+        setSessionStatus('No active session found. Redirecting to sign-in...');
+        window.location.assign('/portal-auth.html');
+        return false;
+      }
+
+      if (!PORTAL_CONFIG.allowedRoles.includes(role)) {
+        setSessionStatus(`Role mismatch (${role}). Redirecting to your assigned portal...`);
+        window.location.assign(routeForRole(role));
+        return false;
+      }
+
+      $('role-pill').textContent = role.toUpperCase();
+      setSessionStatus(`Signed in as ${session?.user?.email || role}. Access granted.`);
+      return true;
+    }
+
+    async function initializeSessionGuard() {
+      const local = getStoredSession();
+      if (local && local.role) {
+        if (!enforceAdminAccess(local)) return false;
+      }
+
+      const backend = await serverSession();
+      if (!backend) {
+        if (!local) {
+          setSessionStatus('Session expired or unavailable. Redirecting...');
+          window.location.assign('/portal-auth.html');
+          return false;
+        }
+        return true;
+      }
+
+      try { localStorage.setItem('portal_session', JSON.stringify(backend)); } catch (_) {}
+      return enforceAdminAccess(backend);
+    }
+
+    async function logout() {
+      try {
+        await fetch(PORTAL_CONFIG.logoutEndpoint, { method: 'POST', credentials: 'include' });
+      } catch (_) {
+        // best effort
+      } finally {
+        clearStoredSession();
+        window.location.assign('/portal-auth.html');
+      }
+    }
+
+    function setupAnnouncementForm() {
+      const form = $('announce-form');
+      const msg = $('announce-msg');
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        msg.textContent = 'Publishing...';
+        msg.className = 'msg';
+
+        const payload = {
+          title: $('announce-title').value.trim(),
+          audience: $('announce-audience').value,
+          body: $('announce-body').value.trim()
+        };
+
+        if (!payload.title || !payload.audience || !payload.body) {
+          msg.textContent = 'Please complete title, audience, and message.';
+          msg.className = 'msg error';
+          return;
+        }
+
+        try {
+          const res = await fetch(PORTAL_CONFIG.announcementsEndpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify(payload)
+          });
+
+          if (!res.ok) {
+            const err = await res.json().catch(() => ({}));
+            throw new Error(err.message || 'Unable to publish announcement.');
+          }
+
+          msg.textContent = 'Announcement published.';
+          msg.className = 'msg success';
+          form.reset();
+
+          const audit = $('audit-list');
+          const entry = document.createElement('div');
+          entry.className = 'item';
+          entry.innerHTML = `
+            <div class="item-top">
+              <div class="item-title">Announcement published</div>
+              <span class="badge b-info">Just now</span>
+            </div>
+            <div class="item-meta">${payload.title} (${payload.audience})</div>
+          `;
+          audit.prepend(entry);
+        } catch (err) {
+          msg.textContent = err.message || 'Publish failed.';
+          msg.className = 'msg error';
+        }
+      });
+    }
+
+    function setupActions() {
+      $('btn-logout').addEventListener('click', logout);
+      $('btn-refresh').addEventListener('click', () => window.location.reload());
+
+      $('btn-sync-users').addEventListener('click', () => {
+        const tbody = $('users-tbody');
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>New User</td>
+          <td>new.user@example.com</td>
+          <td>Volunteer</td>
+          <td><span class="badge b-ok">Active</span></td>
+        `;
+        tbody.prepend(row);
+      });
+
+      $('btn-export-audit').addEventListener('click', () => {
+        const blob = new Blob(
+          ['timestamp,event\\n' + new Date().toISOString() + ',Audit export triggered\\n'],
+          { type: 'text/csv;charset=utf-8;' }
+        );
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'audit-log.csv';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+      });
+    }
+
+    function setupSmoothAnchorNav() {
+      document.querySelectorAll('a.nav-link[href^="#"]').forEach((a) => {
+        a.addEventListener('click', (e) => {
+          const id = a.getAttribute('href');
+          const target = document.querySelector(id);
+          if (!target) return;
+          e.preventDefault();
+
+          document.querySelectorAll('.nav-link').forEach((n) => n.classList.remove('active'));
+          a.classList.add('active');
+
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+      });
+    }
+
+    async function init() {
+      $('year').textContent = new Date().getFullYear();
+
+      const allowed = await initializeSessionGuard();
+      if (!allowed) return;
+
+      setupActions();
+      setupAnnouncementForm();
+      setupSmoothAnchorNav();
+    }
+
+    init();
+  </script>
+</body>
+</html>
