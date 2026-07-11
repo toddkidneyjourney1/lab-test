@@ -6,164 +6,238 @@
   <title>Cast Portal | The Laboratory Theater of Florida</title>
   <link rel="stylesheet" href="style.css" />
   <style>
-    .notice { padding: 0.8rem 1rem; border-radius: 6px; margin: 0.75rem 0; font-weight: 600; }
-    .notice.success { background: #2b9a4a; color: #fff; }
-    .notice.error { background: #a33131; color: #fff; }
-    .portal-login {
-      max-width: 440px;
-      margin: 1.5rem auto 2rem;
-      background: var(--card-bg);
-      border: 1px solid #333;
-      border-radius: 10px;
-      padding: 1.25rem;
+    :root {
+      --bg: #0f0f12;
+      --surface: #17181f;
+      --surface-2: #1f212a;
+      --text: #f4f4f6;
+      --muted: #b8bcc8;
+      --accent: #d72638;
+      --accent-hover: #b71f2f;
+      --border: #323644;
+      --shadow: 0 12px 28px rgba(0, 0, 0, 0.28);
     }
-    .portal-login label {
-      display: block;
-      margin-bottom: 0.4rem;
-      font-weight: 700;
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
     }
-    .portal-login select,
-    .portal-login input {
-      display: block;
-      width: 100%;
-      max-width: 100%;
-      padding: 0.75rem 0.85rem;
-      border-radius: 8px;
-      border: 1px solid #444;
-      background: #101010;
-      color: #fff;
-      margin-bottom: 1rem;
-      font-size: 1rem;
+
+    .page-wrap {
+      max-width: 1150px;
+      margin: 0 auto;
+      padding: 2rem 1rem 3rem;
     }
-    .portal-login input {
-      letter-spacing: 0.02em;
+
+    .portal-header {
+      margin-bottom: 1.5rem;
+      text-align: center;
     }
-    .portal-actions {
+
+    .portal-title {
+      margin: 0;
+      font-size: clamp(1.6rem, 2.2vw, 2.3rem);
+      letter-spacing: 0.2px;
+    }
+
+    .portal-subtitle {
+      margin: 0.55rem auto 0;
+      color: var(--muted);
+      max-width: 760px;
+      line-height: 1.45;
+      font-size: 0.98rem;
+    }
+
+    .toolbar {
+      margin-top: 1.25rem;
       display: flex;
-      gap: 0.75rem;
+      gap: 0.6rem;
+      justify-content: center;
       flex-wrap: wrap;
+    }
+
+    .toolbar a {
+      text-decoration: none;
+      color: #fff;
+      background: #3f4557;
+      border: 1px solid #59607a;
+      padding: 0.56rem 0.82rem;
+      border-radius: 9px;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .toolbar a:hover {
+      filter: brightness(1.08);
+    }
+
+    .show-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(235px, 1fr));
+      gap: 0.95rem;
+      margin-top: 1.4rem;
+    }
+
+    .show-card {
+      background: linear-gradient(180deg, var(--surface), var(--surface-2));
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1rem;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+      min-height: 170px;
+    }
+
+    .show-title {
+      margin: 0;
+      font-size: 1.05rem;
+      line-height: 1.25;
+    }
+
+    .show-meta {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.4;
+      min-height: 2.2em;
+    }
+
+    .show-actions {
+      margin-top: auto;
+      display: flex;
+      gap: 0.55rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-login {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      background: var(--accent);
+      color: #fff;
+      font-weight: 700;
+      border-radius: 9px;
+      padding: 0.6rem 0.9rem;
+      border: 1px solid #8e1a26;
+      min-width: 108px;
+    }
+
+    .btn-login:hover {
+      background: var(--accent-hover);
+    }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      background: transparent;
+      color: #d5d9e6;
+      border: 1px solid #4f566f;
+      border-radius: 9px;
+      padding: 0.56rem 0.82rem;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255,255,255,0.05);
+    }
+
+    .footer-note {
+      margin-top: 1.25rem;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.87rem;
     }
   </style>
 </head>
 <body>
-  <input type="checkbox" id="nav-toggle" class="nav-toggle" />
-  <label for="nav-toggle" class="nav-toggle-label"><span></span></label>
-  <nav class="hamburger-menu">
-    <a href="about.html">Origin Story</a>
-    <a href="archive25.html">Past Experiments</a>
-    <a href="index.html">Back to the Slab</a>
-    <a href="plan.html">Lab Protocols</a>
-    <a href="portal-landing.html">Portal Landing</a>
-    <a href="support.html">Fuel the Innovation</a>
-    <a href="sponsors.html">Core Collaborators</a>
-  </nav>
+  <main class="page-wrap">
+    <header class="portal-header">
+      <h1 class="portal-title">Cast Portal</h1>
+      <p class="portal-subtitle">
+        Select your show card and click <strong>Login</strong> to access cast resources, rehearsal details, and production updates.
+      </p>
 
-  <header>
-    <div class="logo">THE <span>LAB</span><p class="tagline">Intentionally innovative live theater</p></div>
-  </header>
+      <div class="toolbar">
+        <a href="index.html">Back to Home</a>
+        <a href="portal-auth.html">General Portal Login</a>
+        <a href="support.html">Need Help?</a>
+      </div>
+    </header>
 
-  <main id="cast-content">
-    <h1>Cast Portal</h1>
-    <p>Select your show and enter its password.</p>
-    <div id="message-container"></div>
-
-    <section class="portal-login">
-      <h2 style="margin-top:0;">Cast Login</h2>
-      <form id="cast-login-form">
-        <label for="show-select">Show</label>
-        <select id="show-select" required>
-          <option value="">Choose your show</option>
-        </select>
-
-        <label for="show-password">Password</label>
-        <input id="show-password" type="password" autocomplete="current-password" required />
-
-        <div class="portal-actions">
-          <button type="submit" class="btn primary">Enter Portal</button>
-          <button type="button" class="btn warn" id="clear-access-btn">Clear Saved Access</button>
+    <section class="show-grid" aria-label="Cast show login cards">
+      <article class="show-card">
+        <h2 class="show-title">BARE</h2>
+        <p class="show-meta">Cast access for BARE production materials.</p>
+        <div class="show-actions">
+          <a class="btn-login" href="cast-bare.html">Login</a>
+          <a class="btn-secondary" href="cast-bare.html">Open Page</a>
         </div>
-      </form>
+      </article>
+
+      <article class="show-card">
+        <h2 class="show-title">FENCES</h2>
+        <p class="show-meta">Cast access for FENCES rehearsal and show documents.</p>
+        <div class="show-actions">
+          <a class="btn-login" href="cast-fences.html">Login</a>
+          <a class="btn-secondary" href="cast-fences.html">Open Page</a>
+        </div>
+      </article>
+
+      <article class="show-card">
+        <h2 class="show-title">GOD OF CARNAGE</h2>
+        <p class="show-meta">Cast access for GOD OF CARNAGE production updates.</p>
+        <div class="show-actions">
+          <a class="btn-login" href="cast-godofcarnage.html">Login</a>
+          <a class="btn-secondary" href="cast-godofcarnage.html">Open Page</a>
+        </div>
+      </article>
+
+      <article class="show-card">
+        <h2 class="show-title">GODOT</h2>
+        <p class="show-meta">Cast access for GODOT rehearsal and communication hub.</p>
+        <div class="show-actions">
+          <a class="btn-login" href="cast-godot.html">Login</a>
+          <a class="btn-secondary" href="cast-godot.html">Open Page</a>
+        </div>
+      </article>
+
+      <article class="show-card">
+        <h2 class="show-title">MIDSUMMER</h2>
+        <p class="show-meta">Cast access for MIDSUMMER schedules and resources.</p>
+        <div class="show-actions">
+          <a class="btn-login" href="cast-midsummer.html">Login</a>
+          <a class="btn-secondary" href="cast-midsummer.html">Open Page</a>
+        </div>
+      </article>
+
+      <article class="show-card">
+        <h2 class="show-title">PILLOWMAN</h2>
+        <p class="show-meta">Cast access for PILLOWMAN call sheets and notes.</p>
+        <div class="show-actions">
+          <a class="btn-login" href="cast-pillowman.html">Login</a>
+          <a class="btn-secondary" href="cast-pillowman.html">Open Page</a>
+        </div>
+      </article>
+
+      <article class="show-card">
+        <h2 class="show-title">RIVALS</h2>
+        <p class="show-meta">Cast access for RIVALS production and rehearsal info.</p>
+        <div class="show-actions">
+          <a class="btn-login" href="cast-rivals.html">Login</a>
+          <a class="btn-secondary" href="cast-rivals.html">Open Page</a>
+        </div>
+      </article>
     </section>
+
+    <p class="footer-note">If your show is missing, contact production staff for access.</p>
   </main>
-
-  <script>
-    const SHOWS = [
-      { title: "Fences", href: "cast-fences.html", password: "Legacy" },
-      { title: "A Midsummer Night's Dream", href: "cast-midsummer.html", password: "Fantasy" },
-      { title: "Bare", href: "cast-bare.html", password: "Identity" },
-      { title: "God of Carnage", href: "cast-godofcarnage.html", password: "Conflict" },
-      { title: "The Rivals", href: "cast-rivals.html", password: "Romance" },
-      { title: "The Pillowman", href: "cast-pillowman.html", password: "Darkness" },
-      { title: "Waiting for Godot", href: "cast-godot.html", password: "Absurdity" }
-    ];
-
-    function showMessage(text, type = "error") {
-      const container = document.getElementById("message-container");
-      container.innerHTML = `<div class="notice ${type}">${text}</div>`;
-    }
-
-    function clearMessage() {
-      document.getElementById("message-container").innerHTML = "";
-    }
-
-    function getSessionKey(showTitle) {
-      return `cast_portal_access_${showTitle}`;
-    }
-
-    function grantShowAccess(showTitle) {
-      sessionStorage.setItem(getSessionKey(showTitle), "granted");
-    }
-
-    function clearAllAccess() {
-      SHOWS.forEach((show) => sessionStorage.removeItem(getSessionKey(show.title)));
-    }
-
-    function populateShowSelect() {
-      const select = document.getElementById("show-select");
-      SHOWS.forEach((show) => {
-        const option = document.createElement("option");
-        option.value = show.title;
-        option.textContent = show.title;
-        select.appendChild(option);
-      });
-    }
-
-    function handleLogin(event) {
-      event.preventDefault();
-      clearMessage();
-
-      const showTitle = document.getElementById("show-select").value;
-      const password = document.getElementById("show-password").value;
-      const show = SHOWS.find((item) => item.title === showTitle);
-
-      if (!show) {
-        showMessage("Please choose your show.");
-        return;
-      }
-
-      if ((password || "").trim() !== show.password) {
-        showMessage("Incorrect password.");
-        return;
-      }
-
-      grantShowAccess(show.title);
-      showMessage(`${show.title} unlocked for this session. Redirecting...`, "success");
-      document.getElementById("show-password").value = "";
-      window.location.href = show.href;
-    }
-
-    function handleClearAccess() {
-      clearAllAccess();
-      clearMessage();
-      document.getElementById("cast-login-form").reset();
-      showMessage("Saved cast access cleared for this session.", "success");
-    }
-
-    window.addEventListener("load", () => {
-      populateShowSelect();
-      document.getElementById("cast-login-form").addEventListener("submit", handleLogin);
-      document.getElementById("clear-access-btn").addEventListener("click", handleClearAccess);
-    });
-  </script>
 </body>
 </html>
