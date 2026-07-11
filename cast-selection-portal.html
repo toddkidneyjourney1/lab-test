@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cast Selection Portal</title>
+  <style>
+    :root {
+      --bg: #0b1020;
+      --panel: #111a33;
+      --panel-2: #18254a;
+      --text: #e8edff;
+      --muted: #a8b3d6;
+      --accent: #67e8f9;
+      --accent-2: #a78bfa;
+      --ok: #4ade80;
+      --warn: #f59e0b;
+      --danger: #f87171;
+      --border: #2a3764;
+      --focus: #38bdf8;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; }
+
+    body {
+      min-height: 100vh;
+      color: var(--text);
+      background:
+        radial-gradient(1200px 500px at 10% -20%, #1d2f64 0%, transparent 60%),
+        radial-gradient(900px 400px at 110% 10%, #2a1f56 0%, transparent 55%),
+        var(--bg);
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+    }
+
+    header {
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(8px);
+      background: rgba(7, 12, 27, 0.75);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+
+    .topbar {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0.9rem 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.8rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+    }
+
+    .logo {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #082f49;
+      font-weight: 800;
+      font-size: 0.85rem;
+    }
+
+    .role-pill {
+      font-size: 0.78rem;
+      color: #072a32;
+      background: linear-gradient(135deg, #a5f3fc, #c4b5fd);
+      border-radius: 999px;
+      padding: 0.24rem 0.6rem;
+      font-weight: 700;
+    }
+
+    .actions { display: flex; align-items: center; gap: 0.5rem; }
+
+    button, .btn {
+      border: 1px solid var(--border);
+      background: #101a36;
+      color: var(--text);
+      border-radius: 10px;
+      padding: 0.52rem 0.75rem;
+      font-size: 0.88rem;
+      cursor: pointer;
+      text-decoration: none;
+      transition: 0.2s ease;
+    }
+    button:hover, .btn:hover { border-color: #4660a4; background: #132047; }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #22d3ee, #8b5cf6);
+      color: #08142d;
+      border: none;
+      font-weight: 700;
+    }
+    .btn-primary:hover { filter: brightness(1.06); }
+
+    main {
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 1rem;
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 1rem;
+      align-items: start;
+    }
+
+    .sidebar, .panel {
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: linear-gradient(180deg, rgba(24,37,74,0.8), rgba(13,21,45,0.92));
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    }
+
+    .sidebar { padding: 0.9rem; position: sticky; top: 76px; }
+
+    .nav-title {
+      color: var(--muted);
+      font-size: 0.76rem;
+      text-transform: uppercase;
+      letter-spacing: 0.9px;
+      margin: 0.4rem 0 0.5rem;
+    }
+
+    .nav-links { display: grid; gap: 0.42rem; }
+
+    .nav-link {
+      border: 1px solid transparent;
+      border-radius: 10px;
+      padding: 0.56rem 0.65rem;
+      color: #d5ddff;
+      text-decoration: none;
+      font-size: 0.9rem;
+      display: block;
+    }
+
+    .nav-link:hover { background: rgba(139, 92, 246, 0.12); border-color: #4c3f7c; }
+    .nav-link.active { background: rgba(103, 232, 249, 0.14); border-color: #25607a; }
+
+    .status {
+      margin-top: 1rem;
+      border: 1px dashed #345293;
+      border-radius: 12px;
+      padding: 0.65rem;
+      font-size: 0.84rem;
+      color: #b8c7f3;
+      line-height: 1.35;
+    }
+
+    .content {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: 1fr;
+    }
+
+    .panel { padding: 0.95rem; }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 0.85rem;
+    }
+
+    .hero h1 { font-size: 1.25rem; margin-bottom: 0.35rem; }
+    .sub { color: var(--muted); line-height: 1.45; font-size: 0.92rem; }
+
+    .kpis {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.6rem;
+      margin-top: 0.9rem;
+    }
+
+    .kpi {
+      border: 1px solid #334a86;
+      background: rgba(9, 17, 38, 0.72);
+      border-radius: 12px;
+      padding: 0.66rem;
+    }
+
+    .kpi .label { color: var(--muted); font-size: 0.77rem; margin-bottom: 0.2rem; }
+    .kpi .value { font-size: 1.03rem; font-weight: 700; }
+
+    .quick-actions {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 0.55rem;
+      align-content: start;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.6rem;
+      margin-bottom: 0.68rem;
+    }
+    .section-title h2 { font-size: 1rem; }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .list { display: grid; gap: 0.55rem; }
+
+    .item {
+      border: 1px solid #30467f;
+      border-radius: 12px;
+      padding: 0.62rem;
+      background: rgba(13, 23, 50, 0.75);
+    }
+
+    .item-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.65rem;
+      margin-bottom: 0.3rem;
+    }
+
+    .item-title { font-weight: 650; font-size: 0.93rem; }
+    .item-meta { font-size: 0.8rem; color: var(--muted); }
+
+    .badge {
+      font-size: 0.74rem;
+      font-weight: 700;
+      padding: 0.2rem 0.48rem;
+      border-radius: 999px;
+      border: 1px solid;
+      white-space: nowrap;
+    }
+
+    .b-ok { color: #bbf7d0; border-color: #2d7b4a; background: rgba(34,197,94,0.15); }
+    .b-warn { color: #fde68a; border-color: #946300; background: rgba(245,158,11,0.18); }
+
+    .download-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+    }
+
+    .download {
+      border: 1px solid #35528f;
+      border-radius: 10px;
+      background: rgba(17,27,58,0.8);
+      padding: 0.44rem 0.6rem;
+      font-size: 0.84rem;
+      color: #d9e2ff;
+      text-decoration: none;
+    }
+
+    .download:hover { border-color: #4e73c6; background: rgba(25,39,78,0.95); }
+
+    .form-grid {
+      display: grid;
+      gap: 0.6rem;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    label { font-size: 0.82rem; color: #c4cff6; display: block; margin-bottom: 0.3rem; }
+    input, select, textarea {
+      width: 100%;
+      border: 1px solid #35508d;
+      background: #0d1632;
+      color: var(--text);
+      border-radius: 10px;
+      padding: 0.56rem 0.6rem;
+      font-size: 0.9rem;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--focus);
+      box-shadow: 0 0 0 2px rgba(56,189,248,0.2);
+    }
+
+    textarea { min-height: 96px; resize: vertical; }
+
+    .full { grid-column: 1 / -1; }
+
+    .msg {
+      margin-top: 0.45rem;
+      min-height: 1.2rem;
+      color: var(--muted);
+      font-size: 0.84rem;
+    }
+    .msg.error { color: var(--danger); }
+    .msg.success { color: var(--ok); }
+
+    footer {
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.8rem;
+      text-align: center;
+      padding: 0.9rem 1rem 1.2rem;
+    }
+
+    @media (max-width: 980px) {
+      main { grid-template-columns: 1fr; }
+      .sidebar { position: static; top: auto; }
+      .hero { grid-template-columns: 1fr; }
+      .kpis { grid-template-columns: 1fr 1fr; }
+      .grid-2 { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 620px) {
+      .kpis { grid-template-columns: 1fr; }
+      .quick-actions { grid-template-columns: 1fr; }
+      .form-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="topbar">
+      <div class="brand">
+        <div class="logo" aria-hidden="true">TP</div>
+        <span>Cast Selection Portal</span>
+        <span class="role-pill" id="role-pill">CAST MEMBER</span>
+      </div>
+      <div class="actions">
+        <button id="btn-refresh">Refresh</button>
+        <button id="btn-logout">Log Out</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <aside class="sidebar">
+      <div class="nav-title">Navigation</div>
+      <nav class="nav-links">
+        <a class="nav-link active" href="#dashboard">Dashboard</a>
+        <a class="nav-link" href="#rehearsals">Rehearsal Schedule</a>
+        <a class="nav-link" href="#scripts">Scripts & Music</a>
+        <a class="nav-link" href="#announcements">Announcements</a>
+        <a class="nav-link" href="#measurements">Costume Measurements</a>
+        <a class="nav-link" href="#blocking">Blocking Notes</a>
+      </nav>
+
+      <div class="status" id="session-status">
+        Session status: checking...
+      </div>
+    </aside>
+
+    <section class="content">
+      <article class="panel hero" id="dashboard">
+        <div>
+          <h1>Welcome to your production workspace</h1>
+          <p class="sub">
+            Access rehearsal calls, script downloads, show updates, and role resources in one place.
+            This page is role-gated for <strong>cast members</strong>.
+          </p>
+
+          <div class="kpis" aria-label="Key production stats">
+            <div class="kpi">
+              <div class="label">Next Rehearsal</div>
+              <div class="value" id="kpi-next-rehearsal">Tue 6:30 PM</div>
+            </div>
+            <div class="kpi">
+              <div class="label">Scenes Assigned</div>
+              <div class="value" id="kpi-scenes">5 Scenes</div>
+            </div>
+            <div class="kpi">
+              <div class="label">Unread Updates</div>
+              <div class="value" id="kpi-updates">2</div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="section-title"><h2>Quick Actions</h2></div>
+          <div class="quick-actions">
+            <a class="btn btn-primary" href="#scripts">Download Latest Script</a>
+            <a class="btn" href="#measurements">Submit Measurements</a>
+            <a class="btn" href="#blocking">View Blocking Notes</a>
+            <a class="btn" href="#announcements">Read Announcements</a>
+          </div>
+        </div>
+      </article>
+
+      <section class="grid-2">
+        <article class="panel" id="rehearsals">
+          <div class="section-title">
+            <h2>Rehearsal Schedule</h2>
+            <button id="btn-sync-rehearsals">Sync</button>
+          </div>
+          <div class="list" id="rehearsal-list">
+            <div class="item">
+              <div class="item-top">
+                <div class="item-title">Act I Run-Through</div>
+                <span class="badge b-ok">Confirmed</span>
+              </div>
+              <div class="item-meta">Tuesday • 6:30 PM - 9:00 PM • Main Stage</div>
+            </div>
+            <div class="item">
+              <div class="item-top">
+                <div class="item-title">Dance & Movement</div>
+                <span class="badge b-warn">Pending</span>
+              </div>
+              <div class="item-meta">Thursday • 7:00 PM - 8:30 PM • Studio B</div>
+            </div>
+          </div>
+        </article>
+
+        <article class="panel" id="scripts">
+          <div class="section-title">
+            <h2>Scripts & Downloads</h2>
+          </div>
+          <div class="download-row">
+            <a class="download" href="/files/script-latest.pdf">Script vCurrent (PDF)</a>
+            <a class="download" href="/files/music-cues.zip">Music Cues (ZIP)</a>
+            <a class="download" href="/files/scene-breakdown.pdf">Scene Breakdown</a>
+            <a class="download" href="/files/cast-call-sheet.pdf">Cast Call Sheet</a>
+          </div>
+        </article>
+      </section>
+
+      <section class="grid-2">
+        <article class="panel" id="announcements">
+          <div class="section-title">
+            <h2>Show Announcements</h2>
+          </div>
+          <div class="list" id="announcement-list">
+            <div class="item">
+              <div class="item-top">
+                <div class="item-title">Costume fitting window opened</div>
+                <span class="badge b-ok">New</span>
+              </div>
+              <div class="item-meta">Please submit measurements by Friday 5:00 PM.</div>
+            </div>
+            <div class="item">
+              <div class="item-top">
+                <div class="item-title">Script update posted</div>
+                <span class="badge b-ok">Info</span>
+              </div>
+              <div class="item-meta">Re-download Script vCurrent before next rehearsal.</div>
+            </div>
+          </div>
+        </article>
+
+        <article class="panel" id="measurements">
+          <div class="section-title">
+            <h2>Costume Measurements</h2>
+          </div>
+          <form id="measurement-form" novalidate>
+            <div class="form-grid">
+              <div>
+                <label for="height">Height</label>
+                <input id="height" name="height" placeholder="e.g., 5'9&quot; or 175 cm" required />
+              </div>
+              <div>
+                <label for="chest">Chest</label>
+                <input id="chest" name="chest" placeholder="inches or cm" required />
+              </div>
+              <div>
+                <label for="waist">Waist</label>
+                <input id="waist" name="waist" required />
+              </div>
+              <div>
+                <label for="inseam">Inseam</label>
+                <input id="inseam" name="inseam" required />
+              </div>
+              <div class="full">
+                <label for="notes">Notes (optional)</label>
+                <textarea id="notes" name="notes" placeholder="Alterations, fit concerns, allergies, etc."></textarea>
+              </div>
+            </div>
+            <button class="btn-primary" type="submit">Submit Measurements</button>
+            <p class="msg" id="measurement-msg" aria-live="polite"></p>
+          </form>
+        </article>
+      </section>
+
+      <article class="panel" id="blocking">
+        <div class="section-title">
+          <h2>Blocking & Character Notes</h2>
+        </div>
+        <div class="list" id="blocking-list">
+          <div class="item">
+            <div class="item-top">
+              <div class="item-title">Scene 2 Entrance</div>
+              <span class="badge b-ok">Updated</span>
+            </div>
+            <div class="item-meta">Enter from Stage Left after cue line “The curtain rises.”</div>
+          </div>
+          <div class="item">
+            <div class="item-top">
+              <div class="item-title">Finale Positioning</div>
+              <span class="badge b-warn">Review</span>
+            </div>
+            <div class="item-meta">Check spacing on center mark during Thursday rehearsal.</div>
+          </div>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <footer>
+    © <span id="year"></span> Theater Portal · Cast Selection
+  </footer>
+
+  <script>
+    // ===== Config =====
+    const PORTAL_CONFIG = {
+      requiredRole: 'cast',
+      authSessionEndpoint: '/api/auth/session',
+      logoutEndpoint: '/api/auth/logout',
+      measurementsEndpoint: '/api/cast/measurements'
+    };
+
+    const ROLE_REDIRECTS = {
+      volunteer: '/volunteer-portal.html',
+      cast: '/cast-selection-portal.html',
+      admin: '/dashboard.html',
+      default: '/portal-auth.html'
+    };
+
+    // ===== Utilities =====
+    const $ = (id) => document.getElementById(id);
+
+    function getStoredSession() {
+      try {
+        const raw = localStorage.getItem('portal_session');
+        return raw ? JSON.parse(raw) : null;
+      } catch (_) {
+        return null;
+      }
+    }
+
+    function clearStoredSession() {
+      try {
+        localStorage.removeItem('portal_session');
+      } catch (_) {}
+    }
+
+    function routeForRole(role) {
+      const normalized = (role || '').toString().trim().toLowerCase();
+      return ROLE_REDIRECTS[normalized] || ROLE_REDIRECTS.default;
+    }
+
+    function setSessionStatus(text) {
+      $('session-status').textContent = text;
+    }
+
+    async function serverSession() {
+      try {
+        const res = await fetch(PORTAL_CONFIG.authSessionEndpoint, {
+          method: 'GET',
+          credentials: 'include'
+        });
+        if (!res.ok) return null;
+        return res.json();
+      } catch (_) {
+        return null;
+      }
+    }
+
+    function enforceCastRole(session) {
+      const role = (session?.role || '').toLowerCase();
+
+      if (!role) {
+        setSessionStatus('No active session found. Redirecting to sign-in...');
+        window.location.assign('/portal-auth.html');
+        return false;
+      }
+
+      if (role !== PORTAL_CONFIG.requiredRole) {
+        setSessionStatus(`Role mismatch (${role}). Redirecting to your assigned portal...`);
+        window.location.assign(routeForRole(role));
+        return false;
+      }
+
+      $('role-pill').textContent = role.toUpperCase() + ' MEMBER';
+      setSessionStatus(`Signed in as ${session?.user?.email || 'cast member'}. Access granted.`);
+      return true;
+    }
+
+    async function initializeSessionGuard() {
+      // First: local fast path
+      const local = getStoredSession();
+      if (local && local.role) {
+        if (!enforceCastRole(local)) return false;
+      }
+
+      // Then: backend truth check
+      const backend = await serverSession();
+      if (!backend) {
+        if (!local) {
+          setSessionStatus('Session expired or unavailable. Redirecting...');
+          window.location.assign('/portal-auth.html');
+          return false;
+        }
+        return true; // local fallback if backend check unavailable
+      }
+
+      // Sync local copy
+      try { localStorage.setItem('portal_session', JSON.stringify(backend)); } catch (_) {}
+      return enforceCastRole(backend);
+    }
+
+    async function logout() {
+      try {
+        await fetch(PORTAL_CONFIG.logoutEndpoint, {
+          method: 'POST',
+          credentials: 'include'
+        });
+      } catch (_) {
+        // best effort
+      } finally {
+        clearStoredSession();
+        window.location.assign('/portal-auth.html');
+      }
+    }
+
+    function setupMeasurementForm() {
+      const form = $('measurement-form');
+      const msg = $('measurement-msg');
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        msg.textContent = 'Submitting...';
+        msg.className = 'msg';
+
+        const payload = {
+          height: $('height').value.trim(),
+          chest: $('chest').value.trim(),
+          waist: $('waist').value.trim(),
+          inseam: $('inseam').value.trim(),
+          notes: $('notes').value.trim()
+        };
+
+        if (!payload.height || !payload.chest || !payload.waist || !payload.inseam) {
+          msg.textContent = 'Please complete all required measurement fields.';
+          msg.className = 'msg error';
+          return;
+        }
+
+        try {
+          const res = await fetch(PORTAL_CONFIG.measurementsEndpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify(payload)
+          });
+
+          if (!res.ok) {
+            const err = await res.json().catch(() => ({}));
+            throw new Error(err.message || 'Unable to save measurements.');
+          }
+
+          msg.textContent = 'Measurements submitted successfully.';
+          msg.className = 'msg success';
+          form.reset();
+        } catch (err) {
+          msg.textContent = err.message || 'Submission failed.';
+          msg.className = 'msg error';
+        }
+      });
+    }
+
+    function setupActions() {
+      $('btn-logout').addEventListener('click', logout);
+      $('btn-refresh').addEventListener('click', () => window.location.reload());
+      $('btn-sync-rehearsals').addEventListener('click', () => {
+        // Placeholder action for future backend scheduling sync
+        const list = $('rehearsal-list');
+        const note = document.createElement('div');
+        note.className = 'item';
+        note.innerHTML = `
+          <div class="item-top">
+            <div class="item-title">Schedule synced</div>
+            <span class="badge b-ok">Just now</span>
+          </div>
+          <div class="item-meta">Rehearsal data refreshed from production calendar.</div>
+        `;
+        list.prepend(note);
+      });
+    }
+
+    function setupSmoothAnchorNav() {
+      document.querySelectorAll('a.nav-link[href^="#"]').forEach((a) => {
+        a.addEventListener('click', (e) => {
+          const id = a.getAttribute('href');
+          const target = document.querySelector(id);
+          if (!target) return;
+          e.preventDefault();
+
+          document.querySelectorAll('.nav-link').forEach((n) => n.classList.remove('active'));
+          a.classList.add('active');
+
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+      });
+    }
+
+    async function init() {
+      $('year').textContent = new Date().getFullYear();
+
+      const allowed = await initializeSessionGuard();
+      if (!allowed) return;
+
+      setupActions();
+      setupMeasurementForm();
+      setupSmoothAnchorNav();
+    }
+
+    init();
+  </script>
+</body>
+</html>
