@@ -132,6 +132,7 @@
     .msg{margin-top:.45rem;min-height:1.2rem;color:var(--muted);font-size:.84rem}
     .msg.error{color:var(--danger)} .msg.success{color:var(--ok)}
     .mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+    .small{font-size:.8rem;color:var(--muted)}
 
     footer{
       border-top:1px solid var(--border);color:var(--muted);font-size:.8rem;
@@ -205,7 +206,7 @@
             <a class="btn" href="#calendar">Edit Calendar</a>
             <a class="btn" href="#ticker">Edit Ticker</a>
             <a class="btn" href="#callsheet">Edit Call Sheet</a>
-            <a class="btn" id="rehearsal-report-link" href="/rehearsal-report.html">Open Rehearsal Report</a>
+            <a class="btn" id="rehearsal-report-link" href="./rehearsal-report.html">Open Rehearsal Report</a>
           </div>
         </div>
       </article>
@@ -385,7 +386,7 @@
               </div>
               <div class="item-meta">Open and manage rehearsal reports for the selected show.</div>
               <div style="margin-top:.5rem;">
-                <a id="rehearsal-report-link-2" class="btn btn-primary" href="/rehearsal-report.html">Go to Rehearsal Report</a>
+                <a id="rehearsal-report-link-2" class="btn btn-primary" href="./rehearsal-report.html">Go to Rehearsal Report</a>
               </div>
             </div>
 
@@ -395,6 +396,17 @@
                 <span class="badge b-info">Context</span>
               </div>
               <div class="item-meta mono" id="show-key">show: unknown</div>
+            </div>
+
+            <div class="item">
+              <div class="item-top">
+                <div class="item-title">Cast Pages in Repo</div>
+                <span class="badge b-info">Detected</span>
+              </div>
+              <div class="item-meta small">
+                cast-bare.html · cast-fences.html · cast-godofcarnage.html · cast-godot.html · cast-midsummer.html · cast-pillowman.html · cast-rivals.html
+              </div>
+              <div id="cast-page-links" style="margin-top:.55rem;display:grid;gap:.35rem;"></div>
             </div>
           </div>
         </article>
@@ -409,47 +421,44 @@
   <script>
     const PORTAL_CONFIG = {
       allowedRoles: ['admin', 'staff', 'manager'],
-      authSessionEndpoint: '/api/auth/session',
-      logoutEndpoint: '/api/auth/logout',
-      rehearsalReportBaseUrl: '/rehearsal-report.html'
+      authSessionEndpoint: './api/auth/session',
+      logoutEndpoint: './api/auth/logout',
+      rehearsalReportBaseUrl: './rehearsal-report.html'
     };
 
     const ROLE_REDIRECTS = {
-      volunteer: '/volunteer-portal.html',
-      cast: '/cast-selection-portal.html',
-      admin: '/dashboard.html',
-      staff: '/dashboard.html',
-      manager: '/dashboard.html',
-      default: '/portal-auth.html'
+      volunteer: './volunteer-portal.html',
+      cast: './cast-selection-portal.html',
+      admin: './dashboard.html',
+      staff: './dashboard.html',
+      manager: './dashboard.html',
+      default: './portal-auth.html'
     };
 
-    const STORAGE_KEY = 'show_admin_dashboard_data_v1';
+    const STORAGE_KEY = 'show_admin_dashboard_data_v2';
     const SESSION_KEY = 'portal_session';
 
-    const $ = (id) => document.getElementById(id);
+    const CAST_PAGE_FILES = [
+      'cast-bare.html',
+      'cast-fences.html',
+      'cast-godofcarnage.html',
+      'cast-godot.html',
+      'cast-midsummer.html',
+      'cast-pillowman.html',
+      'cast-rivals.html'
+    ];
 
-    const DEFAULT_DATA = {
-      selectedShowId: 'show-1',
-      shows: [
-        {
-          id: 'show-1',
-          name: 'Spring Musical',
-          cast: [
-            { id: cryptoRandom(), name: 'Alex Rivera', role: 'Lead', notes: 'Dance captain' }
-          ],
-          contacts: [
-            { id: cryptoRandom(), name: 'Jordan Lee', type: 'staff', email: 'jordan@example.com', phone: '(555) 111-2222' }
-          ],
-          calendar: [
-            { id: cryptoRandom(), date: todayISO(), time: '18:00', title: 'Blocking Rehearsal', notes: 'Act 1' }
-          ],
-          ticker: 'Welcome to Spring Musical production week.',
-          callsheet: [
-            { id: cryptoRandom(), dept: 'Stage Management', callTime: '17:00', task: 'Preset props and spike checks.' }
-          ]
-        }
-      ]
-    };
+    const INITIAL_SHOWS = [
+      { id: 'bare', name: 'Bare', castPage: './cast-bare.html' },
+      { id: 'fences', name: 'Fences', castPage: './cast-fences.html' },
+      { id: 'godofcarnage', name: 'God of Carnage', castPage: './cast-godofcarnage.html' },
+      { id: 'godot', name: 'Godot', castPage: './cast-godot.html' },
+      { id: 'midsummer', name: 'Midsummer', castPage: './cast-midsummer.html' },
+      { id: 'pillowman', name: 'Pillowman', castPage: './cast-pillowman.html' },
+      { id: 'rivals', name: 'Rivals', castPage: './cast-rivals.html' }
+    ];
+
+    const $ = (id) => document.getElementById(id);
 
     function cryptoRandom() {
       if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
@@ -460,31 +469,75 @@
       const d = new Date();
       const mm = String(d.getMonth() + 1).padStart(2, '0');
       const dd = String(d.getDate()).padStart(2, '0');
-      return `${d.getFullYear()}-${mm}-${dd}`;
+      return d.getFullYear() + '-' + mm + '-' + dd;
+    }
+
+    function createDefaultShow(seed) {
+      return {
+        id: seed.id,
+        name: seed.name,
+        castPage: seed.castPage,
+        cast: [],
+        contacts: [],
+        calendar: [
+          { id: cryptoRandom(), date: todayISO(), time: '18:00', title: 'Rehearsal', notes: seed.name + ' evening rehearsal' }
+        ],
+        ticker: 'Updates for ' + seed.name,
+        callsheet: []
+      };
+    }
+
+    function createDefaultStore() {
+      return {
+        selectedShowId: INITIAL_SHOWS[0].id,
+        shows: INITIAL_SHOWS.map(createDefaultShow)
+      };
+    }
+
+    function ensureStructure(store) {
+      if (!store || !Array.isArray(store.shows)) return createDefaultStore();
+
+      const byId = new Map(store.shows.map(s => [s.id, s]));
+      INITIAL_SHOWS.forEach(seed => {
+        if (!byId.has(seed.id)) {
+          store.shows.push(createDefaultShow(seed));
+        } else {
+          const existing = byId.get(seed.id);
+          existing.name = existing.name || seed.name;
+          existing.castPage = existing.castPage || seed.castPage;
+          existing.cast = Array.isArray(existing.cast) ? existing.cast : [];
+          existing.contacts = Array.isArray(existing.contacts) ? existing.contacts : [];
+          existing.calendar = Array.isArray(existing.calendar) ? existing.calendar : [];
+          existing.callsheet = Array.isArray(existing.callsheet) ? existing.callsheet : [];
+          existing.ticker = typeof existing.ticker === 'string' ? existing.ticker : '';
+        }
+      });
+
+      if (!store.selectedShowId || !store.shows.find(s => s.id === store.selectedShowId)) {
+        store.selectedShowId = store.shows[0].id;
+      }
+      return store;
     }
 
     function loadStore() {
       try {
         const raw = localStorage.getItem(STORAGE_KEY);
         if (!raw) {
-          saveStore(DEFAULT_DATA);
-          return structuredCloneSafe(DEFAULT_DATA);
+          const base = createDefaultStore();
+          saveStore(base);
+          return base;
         }
         const parsed = JSON.parse(raw);
-        if (!parsed?.shows?.length) return structuredCloneSafe(DEFAULT_DATA);
-        if (!parsed.selectedShowId) parsed.selectedShowId = parsed.shows[0].id;
-        return parsed;
+        const normalized = ensureStructure(parsed);
+        saveStore(normalized);
+        return normalized;
       } catch (_) {
-        return structuredCloneSafe(DEFAULT_DATA);
+        return createDefaultStore();
       }
     }
 
     function saveStore(store) {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(store));
-    }
-
-    function structuredCloneSafe(obj) {
-      return JSON.parse(JSON.stringify(obj));
     }
 
     function getCurrentStore() {
@@ -532,22 +585,23 @@
     }
 
     function enforceAdminAccess(session) {
-      const role = (session?.role || '').toLowerCase();
+      const role = (session && session.role ? session.role : '').toLowerCase();
 
       if (!role) {
         setSessionStatus('No active session found. Redirecting to sign-in...');
-        window.location.assign('/portal-auth.html');
+        window.location.assign('./portal-auth.html');
         return false;
       }
 
       if (!PORTAL_CONFIG.allowedRoles.includes(role)) {
-        setSessionStatus(`Role mismatch (${role}). Redirecting to your assigned portal...`);
+        setSessionStatus('Role mismatch (' + role + '). Redirecting to your assigned portal...');
         window.location.assign(routeForRole(role));
         return false;
       }
 
       $('role-pill').textContent = role.toUpperCase();
-      setSessionStatus(`Signed in as ${session?.user?.email || role}. Access granted.`);
+      const email = session && session.user && session.user.email ? session.user.email : role;
+      setSessionStatus('Signed in as ' + email + '. Access granted.');
       return true;
     }
 
@@ -561,7 +615,7 @@
       if (!backend) {
         if (!local) {
           setSessionStatus('Session expired or unavailable. Redirecting...');
-          window.location.assign('/portal-auth.html');
+          window.location.assign('./portal-auth.html');
           return false;
         }
         return true;
@@ -575,10 +629,9 @@
       try {
         await fetch(PORTAL_CONFIG.logoutEndpoint, { method: 'POST', credentials: 'include' });
       } catch (_) {
-        // best effort
       } finally {
         clearStoredSession();
-        window.location.assign('/portal-auth.html');
+        window.location.assign('./portal-auth.html');
       }
     }
 
@@ -638,7 +691,7 @@
       list.innerHTML = '';
       show.calendar
         .slice()
-        .sort((a,b) => `${a.date}T${a.time}`.localeCompare(`${b.date}T${b.time}`))
+        .sort((a,b) => (a.date + 'T' + a.time).localeCompare(b.date + 'T' + b.time))
         .forEach(ev => {
           const item = document.createElement('div');
           item.className = 'item';
@@ -681,14 +734,37 @@
       });
     }
 
-    function updateShowContext(show) {
-      $('show-title').textContent = `${show.name} — Operations Center`;
-      setShowStatus(`Current show: ${show.name}`);
-      $('show-key').textContent = `show:${show.id}`;
+    function renderCastPageLinks(show) {
+      const wrap = $('cast-page-links');
+      wrap.innerHTML = '';
 
-      const reportUrl = `${PORTAL_CONFIG.rehearsalReportBaseUrl}?show=${encodeURIComponent(show.id)}`;
+      CAST_PAGE_FILES.forEach((file) => {
+        const a = document.createElement('a');
+        a.className = 'btn';
+        a.href = './' + file;
+        a.textContent = file;
+        wrap.appendChild(a);
+      });
+
+      if (show.castPage) {
+        const selected = document.createElement('div');
+        selected.className = 'small';
+        selected.style.marginTop = '.25rem';
+        selected.textContent = 'Selected show cast page: ' + show.castPage.replace('./','');
+        wrap.prepend(selected);
+      }
+    }
+
+    function updateShowContext(show) {
+      $('show-title').textContent = show.name + ' — Operations Center';
+      setShowStatus('Current show: ' + show.name);
+      $('show-key').textContent = 'show:' + show.id;
+
+      const reportUrl = PORTAL_CONFIG.rehearsalReportBaseUrl + '?show=' + encodeURIComponent(show.id);
       $('rehearsal-report-link').setAttribute('href', reportUrl);
       $('rehearsal-report-link-2').setAttribute('href', reportUrl);
+
+      renderCastPageLinks(show);
     }
 
     function renderAll() {
@@ -727,8 +803,9 @@
         const store = getCurrentStore();
         const id = 'show-' + cryptoRandom().slice(0,8);
         store.shows.push({
-          id,
+          id: id,
           name: name.trim(),
+          castPage: '',
           cast: [],
           contacts: [],
           calendar: [],
@@ -760,7 +837,7 @@
         }
 
         mutateCurrentShow((show) => {
-          show.cast.unshift({ id: cryptoRandom(), name, role, notes });
+          show.cast.unshift({ id: cryptoRandom(), name: name, role: role, notes: notes });
         });
 
         form.reset();
@@ -798,7 +875,7 @@
         }
 
         mutateCurrentShow((show) => {
-          show.contacts.unshift({ id: cryptoRandom(), name, type, email, phone });
+          show.contacts.unshift({ id: cryptoRandom(), name: name, type: type, email: email, phone: phone });
         });
 
         form.reset();
@@ -836,7 +913,7 @@
         }
 
         mutateCurrentShow((show) => {
-          show.calendar.push({ id: cryptoRandom(), date, time, title, notes });
+          show.calendar.push({ id: cryptoRandom(), date: date, time: time, title: title, notes: notes });
         });
 
         form.reset();
@@ -891,7 +968,7 @@
         }
 
         mutateCurrentShow((show) => {
-          show.callsheet.unshift({ id: cryptoRandom(), dept, callTime, task });
+          show.callsheet.unshift({ id: cryptoRandom(), dept: dept, callTime: callTime, task: task });
         });
 
         form.reset();
@@ -931,12 +1008,12 @@
     }
 
     function escapeHtml(input) {
-      return String(input ?? '')
-        .replaceAll('&', '&amp;')
-        .replaceAll('<', '&lt;')
-        .replaceAll('>', '&gt;')
-        .replaceAll('"', '&quot;')
-        .replaceAll("'", '&#39;');
+      return String(input == null ? '' : input)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
     }
 
     async function init() {
