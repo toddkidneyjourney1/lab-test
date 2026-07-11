@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>The Laboratory Theater of Florida | Portal Auth</title>
+  <title>The Laboratory Theater of Florida | Volunteer Login</title>
   <link rel="stylesheet" href="style.css" />
   <style>
     .auth-wrap {
@@ -33,7 +33,6 @@
       color: #d8d8d8;
       padding: 0.9rem 1rem;
       font-weight: 600;
-      cursor: pointer;
       text-align: center;
       text-decoration: none;
       font-family: inherit;
@@ -41,15 +40,13 @@
       line-height: inherit;
     }
 
-    .auth-tab:hover { background: #1b1b1b; }
     .auth-tab.active {
       color: #fff;
       box-shadow: inset 0 -2px 0 #ff5c8a;
       background: #171717;
     }
 
-    .auth-panel { display: none; padding: 1rem; }
-    .auth-panel.active { display: block; }
+    .auth-panel { padding: 1rem; }
 
     .auth-intro {
       color: #cfcfcf;
@@ -111,6 +108,7 @@
       margin-top: 0.2rem;
     }
     .btn-auth:hover { filter: brightness(1.06); }
+    .btn-auth:disabled { opacity: 0.7; cursor: not-allowed; }
 
     .support-row {
       margin-top: 0.75rem;
@@ -132,61 +130,6 @@
     }
     .message.error { color: #ff8f8f; }
     .message.success { color: #8ff0b4; }
-
-    .site-footer {
-      margin-top: 3rem;
-      background: #101010;
-      border-top: 1px solid #2c2c2c;
-      color: #e6e6e6;
-    }
-
-    .footer-container {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 2rem 1rem 1.25rem;
-      display: grid;
-      gap: 1.5rem;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    }
-
-    .footer-block h3,
-    .footer-block h4 {
-      margin: 0 0 0.75rem;
-      color: #fff;
-    }
-
-    .footer-block p {
-      margin: 0 0 0.75rem;
-      line-height: 1.5;
-      color: #d3d3d3;
-    }
-
-    .footer-block a {
-      color: #ff5c8a;
-      text-decoration: none;
-    }
-
-    .footer-block a:hover {
-      text-decoration: underline;
-    }
-
-    .social-links {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-
-    .social-links li + li {
-      margin-top: 0.4rem;
-    }
-
-    .footer-bottom {
-      border-top: 1px solid #2c2c2c;
-      text-align: center;
-      padding: 0.85rem 1rem 1.2rem;
-      font-size: 0.92rem;
-      color: #b8b8b8;
-    }
   </style>
 </head>
 <body>
@@ -214,29 +157,34 @@
 
   <main>
     <section class="auth-wrap">
-      <div class="auth-card" aria-label="Portal authentication">
-        <div class="auth-tabs" role="tablist" aria-label="Auth tabs">
-          <button class="auth-tab active" id="tab-signin" type="button" role="tab" aria-controls="panel-signin" aria-selected="true">Sign In</button>
-          <a class="auth-tab" id="tab-signup-link" href="volunteer-signup.html" role="button" aria-label="Go to Volunteer Signup">Sign Up</a>
+      <div class="auth-card" aria-label="Volunteer authentication">
+        <div class="auth-tabs" aria-label="Auth tabs">
+          <span class="auth-tab active">Volunteer Sign In</span>
+          <a class="auth-tab" href="volunteer-signup.html" aria-label="Go to Volunteer Signup">Sign Up</a>
         </div>
 
-        <section class="auth-panel active" id="panel-signin" role="tabpanel" aria-labelledby="tab-signin">
-          <p class="auth-intro">Sign in to enter your role-based portal.</p>
+        <section class="auth-panel">
+          <p class="auth-intro">Sign in to access the volunteer portal.</p>
+
           <form id="signin-form" novalidate>
             <div class="field">
               <label for="signin-email">Email Address</label>
               <input id="signin-email" type="email" autocomplete="email" required />
             </div>
+
             <div class="field pw-wrap">
               <label for="signin-password">Password</label>
               <input id="signin-password" type="password" autocomplete="current-password" required />
               <button type="button" class="pw-toggle" data-target="signin-password">Show</button>
             </div>
+
             <button id="login-btn" type="submit" class="btn-auth">Log In</button>
+
             <div class="support-row">
               <a href="#" id="forgot-link">Forgot Password?</a>
               <a href="support.html">Need Help?</a>
             </div>
+
             <p class="message" id="signin-message" aria-live="polite"></p>
           </form>
         </section>
@@ -244,34 +192,7 @@
     </section>
   </main>
 
-  <footer class="site-footer">
-    <div class="footer-container">
-      <div class="footer-block">
-        <h3>The Laboratory Theater of Florida</h3>
-        <p>1634 Woodford Ave.<br>Fort Myers, FL 33901</p>
-        <p><a href="tel:+12392912905">(239) 291-2905</a></p>
-      </div>
-
-      <div class="footer-block">
-        <h4>Mailing Address</h4>
-        <p>P.O. Box 334<br>Fort Myers, FL 33902</p>
-      </div>
-
-      <div class="footer-block">
-        <h4>Follow Us</h4>
-        <ul class="social-links">
-          <li><a href="#" aria-label="Facebook (placeholder)">Facebook</a></li>
-          <li><a href="#" aria-label="Instagram (placeholder)">Instagram</a></li>
-          <li><a href="#" aria-label="YouTube (placeholder)">YouTube</a></li>
-          <li><a href="#" aria-label="X / Twitter (placeholder)">X / Twitter</a></li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="footer-bottom">
-      <p>&copy; 2026 The Laboratory Theater of Florida. All rights reserved.</p>
-    </div>
-  </footer>
+  <!-- Footer removed per request -->
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
   <script>
@@ -285,29 +206,15 @@
 
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    const ROLE_REDIRECTS = {
-      volunteer: "volunteer-portal.html",
-      cast: "cast-selection-portal.html"
-    };
-
     const $ = (id) => document.getElementById(id);
-
-    function normalizeRole(role) {
-      return String(role || "").trim().toLowerCase();
-    }
-
-    function redirectForRole(role) {
-      const r = normalizeRole(role);
-      return ROLE_REDIRECTS[r] || null;
-    }
 
     function setMessage(el, text, type = "") {
       el.textContent = text;
       el.className = `message ${type}`.trim();
     }
 
-    function saveSession(payload) {
-      localStorage.setItem("portal_session", JSON.stringify(payload));
+    function normalizeRole(role) {
+      return String(role || "").trim().toLowerCase();
     }
 
     async function getProfileRole(userId) {
@@ -321,23 +228,14 @@
       return normalizeRole(data?.role);
     }
 
-    function setupTabs() {
-      const tabSignIn = $("tab-signin");
-      const panelSignIn = $("panel-signin");
-
-      tabSignIn.classList.add("active");
-      tabSignIn.setAttribute("aria-selected", "true");
-      panelSignIn.classList.add("active");
-    }
-
-    function setupPasswordToggles() {
+    function setupPasswordToggle() {
       document.querySelectorAll(".pw-toggle").forEach((btn) => {
         btn.addEventListener("click", () => {
           const target = document.getElementById(btn.getAttribute("data-target"));
           if (!target) return;
-          const isHidden = target.type === "password";
-          target.type = isHidden ? "text" : "password";
-          btn.textContent = isHidden ? "Hide" : "Show";
+          const hidden = target.type === "password";
+          target.type = hidden ? "text" : "password";
+          btn.textContent = hidden ? "Hide" : "Show";
         });
       });
     }
@@ -349,6 +247,7 @@
       link.addEventListener("click", async (e) => {
         e.preventDefault();
         const email = $("signin-email").value.trim();
+
         if (!email) {
           setMessage(msg, "Enter your email first, then click Forgot Password.", "error");
           return;
@@ -366,55 +265,44 @@
       });
     }
 
-    function setupSignIn() {
-      const signinForm = $("signin-form");
-      const signinMsg = $("signin-message");
+    function setupSignInForm() {
+      const form = $("signin-form");
+      const msg = $("signin-message");
       const loginBtn = $("login-btn");
 
-      signinForm.addEventListener("submit", async (e) => {
+      form.addEventListener("submit", async (e) => {
         e.preventDefault();
 
         const email = $("signin-email").value.trim();
         const password = $("signin-password").value;
 
         if (!email || !password) {
-          setMessage(signinMsg, "Email and password are required.", "error");
+          setMessage(msg, "Email and password are required.", "error");
           return;
         }
 
         loginBtn.disabled = true;
         loginBtn.textContent = "Logging in...";
-        setMessage(signinMsg, "Signing in...");
+        setMessage(msg, "Signing in...");
 
         try {
           const { data, error } = await supabase.auth.signInWithPassword({ email, password });
           if (error) throw error;
 
           const user = data?.user;
-          const session = data?.session;
           if (!user) throw new Error("No user returned from sign in.");
 
           const role = await getProfileRole(user.id);
-          const target = redirectForRole(role);
 
-          if (!role) {
-            throw new Error("No role found for this account. Contact support.");
-          }
-          if (!target) {
-            throw new Error('Your role is not enabled for this portal yet.');
+          if (role !== "volunteer") {
+            await supabase.auth.signOut();
+            throw new Error("This login is for volunteers only.");
           }
 
-          saveSession({
-            user: { id: user.id, email: user.email },
-            role,
-            token: session?.access_token || null,
-            expiresAt: session?.expires_at || null
-          });
-
-          setMessage(signinMsg, "Success! Redirecting...", "success");
-          window.location.assign(target);
+          setMessage(msg, "Success! Redirecting...", "success");
+          window.location.assign("volunteer-portal.html");
         } catch (err) {
-          setMessage(signinMsg, err.message || "Sign in failed.", "error");
+          setMessage(msg, err.message || "Sign in failed.", "error");
           loginBtn.disabled = false;
           loginBtn.textContent = "Log In";
         }
@@ -423,32 +311,24 @@
 
     async function redirectIfAlreadyLoggedIn() {
       const { data, error } = await supabase.auth.getSession();
-      if (error || !data?.session?.user) return;
+      if (error) return;
+      const user = data?.session?.user;
+      if (!user) return;
 
       try {
-        const user = data.session.user;
         const role = await getProfileRole(user.id);
-        const target = redirectForRole(role);
-        if (!target) return;
-
-        saveSession({
-          user: { id: user.id, email: user.email },
-          role,
-          token: data.session.access_token || null,
-          expiresAt: data.session.expires_at || null
-        });
-
-        window.location.assign(target);
+        if (role === "volunteer") {
+          window.location.assign("volunteer-portal.html");
+        }
       } catch (_) {
-        // Stay on auth page if profile fetch fails
+        // stay on page if role check fails
       }
     }
 
     async function init() {
-      setupTabs();
-      setupPasswordToggles();
+      setupPasswordToggle();
       setupForgotPassword();
-      setupSignIn();
+      setupSignInForm();
       await redirectIfAlreadyLoggedIn();
     }
 
