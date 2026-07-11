@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
   <!-- Security Headers -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://*.supabase.co" />
   <meta http-equiv="X-Content-Type-Options" content="nosniff" />
   <meta http-equiv="X-Frame-Options" content="SAMEORIGIN" />
   <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
@@ -24,6 +24,8 @@
       --accent-secondary-hover: #1e3f6f;
       --border: #323644;
       --shadow: 0 12px 28px rgba(0, 0, 0, 0.28);
+      --success: #22c55e;
+      --error: #ef4444;
     }
 
     body {
@@ -66,7 +68,8 @@
       flex-wrap: wrap;
     }
 
-    .toolbar a {
+    .toolbar a,
+    .toolbar button {
       text-decoration: none;
       color: #fff;
       background: #3f4557;
@@ -79,7 +82,8 @@
       transition: filter 0.2s ease;
     }
 
-    .toolbar a:hover {
+    .toolbar a:hover,
+    .toolbar button:hover {
       filter: brightness(1.08);
     }
 
@@ -163,7 +167,7 @@
       border-radius: 9px;
       padding: 0.6rem 0.9rem;
       border: 1px solid #8e1a26;
-      min-width: 108px;
+      min-width: 100px;
       cursor: pointer;
       transition: background 0.2s ease;
       font-size: 0.9rem;
@@ -184,25 +188,37 @@
       border-radius: 9px;
       padding: 0.6rem 0.9rem;
       border: 1px solid #1e3f6f;
-      min-width: 108px;
+      min-width: 100px;
       cursor: pointer;
       transition: background 0.2s ease;
-      font-size: 0.85rem;
+      font-size: 0.9rem;
     }
 
     .btn-admin:hover {
       background: var(--accent-secondary-hover);
     }
 
-    .btn-admin:disabled {
+    .btn-admin:disabled,
+    .btn-login:disabled {
       opacity: 0.5;
       cursor: not-allowed;
-      background: var(--muted);
     }
 
     .admin-badge {
       display: inline-block;
       background: var(--accent-secondary);
+      color: #fff;
+      font-size: 0.7rem;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      margin-left: 0.4rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .cast-badge {
+      display: inline-block;
+      background: var(--accent);
       color: #fff;
       font-size: 0.7rem;
       padding: 0.25rem 0.5rem;
@@ -219,13 +235,49 @@
       font-size: 0.87rem;
     }
 
-    /* Hidden by default, shown only for admin users */
-    .admin-only {
+    .loading {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .alert {
+      padding: 1rem;
+      border-radius: 9px;
+      margin-bottom: 1rem;
       display: none;
     }
 
-    .admin-only.visible {
-      display: inline-flex;
+    .alert.show {
+      display: block;
+    }
+
+    .alert-error {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid var(--error);
+      color: #fca5a5;
+    }
+
+    .alert-success {
+      background: rgba(34, 197, 94, 0.1);
+      border: 1px solid var(--success);
+      color: #86efac;
     }
   </style>
 </head>
@@ -234,15 +286,16 @@
     <header class="portal-header">
       <h1 class="portal-title">Cast Portal</h1>
       <p class="portal-subtitle">
-        Select your show card and click <strong>Login</strong> to access cast resources, rehearsal details, and production updates.
+        Select your show and login as Cast or Admin to access resources, rehearsal details, and production updates.
       </p>
 
       <div class="toolbar">
         <a href="index.html">Back to Home</a>
-        <a href="admin-portal.html">Admin Login</a>
-        <a href="support.html">Need Help?</a>
+        <button id="logout-btn" style="display: none;">Logout</button>
       </div>
     </header>
+
+    <div id="alert-container"></div>
 
     <section class="show-grid" aria-label="Cast show login cards">
       <!-- BARE Show Card -->
@@ -252,12 +305,13 @@
         </div>
         <div class="show-content">
           <h2 class="show-title">BARE</h2>
-          <p class="show-meta">Cast access for BARE production materials.</p>
+          <p class="show-meta">Access production materials and rehearsal information.</p>
           <div class="show-actions">
-            <a class="btn-login" href="cast-bare.html">Login</a>
-            <button class="btn-admin admin-only" data-show="bare" aria-label="Admin access for BARE show">
-              Admin
-              <span class="admin-badge">Staff</span>
+            <button class="btn-login" data-show="bare" data-role="cast">
+              Cast <span class="cast-badge">Login</span>
+            </button>
+            <button class="btn-admin" data-show="bare" data-role="admin">
+              Admin <span class="admin-badge">Login</span>
             </button>
           </div>
         </div>
@@ -270,12 +324,13 @@
         </div>
         <div class="show-content">
           <h2 class="show-title">FENCES</h2>
-          <p class="show-meta">Cast access for FENCES rehearsal and show documents.</p>
+          <p class="show-meta">Rehearsal and show documents management.</p>
           <div class="show-actions">
-            <a class="btn-login" href="cast-fences.html">Login</a>
-            <button class="btn-admin admin-only" data-show="fences" aria-label="Admin access for FENCES show">
-              Admin
-              <span class="admin-badge">Staff</span>
+            <button class="btn-login" data-show="fences" data-role="cast">
+              Cast <span class="cast-badge">Login</span>
+            </button>
+            <button class="btn-admin" data-show="fences" data-role="admin">
+              Admin <span class="admin-badge">Login</span>
             </button>
           </div>
         </div>
@@ -288,12 +343,13 @@
         </div>
         <div class="show-content">
           <h2 class="show-title">GOD OF CARNAGE</h2>
-          <p class="show-meta">Cast access for GOD OF CARNAGE production updates.</p>
+          <p class="show-meta">Production updates and announcements.</p>
           <div class="show-actions">
-            <a class="btn-login" href="cast-godofcarnage.html">Login</a>
-            <button class="btn-admin admin-only" data-show="godofcarnage" aria-label="Admin access for GOD OF CARNAGE show">
-              Admin
-              <span class="admin-badge">Staff</span>
+            <button class="btn-login" data-show="godofcarnage" data-role="cast">
+              Cast <span class="cast-badge">Login</span>
+            </button>
+            <button class="btn-admin" data-show="godofcarnage" data-role="admin">
+              Admin <span class="admin-badge">Login</span>
             </button>
           </div>
         </div>
@@ -306,12 +362,13 @@
         </div>
         <div class="show-content">
           <h2 class="show-title">GODOT</h2>
-          <p class="show-meta">Cast access for GODOT rehearsal and communication hub.</p>
+          <p class="show-meta">Rehearsal hub and communication center.</p>
           <div class="show-actions">
-            <a class="btn-login" href="cast-godot.html">Login</a>
-            <button class="btn-admin admin-only" data-show="godot" aria-label="Admin access for GODOT show">
-              Admin
-              <span class="admin-badge">Staff</span>
+            <button class="btn-login" data-show="godot" data-role="cast">
+              Cast <span class="cast-badge">Login</span>
+            </button>
+            <button class="btn-admin" data-show="godot" data-role="admin">
+              Admin <span class="admin-badge">Login</span>
             </button>
           </div>
         </div>
@@ -324,12 +381,13 @@
         </div>
         <div class="show-content">
           <h2 class="show-title">MIDSUMMER</h2>
-          <p class="show-meta">Cast access for MIDSUMMER schedules and resources.</p>
+          <p class="show-meta">Schedules and resource management.</p>
           <div class="show-actions">
-            <a class="btn-login" href="cast-midsummer.html">Login</a>
-            <button class="btn-admin admin-only" data-show="midsummer" aria-label="Admin access for MIDSUMMER show">
-              Admin
-              <span class="admin-badge">Staff</span>
+            <button class="btn-login" data-show="midsummer" data-role="cast">
+              Cast <span class="cast-badge">Login</span>
+            </button>
+            <button class="btn-admin" data-show="midsummer" data-role="admin">
+              Admin <span class="admin-badge">Login</span>
             </button>
           </div>
         </div>
@@ -342,12 +400,13 @@
         </div>
         <div class="show-content">
           <h2 class="show-title">PILLOWMAN</h2>
-          <p class="show-meta">Cast access for PILLOWMAN call sheets and notes.</p>
+          <p class="show-meta">Call sheets and production notes.</p>
           <div class="show-actions">
-            <a class="btn-login" href="cast-pillowman.html">Login</a>
-            <button class="btn-admin admin-only" data-show="pillowman" aria-label="Admin access for PILLOWMAN show">
-              Admin
-              <span class="admin-badge">Staff</span>
+            <button class="btn-login" data-show="pillowman" data-role="cast">
+              Cast <span class="cast-badge">Login</span>
+            </button>
+            <button class="btn-admin" data-show="pillowman" data-role="admin">
+              Admin <span class="admin-badge">Login</span>
             </button>
           </div>
         </div>
@@ -360,12 +419,13 @@
         </div>
         <div class="show-content">
           <h2 class="show-title">RIVALS</h2>
-          <p class="show-meta">Cast access for RIVALS production and rehearsal info.</p>
+          <p class="show-meta">Production and rehearsal information.</p>
           <div class="show-actions">
-            <a class="btn-login" href="cast-rivals.html">Login</a>
-            <button class="btn-admin admin-only" data-show="rivals" aria-label="Admin access for RIVALS show">
-              Admin
-              <span class="admin-badge">Staff</span>
+            <button class="btn-login" data-show="rivals" data-role="cast">
+              Cast <span class="cast-badge">Login</span>
+            </button>
+            <button class="btn-admin" data-show="rivals" data-role="admin">
+              Admin <span class="admin-badge">Login</span>
             </button>
           </div>
         </div>
@@ -375,114 +435,232 @@
     <p class="footer-note">If your show is missing, contact production staff for access.</p>
   </main>
 
+  <!-- Supabase Client Library -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  
   <script>
     /**
-     * Role-Based Admin Button Visibility
+     * Cast Portal Authentication Manager
+     * Uses Supabase for backend authentication and role management
      * 
-     * SECURITY NOTE: This is CLIENT-SIDE ONLY for UX purposes.
-     * NEVER rely on this for actual security. Always validate user roles
-     * on the SERVER-SIDE before granting access to admin pages.
-     * 
-     * BACKEND IMPLEMENTATION:
-     * 1. Validate user session/JWT on server
-     * 2. Check user role: 'admin', 'director', 'stage_manager', 'cast'
-     * 3. Only render admin pages if user has appropriate role
-     * 4. Implement proper password hashing (bcrypt, argon2, etc.)
-     * 5. Use HTTPS for all auth endpoints
-     * 6. Implement rate limiting on login attempts
+     * Flow:
+     * 1. User clicks Cast or Admin button on show card
+     * 2. Opens login modal (login.html or separate modal)
+     * 3. User authenticates with Supabase
+     * 4. Backend validates role for specific show
+     * 5. User is redirected based on role:
+     *    - Cast: /cast-{showname}.html
+     *    - Admin: /admin-{showname}.html
      */
 
-    class RoleManager {
+    class CastPortalAuth {
       constructor() {
-        this.userRole = this.getUserRole();
-        this.initializeAdminButtons();
+        // Initialize Supabase client
+        // Replace with your actual Supabase URL and Anon Key
+        const SUPABASE_URL = process.env.SUPABASE_URL || 'https://your-project.supabase.co';
+        const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY || 'your-anon-key';
+
+        this.supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        this.currentUser = null;
+        this.currentRole = null;
+        this.currentShow = null;
+
+        this.init();
       }
 
       /**
-       * Fetch user role from session storage or backend
-       * In production, this should be validated on the server
+       * Initialize auth manager
        */
-      getUserRole() {
-        // Check session storage first
-        const storedRole = sessionStorage.getItem('userRole');
-        if (storedRole) {
-          return storedRole;
-        }
-
-        // Check localStorage (optional - only if "remember me" is implemented)
-        // const savedRole = localStorage.getItem('userRole');
-        
-        return null;
+      async init() {
+        await this.checkAuthStatus();
+        this.attachEventListeners();
       }
 
       /**
-       * Show/hide admin buttons based on user role
-       * BACKEND MUST validate permissions before granting access
+       * Check if user is already authenticated
        */
-      initializeAdminButtons() {
-        const adminButtons = document.querySelectorAll('.btn-admin.admin-only');
-        
-        // Check if user has admin role
-        const isAdmin = this.hasAdminRole();
-
-        if (isAdmin) {
-          adminButtons.forEach(button => {
-            button.classList.add('visible');
-            button.addEventListener('click', (e) => this.handleAdminAccess(e));
-          });
-        }
-      }
-
-      /**
-       * Verify user has admin privileges
-       */
-      hasAdminRole() {
-        const adminRoles = ['admin', 'director', 'stage_manager', 'producer'];
-        return adminRoles.includes(this.userRole);
-      }
-
-      /**
-       * Handle admin button click
-       * Navigate to show-specific admin panel
-       */
-      handleAdminAccess(event) {
-        event.preventDefault();
-        const showName = event.currentTarget.dataset.show;
-        
-        if (!this.userRole) {
-          window.location.href = 'admin-portal.html';
-          return;
-        }
-
-        // Navigate to show-specific admin page
-        window.location.href = `admin-${showName}.html`;
-      }
-
-      /**
-       * Set user role after login (server should validate this)
-       * @param {string} role - User role: 'admin', 'director', 'stage_manager', 'cast'
-       */
-      static setUserRole(role) {
-        const validRoles = ['admin', 'director', 'stage_manager', 'producer', 'cast'];
-        if (validRoles.includes(role)) {
-          sessionStorage.setItem('userRole', role);
-          window.location.reload();
+      async checkAuthStatus() {
+        try {
+          const { data: { session } } = await this.supabase.auth.getSession();
+          
+          if (session) {
+            this.currentUser = session.user;
+            await this.fetchUserRole();
+            this.showLogoutButton();
+          }
+        } catch (error) {
+          console.error('Error checking auth status:', error);
         }
       }
 
       /**
-       * Clear user session on logout
+       * Fetch user role from custom claims or profiles table
        */
-      static logout() {
-        sessionStorage.removeItem('userRole');
-        localStorage.removeItem('userRole');
-        window.location.href = 'index.html';
+      async fetchUserRole() {
+        try {
+          const { data, error } = await this.supabase
+            .from('user_profiles')
+            .select('role, shows')
+            .eq('id', this.currentUser.id)
+            .single();
+
+          if (error) throw error;
+
+          this.currentRole = data?.role || 'cast';
+        } catch (error) {
+          console.error('Error fetching user role:', error);
+          this.currentRole = 'cast';
+        }
+      }
+
+      /**
+       * Attach click listeners to all login buttons
+       */
+      attachEventListeners() {
+        const loginButtons = document.querySelectorAll('.btn-login, .btn-admin');
+        loginButtons.forEach(button => {
+          button.addEventListener('click', (e) => this.handleLoginClick(e));
+        });
+
+        const logoutBtn = document.getElementById('logout-btn');
+        if (logoutBtn) {
+          logoutBtn.addEventListener('click', () => this.logout());
+        }
+      }
+
+      /**
+       * Handle login button clicks
+       */
+      async handleLoginClick(event) {
+        const button = event.target.closest('button');
+        const showName = button.dataset.show;
+        const role = button.dataset.role;
+
+        this.currentShow = showName;
+        this.currentRole = role;
+
+        if (this.currentUser) {
+          // User already authenticated, check role and redirect
+          await this.validateAndRedirect(role, showName);
+        } else {
+          // User not authenticated, open login modal
+          this.openLoginModal(role, showName);
+        }
+      }
+
+      /**
+       * Open login modal/redirect to login page
+       */
+      openLoginModal(role, showName) {
+        // Store intended destination in sessionStorage
+        sessionStorage.setItem('intendedRole', role);
+        sessionStorage.setItem('intendedShow', showName);
+
+        // Redirect to login page (you'll need to create this)
+        window.location.href = `login.html?role=${role}&show=${showName}`;
+      }
+
+      /**
+       * Validate user role and redirect appropriately
+       */
+      async validateAndRedirect(role, showName) {
+        try {
+          // Verify user has permission for this show and role
+          const hasAccess = await this.verifyAccess(role, showName);
+
+          if (!hasAccess) {
+            this.showAlert('You do not have permission to access this area.', 'error');
+            return;
+          }
+
+          // Redirect based on role
+          if (role === 'admin') {
+            window.location.href = `admin-${showName}.html`;
+          } else {
+            window.location.href = `cast-${showName}.html`;
+          }
+        } catch (error) {
+          console.error('Error during redirect:', error);
+          this.showAlert('An error occurred. Please try again.', 'error');
+        }
+      }
+
+      /**
+       * Verify user has access to show with specific role
+       */
+      async verifyAccess(role, showName) {
+        try {
+          const { data, error } = await this.supabase
+            .from('show_access')
+            .select('*')
+            .eq('user_id', this.currentUser.id)
+            .eq('show_name', showName)
+            .eq('role', role)
+            .single();
+
+          if (error && error.code !== 'PGRST116') throw error;
+
+          return !!data;
+        } catch (error) {
+          console.error('Error verifying access:', error);
+          return false;
+        }
+      }
+
+      /**
+       * Logout user
+       */
+      async logout() {
+        try {
+          const { error } = await this.supabase.auth.signOut();
+          if (error) throw error;
+
+          this.currentUser = null;
+          this.currentRole = null;
+          this.hideLogoutButton();
+          this.showAlert('Logged out successfully', 'success');
+
+          setTimeout(() => {
+            window.location.href = 'cast-portal.html';
+          }, 1000);
+        } catch (error) {
+          console.error('Error logging out:', error);
+          this.showAlert('Error logging out', 'error');
+        }
+      }
+
+      /**
+       * Show/hide logout button
+       */
+      showLogoutButton() {
+        const logoutBtn = document.getElementById('logout-btn');
+        if (logoutBtn) logoutBtn.style.display = 'inline-block';
+      }
+
+      hideLogoutButton() {
+        const logoutBtn = document.getElementById('logout-btn');
+        if (logoutBtn) logoutBtn.style.display = 'none';
+      }
+
+      /**
+       * Show alert message
+       */
+      showAlert(message, type = 'info') {
+        const container = document.getElementById('alert-container');
+        const alert = document.createElement('div');
+        alert.className = `alert alert-${type} show`;
+        alert.textContent = message;
+        container.appendChild(alert);
+
+        setTimeout(() => {
+          alert.remove();
+        }, 5000);
       }
     }
 
     // Initialize on page load
     document.addEventListener('DOMContentLoaded', () => {
-      new RoleManager();
+      new CastPortalAuth();
     });
   </script>
 </body>
