@@ -180,6 +180,16 @@
             <input id="phone" name="phone" type="tel" maxlength="40" placeholder="(555) 555-5555" />
           </div>
 
+          <div class="field-group">
+            <label for="password">Password</label>
+            <input id="password" name="password" type="password" minlength="8" required placeholder="Minimum 8 characters" />
+          </div>
+
+          <div class="field-group">
+            <label for="confirm_password">Confirm Password</label>
+            <input id="confirm_password" name="confirm_password" type="password" minlength="8" required placeholder="Re-enter password" />
+          </div>
+
           <div class="field-group full">
             <label for="interests">Areas of Interest</label>
             <select id="interests" name="interests" required>
@@ -200,8 +210,8 @@
         </div>
 
         <div class="actions">
-          <button id="submit-btn" class="btn btn-primary" type="submit">Submit Signup</button>
-          <a class="btn btn-secondary" href="volunteer-login.html">Already a signed-up volunteer? Sign In</a>
+          <button id="submit-btn" class="btn btn-primary" type="submit">Create Volunteer Account</button>
+          <a class="btn btn-secondary" href="portal-auth.html">Already a signed-up volunteer? Sign In</a>
           <a class="btn btn-secondary" href="portal-landing.html">Back to Portal Landing</a>
         </div>
 
@@ -214,7 +224,6 @@
   <script type="module">
     import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-    // Keep these consistent across your portal pages
     const SUPABASE_URL = "https://izytzrxrgnahyvgwqhgd.supabase.co";
     const SUPABASE_ANON_KEY = "sb_publishable_xfsIVVSH8vcUz9XfZgirwA_wl-GSYOw";
     const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -225,11 +234,21 @@
 
     function showMessage(text, type = "error") {
       messageEl.innerHTML = `<div class="notice ${type}">${text}</div>`;
-      setTimeout(() => { messageEl.innerHTML = ""; }, 6000);
+      setTimeout(() => { messageEl.innerHTML = ""; }, 7000);
     }
 
     function normalizePhone(phone) {
       return (phone || "").replace(/[^\d+()-.\s]/g, "").trim();
+    }
+
+    async function upsertVolunteerProfile(userId) {
+      const { error } = await supabase
+        .from("profiles")
+        .upsert(
+          { id: userId, role: "volunteer", updated_at: new Date().toISOString() },
+          { onConflict: "id" }
+        );
+      if (error) throw error;
     }
 
     form.addEventListener("submit", async (e) => {
@@ -240,45 +259,83 @@
         last_name: form.last_name.value.trim(),
         email: form.email.value.trim().toLowerCase(),
         phone: normalizePhone(form.phone.value),
+        password: form.password.value,
+        confirm_password: form.confirm_password.value,
         interests: form.interests.value,
         availability_notes: form.availability.value.trim()
       };
 
-      if (!payload.first_name || !payload.last_name || !payload.email || !payload.interests) {
+      if (!payload.first_name || !payload.last_name || !payload.email || !payload.password || !payload.confirm_password || !payload.interests) {
         showMessage("Please complete all required fields.", "error");
         return;
       }
 
-      submitBtn.disabled = true;
-      submitBtn.textContent = "Submitting...";
-
-      // Optional: attach auth user if logged in
-      const { data: authData } = await supabase.auth.getUser();
-      const userId = authData?.user?.id ?? null;
-
-      const { error } = await supabase
-        .from("volunteer_signups")
-        .insert([{
-          user_id: userId,
-          first_name: payload.first_name,
-          last_name: payload.last_name,
-          email: payload.email,
-          phone: payload.phone || null,
-          interests: payload.interests,
-          availability_notes: payload.availability_notes || null
-        }]);
-
-      if (error) {
-        showMessage(error.message || "Could not submit signup. Please try again.", "error");
-        submitBtn.disabled = false;
-        submitBtn.textContent = "Submit Signup";
+      if (payload.password.length < 8) {
+        showMessage("Password must be at least 8 characters.", "error");
         return;
       }
 
-      form.reset();
-      showMessage("Thanks! Your volunteer signup was submitted successfully.", "success");
-      submitBtn.disabled = false;
-      submitBtn.textContent = "Submit Signup";
+      if (payload.password !== payload.confirm_password) {
+        showMessage("Passwords do not match.", "error");
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Creating account...";
+
+      try {
+        // 1) Create auth account
+        const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
+          email: payload.email,
+          password: payload.password
+        });
+
+        if (signUpError) throw signUpError;
+
+        const userId = signUpData?.user?.id || null;
+
+        // 2) If user record is available immediately, write profile + signup row
+        if (userId) {
+          await upsertVolunteerProfile(userId);
+
+          const { error: insertError } = await supabase
+            .from("volunteer_signups")
+            .insert([{
+              user_id: userId,
+              first_name: payload.first_name,
+              last_name: payload.last_name,
+              email: payload.email,
+              phone: payload.phone || null,
+              interests: payload.interests,
+              availability_notes: payload.availability_notes || null
+            }]);
+
+          if (insertError) throw insertError;
+        } else {
+          // If confirm-email flow defers user creation details
+          const { error: insertError } = await supabase
+            .from("volunteer_signups")
+            .insert([{
+              user_id: null,
+              first_name: payload.first_name,
+              last_name: payload.last_name,
+              email: payload.email,
+              phone: payload.phone || null,
+              interests: payload.interests,
+              availability_notes: payload.availability_notes || null
+            }]);
+
+          if (insertError) throw insertError;
+        }
+
+        form.reset();
+        showMessage("Account created! Check your email to verify, then sign in.", "success");
+      } catch (error) {
+        showMessage(error.message || "Could not create account. Please try again.", "error");
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Create Volunteer Account";
+      }
     });
   </script>
 </body>
