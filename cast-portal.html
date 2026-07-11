@@ -3,6 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <!-- Security Headers -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'" />
+  <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+  <meta http-equiv="X-Frame-Options" content="SAMEORIGIN" />
+  <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
   <title>Cast Portal | The Laboratory Theater of Florida</title>
   <link rel="stylesheet" href="style.css" />
   <style>
@@ -14,6 +20,8 @@
       --muted: #b8bcc8;
       --accent: #d72638;
       --accent-hover: #b71f2f;
+      --accent-secondary: #2c5aa0;
+      --accent-secondary-hover: #1e3f6f;
       --border: #323644;
       --shadow: 0 12px 28px rgba(0, 0, 0, 0.28);
     }
@@ -67,6 +75,8 @@
       border-radius: 9px;
       font-weight: 600;
       font-size: 0.9rem;
+      cursor: pointer;
+      transition: filter 0.2s ease;
     }
 
     .toolbar a:hover {
@@ -89,6 +99,7 @@
       display: flex;
       flex-direction: column;
       min-height: 360px;
+      position: relative;
     }
 
     .show-image-wrap {
@@ -138,6 +149,7 @@
       display: flex;
       gap: 0.55rem;
       flex-wrap: wrap;
+      align-items: flex-end;
     }
 
     .btn-login {
@@ -152,10 +164,52 @@
       padding: 0.6rem 0.9rem;
       border: 1px solid #8e1a26;
       min-width: 108px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+      font-size: 0.9rem;
     }
 
     .btn-login:hover {
       background: var(--accent-hover);
+    }
+
+    .btn-admin {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      background: var(--accent-secondary);
+      color: #fff;
+      font-weight: 700;
+      border-radius: 9px;
+      padding: 0.6rem 0.9rem;
+      border: 1px solid #1e3f6f;
+      min-width: 108px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+      font-size: 0.85rem;
+    }
+
+    .btn-admin:hover {
+      background: var(--accent-secondary-hover);
+    }
+
+    .btn-admin:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      background: var(--muted);
+    }
+
+    .admin-badge {
+      display: inline-block;
+      background: var(--accent-secondary);
+      color: #fff;
+      font-size: 0.7rem;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      margin-left: 0.4rem;
+      font-weight: 600;
+      text-transform: uppercase;
     }
 
     .footer-note {
@@ -163,6 +217,15 @@
       text-align: center;
       color: var(--muted);
       font-size: 0.87rem;
+    }
+
+    /* Hidden by default, shown only for admin users */
+    .admin-only {
+      display: none;
+    }
+
+    .admin-only.visible {
+      display: inline-flex;
     }
   </style>
 </head>
@@ -182,7 +245,8 @@
     </header>
 
     <section class="show-grid" aria-label="Cast show login cards">
-      <article class="show-card">
+      <!-- BARE Show Card -->
+      <article class="show-card" data-show="bare">
         <div class="show-image-wrap">
           <img class="show-image" src="assets/bare.jpg" alt="BARE show artwork" loading="lazy" />
         </div>
@@ -191,11 +255,16 @@
           <p class="show-meta">Cast access for BARE production materials.</p>
           <div class="show-actions">
             <a class="btn-login" href="cast-bare.html">Login</a>
+            <button class="btn-admin admin-only" data-show="bare" aria-label="Admin access for BARE show">
+              Admin
+              <span class="admin-badge">Staff</span>
+            </button>
           </div>
         </div>
       </article>
 
-      <article class="show-card">
+      <!-- FENCES Show Card -->
+      <article class="show-card" data-show="fences">
         <div class="show-image-wrap">
           <img class="show-image" src="assets/fences.jpg" alt="FENCES show artwork" loading="lazy" />
         </div>
@@ -204,11 +273,16 @@
           <p class="show-meta">Cast access for FENCES rehearsal and show documents.</p>
           <div class="show-actions">
             <a class="btn-login" href="cast-fences.html">Login</a>
+            <button class="btn-admin admin-only" data-show="fences" aria-label="Admin access for FENCES show">
+              Admin
+              <span class="admin-badge">Staff</span>
+            </button>
           </div>
         </div>
       </article>
 
-      <article class="show-card">
+      <!-- GOD OF CARNAGE Show Card -->
+      <article class="show-card" data-show="godofcarnage">
         <div class="show-image-wrap">
           <img class="show-image" src="assets/godofcarnage.jpg" alt="GOD OF CARNAGE show artwork" loading="lazy" />
         </div>
@@ -217,11 +291,16 @@
           <p class="show-meta">Cast access for GOD OF CARNAGE production updates.</p>
           <div class="show-actions">
             <a class="btn-login" href="cast-godofcarnage.html">Login</a>
+            <button class="btn-admin admin-only" data-show="godofcarnage" aria-label="Admin access for GOD OF CARNAGE show">
+              Admin
+              <span class="admin-badge">Staff</span>
+            </button>
           </div>
         </div>
       </article>
 
-      <article class="show-card">
+      <!-- GODOT Show Card -->
+      <article class="show-card" data-show="godot">
         <div class="show-image-wrap">
           <img class="show-image" src="assets/godot.jpg" alt="GODOT show artwork" loading="lazy" />
         </div>
@@ -230,11 +309,16 @@
           <p class="show-meta">Cast access for GODOT rehearsal and communication hub.</p>
           <div class="show-actions">
             <a class="btn-login" href="cast-godot.html">Login</a>
+            <button class="btn-admin admin-only" data-show="godot" aria-label="Admin access for GODOT show">
+              Admin
+              <span class="admin-badge">Staff</span>
+            </button>
           </div>
         </div>
       </article>
 
-      <article class="show-card">
+      <!-- MIDSUMMER Show Card -->
+      <article class="show-card" data-show="midsummer">
         <div class="show-image-wrap">
           <img class="show-image" src="assets/midsummer.jpg" alt="MIDSUMMER show artwork" loading="lazy" />
         </div>
@@ -243,11 +327,16 @@
           <p class="show-meta">Cast access for MIDSUMMER schedules and resources.</p>
           <div class="show-actions">
             <a class="btn-login" href="cast-midsummer.html">Login</a>
+            <button class="btn-admin admin-only" data-show="midsummer" aria-label="Admin access for MIDSUMMER show">
+              Admin
+              <span class="admin-badge">Staff</span>
+            </button>
           </div>
         </div>
       </article>
 
-      <article class="show-card">
+      <!-- PILLOWMAN Show Card -->
+      <article class="show-card" data-show="pillowman">
         <div class="show-image-wrap">
           <img class="show-image" src="assets/pillowman.jpg" alt="PILLOWMAN show artwork" loading="lazy" />
         </div>
@@ -256,11 +345,16 @@
           <p class="show-meta">Cast access for PILLOWMAN call sheets and notes.</p>
           <div class="show-actions">
             <a class="btn-login" href="cast-pillowman.html">Login</a>
+            <button class="btn-admin admin-only" data-show="pillowman" aria-label="Admin access for PILLOWMAN show">
+              Admin
+              <span class="admin-badge">Staff</span>
+            </button>
           </div>
         </div>
       </article>
 
-      <article class="show-card">
+      <!-- RIVALS Show Card -->
+      <article class="show-card" data-show="rivals">
         <div class="show-image-wrap">
           <img class="show-image" src="assets/rivals.jpg" alt="RIVALS show artwork" loading="lazy" />
         </div>
@@ -269,6 +363,10 @@
           <p class="show-meta">Cast access for RIVALS production and rehearsal info.</p>
           <div class="show-actions">
             <a class="btn-login" href="cast-rivals.html">Login</a>
+            <button class="btn-admin admin-only" data-show="rivals" aria-label="Admin access for RIVALS show">
+              Admin
+              <span class="admin-badge">Staff</span>
+            </button>
           </div>
         </div>
       </article>
@@ -276,5 +374,116 @@
 
     <p class="footer-note">If your show is missing, contact production staff for access.</p>
   </main>
+
+  <script>
+    /**
+     * Role-Based Admin Button Visibility
+     * 
+     * SECURITY NOTE: This is CLIENT-SIDE ONLY for UX purposes.
+     * NEVER rely on this for actual security. Always validate user roles
+     * on the SERVER-SIDE before granting access to admin pages.
+     * 
+     * BACKEND IMPLEMENTATION:
+     * 1. Validate user session/JWT on server
+     * 2. Check user role: 'admin', 'director', 'stage_manager', 'cast'
+     * 3. Only render admin pages if user has appropriate role
+     * 4. Implement proper password hashing (bcrypt, argon2, etc.)
+     * 5. Use HTTPS for all auth endpoints
+     * 6. Implement rate limiting on login attempts
+     */
+
+    class RoleManager {
+      constructor() {
+        this.userRole = this.getUserRole();
+        this.initializeAdminButtons();
+      }
+
+      /**
+       * Fetch user role from session storage or backend
+       * In production, this should be validated on the server
+       */
+      getUserRole() {
+        // Check session storage first
+        const storedRole = sessionStorage.getItem('userRole');
+        if (storedRole) {
+          return storedRole;
+        }
+
+        // Check localStorage (optional - only if "remember me" is implemented)
+        // const savedRole = localStorage.getItem('userRole');
+        
+        return null;
+      }
+
+      /**
+       * Show/hide admin buttons based on user role
+       * BACKEND MUST validate permissions before granting access
+       */
+      initializeAdminButtons() {
+        const adminButtons = document.querySelectorAll('.btn-admin.admin-only');
+        
+        // Check if user has admin role
+        const isAdmin = this.hasAdminRole();
+
+        if (isAdmin) {
+          adminButtons.forEach(button => {
+            button.classList.add('visible');
+            button.addEventListener('click', (e) => this.handleAdminAccess(e));
+          });
+        }
+      }
+
+      /**
+       * Verify user has admin privileges
+       */
+      hasAdminRole() {
+        const adminRoles = ['admin', 'director', 'stage_manager', 'producer'];
+        return adminRoles.includes(this.userRole);
+      }
+
+      /**
+       * Handle admin button click
+       * Navigate to show-specific admin panel
+       */
+      handleAdminAccess(event) {
+        event.preventDefault();
+        const showName = event.currentTarget.dataset.show;
+        
+        if (!this.userRole) {
+          window.location.href = 'admin-portal.html';
+          return;
+        }
+
+        // Navigate to show-specific admin page
+        window.location.href = `admin-${showName}.html`;
+      }
+
+      /**
+       * Set user role after login (server should validate this)
+       * @param {string} role - User role: 'admin', 'director', 'stage_manager', 'cast'
+       */
+      static setUserRole(role) {
+        const validRoles = ['admin', 'director', 'stage_manager', 'producer', 'cast'];
+        if (validRoles.includes(role)) {
+          sessionStorage.setItem('userRole', role);
+          window.location.reload();
+        }
+      }
+
+      /**
+       * Clear user session on logout
+       */
+      static logout() {
+        sessionStorage.removeItem('userRole');
+        localStorage.removeItem('userRole');
+        window.location.href = 'index.html';
+      }
+    }
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', () => {
+      new RoleManager();
+    });
+  </script>
 </body>
 </html>
