@@ -295,13 +295,10 @@
 
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+    // If volunteer/cast are required roles, keep redirects strict.
     const ROLE_REDIRECTS = {
       volunteer: "/volunteer-portal.html",
-      cast: "/cast-selection-portal.html",
-      admin: "/dashboard.html",
-      staff: "/dashboard.html",
-      manager: "/dashboard.html",
-      default: "/dashboard.html"
+      cast: "/cast-selection-portal.html"
     };
 
     const $ = (id) => document.getElementById(id);
@@ -311,8 +308,8 @@
     }
 
     function redirectForRole(role) {
-      const r = normalizeRole(role);
-      return ROLE_REDIRECTS[r] || ROLE_REDIRECTS.default;
+      const normalized = normalizeRole(role);
+      return ROLE_REDIRECTS[normalized] || null;
     }
 
     function setMessage(el, text, type = "") {
@@ -329,10 +326,10 @@
         .from("profiles")
         .select("role")
         .eq("id", userId)
-        .single();
+        .maybeSingle();
 
       if (error) throw error;
-      return normalizeRole(data?.role) || "volunteer";
+      return normalizeRole(data?.role);
     }
 
     function setupTabs() {
@@ -407,6 +404,15 @@
 
           const role = await getProfileRole(user.id);
 
+          if (!role) {
+            throw new Error("No role found for this account. Contact support.");
+          }
+
+          const target = redirectForRole(role);
+          if (!target) {
+            throw new Error(`Role "${role}" is not allowed for this portal.`);
+          }
+
           saveSession({
             user: { id: user.id, email: user.email },
             role,
@@ -415,7 +421,7 @@
           });
 
           setMessage(signinMsg, "Success! Redirecting...", "success");
-          window.location.assign(redirectForRole(role));
+          window.location.assign(target);
         } catch (err) {
           setMessage(signinMsg, err.message || "Sign in failed.", "error");
         }
@@ -430,6 +436,11 @@
         const user = data.session.user;
         const role = await getProfileRole(user.id);
 
+        if (!role) return; // stay here if no role record
+
+        const target = redirectForRole(role);
+        if (!target) return; // stay here if role not volunteer/cast
+
         saveSession({
           user: { id: user.id, email: user.email },
           role,
@@ -437,7 +448,7 @@
           expiresAt: data.session.expires_at || null
         });
 
-        window.location.assign(redirectForRole(role));
+        window.location.assign(target);
       } catch (_) {
         // Stay on auth page if profile fetch fails
       }
