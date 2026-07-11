@@ -6,18 +6,9 @@
   <title>Show Admin Dashboard</title>
   <style>
     :root{
-      --bg:#0b1020;
-      --panel:#121a30;
-      --panel-2:#1a2646;
-      --text:#e7ecff;
-      --muted:#a9b5dc;
-      --accent:#60a5fa;
-      --accent-2:#a78bfa;
-      --ok:#4ade80;
-      --warn:#f59e0b;
-      --danger:#f87171;
-      --border:#2a3866;
-      --focus:#38bdf8;
+      --bg:#0b1020; --panel:#121a30; --text:#e7ecff; --muted:#a9b5dc;
+      --accent:#60a5fa; --accent2:#a78bfa; --border:#2a3866;
+      --ok:#4ade80; --danger:#f87171;
     }
     *{box-sizing:border-box;margin:0;padding:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
     body{
@@ -28,126 +19,92 @@
         var(--bg);
       display:grid;grid-template-rows:auto 1fr auto;
     }
-    header{
-      position:sticky;top:0;z-index:20;
-      border-bottom:1px solid var(--border);
-      background:rgba(8,12,28,.78);backdrop-filter:blur(8px);
-    }
+    header,footer{background:rgba(8,12,28,.78);backdrop-filter:blur(8px)}
+    header{border-bottom:1px solid var(--border)}
+    footer{border-top:1px solid var(--border);text-align:center;color:var(--muted);font-size:.82rem;padding:.95rem}
     .topbar{
-      max-width:1280px;margin:0 auto;padding:.9rem 1rem;
-      display:flex;align-items:center;justify-content:space-between;gap:.8rem;flex-wrap:wrap;
+      max-width:1200px;margin:0 auto;padding:.9rem 1rem;
+      display:flex;align-items:center;justify-content:space-between;gap:.7rem;flex-wrap:wrap;
     }
-    .brand{display:flex;align-items:center;gap:.65rem;font-weight:700}
+    .brand{display:flex;align-items:center;gap:.6rem;font-weight:700}
     .logo{
       width:34px;height:34px;border-radius:10px;display:grid;place-items:center;
-      background:linear-gradient(135deg,var(--accent),var(--accent-2));
-      color:#102047;font-weight:800;font-size:.85rem;
+      background:linear-gradient(135deg,var(--accent),var(--accent2));color:#102047;font-weight:800;font-size:.85rem;
     }
+    .actions{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
     .pill{
       font-size:.77rem;padding:.24rem .62rem;border-radius:999px;font-weight:700;
       color:#1e1b4b;background:linear-gradient(135deg,#bfdbfe,#ddd6fe);
     }
-    .actions{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap}
-    button,.btn{
-      border:1px solid var(--border);background:#121b34;color:var(--text);
-      border-radius:10px;padding:.52rem .76rem;font-size:.88rem;cursor:pointer;text-decoration:none;transition:.2s;
-    }
-    button:hover,.btn:hover{border-color:#4b67b2;background:#172448}
-    .btn-primary{border:none;background:linear-gradient(135deg,#60a5fa,#a78bfa);color:#0f1f49;font-weight:700}
-    .btn-primary:hover{filter:brightness(1.06)}
-    .btn-danger{border:1px solid #7f1d1d;color:#fecaca;background:rgba(248,113,113,.15)}
-    .btn-danger:hover{background:rgba(248,113,113,.24)}
 
     main{
-      max-width:1280px;width:100%;margin:0 auto;padding:1rem;
-      display:grid;grid-template-columns:300px 1fr;gap:1rem;align-items:start;
+      max-width:1200px;width:100%;margin:0 auto;padding:1rem;
+      display:grid;grid-template-columns:300px 1fr;gap:1rem;
     }
     .sidebar,.panel{
-      border:1px solid var(--border);border-radius:16px;
+      border:1px solid var(--border);border-radius:16px;padding:1rem;
       background:linear-gradient(180deg,rgba(26,38,70,.84),rgba(15,23,45,.93));
-      box-shadow:0 10px 30px rgba(0,0,0,.25);
+      box-shadow:0 10px 30px rgba(0,0,0,.22);
     }
-    .sidebar{padding:.95rem;position:sticky;top:76px}
-    .nav-title{color:var(--muted);font-size:.76rem;text-transform:uppercase;letter-spacing:.9px;margin:.4rem 0 .5rem}
-    .nav-links{display:grid;gap:.42rem}
-    .nav-link{
-      border:1px solid transparent;border-radius:10px;padding:.56rem .65rem;
-      color:#dae2ff;text-decoration:none;font-size:.9rem;display:block;
-    }
-    .nav-link:hover{background:rgba(96,165,250,.10);border-color:#4068a8}
+    .sidebar{position:sticky;top:76px;height:fit-content}
+    .nav-title{color:var(--muted);font-size:.78rem;text-transform:uppercase;letter-spacing:.8px;margin-bottom:.5rem}
+    .nav-links{display:grid;gap:.45rem}
+    .nav-link{display:block;padding:.55rem .65rem;border-radius:10px;color:#dae2ff;text-decoration:none;border:1px solid transparent}
+    .nav-link:hover{background:rgba(96,165,250,.1);border-color:#4068a8}
     .nav-link.active{background:rgba(167,139,250,.14);border-color:#5a4a9d}
-    .status{
-      margin-top:1rem;border:1px dashed #425b9e;border-radius:12px;padding:.65rem;
-      font-size:.84rem;color:#becaf0;line-height:1.35;
-    }
+    .status{margin-top:.9rem;border:1px dashed #425b9e;border-radius:12px;padding:.65rem;color:#becaf0;font-size:.84rem}
 
     .content{display:grid;gap:1rem}
-    .panel{padding:1rem}
-    .hero{display:grid;grid-template-columns:1.2fr 1fr;gap:.9rem}
-    .hero h1{font-size:1.27rem;margin-bottom:.35rem}
-    .sub{color:var(--muted);line-height:1.45;font-size:.92rem}
-    .kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.62rem;margin-top:.9rem}
-    .kpi{border:1px solid #3a4f8f;background:rgba(12,20,42,.72);border-radius:12px;padding:.66rem}
-    .kpi .label{color:var(--muted);font-size:.77rem;margin-bottom:.2rem}
-    .kpi .value{font-size:1.03rem;font-weight:700}
+    .hero{display:grid;grid-template-columns:1.2fr 1fr;gap:1rem}
+    .hero h1{font-size:1.25rem;margin-bottom:.35rem}
+    .sub{color:var(--muted);font-size:.92rem;line-height:1.45}
+    .kpis{margin-top:.9rem;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.6rem}
+    .kpi{border:1px solid #3a4f8f;border-radius:12px;padding:.65rem;background:rgba(12,20,42,.72)}
+    .kpi .label{font-size:.76rem;color:var(--muted)}
+    .kpi .value{font-size:1.03rem;font-weight:700;margin-top:.2rem}
 
-    .section-title{display:flex;align-items:center;justify-content:space-between;gap:.6rem;margin-bottom:.68rem;flex-wrap:wrap}
-    .section-title h2{font-size:1rem}
     .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
-
+    .section-title{display:flex;align-items:center;justify-content:space-between;gap:.5rem;margin-bottom:.7rem}
+    .section-title h2{font-size:1rem}
+    .stack{display:grid;gap:.55rem}
     .list{display:grid;gap:.55rem}
-    .item{
-      border:1px solid #364b8a;border-radius:12px;padding:.62rem;
-      background:rgba(12,20,42,.76);
-    }
-    .item-top{display:flex;align-items:center;justify-content:space-between;gap:.65rem;margin-bottom:.3rem}
+    .item{border:1px solid #364b8a;border-radius:12px;padding:.62rem;background:rgba(12,20,42,.76)}
+    .item-top{display:flex;justify-content:space-between;gap:.6rem;align-items:center;margin-bottom:.25rem}
     .item-title{font-weight:650;font-size:.93rem}
-    .item-meta{font-size:.8rem;color:var(--muted)}
-    .badge{
-      font-size:.74rem;font-weight:700;padding:.2rem .48rem;border-radius:999px;border:1px solid;white-space:nowrap;
-    }
-    .b-ok{color:#bbf7d0;border-color:#2d7b4a;background:rgba(34,197,94,.15)}
-    .b-warn{color:#fde68a;border-color:#946300;background:rgba(245,158,11,.18)}
-    .b-danger{color:#fecaca;border-color:#7f1d1d;background:rgba(248,113,113,.14)}
+    .item-meta{font-size:.82rem;color:var(--muted)}
+    .badge{font-size:.74rem;font-weight:700;padding:.2rem .48rem;border-radius:999px;border:1px solid}
     .b-info{color:#c7d2fe;border-color:#4f46e5;background:rgba(99,102,241,.16)}
+    .b-ok{color:#bbf7d0;border-color:#2d7b4a;background:rgba(34,197,94,.15)}
 
     .table-wrap{overflow:auto;border:1px solid #364b8a;border-radius:12px}
     table{width:100%;border-collapse:collapse;min-width:640px;background:rgba(12,20,42,.72)}
     th,td{padding:.62rem .68rem;border-bottom:1px solid #2e4179;text-align:left;font-size:.86rem;vertical-align:top}
     th{font-size:.78rem;color:#bec9ef;text-transform:uppercase;letter-spacing:.65px;background:rgba(19,31,63,.95)}
-    tr:hover td{background:rgba(96,165,250,.06)}
 
-    .form-grid{display:grid;gap:.6rem;grid-template-columns:1fr 1fr}
-    .full{grid-column:1/-1}
     label{font-size:.82rem;color:#c9d4f5;display:block;margin-bottom:.3rem}
     input,select,textarea{
       width:100%;border:1px solid #3b5496;background:#101a36;color:var(--text);
       border-radius:10px;padding:.56rem .6rem;font-size:.9rem;
     }
-    input:focus,select:focus,textarea:focus{
-      outline:none;border-color:var(--focus);box-shadow:0 0 0 2px rgba(56,189,248,.2);
-    }
     textarea{min-height:96px;resize:vertical}
-    .stack{display:grid;gap:.55rem}
-    .msg{margin-top:.45rem;min-height:1.2rem;color:var(--muted);font-size:.84rem}
+    button,.btn{
+      border:1px solid var(--border);background:#121b34;color:var(--text);
+      border-radius:10px;padding:.52rem .76rem;font-size:.88rem;cursor:pointer;text-decoration:none;
+    }
+    .btn-primary{border:none;background:linear-gradient(135deg,#60a5fa,#a78bfa);color:#0f1f49;font-weight:700}
+    .btn-danger{border:1px solid #7f1d1d;color:#fecaca;background:rgba(248,113,113,.15)}
+    .msg{min-height:1.2rem;font-size:.84rem;color:var(--muted)}
     .msg.error{color:var(--danger)} .msg.success{color:var(--ok)}
     .mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
-    .small{font-size:.8rem;color:var(--muted)}
 
-    footer{
-      border-top:1px solid var(--border);color:var(--muted);font-size:.8rem;
-      text-align:center;padding:.9rem 1rem 1.2rem;
-    }
-
-    @media (max-width:1100px){
+    @media (max-width:1020px){
       main{grid-template-columns:1fr}
-      .sidebar{position:static;top:auto}
+      .sidebar{position:static}
       .hero,.grid-2{grid-template-columns:1fr}
       .kpis{grid-template-columns:1fr 1fr}
     }
-    @media (max-width:680px){
-      .kpis,.form-grid{grid-template-columns:1fr}
-      table{min-width:560px}
+    @media (max-width:620px){
+      .kpis{grid-template-columns:1fr}
     }
   </style>
 </head>
@@ -155,16 +112,14 @@
   <header>
     <div class="topbar">
       <div class="brand">
-        <div class="logo" aria-hidden="true">TP</div>
+        <div class="logo">TP</div>
         <span>Show Admin Dashboard</span>
-        <span class="pill" id="role-pill">ADMIN</span>
+        <span class="pill">NO AUTH REDIRECT</span>
       </div>
-
       <div class="actions">
         <select id="show-selector" aria-label="Select show"></select>
         <button id="btn-new-show">New Show</button>
         <button id="btn-refresh">Refresh</button>
-        <button id="btn-logout">Log Out</button>
       </div>
     </div>
   </header>
@@ -181,17 +136,15 @@
         <a class="nav-link" href="#callsheet">Call Sheet</a>
         <a class="nav-link" href="#links">Links</a>
       </nav>
-      <div class="status" id="session-status">Session status: checking...</div>
       <div class="status" id="show-status">Show: loading...</div>
+      <div class="status mono" id="show-password-note">Password: (not set)</div>
     </aside>
 
     <section class="content">
       <article class="panel hero" id="overview">
         <div>
           <h1 id="show-title">Show Operations Center</h1>
-          <p class="sub">
-            This dashboard is show-independent. All data you view/edit is stored under the selected show and does not affect other shows.
-          </p>
+          <p class="sub">All data is isolated per show. Switching shows loads that show’s own cast, contacts, calendar, ticker, and call sheet.</p>
           <div class="kpis">
             <div class="kpi"><div class="label">Cast Members</div><div class="value" id="kpi-cast">0</div></div>
             <div class="kpi"><div class="label">Contacts</div><div class="value" id="kpi-contacts">0</div></div>
@@ -213,87 +166,44 @@
 
       <section class="grid-2">
         <article class="panel" id="cast">
-          <div class="section-title">
-            <h2>Cast List</h2>
-          </div>
+          <div class="section-title"><h2>Cast List</h2></div>
           <form id="cast-form" class="stack" novalidate>
-            <div class="form-grid">
-              <div>
-                <label for="cast-name">Name</label>
-                <input id="cast-name" required />
-              </div>
-              <div>
-                <label for="cast-role">Show Role</label>
-                <input id="cast-role" required />
-              </div>
-              <div class="full">
-                <label for="cast-notes">Notes</label>
-                <input id="cast-notes" />
-              </div>
+            <div>
+              <label for="cast-name">Name</label>
+              <input id="cast-name" required />
+            </div>
+            <div>
+              <label for="cast-role">Role</label>
+              <input id="cast-role" required />
+            </div>
+            <div>
+              <label for="cast-notes">Notes</label>
+              <input id="cast-notes" />
             </div>
             <button class="btn-primary" type="submit">Add Cast Member</button>
-            <p class="msg" id="cast-msg" aria-live="polite"></p>
+            <p class="msg" id="cast-msg"></p>
           </form>
-
           <div class="table-wrap" style="margin-top:.8rem;">
-            <table aria-label="Cast table">
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Role</th>
-                  <th>Notes</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
+            <table>
+              <thead><tr><th>Name</th><th>Role</th><th>Notes</th><th>Action</th></tr></thead>
               <tbody id="cast-tbody"></tbody>
             </table>
           </div>
         </article>
 
         <article class="panel" id="contacts">
-          <div class="section-title">
-            <h2>Contact Information</h2>
-          </div>
+          <div class="section-title"><h2>Contact Info</h2></div>
           <form id="contact-form" class="stack" novalidate>
-            <div class="form-grid">
-              <div>
-                <label for="contact-name">Name</label>
-                <input id="contact-name" required />
-              </div>
-              <div>
-                <label for="contact-type">Type</label>
-                <select id="contact-type" required>
-                  <option value="" selected disabled>Select type</option>
-                  <option value="cast">Cast</option>
-                  <option value="crew">Crew</option>
-                  <option value="vendor">Vendor</option>
-                  <option value="staff">Staff</option>
-                </select>
-              </div>
-              <div>
-                <label for="contact-email">Email</label>
-                <input id="contact-email" type="email" required />
-              </div>
-              <div>
-                <label for="contact-phone">Phone</label>
-                <input id="contact-phone" required />
-              </div>
-            </div>
+            <div><label for="contact-name">Name</label><input id="contact-name" required /></div>
+            <div><label for="contact-type">Type</label><input id="contact-type" placeholder="cast/crew/staff/vendor" required /></div>
+            <div><label for="contact-email">Email</label><input id="contact-email" type="email" required /></div>
+            <div><label for="contact-phone">Phone</label><input id="contact-phone" required /></div>
             <button class="btn-primary" type="submit">Add Contact</button>
-            <p class="msg" id="contact-msg" aria-live="polite"></p>
+            <p class="msg" id="contact-msg"></p>
           </form>
-
           <div class="table-wrap" style="margin-top:.8rem;">
-            <table aria-label="Contacts table">
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Type</th>
-                  <th>Email</th>
-                  <th>Phone</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
+            <table>
+              <thead><tr><th>Name</th><th>Type</th><th>Email</th><th>Phone</th><th>Action</th></tr></thead>
               <tbody id="contacts-tbody"></tbody>
             </table>
           </div>
@@ -304,48 +214,26 @@
         <article class="panel" id="calendar">
           <div class="section-title"><h2>Edit Calendar</h2></div>
           <form id="calendar-form" class="stack" novalidate>
-            <div class="form-grid">
-              <div>
-                <label for="calendar-date">Date</label>
-                <input id="calendar-date" type="date" required />
-              </div>
-              <div>
-                <label for="calendar-time">Time</label>
-                <input id="calendar-time" type="time" required />
-              </div>
-              <div class="full">
-                <label for="calendar-title">Event Title</label>
-                <input id="calendar-title" required />
-              </div>
-              <div class="full">
-                <label for="calendar-notes">Notes</label>
-                <textarea id="calendar-notes"></textarea>
-              </div>
-            </div>
+            <div><label for="calendar-date">Date</label><input id="calendar-date" type="date" required /></div>
+            <div><label for="calendar-time">Time</label><input id="calendar-time" type="time" required /></div>
+            <div><label for="calendar-title">Title</label><input id="calendar-title" required /></div>
+            <div><label for="calendar-notes">Notes</label><textarea id="calendar-notes"></textarea></div>
             <button class="btn-primary" type="submit">Add Calendar Event</button>
-            <p class="msg" id="calendar-msg" aria-live="polite"></p>
+            <p class="msg" id="calendar-msg"></p>
           </form>
-
           <div class="list" id="calendar-list" style="margin-top:.8rem;"></div>
         </article>
 
         <article class="panel" id="ticker">
           <div class="section-title"><h2>Edit Ticker</h2></div>
           <form id="ticker-form" class="stack" novalidate>
-            <div>
-              <label for="ticker-input">Ticker Message</label>
-              <textarea id="ticker-input" required></textarea>
-            </div>
+            <div><label for="ticker-input">Ticker Message</label><textarea id="ticker-input" required></textarea></div>
             <button class="btn-primary" type="submit">Save Ticker</button>
-            <p class="msg" id="ticker-msg" aria-live="polite"></p>
+            <p class="msg" id="ticker-msg"></p>
           </form>
-
           <div class="item" style="margin-top:.8rem;">
-            <div class="item-top">
-              <div class="item-title">Current Ticker</div>
-              <span class="badge b-info">Live</span>
-            </div>
-            <div class="item-meta" id="ticker-preview">No ticker set for this show.</div>
+            <div class="item-top"><div class="item-title">Current Ticker</div><span class="badge b-info">Live</span></div>
+            <div class="item-meta" id="ticker-preview">No ticker set.</div>
           </div>
         </article>
       </section>
@@ -354,59 +242,31 @@
         <article class="panel" id="callsheet">
           <div class="section-title"><h2>Edit Call Sheet</h2></div>
           <form id="callsheet-form" class="stack" novalidate>
-            <div class="form-grid">
-              <div>
-                <label for="callsheet-dept">Department</label>
-                <input id="callsheet-dept" required />
-              </div>
-              <div>
-                <label for="callsheet-calltime">Call Time</label>
-                <input id="callsheet-calltime" type="time" required />
-              </div>
-              <div class="full">
-                <label for="callsheet-task">Task / Instruction</label>
-                <textarea id="callsheet-task" required></textarea>
-              </div>
-            </div>
+            <div><label for="callsheet-dept">Department</label><input id="callsheet-dept" required /></div>
+            <div><label for="callsheet-time">Call Time</label><input id="callsheet-time" type="time" required /></div>
+            <div><label for="callsheet-task">Task</label><textarea id="callsheet-task" required></textarea></div>
             <button class="btn-primary" type="submit">Add Call Sheet Item</button>
-            <p class="msg" id="callsheet-msg" aria-live="polite"></p>
+            <p class="msg" id="callsheet-msg"></p>
           </form>
-
           <div class="list" id="callsheet-list" style="margin-top:.8rem;"></div>
         </article>
 
         <article class="panel" id="links">
           <div class="section-title"><h2>Show Links</h2></div>
-
           <div class="list">
             <div class="item">
-              <div class="item-top">
-                <div class="item-title">Rehearsal Report</div>
-                <span class="badge b-ok">Available</span>
-              </div>
-              <div class="item-meta">Open and manage rehearsal reports for the selected show.</div>
+              <div class="item-top"><div class="item-title">Rehearsal Report</div><span class="badge b-ok">Available</span></div>
+              <div class="item-meta">Opens rehearsal report for selected show.</div>
               <div style="margin-top:.5rem;">
                 <a id="rehearsal-report-link-2" class="btn btn-primary" href="./rehearsal-report.html">Go to Rehearsal Report</a>
               </div>
             </div>
-
             <div class="item">
-              <div class="item-top">
-                <div class="item-title">Current Show Key</div>
-                <span class="badge b-info">Context</span>
+              <div class="item-top"><div class="item-title">Cast Page</div><span class="badge b-info">Per Show</span></div>
+              <div class="item-meta" id="cast-page-label">Not set</div>
+              <div style="margin-top:.5rem;">
+                <a id="cast-page-link" class="btn" href="#">Open Cast Page</a>
               </div>
-              <div class="item-meta mono" id="show-key">show: unknown</div>
-            </div>
-
-            <div class="item">
-              <div class="item-top">
-                <div class="item-title">Cast Pages in Repo</div>
-                <span class="badge b-info">Detected</span>
-              </div>
-              <div class="item-meta small">
-                cast-bare.html · cast-fences.html · cast-godofcarnage.html · cast-godot.html · cast-midsummer.html · cast-pillowman.html · cast-rivals.html
-              </div>
-              <div id="cast-page-links" style="margin-top:.55rem;display:grid;gap:.35rem;"></div>
             </div>
           </div>
         </article>
@@ -414,55 +274,25 @@
     </section>
   </main>
 
-  <footer>
-    © <span id="year"></span> Theater Portal · Show Admin
-  </footer>
+  <footer>© <span id="year"></span> Theater Portal · Show Admin</footer>
 
   <script>
-    const PORTAL_CONFIG = {
-      allowedRoles: ['admin', 'staff', 'manager'],
-      authSessionEndpoint: './api/auth/session',
-      logoutEndpoint: './api/auth/logout',
-      rehearsalReportBaseUrl: './rehearsal-report.html'
-    };
+    const STORAGE_KEY = 'show_admin_dashboard_data_v3';
 
-    const ROLE_REDIRECTS = {
-      volunteer: './volunteer-portal.html',
-      cast: './cast-selection-portal.html',
-      admin: './dashboard.html',
-      staff: './dashboard.html',
-      manager: './dashboard.html',
-      default: './portal-auth.html'
-    };
-
-    const STORAGE_KEY = 'show_admin_dashboard_data_v2';
-    const SESSION_KEY = 'portal_session';
-
-    const CAST_PAGE_FILES = [
-      'cast-bare.html',
-      'cast-fences.html',
-      'cast-godofcarnage.html',
-      'cast-godot.html',
-      'cast-midsummer.html',
-      'cast-pillowman.html',
-      'cast-rivals.html'
-    ];
-
-    const INITIAL_SHOWS = [
-      { id: 'bare', name: 'Bare', castPage: './cast-bare.html' },
-      { id: 'fences', name: 'Fences', castPage: './cast-fences.html' },
-      { id: 'godofcarnage', name: 'God of Carnage', castPage: './cast-godofcarnage.html' },
-      { id: 'godot', name: 'Godot', castPage: './cast-godot.html' },
-      { id: 'midsummer', name: 'Midsummer', castPage: './cast-midsummer.html' },
-      { id: 'pillowman', name: 'Pillowman', castPage: './cast-pillowman.html' },
-      { id: 'rivals', name: 'Rivals', castPage: './cast-rivals.html' }
+    const SHOWS = [
+      { id: 'fences', name: 'Fences', password: 'Legacy', castPage: './cast-fences.html' },
+      { id: 'midsummer', name: "A Midsummer Night's Dream", password: '', castPage: './cast-midsummer.html' },
+      { id: 'bare', name: 'Bare', password: '', castPage: './cast-bare.html' },
+      { id: 'godofcarnage', name: 'God of Carnage', password: '', castPage: './cast-godofcarnage.html' },
+      { id: 'rivals', name: 'The Rivals', password: '', castPage: './cast-rivals.html' },
+      { id: 'pillowman', name: 'The Pillowman', password: '', castPage: './cast-pillowman.html' },
+      { id: 'godot', name: 'Waiting for Godot', password: '', castPage: './cast-godot.html' }
     ];
 
     const $ = (id) => document.getElementById(id);
 
-    function cryptoRandom() {
-      if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
-      return 'id-' + Math.random().toString(36).slice(2) + Date.now();
+    function uuid() {
+      return (crypto && crypto.randomUUID) ? crypto.randomUUID() : 'id-' + Math.random().toString(36).slice(2) + Date.now();
     }
 
     function todayISO() {
@@ -472,565 +302,288 @@
       return d.getFullYear() + '-' + mm + '-' + dd;
     }
 
-    function createDefaultShow(seed) {
+    function defaultShowData(show) {
       return {
-        id: seed.id,
-        name: seed.name,
-        castPage: seed.castPage,
+        id: show.id,
+        name: show.name,
+        password: show.password || '',
+        castPage: show.castPage,
         cast: [],
         contacts: [],
-        calendar: [
-          { id: cryptoRandom(), date: todayISO(), time: '18:00', title: 'Rehearsal', notes: seed.name + ' evening rehearsal' }
-        ],
-        ticker: 'Updates for ' + seed.name,
+        calendar: [{ id: uuid(), date: todayISO(), time: '18:00', title: 'Rehearsal', notes: '' }],
+        ticker: '',
         callsheet: []
       };
     }
 
-    function createDefaultStore() {
-      return {
-        selectedShowId: INITIAL_SHOWS[0].id,
-        shows: INITIAL_SHOWS.map(createDefaultShow)
+    function initStore() {
+      const base = {
+        selectedShowId: SHOWS[0].id,
+        shows: SHOWS.map(defaultShowData)
       };
-    }
-
-    function ensureStructure(store) {
-      if (!store || !Array.isArray(store.shows)) return createDefaultStore();
-
-      const byId = new Map(store.shows.map(s => [s.id, s]));
-      INITIAL_SHOWS.forEach(seed => {
-        if (!byId.has(seed.id)) {
-          store.shows.push(createDefaultShow(seed));
-        } else {
-          const existing = byId.get(seed.id);
-          existing.name = existing.name || seed.name;
-          existing.castPage = existing.castPage || seed.castPage;
-          existing.cast = Array.isArray(existing.cast) ? existing.cast : [];
-          existing.contacts = Array.isArray(existing.contacts) ? existing.contacts : [];
-          existing.calendar = Array.isArray(existing.calendar) ? existing.calendar : [];
-          existing.callsheet = Array.isArray(existing.callsheet) ? existing.callsheet : [];
-          existing.ticker = typeof existing.ticker === 'string' ? existing.ticker : '';
-        }
-      });
-
-      if (!store.selectedShowId || !store.shows.find(s => s.id === store.selectedShowId)) {
-        store.selectedShowId = store.shows[0].id;
-      }
-      return store;
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(base));
+      return base;
     }
 
     function loadStore() {
       try {
         const raw = localStorage.getItem(STORAGE_KEY);
-        if (!raw) {
-          const base = createDefaultStore();
-          saveStore(base);
-          return base;
-        }
+        if (!raw) return initStore();
         const parsed = JSON.parse(raw);
-        const normalized = ensureStructure(parsed);
-        saveStore(normalized);
-        return normalized;
-      } catch (_) {
-        return createDefaultStore();
-      }
-    }
+        if (!parsed || !Array.isArray(parsed.shows)) return initStore();
 
-    function saveStore(store) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(store));
-    }
+        // ensure all required shows exist
+        SHOWS.forEach(seed => {
+          if (!parsed.shows.find(s => s.id === seed.id)) parsed.shows.push(defaultShowData(seed));
+        });
 
-    function getCurrentStore() {
-      return loadStore();
-    }
+        // normalize
+        parsed.shows = parsed.shows.map(s => ({
+          id: s.id,
+          name: s.name || (SHOWS.find(x => x.id === s.id)?.name || s.id),
+          password: typeof s.password === 'string' ? s.password : '',
+          castPage: s.castPage || (SHOWS.find(x => x.id === s.id)?.castPage || '#'),
+          cast: Array.isArray(s.cast) ? s.cast : [],
+          contacts: Array.isArray(s.contacts) ? s.contacts : [],
+          calendar: Array.isArray(s.calendar) ? s.calendar : [],
+          ticker: typeof s.ticker === 'string' ? s.ticker : '',
+          callsheet: Array.isArray(s.callsheet) ? s.callsheet : []
+        }));
 
-    function setCurrentStore(next) {
-      saveStore(next);
-    }
-
-    function getCurrentShow(store) {
-      return store.shows.find(s => s.id === store.selectedShowId) || store.shows[0];
-    }
-
-    function setSessionStatus(text) {
-      $('session-status').textContent = text;
-    }
-
-    function setShowStatus(text) {
-      $('show-status').textContent = text;
-    }
-
-    function getStoredSession() {
-      try {
-        const raw = localStorage.getItem(SESSION_KEY);
-        return raw ? JSON.parse(raw) : null;
-      } catch (_) { return null; }
-    }
-
-    function clearStoredSession() {
-      try { localStorage.removeItem(SESSION_KEY); } catch (_) {}
-    }
-
-    function routeForRole(role) {
-      const normalized = (role || '').toString().trim().toLowerCase();
-      return ROLE_REDIRECTS[normalized] || ROLE_REDIRECTS.default;
-    }
-
-    async function serverSession() {
-      try {
-        const res = await fetch(PORTAL_CONFIG.authSessionEndpoint, { method: 'GET', credentials: 'include' });
-        if (!res.ok) return null;
-        return res.json();
-      } catch (_) { return null; }
-    }
-
-    function enforceAdminAccess(session) {
-      const role = (session && session.role ? session.role : '').toLowerCase();
-
-      if (!role) {
-        setSessionStatus('No active session found. Redirecting to sign-in...');
-        window.location.assign('./portal-auth.html');
-        return false;
-      }
-
-      if (!PORTAL_CONFIG.allowedRoles.includes(role)) {
-        setSessionStatus('Role mismatch (' + role + '). Redirecting to your assigned portal...');
-        window.location.assign(routeForRole(role));
-        return false;
-      }
-
-      $('role-pill').textContent = role.toUpperCase();
-      const email = session && session.user && session.user.email ? session.user.email : role;
-      setSessionStatus('Signed in as ' + email + '. Access granted.');
-      return true;
-    }
-
-    async function initializeSessionGuard() {
-      const local = getStoredSession();
-      if (local && local.role) {
-        if (!enforceAdminAccess(local)) return false;
-      }
-
-      const backend = await serverSession();
-      if (!backend) {
-        if (!local) {
-          setSessionStatus('Session expired or unavailable. Redirecting...');
-          window.location.assign('./portal-auth.html');
-          return false;
+        if (!parsed.selectedShowId || !parsed.shows.find(s => s.id === parsed.selectedShowId)) {
+          parsed.selectedShowId = parsed.shows[0].id;
         }
-        return true;
-      }
 
-      try { localStorage.setItem(SESSION_KEY, JSON.stringify(backend)); } catch (_) {}
-      return enforceAdminAccess(backend);
-    }
-
-    async function logout() {
-      try {
-        await fetch(PORTAL_CONFIG.logoutEndpoint, { method: 'POST', credentials: 'include' });
+        saveStore(parsed);
+        return parsed;
       } catch (_) {
-      } finally {
-        clearStoredSession();
-        window.location.assign('./portal-auth.html');
+        return initStore();
       }
     }
 
-    function updateShowSelector() {
-      const store = getCurrentStore();
-      const select = $('show-selector');
-      select.innerHTML = '';
-      store.shows.forEach(show => {
-        const opt = document.createElement('option');
-        opt.value = show.id;
-        opt.textContent = show.name;
-        if (show.id === store.selectedShowId) opt.selected = true;
-        select.appendChild(opt);
+    function saveStore(store) { localStorage.setItem(STORAGE_KEY, JSON.stringify(store)); }
+    function getShow(store) { return store.shows.find(s => s.id === store.selectedShowId) || store.shows[0]; }
+    function esc(v){ return String(v == null ? '' : v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+
+    function renderSelector() {
+      const store = loadStore();
+      const sel = $('show-selector');
+      sel.innerHTML = '';
+      store.shows.forEach(s => {
+        const o = document.createElement('option');
+        o.value = s.id;
+        o.textContent = s.name;
+        if (s.id === store.selectedShowId) o.selected = true;
+        sel.appendChild(o);
       });
     }
 
-    function updateKpis(show) {
+    function renderAll() {
+      const store = loadStore();
+      const show = getShow(store);
+
+      $('show-title').textContent = show.name + ' — Operations Center';
+      $('show-status').textContent = 'Current show: ' + show.name;
+      $('show-password-note').textContent = 'Password: ' + (show.password || '(blank)');
       $('kpi-cast').textContent = String(show.cast.length);
       $('kpi-contacts').textContent = String(show.contacts.length);
       $('kpi-calendar').textContent = String(show.calendar.length);
       $('kpi-callsheet').textContent = String(show.callsheet.length);
-    }
-
-    function renderCast(show) {
-      const tbody = $('cast-tbody');
-      tbody.innerHTML = '';
-      show.cast.forEach(member => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td>${escapeHtml(member.name)}</td>
-          <td>${escapeHtml(member.role)}</td>
-          <td>${escapeHtml(member.notes || '')}</td>
-          <td><button data-remove-cast="${member.id}" class="btn-danger">Remove</button></td>
-        `;
-        tbody.appendChild(tr);
-      });
-    }
-
-    function renderContacts(show) {
-      const tbody = $('contacts-tbody');
-      tbody.innerHTML = '';
-      show.contacts.forEach(c => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td>${escapeHtml(c.name)}</td>
-          <td>${escapeHtml(c.type)}</td>
-          <td>${escapeHtml(c.email)}</td>
-          <td>${escapeHtml(c.phone)}</td>
-          <td><button data-remove-contact="${c.id}" class="btn-danger">Remove</button></td>
-        `;
-        tbody.appendChild(tr);
-      });
-    }
-
-    function renderCalendar(show) {
-      const list = $('calendar-list');
-      list.innerHTML = '';
-      show.calendar
-        .slice()
-        .sort((a,b) => (a.date + 'T' + a.time).localeCompare(b.date + 'T' + b.time))
-        .forEach(ev => {
-          const item = document.createElement('div');
-          item.className = 'item';
-          item.innerHTML = `
-            <div class="item-top">
-              <div class="item-title">${escapeHtml(ev.title)}</div>
-              <span class="badge b-info">${escapeHtml(ev.date)} ${escapeHtml(ev.time)}</span>
-            </div>
-            <div class="item-meta">${escapeHtml(ev.notes || '')}</div>
-            <div style="margin-top:.45rem;">
-              <button class="btn-danger" data-remove-calendar="${ev.id}">Remove</button>
-            </div>
-          `;
-          list.appendChild(item);
-        });
-    }
-
-    function renderTicker(show) {
-      $('ticker-preview').textContent = show.ticker || 'No ticker set for this show.';
       $('ticker-input').value = show.ticker || '';
-    }
+      $('ticker-preview').textContent = show.ticker || 'No ticker set.';
 
-    function renderCallsheet(show) {
-      const list = $('callsheet-list');
-      list.innerHTML = '';
-      show.callsheet.forEach(row => {
-        const item = document.createElement('div');
-        item.className = 'item';
-        item.innerHTML = `
+      const castHref = show.castPage || '#';
+      $('cast-page-label').textContent = castHref;
+      $('cast-page-link').href = castHref;
+
+      const rr = './rehearsal-report.html?show=' + encodeURIComponent(show.id);
+      $('rehearsal-report-link').href = rr;
+      $('rehearsal-report-link-2').href = rr;
+
+      // cast
+      const castBody = $('cast-tbody');
+      castBody.innerHTML = '';
+      show.cast.forEach(row => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${esc(row.name)}</td><td>${esc(row.role)}</td><td>${esc(row.notes)}</td><td><button class="btn-danger" data-rm-cast="${row.id}">Remove</button></td>`;
+        castBody.appendChild(tr);
+      });
+
+      // contacts
+      const contactsBody = $('contacts-tbody');
+      contactsBody.innerHTML = '';
+      show.contacts.forEach(row => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${esc(row.name)}</td><td>${esc(row.type)}</td><td>${esc(row.email)}</td><td>${esc(row.phone)}</td><td><button class="btn-danger" data-rm-contact="${row.id}">Remove</button></td>`;
+        contactsBody.appendChild(tr);
+      });
+
+      // calendar
+      const calList = $('calendar-list');
+      calList.innerHTML = '';
+      show.calendar.slice().sort((a,b)=>(a.date+'T'+a.time).localeCompare(b.date+'T'+b.time)).forEach(ev => {
+        const div = document.createElement('div');
+        div.className = 'item';
+        div.innerHTML = `
           <div class="item-top">
-            <div class="item-title">${escapeHtml(row.dept)}</div>
-            <span class="badge b-warn">${escapeHtml(row.callTime)}</span>
+            <div class="item-title">${esc(ev.title)}</div>
+            <span class="badge b-info">${esc(ev.date)} ${esc(ev.time)}</span>
           </div>
-          <div class="item-meta">${escapeHtml(row.task)}</div>
-          <div style="margin-top:.45rem;">
-            <button class="btn-danger" data-remove-callsheet="${row.id}">Remove</button>
-          </div>
+          <div class="item-meta">${esc(ev.notes)}</div>
+          <div style="margin-top:.45rem;"><button class="btn-danger" data-rm-cal="${ev.id}">Remove</button></div>
         `;
-        list.appendChild(item);
-      });
-    }
-
-    function renderCastPageLinks(show) {
-      const wrap = $('cast-page-links');
-      wrap.innerHTML = '';
-
-      CAST_PAGE_FILES.forEach((file) => {
-        const a = document.createElement('a');
-        a.className = 'btn';
-        a.href = './' + file;
-        a.textContent = file;
-        wrap.appendChild(a);
+        calList.appendChild(div);
       });
 
-      if (show.castPage) {
-        const selected = document.createElement('div');
-        selected.className = 'small';
-        selected.style.marginTop = '.25rem';
-        selected.textContent = 'Selected show cast page: ' + show.castPage.replace('./','');
-        wrap.prepend(selected);
-      }
+      // callsheet
+      const csList = $('callsheet-list');
+      csList.innerHTML = '';
+      show.callsheet.forEach(it => {
+        const div = document.createElement('div');
+        div.className = 'item';
+        div.innerHTML = `
+          <div class="item-top">
+            <div class="item-title">${esc(it.dept)}</div>
+            <span class="badge b-info">${esc(it.time)}</span>
+          </div>
+          <div class="item-meta">${esc(it.task)}</div>
+          <div style="margin-top:.45rem;"><button class="btn-danger" data-rm-call="${it.id}">Remove</button></div>
+        `;
+        csList.appendChild(div);
+      });
+
+      renderSelector();
     }
 
-    function updateShowContext(show) {
-      $('show-title').textContent = show.name + ' — Operations Center';
-      setShowStatus('Current show: ' + show.name);
-      $('show-key').textContent = 'show:' + show.id;
-
-      const reportUrl = PORTAL_CONFIG.rehearsalReportBaseUrl + '?show=' + encodeURIComponent(show.id);
-      $('rehearsal-report-link').setAttribute('href', reportUrl);
-      $('rehearsal-report-link-2').setAttribute('href', reportUrl);
-
-      renderCastPageLinks(show);
-    }
-
-    function renderAll() {
-      const store = getCurrentStore();
-      const show = getCurrentShow(store);
-      updateShowSelector();
-      updateShowContext(show);
-      updateKpis(show);
-      renderCast(show);
-      renderContacts(show);
-      renderCalendar(show);
-      renderTicker(show);
-      renderCallsheet(show);
-    }
-
-    function mutateCurrentShow(mutator) {
-      const store = getCurrentStore();
-      const idx = store.shows.findIndex(s => s.id === store.selectedShowId);
-      if (idx === -1) return;
-      mutator(store.shows[idx], store);
-      setCurrentStore(store);
+    function mutate(mutator){
+      const store = loadStore();
+      const show = getShow(store);
+      mutator(show, store);
+      saveStore(store);
       renderAll();
     }
 
-    function setupShowControls() {
+    function bind() {
+      $('btn-refresh').addEventListener('click', () => location.reload());
+
       $('show-selector').addEventListener('change', (e) => {
-        const store = getCurrentStore();
+        const store = loadStore();
         store.selectedShowId = e.target.value;
-        setCurrentStore(store);
+        saveStore(store);
         renderAll();
       });
 
       $('btn-new-show').addEventListener('click', () => {
-        const name = window.prompt('Enter new show name:');
+        const name = prompt('Enter show name:');
         if (!name || !name.trim()) return;
-        const store = getCurrentStore();
-        const id = 'show-' + cryptoRandom().slice(0,8);
+        const store = loadStore();
+        const id = 'show-' + uuid().slice(0,8);
         store.shows.push({
-          id: id,
-          name: name.trim(),
-          castPage: '',
-          cast: [],
-          contacts: [],
-          calendar: [],
-          ticker: '',
-          callsheet: []
+          id, name: name.trim(), password:'', castPage:'#',
+          cast:[], contacts:[], calendar:[], ticker:'', callsheet:[]
         });
         store.selectedShowId = id;
-        setCurrentStore(store);
+        saveStore(store);
         renderAll();
       });
-    }
 
-    function setupCast() {
-      const form = $('cast-form');
-      const msg = $('cast-msg');
-
-      form.addEventListener('submit', (e) => {
+      $('cast-form').addEventListener('submit', (e) => {
         e.preventDefault();
-        msg.className = 'msg';
-
         const name = $('cast-name').value.trim();
         const role = $('cast-role').value.trim();
         const notes = $('cast-notes').value.trim();
-
-        if (!name || !role) {
-          msg.textContent = 'Name and role are required.';
-          msg.className = 'msg error';
-          return;
-        }
-
-        mutateCurrentShow((show) => {
-          show.cast.unshift({ id: cryptoRandom(), name: name, role: role, notes: notes });
-        });
-
-        form.reset();
-        msg.textContent = 'Cast member added.';
-        msg.className = 'msg success';
+        if (!name || !role) { $('cast-msg').className='msg error'; $('cast-msg').textContent='Name and role required.'; return; }
+        mutate(show => show.cast.unshift({ id: uuid(), name, role, notes }));
+        e.target.reset();
+        $('cast-msg').className='msg success'; $('cast-msg').textContent='Cast member added.';
       });
 
       $('cast-tbody').addEventListener('click', (e) => {
-        const btn = e.target.closest('button[data-remove-cast]');
-        if (!btn) return;
-        const id = btn.getAttribute('data-remove-cast');
-        mutateCurrentShow((show) => {
-          show.cast = show.cast.filter(m => m.id !== id);
-        });
+        const b = e.target.closest('button[data-rm-cast]');
+        if (!b) return;
+        const id = b.getAttribute('data-rm-cast');
+        mutate(show => show.cast = show.cast.filter(x => x.id !== id));
       });
-    }
 
-    function setupContacts() {
-      const form = $('contact-form');
-      const msg = $('contact-msg');
-
-      form.addEventListener('submit', (e) => {
+      $('contact-form').addEventListener('submit', (e) => {
         e.preventDefault();
-        msg.className = 'msg';
-
         const name = $('contact-name').value.trim();
-        const type = $('contact-type').value;
+        const type = $('contact-type').value.trim();
         const email = $('contact-email').value.trim();
         const phone = $('contact-phone').value.trim();
-
-        if (!name || !type || !email || !phone) {
-          msg.textContent = 'Name, type, email, and phone are required.';
-          msg.className = 'msg error';
-          return;
-        }
-
-        mutateCurrentShow((show) => {
-          show.contacts.unshift({ id: cryptoRandom(), name: name, type: type, email: email, phone: phone });
-        });
-
-        form.reset();
-        msg.textContent = 'Contact added.';
-        msg.className = 'msg success';
+        if (!name || !type || !email || !phone) { $('contact-msg').className='msg error'; $('contact-msg').textContent='All fields required.'; return; }
+        mutate(show => show.contacts.unshift({ id: uuid(), name, type, email, phone }));
+        e.target.reset();
+        $('contact-msg').className='msg success'; $('contact-msg').textContent='Contact added.';
       });
 
       $('contacts-tbody').addEventListener('click', (e) => {
-        const btn = e.target.closest('button[data-remove-contact]');
-        if (!btn) return;
-        const id = btn.getAttribute('data-remove-contact');
-        mutateCurrentShow((show) => {
-          show.contacts = show.contacts.filter(c => c.id !== id);
-        });
+        const b = e.target.closest('button[data-rm-contact]');
+        if (!b) return;
+        const id = b.getAttribute('data-rm-contact');
+        mutate(show => show.contacts = show.contacts.filter(x => x.id !== id));
       });
-    }
 
-    function setupCalendar() {
-      const form = $('calendar-form');
-      const msg = $('calendar-msg');
-
-      form.addEventListener('submit', (e) => {
+      $('calendar-form').addEventListener('submit', (e) => {
         e.preventDefault();
-        msg.className = 'msg';
-
         const date = $('calendar-date').value;
         const time = $('calendar-time').value;
         const title = $('calendar-title').value.trim();
         const notes = $('calendar-notes').value.trim();
-
-        if (!date || !time || !title) {
-          msg.textContent = 'Date, time, and event title are required.';
-          msg.className = 'msg error';
-          return;
-        }
-
-        mutateCurrentShow((show) => {
-          show.calendar.push({ id: cryptoRandom(), date: date, time: time, title: title, notes: notes });
-        });
-
-        form.reset();
-        msg.textContent = 'Calendar event added.';
-        msg.className = 'msg success';
+        if (!date || !time || !title) { $('calendar-msg').className='msg error'; $('calendar-msg').textContent='Date, time, title required.'; return; }
+        mutate(show => show.calendar.push({ id: uuid(), date, time, title, notes }));
+        e.target.reset();
+        $('calendar-msg').className='msg success'; $('calendar-msg').textContent='Calendar event added.';
       });
 
       $('calendar-list').addEventListener('click', (e) => {
-        const btn = e.target.closest('button[data-remove-calendar]');
-        if (!btn) return;
-        const id = btn.getAttribute('data-remove-calendar');
-        mutateCurrentShow((show) => {
-          show.calendar = show.calendar.filter(item => item.id !== id);
-        });
+        const b = e.target.closest('button[data-rm-cal]');
+        if (!b) return;
+        const id = b.getAttribute('data-rm-cal');
+        mutate(show => show.calendar = show.calendar.filter(x => x.id !== id));
       });
-    }
 
-    function setupTicker() {
-      const form = $('ticker-form');
-      const msg = $('ticker-msg');
-
-      form.addEventListener('submit', (e) => {
+      $('ticker-form').addEventListener('submit', (e) => {
         e.preventDefault();
-        msg.className = 'msg';
-        const value = $('ticker-input').value.trim();
-
-        mutateCurrentShow((show) => {
-          show.ticker = value;
-        });
-
-        msg.textContent = 'Ticker updated for this show.';
-        msg.className = 'msg success';
+        const val = $('ticker-input').value.trim();
+        mutate(show => show.ticker = val);
+        $('ticker-msg').className='msg success'; $('ticker-msg').textContent='Ticker saved.';
       });
-    }
 
-    function setupCallsheet() {
-      const form = $('callsheet-form');
-      const msg = $('callsheet-msg');
-
-      form.addEventListener('submit', (e) => {
+      $('callsheet-form').addEventListener('submit', (e) => {
         e.preventDefault();
-        msg.className = 'msg';
-
         const dept = $('callsheet-dept').value.trim();
-        const callTime = $('callsheet-calltime').value;
+        const time = $('callsheet-time').value;
         const task = $('callsheet-task').value.trim();
-
-        if (!dept || !callTime || !task) {
-          msg.textContent = 'Department, call time, and task are required.';
-          msg.className = 'msg error';
-          return;
-        }
-
-        mutateCurrentShow((show) => {
-          show.callsheet.unshift({ id: cryptoRandom(), dept: dept, callTime: callTime, task: task });
-        });
-
-        form.reset();
-        msg.textContent = 'Call sheet item added.';
-        msg.className = 'msg success';
+        if (!dept || !time || !task) { $('callsheet-msg').className='msg error'; $('callsheet-msg').textContent='Department, time, task required.'; return; }
+        mutate(show => show.callsheet.unshift({ id: uuid(), dept, time, task }));
+        e.target.reset();
+        $('callsheet-msg').className='msg success'; $('callsheet-msg').textContent='Call sheet item added.';
       });
 
       $('callsheet-list').addEventListener('click', (e) => {
-        const btn = e.target.closest('button[data-remove-callsheet]');
-        if (!btn) return;
-        const id = btn.getAttribute('data-remove-callsheet');
-        mutateCurrentShow((show) => {
-          show.callsheet = show.callsheet.filter(item => item.id !== id);
-        });
+        const b = e.target.closest('button[data-rm-call]');
+        if (!b) return;
+        const id = b.getAttribute('data-rm-call');
+        mutate(show => show.callsheet = show.callsheet.filter(x => x.id !== id));
       });
-    }
 
-    function setupActions() {
-      $('btn-logout').addEventListener('click', logout);
-      $('btn-refresh').addEventListener('click', () => window.location.reload());
-    }
-
-    function setupSmoothAnchorNav() {
-      document.querySelectorAll('a.nav-link[href^="#"]').forEach((a) => {
+      document.querySelectorAll('a.nav-link[href^="#"]').forEach(a => {
         a.addEventListener('click', (e) => {
-          const id = a.getAttribute('href');
-          const target = document.querySelector(id);
+          const target = document.querySelector(a.getAttribute('href'));
           if (!target) return;
           e.preventDefault();
-
-          document.querySelectorAll('.nav-link').forEach((n) => n.classList.remove('active'));
+          document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active'));
           a.classList.add('active');
-
           target.scrollIntoView({ behavior: 'smooth', block: 'start' });
         });
       });
     }
 
-    function escapeHtml(input) {
-      return String(input == null ? '' : input)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#39;');
-    }
-
-    async function init() {
+    function init(){
       $('year').textContent = new Date().getFullYear();
-
-      const allowed = await initializeSessionGuard();
-      if (!allowed) return;
-
-      setupActions();
-      setupShowControls();
-      setupCast();
-      setupContacts();
-      setupCalendar();
-      setupTicker();
-      setupCallsheet();
-      setupSmoothAnchorNav();
-
+      loadStore();
+      bind();
       renderAll();
     }
 
