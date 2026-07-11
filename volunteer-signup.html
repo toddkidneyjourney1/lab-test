@@ -124,9 +124,11 @@
       color: #fff;
     }
 
-    .btn:disabled {
+    .btn:disabled,
+    .btn[aria-disabled="true"] {
       opacity: 0.7;
       cursor: not-allowed;
+      pointer-events: none;
     }
 
     .notice {
@@ -201,7 +203,7 @@
 
         <div class="actions">
           <button id="submit-btn" class="btn btn-primary" type="submit">Submit Signup</button>
-          <a class="btn btn-secondary" href="volunteer.html">Pick Your Shift</a>
+          <a id="pick-shift-btn" class="btn btn-secondary" href="portal-landing.html" aria-disabled="true" title="Sign in required">Pick Your Shift</a>
           <a class="btn btn-secondary" href="portal-landing.html">Back to Portal Landing</a>
         </div>
 
@@ -222,6 +224,7 @@
     const form = document.getElementById("volunteer-form");
     const submitBtn = document.getElementById("submit-btn");
     const messageEl = document.getElementById("message");
+    const pickShiftBtn = document.getElementById("pick-shift-btn");
 
     function showMessage(text, type = "error") {
       messageEl.innerHTML = `<div class="notice ${type}">${text}</div>`;
@@ -230,6 +233,23 @@
 
     function normalizePhone(phone) {
       return (phone || "").replace(/[^\d+()-.\s]/g, "").trim();
+    }
+
+    function setPickShiftAccess(isAuthenticated) {
+      if (isAuthenticated) {
+        pickShiftBtn.href = "volunteer.html";
+        pickShiftBtn.removeAttribute("aria-disabled");
+        pickShiftBtn.removeAttribute("title");
+      } else {
+        pickShiftBtn.href = "portal-landing.html";
+        pickShiftBtn.setAttribute("aria-disabled", "true");
+        pickShiftBtn.setAttribute("title", "Sign in required");
+      }
+    }
+
+    async function enforcePickShiftAuth() {
+      const { data: { user } } = await supabase.auth.getUser();
+      setPickShiftAccess(!!user);
     }
 
     form.addEventListener("submit", async (e) => {
@@ -279,6 +299,12 @@
       showMessage("Thanks! Your volunteer signup was submitted successfully.", "success");
       submitBtn.disabled = false;
       submitBtn.textContent = "Submit Signup";
+    });
+
+    enforcePickShiftAuth();
+
+    supabase.auth.onAuthStateChange((_event, session) => {
+      setPickShiftAccess(!!session?.user);
     });
   </script>
 </body>
