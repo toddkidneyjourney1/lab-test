@@ -1,146 +1,192 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A Midsummer Night's Dream | The Lab Theater</title>
-    <link rel="stylesheet" href="../style.css">
-    <style>
-        /* Ensuring layout matches your specific needs */
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .nav-link {
-            text-align: right;
-        }
-        .btn-primary {
-            display: inline-block;
-            margin-top: 20px;
-        }
-        .bottom-nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 30px;
-        }
-        .btn-back {
-            display: inline-block;
-            padding: 10px 20px;
-            background-color: #ccc;
-            color: #000;
-            text-decoration: none;
-            border-radius: 5px;
-            font-weight: bold;
-        }
-        /* Cast Section Styling */
-        .cast-section {
-            margin-top: 3rem;
-            padding-top: 2rem;
-            border-top: 2px solid var(--accent);
-        }
-        .cast-section h2 {
-            color: var(--text);
-            margin-bottom: 2rem;
-            text-transform: uppercase;
-            font-weight: 700;
-        }
-        .cast-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-        .cast-card {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-        }
-        .cast-photo {
-            width: 150px;
-            height: 150px;
-            border-radius: 8px;
-            object-fit: cover;
-            margin-bottom: 1rem;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .cast-card h3 {
-            color: var(--text);
-            margin: 0.5rem 0;
-            font-size: 1rem;
-        }
-        .cast-role {
-            color: var(--accent);
-            font-size: 0.9rem;
-            font-style: italic;
-        }
-        .cast-note {
-            color: var(--gray);
-            font-size: 0.85rem;
-            margin-top: 1.5rem;
-            font-style: italic;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>A Midsummer Night's Dream | The Lab Theater</title>
+  <link rel="stylesheet" href="../style.css" />
+  <style>
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .nav-link {
+      text-align: right;
+    }
+    .btn-primary {
+      display: inline-block;
+      margin-top: 20px;
+    }
+    .bottom-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 30px;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .bottom-nav .btn-primary {
+      margin-top: 0;
+    }
+
+    .cast-section {
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 2px solid #444;
+    }
+    .cast-section h2 {
+      margin-bottom: 1.25rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .cast-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 1.25rem;
+    }
+    .cast-card {
+      text-align: center;
+    }
+    .cast-photo {
+      width: 100%;
+      max-width: 170px;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-bottom: 0.6rem;
+      background: #ddd;
+    }
+    .cast-card h3 {
+      margin: 0.2rem 0;
+      font-size: 1rem;
+    }
+    .cast-actor {
+      margin: 0;
+      font-size: 0.92rem;
+      opacity: 0.85;
+    }
+  </style>
 </head>
 <body>
-    <header>
-        <div class="logo">THE <span>LAB</span>
-            <p class="tagline">Intentionally innovative live theater</p>
+  <header>
+    <div class="logo">THE <span>LAB</span>
+      <p class="tagline">Intentionally innovative live theater</p>
+      <input type="checkbox" id="nav-toggle" class="nav-toggle" />
+      <label for="nav-toggle" class="nav-toggle-label">
+        <span></span>
+      </label>
+
+      <nav class="hamburger-menu">
+        <a href="../index.html">Home</a>
+        <a href="fences.html">Fences</a>
+        <a href="bare.html">Bare</a>
+        <a href="god.html">God of Carnage</a>
+        <a href="godot.html">Waiting for Godot</a>
+        <a href="pillowman.html">The Pillowman</a>
+        <a href="rivals.html">The Rivals</a>
+        <a href="shakespeare.html">A Midsummer Night's Dream</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <article class="production-details">
+      <h1>A Midsummer Night's Dream</h1>
+      <p class="meta">March 25 – April 11, 2027</p>
+      <img src="../assets/midsummer.jpg" alt="A Midsummer Night's Dream" class="feature-img" />
+      <div class="content">
+        <p>by William Shakespeare</p>
+        <p>
+          Get ready to be whisked away to a world of moonlight, mischief, and magical enchantment!
+          Shakespeare's <em>A Midsummer Night's Dream</em> is the ultimate romantic comedy, where
+          young lovers, feuding fairies, and a troupe of hilariously earnest actors collide in a forest
+          full of surprises.
+        </p>
+      </div>
+
+      <section class="cast-section">
+        <h2>Cast</h2>
+        <div class="cast-grid">
+          <div class="cast-card">
+            <img src="../assets/cast/placeholder.jpg" alt="Puck placeholder photo" class="cast-photo" />
+            <h3>Puck</h3>
+            <p class="cast-actor">Actor: TBA</p>
+          </div>
+
+          <div class="cast-card">
+            <img src="../assets/cast/placeholder.jpg" alt="Oberon placeholder photo" class="cast-photo" />
+            <h3>Oberon</h3>
+            <p class="cast-actor">Actor: TBA</p>
+          </div>
+
+          <div class="cast-card">
+            <img src="../assets/cast/placeholder.jpg" alt="Titania placeholder photo" class="cast-photo" />
+            <h3>Titania</h3>
+            <p class="cast-actor">Actor: TBA</p>
+          </div>
+
+          <div class="cast-card">
+            <img src="../assets/cast/placeholder.jpg" alt="Hermia placeholder photo" class="cast-photo" />
+            <h3>Hermia</h3>
+            <p class="cast-actor">Actor: TBA</p>
+          </div>
+
+          <div class="cast-card">
+            <img src="../assets/cast/placeholder.jpg" alt="Helena placeholder photo" class="cast-photo" />
+            <h3>Helena</h3>
+            <p class="cast-actor">Actor: TBA</p>
+          </div>
+
+          <div class="cast-card">
+            <img src="../assets/cast/placeholder.jpg" alt="Lysander placeholder photo" class="cast-photo" />
+            <h3>Lysander</h3>
+            <p class="cast-actor">Actor: TBA</p>
+          </div>
+
+          <div class="cast-card">
+            <img src="../assets/cast/placeholder.jpg" alt="Demetrius placeholder photo" class="cast-photo" />
+            <h3>Demetrius</h3>
+            <p class="cast-actor">Actor: TBA</p>
+          </div>
+
+          <div class="cast-card">
+            <img src="../assets/cast/placeholder.jpg" alt="Theseus placeholder photo" class="cast-photo" />
+            <h3>Theseus</h3>
+            <p class="cast-actor">Actor: TBA</p>
+          </div>
+
+          <div class="cast-card">
+            <img src="../assets/cast/placeholder.jpg" alt="Hippolyta placeholder photo" class="cast-photo" />
+            <h3>Hippolyta</h3>
+            <p class="cast-actor">Actor: TBA</p>
+          </div>
+
+          <div class="cast-card">
+            <img src="../assets/cast/placeholder.jpg" alt="Bottom placeholder photo" class="cast-photo" />
+            <h3>Bottom</h3>
+            <p class="cast-actor">Actor: TBA</p>
+          </div>
+
+          <div class="cast-card">
+            <img src="../assets/cast/placeholder.jpg" alt="Quince placeholder photo" class="cast-photo" />
+            <h3>Quince</h3>
+            <p class="cast-actor">Actor: TBA</p>
+          </div>
+
+          <div class="cast-card">
+            <img src="../assets/cast/placeholder.jpg" alt="Egeus placeholder photo" class="cast-photo" />
+            <h3>Egeus</h3>
+            <p class="cast-actor">Actor: TBA</p>
+          </div>
         </div>
-    </header>
+      </section>
 
-    <main>
-        <article class="production-details">
-            <h1>A Midsummer Night's Dream</h1>
-            <p class="meta">March 25 – April 11, 2027</p>
-            <img src="../assets/midsummer.jpg" alt="A Midsummer Night's Dream" class="feature-img">
-            <div class="content">
-                <p>by William Shakespeare</p>
-                <p>Get ready to be whisked away to a world of moonlight, mischief, and magical enchantment! Shakespeare's A Midsummer Night's Dream is the ultimate romantic comedy, where four young lovers find themselves tangled in a forest where fairies play, spells go awry, and the impossible happens. Whether it's the antics of the irrepressible Puck, the bumbling performance of the local laborers, or the chaotic love triangle of the enchanted, this play is a joyous, whimsical celebration of the absurdity of love. It's a timeless, laugh-out-loud masterpiece that will leave you dreaming of magic long after the final bow!.</p>
-            </div>
-
-            <!-- Cast Section -->
-            <div class="cast-section">
-                <h2>Cast</h2>
-                <div class="cast-grid">
-                    <div class="cast-card">
-                        <img src="https://via.placeholder.com/150?text=Actor+1" alt="Cast Member" class="cast-photo">
-                        <h3>Actor Name</h3>
-                        <p class="cast-role">Puck</p>
-                    </div>
-                    <div class="cast-card">
-                        <img src="https://via.placeholder.com/150?text=Actor+2" alt="Cast Member" class="cast-photo">
-                        <h3>Actor Name</h3>
-                        <p class="cast-role">Oberon</p>
-                    </div>
-                    <div class="cast-card">
-                        <img src="https://via.placeholder.com/150?text=Actor+3" alt="Cast Member" class="cast-photo">
-                        <h3>Actor Name</h3>
-                        <p class="cast-role">Titania</p>
-                    </div>
-                    <div class="cast-card">
-                        <img src="https://via.placeholder.com/150?text=Actor+4" alt="Cast Member" class="cast-photo">
-                        <h3>Actor Name</h3>
-                        <p class="cast-role">Hermia</p>
-                    </div>
-                </div>
-                <p class="cast-note">* Cast photos coming soon</p>
-            </div>
-            
-            <div class="bottom-nav">
-              <a href="https://www.purplepass.com/events/376902-a-midsummer-night-s-dream-mar-25th-2027" class="btn-primary">
-    Hold on to your seat
-</a>
-                <a href="../index.html" class="btn-back">
-                    Back to The Lab
-                </a>
-            </div>
-        </article>
-    </main>
+      <div class="bottom-nav">
+        <a href="https://www.purplepass.com/events/376902-a-midsummer-night-s-dream-mar-25th-2027" class="btn-primary">Hold on to your seat</a>
+        <a href="../index.html" class="btn-primary">Back to Home</a>
+      </div>
+    </article>
+  </main>
 </body>
 </html>
