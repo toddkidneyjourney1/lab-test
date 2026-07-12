@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+    <h1 id="show-title">Loading...</h1>
+    <div id="cast-list-display"></div>
+
+    <script>
+        // Get the show name from the URL (e.g., ?show=fences)
+        const urlParams = new URLSearchParams(window.location.search);
+        const show = urlParams.get('show');
+        document.getElementById('show-title').innerText = show.toUpperCase();
+
+        // Load data specific to this show
+        const savedData = localStorage.getItem(show + '_cast');
+        const displayContainer = document.getElementById('cast-list-display');
+
+        if (savedData) {
+            const cast = JSON.parse(savedData);
+            cast.forEach(member => {
+                displayContainer.innerHTML += `<div><h3>${member.name}</h3><p>${member.role}</p></div>`;
+            });
+        }
+    </script>
+</body>
+</html>
