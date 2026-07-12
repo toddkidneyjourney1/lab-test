@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Waiting for Godot | Cast Rehearsal Hub</title>
@@ -409,7 +410,36 @@
       </article>
     </section>
   </main>
+// Initialize Supabase (Same keys as your dashboard)
+const supabase = supabase.createClient('YOUR_URL', 'YOUR_KEY');
 
+async function loadCast() {
+  const { data, error } = await supabase
+    .from('theater_data')
+    .select('*')
+    .eq('category', 'cast')
+    .eq('show_name', 'Waiting for Godot');
+
+  if (error) {
+    console.error('Error loading cast:', error);
+    return;
+  }
+
+  // Find your target table body or container in your HTML
+  const listContainer = document.getElementById('cast-list-container');
+  listContainer.innerHTML = '';
+
+  data.forEach(member => {
+    // Create your card or row dynamically
+    const div = document.createElement('div');
+    div.className = 'cast-card'; 
+    div.innerHTML = `<h3>${member.name}</h3><p>${member.role_or_type}</p>`;
+    listContainer.appendChild(div);
+  });
+}
+
+// Run on load
+document.addEventListener('DOMContentLoaded', loadCast);
   <footer>
     Internal cast portal • Keep contact information private and do not share outside production channels.
   </footer>
