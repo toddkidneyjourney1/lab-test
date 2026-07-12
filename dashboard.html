@@ -64,6 +64,18 @@
 
         // Initialize
         refreshDashboard();
+        async function addItem(category, payload) {
+    const { error } = await supabase
+        .from('theater_data')
+        .insert([{ 
+            category, 
+            show_id: currentShowId, // This ensures it stays associated with the current show
+            ...payload 
+        }]);
+    
+    if (error) console.error('Insert error:', error);
+    else refreshDashboard();
+}
     </script>
 </body>
 </html>
