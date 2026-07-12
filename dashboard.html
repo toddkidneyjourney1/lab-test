@@ -3,104 +3,163 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Show Admin Dashboard (Static)</title>
+  <title>Show Admin Dashboard (Lab Style)</title>
   <style>
     :root{
-      --bg:#0b1020; --panel:#121a30; --text:#e7ecff; --muted:#a9b5dc;
-      --accent:#60a5fa; --accent2:#a78bfa; --border:#2a3866;
-      --ok:#4ade80; --danger:#f87171; --warn:#f59e0b;
+      --bg:#070b16;
+      --panel:#0f162d;
+      --panel-soft:#121c38;
+      --text:#e8eeff;
+      --muted:#9eb0db;
+      --accent:#64b5ff;
+      --accent2:#9b8bff;
+      --border:#2e4277;
+      --ok:#4ade80;
+      --danger:#f87171;
+      --warn:#f59e0b;
+      --glow:0 0 0 1px rgba(120,160,255,.15), 0 12px 34px rgba(0,0,0,.45);
     }
+
     *{box-sizing:border-box;margin:0;padding:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+
     body{
-      min-height:100vh;color:var(--text);
+      min-height:100vh;
+      color:var(--text);
       background:
-        radial-gradient(1000px 460px at 0% -20%, #1a2b59 0%, transparent 56%),
-        radial-gradient(850px 380px at 120% 0%, #3a245f 0%, transparent 55%),
-        var(--bg);
+        radial-gradient(1100px 520px at -8% -18%, rgba(76,130,255,.26) 0%, transparent 58%),
+        radial-gradient(950px 420px at 112% -8%, rgba(176,112,255,.22) 0%, transparent 55%),
+        linear-gradient(180deg,#060913 0%, #080d1b 60%, #060913 100%);
       display:grid;grid-template-rows:auto 1fr auto;
     }
-    header,footer{background:rgba(8,12,28,.78);backdrop-filter:blur(8px)}
-    header{border-bottom:1px solid var(--border)}
-    footer{border-top:1px solid var(--border);text-align:center;color:var(--muted);font-size:.82rem;padding:.95rem}
+
+    /* Header aligned to index-like lab style */
+    header{
+      border-bottom:1px solid rgba(117,149,222,.25);
+      background:rgba(7,11,22,.78);
+      backdrop-filter:blur(10px);
+      position:sticky;top:0;z-index:20;
+    }
     .topbar{
-      max-width:1280px;margin:0 auto;padding:.9rem 1rem;
-      display:flex;align-items:center;justify-content:space-between;gap:.7rem;flex-wrap:wrap;
+      max-width:1280px;margin:0 auto;padding:.85rem 1rem;
+      display:flex;align-items:center;justify-content:space-between;gap:.8rem;flex-wrap:wrap;
     }
-    .brand{display:flex;align-items:center;gap:.6rem;font-weight:700}
+    .brand{
+      display:flex;align-items:center;gap:.65rem;font-weight:700;letter-spacing:.2px;
+    }
     .logo{
-      width:34px;height:34px;border-radius:10px;display:grid;place-items:center;
-      background:linear-gradient(135deg,var(--accent),var(--accent2));color:#102047;font-weight:800;font-size:.85rem;
+      width:36px;height:36px;border-radius:11px;display:grid;place-items:center;
+      background:linear-gradient(135deg,var(--accent),var(--accent2));
+      color:#102047;font-weight:900;font-size:.82rem;
+      box-shadow:0 8px 20px rgba(102,153,255,.35);
     }
-    .actions{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
+    .brand span.title{
+      font-size:1rem;
+    }
     .pill{
-      font-size:.77rem;padding:.24rem .62rem;border-radius:999px;font-weight:700;
-      color:#1e1b4b;background:linear-gradient(135deg,#bfdbfe,#ddd6fe);
+      font-size:.74rem;padding:.25rem .62rem;border-radius:999px;font-weight:700;
+      color:#131a3f;background:linear-gradient(135deg,#bfdcff,#ddd6fe);
+      border:1px solid rgba(255,255,255,.35);
     }
+
+    .actions{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
 
     main{
       max-width:1280px;width:100%;margin:0 auto;padding:1rem;
       display:grid;grid-template-columns:300px 1fr;gap:1rem;
     }
+
     .sidebar,.panel{
-      border:1px solid var(--border);border-radius:16px;padding:1rem;
-      background:linear-gradient(180deg,rgba(26,38,70,.84),rgba(15,23,45,.93));
-      box-shadow:0 10px 30px rgba(0,0,0,.22);
+      border:1px solid var(--border);
+      border-radius:16px;padding:1rem;
+      background:
+        linear-gradient(180deg,rgba(20,30,58,.9),rgba(12,18,36,.94));
+      box-shadow:var(--glow);
     }
-    .sidebar{position:sticky;top:76px;height:fit-content}
-    .nav-title{color:var(--muted);font-size:.78rem;text-transform:uppercase;letter-spacing:.8px;margin-bottom:.5rem}
+
+    .sidebar{position:sticky;top:84px;height:fit-content}
+    .nav-title{color:var(--muted);font-size:.78rem;text-transform:uppercase;letter-spacing:.9px;margin-bottom:.52rem}
     .nav-links{display:grid;gap:.45rem}
-    .nav-link{display:block;padding:.55rem .65rem;border-radius:10px;color:#dae2ff;text-decoration:none;border:1px solid transparent}
-    .nav-link:hover{background:rgba(96,165,250,.1);border-color:#4068a8}
-    .nav-link.active{background:rgba(167,139,250,.14);border-color:#5a4a9d}
-    .status{margin-top:.9rem;border:1px dashed #425b9e;border-radius:12px;padding:.65rem;color:#becaf0;font-size:.84rem}
+    .nav-link{
+      display:block;padding:.56rem .66rem;border-radius:10px;color:#dce5ff;text-decoration:none;border:1px solid transparent;
+      transition:.16s ease;
+    }
+    .nav-link:hover{background:rgba(100,181,255,.1);border-color:#4a6eb3}
+    .nav-link.active{background:rgba(155,139,255,.16);border-color:#5c52a6}
+    .status{
+      margin-top:.92rem;border:1px dashed #465f9f;border-radius:12px;padding:.66rem;color:#c1cdf0;font-size:.84rem;
+      background:rgba(15,23,47,.45);
+    }
     .mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+    .small{font-size:.8rem;color:var(--muted)}
 
     .content{display:grid;gap:1rem}
     .hero{display:grid;grid-template-columns:1.2fr 1fr;gap:1rem}
-    .hero h1{font-size:1.25rem;margin-bottom:.35rem}
+    .hero h1{font-size:1.26rem;margin-bottom:.38rem;letter-spacing:.2px}
     .sub{color:var(--muted);font-size:.92rem;line-height:1.45}
-    .kpis{margin-top:.9rem;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.6rem}
-    .kpi{border:1px solid #3a4f8f;border-radius:12px;padding:.65rem;background:rgba(12,20,42,.72)}
+
+    .kpis{margin-top:.9rem;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.62rem}
+    .kpi{
+      border:1px solid #3a5194;border-radius:12px;padding:.66rem;
+      background:linear-gradient(180deg,rgba(14,23,47,.8),rgba(10,17,34,.88));
+    }
     .kpi .label{font-size:.76rem;color:var(--muted)}
     .kpi .value{font-size:1.03rem;font-weight:700;margin-top:.2rem}
 
     .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
-    .section-title{display:flex;align-items:center;justify-content:space-between;gap:.5rem;margin-bottom:.7rem;flex-wrap:wrap}
+    .section-title{display:flex;align-items:center;justify-content:space-between;gap:.5rem;margin-bottom:.72rem;flex-wrap:wrap}
     .section-title h2{font-size:1rem}
-    .stack{display:grid;gap:.55rem}
-    .list{display:grid;gap:.55rem}
-    .item{border:1px solid #364b8a;border-radius:12px;padding:.62rem;background:rgba(12,20,42,.76)}
+    .stack,.list{display:grid;gap:.55rem}
+    .item{
+      border:1px solid #3a5194;border-radius:12px;padding:.64rem;
+      background:rgba(12,20,42,.78)
+    }
     .item-top{display:flex;justify-content:space-between;gap:.6rem;align-items:center;margin-bottom:.25rem}
     .item-title{font-weight:650;font-size:.93rem}
     .item-meta{font-size:.82rem;color:var(--muted)}
+
     .badge{font-size:.74rem;font-weight:700;padding:.2rem .48rem;border-radius:999px;border:1px solid}
     .b-info{color:#c7d2fe;border-color:#4f46e5;background:rgba(99,102,241,.16)}
     .b-ok{color:#bbf7d0;border-color:#2d7b4a;background:rgba(34,197,94,.15)}
     .b-warn{color:#fde68a;border-color:#946300;background:rgba(245,158,11,.18)}
 
     .table-wrap{overflow:auto;border:1px solid #364b8a;border-radius:12px}
-    table{width:100%;border-collapse:collapse;min-width:640px;background:rgba(12,20,42,.72)}
+    table{width:100%;border-collapse:collapse;min-width:640px;background:rgba(11,18,38,.78)}
     th,td{padding:.62rem .68rem;border-bottom:1px solid #2e4179;text-align:left;font-size:.86rem;vertical-align:top}
-    th{font-size:.78rem;color:#bec9ef;text-transform:uppercase;letter-spacing:.65px;background:rgba(19,31,63,.95)}
+    th{font-size:.78rem;color:#bec9ef;text-transform:uppercase;letter-spacing:.65px;background:rgba(18,29,59,.98)}
     tr:hover td{background:rgba(96,165,250,.06)}
 
     label{font-size:.82rem;color:#c9d4f5;display:block;margin-bottom:.3rem}
     input,select,textarea{
-      width:100%;border:1px solid #3b5496;background:#101a36;color:var(--text);
+      width:100%;border:1px solid #3c569a;background:#0f1832;color:var(--text);
       border-radius:10px;padding:.56rem .6rem;font-size:.9rem;
     }
     textarea{min-height:96px;resize:vertical}
     button,.btn{
-      border:1px solid var(--border);background:#121b34;color:var(--text);
+      border:1px solid var(--border);
+      background:linear-gradient(180deg,#152243,#101a34);
+      color:var(--text);
       border-radius:10px;padding:.52rem .76rem;font-size:.88rem;cursor:pointer;text-decoration:none;
+      transition:.15s ease;
     }
-    button:hover,.btn:hover{border-color:#4b67b2;background:#172448}
-    .btn-primary{border:none;background:linear-gradient(135deg,#60a5fa,#a78bfa);color:#0f1f49;font-weight:700}
+    button:hover,.btn:hover{border-color:#5877c2;background:linear-gradient(180deg,#1a2a54,#122043)}
+    .btn-primary{
+      border:none;background:linear-gradient(135deg,#64b5ff,#9b8bff);
+      color:#0f1f49;font-weight:700;
+      box-shadow:0 6px 16px rgba(117,163,255,.35);
+    }
     .btn-danger{border:1px solid #7f1d1d;color:#fecaca;background:rgba(248,113,113,.15)}
     .btn-danger:hover{background:rgba(248,113,113,.24)}
+
     .msg{min-height:1.2rem;font-size:.84rem;color:var(--muted)}
-    .msg.error{color:var(--danger)} .msg.success{color:var(--ok)}
-    .small{font-size:.8rem;color:var(--muted)}
+    .msg.error{color:var(--danger)}
+    .msg.success{color:var(--ok)}
+
+    footer{
+      border-top:1px solid rgba(117,149,222,.25);
+      text-align:center;color:var(--muted);font-size:.82rem;padding:.95rem;
+      background:rgba(7,11,22,.78);
+      backdrop-filter:blur(8px);
+    }
 
     @media (max-width:1020px){
       main{grid-template-columns:1fr}
@@ -118,8 +177,8 @@
     <div class="topbar">
       <div class="brand">
         <div class="logo">TP</div>
-        <span>Show Admin Dashboard</span>
-        <span class="pill">STATIC SITE</span>
+        <span class="title">Lab Dashboard</span>
+        <span class="pill">ADMIN</span>
       </div>
       <div class="actions">
         <select id="show-selector" aria-label="Select show"></select>
@@ -171,6 +230,7 @@
             <a class="btn" href="#ticker">Edit Ticker</a>
             <a class="btn" href="#callsheet">Edit Call Sheet</a>
             <a class="btn" id="rehearsal-report-link" href="./rehearsal-report.html">Open Rehearsal Report</a>
+            <a class="btn btn-primary" id="rehearsal-portal-link" href="./rehearsal-portal.html">Open Rehearsal Portal</a>
           </div>
         </div>
       </article>
@@ -264,6 +324,13 @@
               </div>
             </div>
             <div class="item">
+              <div class="item-top"><div class="item-title">Rehearsal Portal</div><span class="badge b-ok">Available</span></div>
+              <div class="item-meta">Opens the rehearsal portal.</div>
+              <div style="margin-top:.5rem;">
+                <a id="rehearsal-portal-link-2" class="btn btn-primary" href="./rehearsal-portal.html">Go to Rehearsal Portal</a>
+              </div>
+            </div>
+            <div class="item">
               <div class="item-top"><div class="item-title">Cast Page</div><span class="badge b-info">Per Show</span></div>
               <div class="item-meta" id="cast-page-label">Not set</div>
               <div style="margin-top:.5rem;">
@@ -276,7 +343,7 @@
     </section>
   </main>
 
-  <footer>© <span id="year"></span> Theater Portal · Static Admin Dashboard</footer>
+  <footer>© <span id="year"></span> Theater Portal · Lab Dashboard</footer>
 
   <script>
     const STORAGE_KEY = 'show_admin_dashboard_static_v2';
