@@ -3,251 +3,415 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>A Midsummer Night's Dream Cast Portal</title>
+  <title>A Midsummer Night’s Dream | Cast Rehearsal Hub</title>
+  <link rel="stylesheet" href="style.css" />
   <style>
-    :root{
-      --bg:#0b1020; --panel:#121a30; --text:#e7ecff; --muted:#a9b5dc;
-      --accent:#60a5fa; --accent2:#a78bfa; --border:#2a3866;
-      --ok:#4ade80; --info:#93c5fd;
+    :root {
+      --bg: #0f0f14;
+      --card: #1a1b22;
+      --text: #f5f5f7;
+      --muted: #b5b7c3;
+      --accent: #ff3366;
+      --border: #2b2d3a;
+      --ok: #35c98a;
+      --warn: #ffcc66;
+      --shadow: rgba(0, 0, 0, 0.35);
     }
-    *{box-sizing:border-box;margin:0;padding:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
-    body{
-      min-height:100vh;color:var(--text);
-      background:
-        radial-gradient(1000px 460px at 0% -20%, #1a2b59 0%, transparent 56%),
-        radial-gradient(850px 380px at 120% 0%, #3a245f 0%, transparent 55%),
-        var(--bg);
-      display:grid;grid-template-rows:auto 1fr auto;
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      background: radial-gradient(circle at top, #191a24 0%, var(--bg) 45%);
+      color: var(--text);
+      line-height: 1.45;
+      min-height: 100vh;
     }
-    header,footer{background:rgba(8,12,28,.78);backdrop-filter:blur(8px)}
-    header{border-bottom:1px solid var(--border)}
-    footer{border-top:1px solid var(--border);text-align:center;color:var(--muted);font-size:.82rem;padding:.95rem}
-    .topbar{
-      max-width:1100px;margin:0 auto;padding:.9rem 1rem;
-      display:flex;align-items:center;justify-content:space-between;gap:.7rem;flex-wrap:wrap;
+
+    header {
+      border-bottom: 1px solid var(--border);
+      background: rgba(15, 15, 20, 0.88);
+      backdrop-filter: blur(8px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
     }
-    .brand{display:flex;align-items:center;gap:.6rem;font-weight:700}
-    .logo{
-      width:34px;height:34px;border-radius:10px;display:grid;place-items:center;
-      background:linear-gradient(135deg,var(--accent),var(--accent2));color:#102047;font-weight:800;font-size:.85rem;
+
+    .topbar {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1rem 1.25rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
     }
-    .btn{
-      border:1px solid var(--border);background:#121b34;color:var(--text);
-      border-radius:10px;padding:.52rem .76rem;font-size:.88rem;cursor:pointer;text-decoration:none;display:inline-block;
+
+    .logo {
+      font-weight: 900;
+      letter-spacing: 0.04em;
+      font-size: 1.08rem;
     }
-    .btn:hover{border-color:#4b67b2;background:#172448}
-    main{max-width:1100px;width:100%;margin:0 auto;padding:1rem;display:grid;gap:1rem}
-    .panel{
-      border:1px solid var(--border);border-radius:16px;padding:1rem;
-      background:linear-gradient(180deg,rgba(26,38,70,.84),rgba(15,23,45,.93));
-      box-shadow:0 10px 30px rgba(0,0,0,.22);
+
+    .logo span { color: var(--accent); }
+
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
     }
-    .hero{display:grid;grid-template-columns:1.2fr 1fr;gap:1rem}
-    .hero h1{font-size:1.25rem;margin-bottom:.35rem}
-    .sub{color:var(--muted);font-size:.92rem;line-height:1.45}
-    .badge{
-      display:inline-block;font-size:.74rem;font-weight:700;padding:.24rem .55rem;border-radius:999px;
-      border:1px solid #4f46e5;background:rgba(99,102,241,.16);color:#c7d2fe;
+
+    nav a {
+      text-decoration: none;
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.45rem 0.7rem;
+      font-size: 0.9rem;
+      transition: 0.2s ease;
     }
-    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
-    .section-title{display:flex;align-items:center;justify-content:space-between;gap:.5rem;margin-bottom:.65rem}
-    .section-title h2{font-size:1rem}
-    .list{list-style:none;display:grid;gap:.55rem}
-    .item{
-      border:1px solid #364b8a;border-radius:12px;padding:.62rem;background:rgba(12,20,42,.76);
+
+    nav a:hover,
+    nav a[aria-current="page"] {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px rgba(255, 51, 102, 0.15) inset;
     }
-    .item strong{color:#dbe7ff}
-    .muted{color:var(--muted);font-size:.84rem}
-    .ticker{
-      border:1px solid #2d7b4a;background:rgba(34,197,94,.12);border-radius:12px;padding:.65rem;color:#dcfce7;
-      font-weight:600;
+
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1.25rem;
+      display: grid;
+      gap: 1rem;
     }
-    .meta{font-size:.8rem;color:var(--muted);margin-top:.5rem}
-    .calendar-embed-wrap{margin-top:1rem;border:1px solid #364b8a;border-radius:14px;overflow:hidden;background:rgba(12,20,42,.76)}
-    .calendar-embed{display:block;width:100%;min-height:480px;border:0;background:#fff}
-    .calendar-empty{padding:1rem;border:1px dashed #4b67b2;border-radius:12px;background:rgba(12,20,42,.4);color:var(--muted)}
-    @media (max-width:900px){.hero,.grid-2{grid-template-columns:1fr}}
+
+    .intro {
+      background: linear-gradient(180deg, rgba(255, 51, 102, 0.11), rgba(255, 51, 102, 0.03));
+      border: 1px solid rgba(255, 51, 102, 0.35);
+      border-radius: 14px;
+      padding: 1rem;
+    }
+
+    .intro h1 {
+      margin: 0 0 0.35rem;
+      font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+    }
+
+    .intro p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .ticker-wrap {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: #151720;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      min-height: 44px;
+    }
+
+    .ticker-label {
+      background: rgba(255, 51, 102, 0.18);
+      color: #ffdbe6;
+      padding: 0.6rem 0.75rem;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      border-right: 1px solid var(--border);
+      white-space: nowrap;
+    }
+
+    .ticker {
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+      height: 44px;
+    }
+
+    .ticker-track {
+      position: absolute;
+      white-space: nowrap;
+      will-change: transform;
+      animation: ticker-scroll 28s linear infinite;
+      padding-left: 100%;
+      line-height: 44px;
+      color: var(--warn);
+      font-size: 0.92rem;
+    }
+
+    @keyframes ticker-scroll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-100%); }
+    }
+
+    .grid {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: 1fr 1fr;
+      align-items: start;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      box-shadow: 0 10px 24px var(--shadow);
+      overflow: hidden;
+    }
+
+    .card h2 {
+      margin: 0;
+      padding: 0.85rem 1rem;
+      font-size: 1rem;
+      border-bottom: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.01);
+    }
+
+    .card-body { padding: 0.9rem 1rem 1rem; }
+
+    .calendar-2x2 {
+      width: min(100%, 520px);
+      aspect-ratio: 2 / 2;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      margin: 0 auto;
+      background: #111218;
+    }
+
+    .calendar-2x2 iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display: block;
+    }
+
+    .calendar-actions {
+      margin-top: 0.75rem;
+      display: flex;
+      justify-content: center;
+    }
+
+    .button {
+      text-decoration: none;
+      color: white;
+      background: var(--accent);
+      border: 1px solid transparent;
+      padding: 0.5rem 0.8rem;
+      border-radius: 10px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      transition: transform 0.15s ease, filter 0.2s ease;
+    }
+
+    .button:hover { transform: translateY(-1px); filter: brightness(1.05); }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 0.55rem 0.45rem;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+
+    th {
+      color: #ffdbe6;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .tag {
+      display: inline-block;
+      font-size: 0.74rem;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 0.18rem 0.5rem;
+      color: var(--muted);
+      margin-left: 0.35rem;
+    }
+
+    .status-ok { color: var(--ok); font-weight: 700; }
+    .status-warn { color: var(--warn); font-weight: 700; }
+
+    .call-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 0.55rem;
+    }
+
+    .call-list li {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.6rem 0.7rem;
+      background: rgba(255, 255, 255, 0.01);
+    }
+
+    .call-time {
+      font-weight: 800;
+      color: #ffdbe6;
+      margin-right: 0.4rem;
+    }
+
+    .small-note {
+      margin-top: 0.6rem;
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+
+    footer {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1.25rem 1.8rem;
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+
+    @media (max-width: 920px) {
+      .grid { grid-template-columns: 1fr; }
+      .calendar-2x2 { width: 100%; max-width: 420px; }
+    }
   </style>
 </head>
 <body>
   <header>
     <div class="topbar">
-      <div class="brand">
-        <div class="logo">TP</div>
-        <span id="show-title">A Midsummer Night's Dream Cast Portal</span>
-        <span class="badge">LIVE FROM ADMIN DATA</span>
-      </div>
-      <div>
-        <a class="btn" href="./dashboard.html">Back to Admin Dashboard</a>
-      </div>
+      <div class="logo">THE <span>LAB</span></div>
+      <nav aria-label="Primary">
+        <a href="index.html">Back to the Slab</a>
+        <a href="about.html">Origin Story</a>
+        <a href="cast-portal.html">Portal Landing Pad</a>
+        <a href="cast-midsummer.html" aria-current="page">Midsummer Hub</a>
+      </nav>
     </div>
   </header>
 
   <main>
-    <section class="panel hero">
-      <div>
-        <h1 id="hero-title">A Midsummer Night's Dream — Cast Portal</h1>
-        <p class="sub">This page updates from the static admin dashboard data for this show.</p>
-        <div class="meta">Last updated: <span id="updated-at">—</span></div>
-      </div>
-      <div>
-        <div class="section-title"><h2>Ticker</h2></div>
-        <div id="ticker-text" class="ticker">No ticker updates.</div>
+    <section class="intro" aria-labelledby="page-title">
+      <h1 id="page-title">A Midsummer Night’s Dream Rehearsal Hub</h1>
+      <p>Calendar, contact sheet, call list, and rolling notifications for cast and crew.</p>
+    </section>
+
+    <section class="ticker-wrap" aria-label="Notifications">
+      <div class="ticker-label">Notifications</div>
+      <div class="ticker" role="status" aria-live="polite">
+        <div class="ticker-track">
+          Tonight 7:00 PM full cast call • Fairy scene spacing at top of rehearsal • Bring movement shoes • Mechanicals run-through after break • Confirm attendance in group chat by noon
+        </div>
       </div>
     </section>
 
-    <section class="grid-2">
-      <article class="panel">
-        <div class="section-title"><h2>Cast List</h2></div>
-        <ul id="cast-list" class="list">
-          <li class="item muted">No cast entries yet.</li>
-        </ul>
+    <section class="grid">
+      <article class="card" aria-labelledby="calendar-heading">
+        <h2 id="calendar-heading">Rehearsal Calendar</h2>
+        <div class="card-body">
+          <div class="calendar-2x2">
+            <iframe
+              title="Rehearsal Calendar"
+              src="https://calendar.google.com/calendar/embed?src=ZTdhNTU4ZDU2OWIzMDYxMzRkNDFhMjdhMTc1MjcxZDM2YjczZDY0MWRlZTVhY2Q3MTllNGM3ZGE0NTU0ZjA0MkBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&ctz=America%2FNew_York"
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+          </div>
+          <div class="calendar-actions">
+            <a
+              class="button"
+              href="https://calendar.google.com/calendar/u/0?cid=ZTdhNTU4ZDU2OWIzMDYxMzRkNDFhMjdhMTc1MjcxZDM2YjczZDY0MWRlZTVhY2Q3MTllNGM3ZGE0NTU0ZjA0MkBncm91cC5jYWxlbmRhci5nb29nbGUuY29t"
+              target="_blank"
+              rel="noopener noreferrer">
+              Open Full Calendar
+            </a>
+          </div>
+          <p class="small-note">Tip: If events are missing, verify you are logged into the Google account with rehearsal access.</p>
+        </div>
       </article>
 
-      <article class="panel">
-        <div class="section-title"><h2>Calendar</h2></div>
-        <ul id="calendar-list" class="list">
-          <li class="item muted">No calendar items yet.</li>
-        </ul>
+      <article class="card" aria-labelledby="call-list-heading">
+        <h2 id="call-list-heading">Today’s Call List</h2>
+        <div class="card-body">
+          <ul class="call-list">
+            <li><span class="call-time">6:00 PM</span> Stage Management + Deck Crew <span class="tag">Preset</span></li>
+            <li><span class="call-time">6:25 PM</span> Fairies + Puck <span class="tag">Movement Warmup</span></li>
+            <li><span class="call-time">6:45 PM</span> Lovers <span class="tag">Forest Scenes</span></li>
+            <li><span class="call-time">7:00 PM</span> Full Cast <span class="tag">Act I Run</span></li>
+            <li><span class="call-time">8:20 PM</span> Mechanicals <span class="tag">Play-Within-Play</span></li>
+          </ul>
+          <p class="small-note"><span class="status-warn">Reminder:</span> Sign in with stage management when you arrive.</p>
+        </div>
       </article>
-    </section>
 
-    <section class="panel">
-      <div class="section-title"><h2>Google Calendar</h2></div>
-      <div id="google-calendar-embed"></div>
-    </section>
-
-    <section class="panel">
-      <div class="section-title"><h2>Call Sheet</h2></div>
-      <ul id="callsheet-list" class="list">
-        <li class="item muted">No call sheet items yet.</li>
-      </ul>
+      <article class="card" style="grid-column: 1 / -1;" aria-labelledby="cast-list-heading">
+        <h2 id="cast-list-heading">Cast List + Contact Info</h2>
+        <div class="card-body">
+          <table aria-label="Cast contact table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Role</th>
+                <th>Phone</th>
+                <th>Email</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Riley Carter</td>
+                <td>Puck</td>
+                <td>(239) 555-0131</td>
+                <td>riley.carter@thelab.org</td>
+                <td class="status-ok">Confirmed</td>
+              </tr>
+              <tr>
+                <td>Sam Rivera</td>
+                <td>Hermia</td>
+                <td>(239) 555-0132</td>
+                <td>sam.rivera@thelab.org</td>
+                <td class="status-ok">Confirmed</td>
+              </tr>
+              <tr>
+                <td>Taylor Brooks</td>
+                <td>Lysander</td>
+                <td>(239) 555-0133</td>
+                <td>taylor.brooks@thelab.org</td>
+                <td class="status-ok">Confirmed</td>
+              </tr>
+              <tr>
+                <td>Casey Monroe</td>
+                <td>Helena</td>
+                <td>(239) 555-0134</td>
+                <td>casey.monroe@thelab.org</td>
+                <td class="status-warn">ETA 6:50 PM</td>
+              </tr>
+              <tr>
+                <td>Avery Quinn</td>
+                <td>Stage Manager</td>
+                <td>(239) 555-0135</td>
+                <td>avery.quinn@thelab.org</td>
+                <td class="status-ok">Confirmed</td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="small-note">Replace placeholder contact details with your live Midsummer roster before publishing.</p>
+        </div>
+      </article>
     </section>
   </main>
 
-  <footer>© <span id="year"></span> Theater Portal · Cast Portal</footer>
-
-  <script>
-    (() => {
-      const STORAGE_KEY = 'show_admin_dashboard_static_v2';
-      const SHOW_ID = 'midsummer';
-      const GOOGLE_CALENDAR_URL = '';
-      const $ = (id) => document.getElementById(id);
-
-      function esc(v){
-        return String(v == null ? '' : v)
-          .replace(/&/g,'&amp;')
-          .replace(/</g,'&lt;')
-          .replace(/>/g,'&gt;')
-          .replace(/"/g,'&quot;')
-          .replace(/'/g,'&#39;');
-      }
-
-      function loadStore() {
-        try {
-          const raw = localStorage.getItem(STORAGE_KEY);
-          if (!raw) return null;
-          return JSON.parse(raw);
-        } catch (_) {
-          return null;
-        }
-      }
-
-      function getShowData() {
-        const store = loadStore();
-        if (!store || !Array.isArray(store.shows)) return null;
-        return store.shows.find(s => s.id === SHOW_ID) || null;
-      }
-
-      function renderList(el, html, emptyMessage) {
-        if (!el) return;
-        el.innerHTML = html || `<li class="item muted">${emptyMessage}</li>`;
-      }
-
-      function getCalendarEmbedUrl(show) {
-        return (
-          GOOGLE_CALENDAR_URL ||
-          show?.googleCalendarEmbedUrl ||
-          show?.googleCalendarUrl ||
-          show?.calendarEmbedUrl ||
-          ''
-        );
-      }
-
-      function renderGoogleCalendar(show) {
-        const container = $('google-calendar-embed');
-        if (!container) return;
-
-        const embedUrl = getCalendarEmbedUrl(show);
-        if (!embedUrl) {
-          container.innerHTML = '<div class="calendar-empty">No Google Calendar embed has been configured for this show yet.</div>';
-          return;
-        }
-
-        container.innerHTML = `<div class="calendar-embed-wrap"><iframe class="calendar-embed" src="${esc(embedUrl)}" title="Google Calendar for ${esc(show?.name || SHOW_ID)}" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div>`;
-      }
-
-      function render() {
-        const show = getShowData();
-
-        if (!show) {
-          $('show-title').textContent = "A Midsummer Night's Dream Cast Portal";
-          $('hero-title').textContent = 'Show not found';
-          $('ticker-text').textContent = 'No data found for this show yet.';
-          renderList($('cast-list'), '', 'No cast entries yet.');
-          renderList($('calendar-list'), '', 'No calendar items yet.');
-          renderList($('callsheet-list'), '', 'No call sheet items yet.');
-          renderGoogleCalendar(null);
-          $('updated-at').textContent = new Date().toLocaleString();
-          return;
-        }
-
-        $('show-title').textContent = (show.name || SHOW_ID) + ' Cast Portal';
-        $('hero-title').textContent = (show.name || SHOW_ID) + ' — Cast Portal';
-        $('ticker-text').textContent = show.ticker || 'No ticker updates.';
-
-        const castHtml = (show.cast || []).map(m => `
-          <li class="item">
-            <strong>${esc(m.name)}</strong> — ${esc(m.role)}
-            ${m.notes ? `<div class="muted">${esc(m.notes)}</div>` : ''}
-          </li>
-        `).join('');
-        renderList($('cast-list'), castHtml, 'No cast entries yet.');
-
-        const calendarRows = (show.calendar || [])
-          .slice()
-          .sort((a,b)=>(a.date+'T'+a.time).localeCompare(b.date+'T'+b.time));
-
-        const calHtml = calendarRows.map(ev => `
-          <li class="item">
-            <strong>${esc(ev.date)} ${esc(ev.time)}</strong> — ${esc(ev.title)}
-            ${ev.notes ? `<div class="muted">${esc(ev.notes)}</div>` : ''}
-          </li>
-        `).join('');
-        renderList($('calendar-list'), calHtml, 'No calendar items yet.');
-
-        const csHtml = (show.callsheet || []).map(c => `
-          <li class="item">
-            <strong>${esc(c.time)}</strong> ${esc(c.dept)} — ${esc(c.task)}
-          </li>
-        `).join('');
-        renderList($('callsheet-list'), csHtml, 'No call sheet items yet.');
-
-        renderGoogleCalendar(show);
-        $('updated-at').textContent = new Date().toLocaleString();
-      }
-
-      $('year').textContent = new Date().getFullYear();
-      render();
-
-      window.addEventListener('storage', (e) => {
-        if (e.key === STORAGE_KEY) render();
-      });
-
-      document.addEventListener('visibilitychange', () => {
-        if (!document.hidden) render();
-      });
-    })();
-  </script>
+  <footer>
+    Internal cast portal • Keep contact information private and do not share outside production channels.
+  </footer>
 </body>
 </html>
