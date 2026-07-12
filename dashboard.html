@@ -1,7 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+<!-- Add this to your <head> -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+  // Add this near your other constants
+  const supabase = supabase.createClient('https://izytzrxrgnahyvgwqhgd.supabase.coL', 'sb_publishable_wo-PDCkLxkuGLsar5by1Sw_ShjHgZDC');
+</script>  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Show Admin Dashboard (Lab Style)</title>
   <style>
@@ -346,6 +352,29 @@
   <footer>© <span id="year"></span> Theater Portal · Lab Dashboard</footer>
 
   <script>
+    async function loadStore() {
+  // Fetch only the data for the current show
+  const { data, error } = await supabase
+    .from('show_data')
+    .select('*')
+    .eq('show_id', currentShowId); // Use your active show ID
+
+  if (error) {
+    console.error('Error loading:', error);
+    return;
+  }
+  
+  // Transform the database 'data' array back into your dashboard's 
+  // expected JSON format and run renderAll()
+  updateDashboardUI(data);
+      async function mutate(moduleType, content) {
+  const { data, error } = await supabase
+    .from('show_data')
+
+  if (error) console.error('Error saving:', error);
+  else renderAll(); // Refresh the dashboard after a successful save
+}
+}
     const STORAGE_KEY = 'show_admin_dashboard_static_v2';
 
     const SHOWS = [
