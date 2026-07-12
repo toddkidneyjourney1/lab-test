@@ -1,1 +1,314 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Crocodile Fever | Rehearsal Report</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    :root {
+      --bg: #0f0f14;
+      --card: #1a1b22;
+      --text: #f5f5f7;
+      --muted: #b5b7c3;
+      --accent: #ff3366;
+      --border: #2b2d3a;
+      --shadow: rgba(0, 0, 0, 0.35);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      background: radial-gradient(circle at top, #191a24 0%, var(--bg) 45%);
+      color: var(--text);
+      line-height: 1.45;
+      min-height: 100vh;
+    }
+
+    header {
+      border-bottom: 1px solid var(--border);
+      background: rgba(15, 15, 20, 0.88);
+      backdrop-filter: blur(8px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .topbar {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1rem 1.25rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .logo {
+      font-weight: 900;
+      letter-spacing: 0.04em;
+      font-size: 1.08rem;
+    }
+
+    .logo span { color: var(--accent); }
+
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.45rem 0.7rem;
+      font-size: 0.9rem;
+      transition: 0.2s ease;
+    }
+
+    nav a:hover,
+    nav a[aria-current="page"] {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px rgba(255, 51, 102, 0.15) inset;
+    }
+
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1.25rem;
+      display: grid;
+      gap: 1rem;
+    }
+
+    .intro {
+      background: linear-gradient(180deg, rgba(255, 51, 102, 0.11), rgba(255, 51, 102, 0.03));
+      border: 1px solid rgba(255, 51, 102, 0.35);
+      border-radius: 14px;
+      padding: 1rem;
+    }
+
+    .intro h1 {
+      margin: 0 0 0.35rem;
+      font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+    }
+
+    .intro p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .report-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      box-shadow: 0 10px 24px var(--shadow);
+      overflow: hidden;
+    }
+
+    .report-card h2 {
+      margin: 0;
+      padding: 0.85rem 1rem;
+      font-size: 1rem;
+      border-bottom: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.01);
+      color: #ffdbe6;
+      letter-spacing: 0.02em;
+    }
+
+    .report-body {
+      padding: 0.9rem 1rem 1rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 1rem;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.01);
+    }
+
+    th, td {
+      padding: 0.65rem 0.6rem;
+      border: 1px solid var(--border);
+      vertical-align: top;
+      font-size: 0.92rem;
+    }
+
+    th {
+      background: rgba(255, 51, 102, 0.12);
+      color: #ffdbe6;
+      text-align: left;
+      font-size: 0.8rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      width: 18%;
+      white-space: nowrap;
+    }
+
+    td {
+      color: var(--text);
+      min-height: 42px;
+    }
+
+    .wide-cell {
+      height: 110px;
+    }
+
+    .notes-cell {
+      height: 70px;
+    }
+
+    .future th {
+      text-align: left;
+    }
+
+    .future th[colspan] {
+      text-align: center;
+      font-size: 0.85rem;
+      letter-spacing: 0.05em;
+    }
+
+    .placeholder {
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    footer {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1.25rem 1.8rem;
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+
+    @media (max-width: 920px) {
+      th, td { font-size: 0.88rem; }
+      .wide-cell { height: 90px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="topbar">
+      <div class="logo">THE <span>LAB</span></div>
+      <nav aria-label="Primary">
+        <a href="index.html">Back to the Slab</a>
+        <a href="cast-portal.html">Portal Landing Pad</a>
+        <a href="rehearsal-report.html" aria-current="page">Rehearsal Report</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="intro" aria-labelledby="page-title">
+      <h1 id="page-title">Crocodile Fever – Rehearsal Report</h1>
+      <p>Daily production report template for rehearsal tracking, department notes, and future schedule planning.</p>
+    </section>
+
+    <section class="report-card">
+      <h2>Production Report Form</h2>
+      <div class="report-body">
+
+        <table aria-label="General rehearsal details">
+          <tr>
+            <th>Date</th>
+            <td><span class="placeholder">[Insert Date]</span></td>
+            <th>Director</th>
+            <td><span class="placeholder">[Insert Name]</span></td>
+          </tr>
+          <tr>
+            <th>Rehearsal #</th>
+            <td><span class="placeholder">[Insert #]</span></td>
+            <th>AD/SM</th>
+            <td><span class="placeholder">[Insert Name]</span></td>
+          </tr>
+          <tr>
+            <th>Location</th>
+            <td><span class="placeholder">[Insert Location]</span></td>
+            <th>ASM</th>
+            <td><span class="placeholder">[Insert Name]</span></td>
+          </tr>
+        </table>
+
+        <table aria-label="Rehearsal timing details">
+          <tr>
+            <th>Start Time</th>
+            <td><span class="placeholder">[Insert Time]</span></td>
+          </tr>
+          <tr>
+            <th>Break/End Time</th>
+            <td><span class="placeholder">[Insert Time]</span></td>
+          </tr>
+        </table>
+
+        <table aria-label="Schedule and attendance summary">
+          <tr>
+            <th style="width: 50%;">Schedule/Overview</th>
+            <th style="width: 50%;">Absent/Late/Left Early</th>
+          </tr>
+          <tr>
+            <td class="wide-cell"><span class="placeholder">[Details]</span></td>
+            <td class="wide-cell"><span class="placeholder">[Details]</span></td>
+          </tr>
+        </table>
+
+        <table aria-label="Department notes">
+          <tr><th>Script Notes</th></tr>
+          <tr><td class="notes-cell"></td></tr>
+
+          <tr><th>Scenic</th></tr>
+          <tr><td class="notes-cell"></td></tr>
+
+          <tr><th>Costumes/Hair/Makeup</th></tr>
+          <tr><td class="notes-cell"></td></tr>
+
+          <tr><th>Props</th></tr>
+          <tr><td class="notes-cell"></td></tr>
+
+          <tr><th>Lighting</th></tr>
+          <tr><td class="notes-cell"></td></tr>
+
+          <tr><th>Sound</th></tr>
+          <tr><td class="notes-cell"></td></tr>
+
+          <tr><th>Production/Marketing</th></tr>
+          <tr><td class="notes-cell"></td></tr>
+
+          <tr><th>Miscellaneous</th></tr>
+          <tr><td class="notes-cell"></td></tr>
+        </table>
+
+        <table class="future" aria-label="Future schedule">
+          <tr><th colspan="4">Future Schedule</th></tr>
+          <tr>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Schedule</th>
+            <th>Actors Called</th>
+          </tr>
+          <tr>
+            <td><span class="placeholder">[Date]</span></td>
+            <td><span class="placeholder">[Time]</span></td>
+            <td><span class="placeholder">[Details]</span></td>
+            <td><span class="placeholder">[Actors]</span></td>
+          </tr>
+        </table>
+
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    Internal production document • Archive reports after each rehearsal for continuity across departments.
+  </footer>
+</body>
+</html>
