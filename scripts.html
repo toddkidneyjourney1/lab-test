@@ -1,1 +1,191 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Show Scripts · Theater Portal</title>
+  <style>
+    :root{
+      --bg:#070b16;
+      --panel:#0f162d;
+      --text:#e8eeff;
+      --muted:#9eb0db;
+      --accent:#64b5ff;
+      --accent2:#9b8bff;
+      --border:#2e4277;
+      --glow:0 0 0 1px rgba(120,160,255,.15), 0 12px 34px rgba(0,0,0,.45);
+    }
+
+    *{box-sizing:border-box;margin:0;padding:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+
+    body{
+      min-height:100vh;
+      color:var(--text);
+      background:
+        radial-gradient(1000px 500px at -8% -18%, rgba(76,130,255,.26) 0%, transparent 58%),
+        radial-gradient(900px 420px at 112% -8%, rgba(176,112,255,.22) 0%, transparent 55%),
+        linear-gradient(180deg,#060913 0%, #080d1b 60%, #060913 100%);
+      display:grid;
+      grid-template-rows:auto 1fr auto;
+    }
+
+    header{
+      border-bottom:1px solid rgba(117,149,222,.25);
+      background:rgba(7,11,22,.78);
+      backdrop-filter:blur(10px);
+      position:sticky;top:0;z-index:20;
+    }
+
+    .topbar{
+      max-width:1100px;margin:0 auto;padding:.9rem 1rem;
+      display:flex;align-items:center;justify-content:space-between;gap:.8rem;flex-wrap:wrap;
+    }
+
+    .brand{
+      display:flex;align-items:center;gap:.65rem;font-weight:700;
+    }
+
+    .logo{
+      width:36px;height:36px;border-radius:11px;display:grid;place-items:center;
+      background:linear-gradient(135deg,var(--accent),var(--accent2));
+      color:#102047;font-weight:900;font-size:.82rem;
+      box-shadow:0 8px 20px rgba(102,153,255,.35);
+    }
+
+    .title{font-size:1rem}
+    .pill{
+      font-size:.74rem;padding:.24rem .6rem;border-radius:999px;font-weight:700;
+      color:#131a3f;background:linear-gradient(135deg,#bfdcff,#ddd6fe);
+      border:1px solid rgba(255,255,255,.35);
+    }
+
+    main{
+      max-width:1100px;width:100%;margin:0 auto;padding:1rem;
+      display:grid;gap:1rem;
+    }
+
+    .panel{
+      border:1px solid var(--border);
+      border-radius:16px;padding:1rem;
+      background:linear-gradient(180deg,rgba(20,30,58,.9),rgba(12,18,36,.94));
+      box-shadow:var(--glow);
+    }
+
+    h1{font-size:1.28rem;margin-bottom:.35rem}
+    .sub{color:var(--muted);font-size:.92rem;line-height:1.45}
+
+    .grid{
+      margin-top:1rem;
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:.8rem;
+    }
+
+    a.script-link{
+      display:flex;align-items:center;justify-content:space-between;gap:.6rem;
+      text-decoration:none;color:var(--text);
+      border:1px solid #3a5194;border-radius:12px;padding:.75rem .8rem;
+      background:rgba(12,20,42,.78);
+      transition:.15s ease;
+    }
+
+    a.script-link:hover{
+      border-color:#5f7fca;
+      background:rgba(96,165,250,.08);
+      transform:translateY(-1px);
+    }
+
+    .show-name{font-weight:650}
+    .open-label{
+      font-size:.78rem;color:#c7d2fe;
+      border:1px solid #4f46e5;background:rgba(99,102,241,.16);
+      padding:.16rem .42rem;border-radius:999px;
+    }
+
+    .actions{
+      margin-top:1rem;display:flex;gap:.5rem;flex-wrap:wrap;
+    }
+
+    .btn{
+      border:1px solid var(--border);
+      background:linear-gradient(180deg,#152243,#101a34);
+      color:var(--text);
+      border-radius:10px;padding:.52rem .76rem;font-size:.88rem;cursor:pointer;text-decoration:none;
+      transition:.15s ease;
+    }
+    .btn:hover{border-color:#5877c2;background:linear-gradient(180deg,#1a2a54,#122043)}
+
+    footer{
+      border-top:1px solid rgba(117,149,222,.25);
+      text-align:center;color:var(--muted);font-size:.82rem;padding:.95rem;
+      background:rgba(7,11,22,.78);
+      backdrop-filter:blur(8px);
+      margin-top:1rem;
+    }
+
+    @media (max-width:720px){
+      .grid{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="topbar">
+      <div class="brand">
+        <div class="logo">TP</div>
+        <span class="title">Scripts Library</span>
+        <span class="pill">ALL SHOWS</span>
+      </div>
+      <a class="btn" href="./dashboard.html">Back to Dashboard</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="panel">
+      <h1>Show Scripts</h1>
+      <p class="sub">Select a show below to open its script page/file.</p>
+
+      <div class="grid">
+        <a class="script-link" href="./scripts-fences.html">
+          <span class="show-name">Fences</span><span class="open-label">Open</span>
+        </a>
+
+        <a class="script-link" href="./scripts-midsummer.html">
+          <span class="show-name">A Midsummer Night's Dream</span><span class="open-label">Open</span>
+        </a>
+
+        <a class="script-link" href="./scripts-bare.html">
+          <span class="show-name">Bare</span><span class="open-label">Open</span>
+        </a>
+
+        <a class="script-link" href="./scripts-godofcarnage.html">
+          <span class="show-name">God of Carnage</span><span class="open-label">Open</span>
+        </a>
+
+        <a class="script-link" href="./scripts-rivals.html">
+          <span class="show-name">The Rivals</span><span class="open-label">Open</span>
+        </a>
+
+        <a class="script-link" href="./scripts-pillowman.html">
+          <span class="show-name">The Pillowman</span><span class="open-label">Open</span>
+        </a>
+
+        <a class="script-link" href="./scripts-godot.html">
+          <span class="show-name">Waiting for Godot</span><span class="open-label">Open</span>
+        </a>
+      </div>
+
+      <div class="actions">
+        <a class="btn" href="./cast-bare.html">Back to Bare Cast Page</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>© <span id="year"></span> Theater Portal · Scripts</footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
