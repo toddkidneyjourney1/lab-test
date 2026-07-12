@@ -24,19 +24,20 @@
     </main>
 
     <script>
-    // 1. Initialize once safely
-    // Check if it's already defined to avoid the "already been declared" error
-    if (typeof supabase === 'undefined') {
-        const supabaseUrl = 'YOUR_SUPABASE_URL';
-        const supabaseKey = 'YOUR_SUPABASE_ANON_KEY';
-        window.supabase = supabase.createClient(supabaseUrl, supabaseKey);
+    // 1. Initialize with a unique variable name (e.g., 'sbClient')
+    let sbClient;
+
+    if (typeof sbClient === 'undefined') {
+        const supabaseUrl = 'https://supabase.com/dashboard/project/izytzrxrgnahyvgwqhgd.co';
+        const supabaseKey = 'sb_publishable_UMVNR69vN_30ZGOjARlJlw_neIicJAg';
+        sbClient = supabase.createClient(supabaseUrl, supabaseKey);
     }
 
     async function loadCast() {
         console.log("Attempting to fetch...");
         
-        // Use window.supabase here if you initialized it above
-        const { data, error } = await window.supabase
+        // 2. Use your unique client variable here
+        const { data, error } = await sbClient
             .from('theater_data')
             .select('*')
             .eq('show_id', 'godot')
@@ -51,7 +52,7 @@
         console.log("Data received:", data);
         const container = document.getElementById('cast-list');
         
-        if (data.length === 0) {
+        if (!data || data.length === 0) {
             container.innerHTML = '<p>No cast members found for this show.</p>';
             return;
         }
@@ -65,8 +66,6 @@
         `).join('');
     }
 
-    // Run when the page is fully loaded
     document.addEventListener('DOMContentLoaded', loadCast);
 </script>
-</body>
 </html>
