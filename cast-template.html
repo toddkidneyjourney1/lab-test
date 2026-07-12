@@ -1,25 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cast Portal | The Laboratory Theater of Florida</title>
+  <style>
+    body { background-color: #0f0f12; color: #f4f4f6; font-family: Inter, sans-serif; padding: 2rem; }
+    .page-wrap { max-width: 800px; margin: 0 auto; }
+    #show-title { color: #d72638; text-transform: uppercase; border-bottom: 2px solid #323644; padding-bottom: 0.5rem; }
+    .cast-card { background: #17181f; border: 1px solid #323644; padding: 15px; margin: 15px 0; border-radius: 10px; }
+    .back-link { display: inline-block; margin-bottom: 20px; color: #b8bcc8; text-decoration: none; }
+  </style>
+</head>
 <body>
-    <h1 id="show-title">Loading...</h1>
+  <main class="page-wrap">
+    <a href="admin-portal.html" class="back-link">← Back to Admin Portal</a>
+    <h1 id="show-title">Loading Show...</h1>
     <div id="cast-list-display"></div>
+  </main>
 
-    <script>
-        // Get the show name from the URL (e.g., ?show=fences)
-        const urlParams = new URLSearchParams(window.location.search);
-        const show = urlParams.get('show');
-        document.getElementById('show-title').innerText = show.toUpperCase();
+  <script>
+    // 1. Get the show name from the URL (e.g., ?show=bare)
+    const urlParams = new URLSearchParams(window.location.search);
+    const show = urlParams.get('show');
+    
+    // 2. Set the Title
+    document.getElementById('show-title').innerText = show ? show.replace('-', ' ') : 'Unknown Show';
 
-        // Load data specific to this show
-        const savedData = localStorage.getItem(show + '_cast');
-        const displayContainer = document.getElementById('cast-list-display');
+    // 3. Load and Display data specific to this show key
+    const showKey = (show || 'default') + '_cast';
+    const savedData = localStorage.getItem(showKey);
+    const displayContainer = document.getElementById('cast-list-display');
 
-        if (savedData) {
-            const cast = JSON.parse(savedData);
-            cast.forEach(member => {
-                displayContainer.innerHTML += `<div><h3>${member.name}</h3><p>${member.role}</p></div>`;
-            });
-        }
-    </script>
+    if (savedData) {
+      const cast = JSON.parse(savedData);
+      let html = '<h2>Current Cast</h2>';
+      cast.forEach(member => {
+        html += `
+          <div class="cast-card">
+            <h3>${member.name}</h3>
+            <p><strong>Role:</strong> ${member.role}</p>
+          </div>`;
+      });
+      displayContainer.innerHTML = html;
+    } else {
+      displayContainer.innerHTML = '<p>No data found for this show yet.</p>';
+    }
+  </script>
 </body>
 </html>
