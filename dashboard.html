@@ -15,67 +15,16 @@
         </table>
     </div>
 
-    <script>
-        // 1. Initialize Supabase Client
-        const supabaseUrl = 'https://izytzrxrgnahyvgwqhgd.supabase.co';
-        const supabaseKey = 'sb_publishable_UMVNR69vN_30ZGOjARlJlw_neIicJAg';
-        const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+   <script>
+    // 1. Initialize Supabase Client
+    const supabaseUrl = 'https://izytzrxrgnahyvgwqhgd.supabase.co';
+    const supabaseKey = 'sb_publishable_UMVNR69vN_30ZGOjARlJlw_neIicJAg';
+    const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
-        const $ = (id) => document.getElementById(id);
+    // FIX: Define currentShowId so the addItem function can use it
+    let currentShowId = 'godot'; 
 
-        // 2. Fetch Data (Async/Await)
-        async function refreshDashboard() {
-            const { data, error } = await supabase
-                .from('theater_data') // Ensure your table name matches
-                .select('*');
+    const $ = (id) => document.getElementById(id);
 
-            if (error) {
-                console.error('Fetch error:', error.message);
-                return;
-            }
-            renderAll(data);
-        }
-
-        // 3. Render Data to UI
-        function renderAll(data) {
-            const cast = data.filter(d => d.category === 'cast');
-            $('kpi-cast').textContent = cast.length;
-
-            const castBody = $('cast-tbody');
-            castBody.innerHTML = cast.map(row => `
-                <tr>
-                    <td>${row.name}</td>
-                    <td>${row.role}</td>
-                    <td><button onclick="deleteItem('${row.id}')">Remove</button></td>
-                </tr>
-            `).join('');
-        }
-
-        // 4. Delete Data
-        async function deleteItem(id) {
-            const { error } = await supabase
-                .from('theater_data')
-                .delete()
-                .eq('id', id);
-
-            if (error) console.error('Delete error:', error.message);
-            else refreshDashboard();
-        }
-
-        // Initialize
-        refreshDashboard();
-        async function addItem(category, payload) {
-    const { error } = await supabase
-        .from('theater_data')
-        .insert([{ 
-            category, 
-            show_id: currentShowId, // This ensures it stays associated with the current show
-            ...payload 
-        }]);
-    
-    if (error) console.error('Insert error:', error);
-    else refreshDashboard();
-}
-    </script>
-</body>
-</html>
+    // ... (rest of your functions)
+</script>
