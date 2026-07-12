@@ -1035,6 +1035,65 @@ async function addContact(name, type, email, phone) {
   addContact(name, type, email, phone);
   e.target.reset();
 });
+  // Fetch Call Sheet items from Supabase
+async function fetchCallSheet() {
+  const { data, error } = await supabase
+    .from('theater_data')
+    .select('*')
+    .eq('category', 'call_sheet')
+    .eq('show_name', 'Waiting for Godot');
+
+  if (error) {
+    console.error('Error fetching call sheet:', error);
+    return;
+  }
+
+  const csList = document.getElementById('callsheet-list');
+  csList.innerHTML = '';
+  data.forEach(item => {
+    const div = document.createElement('div');
+    div.className = 'item';
+    div.innerHTML = `
+      <div class="item-top">
+        <div class="item-title">${esc(item.name)}</div>
+        <span class="badge b-warn">${esc(item.email_or_time)}</span>
+      </div>
+      <div class="item-meta">${esc(item.phone_or_task)}</div>
+      <div style="margin-top:.45rem;"><button class="btn-danger" onclick="deleteCallSheet('${item.id}')">Remove</button></div>
+    `;
+    csList.appendChild(div);
+  });
+}
+
+// Add a new Call Sheet item
+async function addCallSheet(dept, time, task) {
+  const { data, error } = await supabase
+    .from('theater_data')
+    .insert([{ 
+      show_name: 'Waiting for Godot', 
+      category: 'call_sheet',
+      name: dept,             // Using 'name' column for Department
+      email_or_time: time,    // Using 'email_or_time' column for Time
+      phone_or_task: task     // Using 'phone_or_task' column for Task
+    }]);
+
+  if (error) {
+    console.error('Error adding to call sheet:', error);
+    alert('Failed to save to database.');
+  } else {
+    fetchCallSheet(); // Refresh the list
+  }
+}
+  document.getElementById('callsheet-form').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const dept = document.getElementById('callsheet-dept').value.trim();
+  const time = document.getElementById('callsheet-time').value;
+  const task = document.getElementById('callsheet-task').value.trim();
+  
+  if (!dept || !time || !task) return alert('Department, time, and task required.');
+  addCallSheet(dept, time, task);
+  e.target.reset();
+});
 </script>
 </body>
 </html>
