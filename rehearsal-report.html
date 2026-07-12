@@ -1,314 +1,484 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Crocodile Fever | Rehearsal Report</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>Rehearsal Report</title>
   <style>
-    :root {
-      --bg: #0f0f14;
-      --card: #1a1b22;
-      --text: #f5f5f7;
-      --muted: #b5b7c3;
-      --accent: #ff3366;
-      --border: #2b2d3a;
-      --shadow: rgba(0, 0, 0, 0.35);
+    :root{
+      --bg:#0b1020;
+      --panel:#121a30;
+      --text:#e7ecff;
+      --muted:#a9b5dc;
+      --accent:#60a5fa;
+      --accent2:#a78bfa;
+      --border:#2a3866;
+      --ok:#4ade80;
+      --warn:#f59e0b;
+      --danger:#f87171;
     }
 
-    * { box-sizing: border-box; }
-
-    body {
-      margin: 0;
-      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-      background: radial-gradient(circle at top, #191a24 0%, var(--bg) 45%);
-      color: var(--text);
-      line-height: 1.45;
-      min-height: 100vh;
+    *{
+      box-sizing:border-box;
+      margin:0;
+      padding:0;
+      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
     }
 
-    header {
-      border-bottom: 1px solid var(--border);
-      background: rgba(15, 15, 20, 0.88);
-      backdrop-filter: blur(8px);
-      position: sticky;
-      top: 0;
-      z-index: 100;
+    body{
+      min-height:100vh;
+      color:var(--text);
+      background:
+        radial-gradient(900px 420px at 0% -10%, #1a2b59 0%, transparent 56%),
+        radial-gradient(800px 380px at 120% 0%, #3a245f 0%, transparent 55%),
+        var(--bg);
+      display:grid;
+      grid-template-rows:auto 1fr auto;
     }
 
-    .topbar {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 1rem 1.25rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 1rem;
-      flex-wrap: wrap;
+    header, footer{
+      background:rgba(8,12,28,.78);
+      backdrop-filter:blur(8px);
     }
 
-    .logo {
-      font-weight: 900;
-      letter-spacing: 0.04em;
-      font-size: 1.08rem;
+    header{border-bottom:1px solid var(--border);}
+    footer{
+      border-top:1px solid var(--border);
+      text-align:center;
+      color:var(--muted);
+      font-size:.82rem;
+      padding:.9rem;
     }
 
-    .logo span { color: var(--accent); }
-
-    nav {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.6rem;
+    .topbar{
+      max-width:1100px;
+      margin:0 auto;
+      padding:.9rem 1rem;
+      display:flex;
+      gap:.7rem;
+      align-items:center;
+      justify-content:space-between;
+      flex-wrap:wrap;
     }
 
-    nav a {
-      text-decoration: none;
-      color: var(--text);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 0.45rem 0.7rem;
-      font-size: 0.9rem;
-      transition: 0.2s ease;
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:.6rem;
+      font-weight:700;
     }
 
-    nav a:hover,
-    nav a[aria-current="page"] {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 2px rgba(255, 51, 102, 0.15) inset;
+    .logo{
+      width:34px;height:34px;border-radius:10px;
+      display:grid;place-items:center;
+      background:linear-gradient(135deg,var(--accent),var(--accent2));
+      color:#102047;font-weight:800;font-size:.85rem;
     }
 
-    main {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 1.25rem;
-      display: grid;
-      gap: 1rem;
+    .actions{
+      display:flex;
+      gap:.5rem;
+      flex-wrap:wrap;
     }
 
-    .intro {
-      background: linear-gradient(180deg, rgba(255, 51, 102, 0.11), rgba(255, 51, 102, 0.03));
-      border: 1px solid rgba(255, 51, 102, 0.35);
-      border-radius: 14px;
-      padding: 1rem;
+    .container{
+      max-width:1100px;
+      width:100%;
+      margin:0 auto;
+      padding:1rem;
+      display:grid;
+      gap:1rem;
     }
 
-    .intro h1 {
-      margin: 0 0 0.35rem;
-      font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+    .panel{
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:1rem;
+      background:linear-gradient(180deg,rgba(26,38,70,.84),rgba(15,23,45,.93));
+      box-shadow:0 10px 30px rgba(0,0,0,.22);
     }
 
-    .intro p {
-      margin: 0;
-      color: var(--muted);
-      font-size: 0.95rem;
+    .stack{display:grid;gap:.8rem;}
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;}
+    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem;}
+
+    label{
+      display:block;
+      margin-bottom:.3rem;
+      color:#c9d4f5;
+      font-size:.84rem;
     }
 
-    .report-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      box-shadow: 0 10px 24px var(--shadow);
-      overflow: hidden;
+    input, textarea, select{
+      width:100%;
+      border:1px solid #3b5496;
+      background:#101a36;
+      color:var(--text);
+      border-radius:10px;
+      padding:.58rem .62rem;
+      font-size:.92rem;
     }
 
-    .report-card h2 {
-      margin: 0;
-      padding: 0.85rem 1rem;
-      font-size: 1rem;
-      border-bottom: 1px solid var(--border);
-      background: rgba(255, 255, 255, 0.01);
-      color: #ffdbe6;
-      letter-spacing: 0.02em;
+    textarea{
+      min-height:90px;
+      resize:vertical;
+      line-height:1.4;
     }
 
-    .report-body {
-      padding: 0.9rem 1rem 1rem;
+    .title-input{
+      font-size:1.1rem;
+      font-weight:700;
+      padding:.7rem .8rem;
     }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-bottom: 1rem;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      overflow: hidden;
-      background: rgba(255, 255, 255, 0.01);
+    .btn{
+      border:1px solid var(--border);
+      background:#121b34;
+      color:var(--text);
+      border-radius:10px;
+      padding:.55rem .8rem;
+      font-size:.88rem;
+      cursor:pointer;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:.4rem;
     }
 
-    th, td {
-      padding: 0.65rem 0.6rem;
-      border: 1px solid var(--border);
-      vertical-align: top;
-      font-size: 0.92rem;
+    .btn:hover{border-color:#4b67b2;background:#172448;}
+    .btn-primary{
+      border:none;
+      background:linear-gradient(135deg,#60a5fa,#a78bfa);
+      color:#0f1f49;
+      font-weight:700;
+    }
+    .btn-ok{
+      border:1px solid #2d7b4a;
+      background:rgba(34,197,94,.15);
+      color:#bbf7d0;
+    }
+    .btn-warn{
+      border:1px solid #946300;
+      background:rgba(245,158,11,.18);
+      color:#fde68a;
     }
 
-    th {
-      background: rgba(255, 51, 102, 0.12);
-      color: #ffdbe6;
-      text-align: left;
-      font-size: 0.8rem;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      width: 18%;
-      white-space: nowrap;
+    .section-title{
+      font-size:1rem;
+      font-weight:700;
+      margin-bottom:.2rem;
     }
 
-    td {
-      color: var(--text);
-      min-height: 42px;
+    .hint{
+      color:var(--muted);
+      font-size:.82rem;
     }
 
-    .wide-cell {
-      height: 110px;
+    .msg{
+      min-height:1.2rem;
+      font-size:.84rem;
+      color:var(--muted);
     }
+    .success{color:var(--ok);}
+    .error{color:var(--danger);}
 
-    .notes-cell {
-      height: 70px;
-    }
-
-    .future th {
-      text-align: left;
-    }
-
-    .future th[colspan] {
-      text-align: center;
-      font-size: 0.85rem;
-      letter-spacing: 0.05em;
-    }
-
-    .placeholder {
-      color: var(--muted);
-      font-style: italic;
-    }
-
-    footer {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 1.25rem 1.8rem;
-      color: var(--muted);
-      font-size: 0.8rem;
-    }
-
-    @media (max-width: 920px) {
-      th, td { font-size: 0.88rem; }
-      .wide-cell { height: 90px; }
+    @media (max-width:900px){
+      .grid-3{grid-template-columns:1fr;}
+      .grid-2{grid-template-columns:1fr;}
     }
   </style>
 </head>
 <body>
   <header>
     <div class="topbar">
-      <div class="logo">THE <span>LAB</span></div>
-      <nav aria-label="Primary">
-        <a href="index.html">Back to the Slab</a>
-        <a href="cast-portal.html">Portal Landing Pad</a>
-        <a href="rehearsal-report.html" aria-current="page">Rehearsal Report</a>
-      </nav>
+      <div class="brand">
+        <div class="logo">TP</div>
+        <span>Rehearsal Report</span>
+      </div>
+      <div class="actions">
+        <a class="btn" href="./dashboard.html">Back to Dashboard</a>
+        <button id="btn-save" class="btn btn-primary">Save</button>
+        <button id="btn-archive" class="btn btn-ok">Archive</button>
+        <button id="btn-share" class="btn btn-warn">Share</button>
+      </div>
     </div>
   </header>
 
-  <main>
-    <section class="intro" aria-labelledby="page-title">
-      <h1 id="page-title">Crocodile Fever – Rehearsal Report</h1>
-      <p>Daily production report template for rehearsal tracking, department notes, and future schedule planning.</p>
+  <main class="container">
+    <section class="panel stack">
+      <div>
+        <label for="report-title">Report Title (fillable)</label>
+        <input id="report-title" class="title-input" placeholder="e.g., Rehearsal Report - The Rivals - July 12, 2026" />
+      </div>
+
+      <div class="grid-3">
+        <div>
+          <label for="show-name">Show Name</label>
+          <input id="show-name" placeholder="Show name" />
+        </div>
+        <div>
+          <label for="report-date">Date</label>
+          <input id="report-date" type="date" />
+        </div>
+        <div>
+          <label for="stage-manager">Stage Manager</label>
+          <input id="stage-manager" placeholder="Name" />
+        </div>
+      </div>
+
+      <div class="grid-3">
+        <div>
+          <label for="director">Director</label>
+          <input id="director" placeholder="Name" />
+        </div>
+        <div>
+          <label for="start-time">Start Time</label>
+          <input id="start-time" type="time" />
+        </div>
+        <div>
+          <label for="end-time">End Time</label>
+          <input id="end-time" type="time" />
+        </div>
+      </div>
     </section>
 
-    <section class="report-card">
-      <h2>Production Report Form</h2>
-      <div class="report-body">
-
-        <table aria-label="General rehearsal details">
-          <tr>
-            <th>Date</th>
-            <td><span class="placeholder">[Insert Date]</span></td>
-            <th>Director</th>
-            <td><span class="placeholder">[Insert Name]</span></td>
-          </tr>
-          <tr>
-            <th>Rehearsal #</th>
-            <td><span class="placeholder">[Insert #]</span></td>
-            <th>AD/SM</th>
-            <td><span class="placeholder">[Insert Name]</span></td>
-          </tr>
-          <tr>
-            <th>Location</th>
-            <td><span class="placeholder">[Insert Location]</span></td>
-            <th>ASM</th>
-            <td><span class="placeholder">[Insert Name]</span></td>
-          </tr>
-        </table>
-
-        <table aria-label="Rehearsal timing details">
-          <tr>
-            <th>Start Time</th>
-            <td><span class="placeholder">[Insert Time]</span></td>
-          </tr>
-          <tr>
-            <th>Break/End Time</th>
-            <td><span class="placeholder">[Insert Time]</span></td>
-          </tr>
-        </table>
-
-        <table aria-label="Schedule and attendance summary">
-          <tr>
-            <th style="width: 50%;">Schedule/Overview</th>
-            <th style="width: 50%;">Absent/Late/Left Early</th>
-          </tr>
-          <tr>
-            <td class="wide-cell"><span class="placeholder">[Details]</span></td>
-            <td class="wide-cell"><span class="placeholder">[Details]</span></td>
-          </tr>
-        </table>
-
-        <table aria-label="Department notes">
-          <tr><th>Script Notes</th></tr>
-          <tr><td class="notes-cell"></td></tr>
-
-          <tr><th>Scenic</th></tr>
-          <tr><td class="notes-cell"></td></tr>
-
-          <tr><th>Costumes/Hair/Makeup</th></tr>
-          <tr><td class="notes-cell"></td></tr>
-
-          <tr><th>Props</th></tr>
-          <tr><td class="notes-cell"></td></tr>
-
-          <tr><th>Lighting</th></tr>
-          <tr><td class="notes-cell"></td></tr>
-
-          <tr><th>Sound</th></tr>
-          <tr><td class="notes-cell"></td></tr>
-
-          <tr><th>Production/Marketing</th></tr>
-          <tr><td class="notes-cell"></td></tr>
-
-          <tr><th>Miscellaneous</th></tr>
-          <tr><td class="notes-cell"></td></tr>
-        </table>
-
-        <table class="future" aria-label="Future schedule">
-          <tr><th colspan="4">Future Schedule</th></tr>
-          <tr>
-            <th>Date</th>
-            <th>Time</th>
-            <th>Schedule</th>
-            <th>Actors Called</th>
-          </tr>
-          <tr>
-            <td><span class="placeholder">[Date]</span></td>
-            <td><span class="placeholder">[Time]</span></td>
-            <td><span class="placeholder">[Details]</span></td>
-            <td><span class="placeholder">[Actors]</span></td>
-          </tr>
-        </table>
-
+    <section class="panel stack">
+      <div class="section-title">Attendance</div>
+      <div class="grid-2">
+        <div>
+          <label for="present">Present</label>
+          <textarea id="present" placeholder="List cast/crew who were present"></textarea>
+        </div>
+        <div>
+          <label for="absent">Absent</label>
+          <textarea id="absent" placeholder="List cast/crew who were absent and reason"></textarea>
+        </div>
       </div>
+    </section>
+
+    <section class="panel stack">
+      <div class="section-title">Work Completed</div>
+      <textarea id="work-completed" placeholder="Scenes rehearsed, choreography/music work, notes addressed..."></textarea>
+    </section>
+
+    <section class="panel stack">
+      <div class="section-title">Production Notes</div>
+      <div class="grid-2">
+        <div>
+          <label for="scenic-notes">Scenic Notes</label>
+          <textarea id="scenic-notes"></textarea>
+        </div>
+        <div>
+          <label for="lighting-notes">Lighting Notes</label>
+          <textarea id="lighting-notes"></textarea>
+        </div>
+      </div>
+      <div class="grid-2">
+        <div>
+          <label for="sound-notes">Sound Notes</label>
+          <textarea id="sound-notes"></textarea>
+        </div>
+        <div>
+          <label for="costume-notes">Costume Notes</label>
+          <textarea id="costume-notes"></textarea>
+        </div>
+      </div>
+      <div class="grid-2">
+        <div>
+          <label for="props-notes">Props Notes</label>
+          <textarea id="props-notes"></textarea>
+        </div>
+        <div>
+          <label for="general-notes">General Notes</label>
+          <textarea id="general-notes"></textarea>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel stack">
+      <div class="section-title">Plan for Next Rehearsal</div>
+      <textarea id="next-plan" placeholder="Call time, goals, scene schedule, reminders..."></textarea>
+      <p id="status-msg" class="msg"></p>
+      <p class="hint">
+        Archive and Share are implemented for static hosting:
+        Archive downloads JSON (ready for Drive API integration), Share opens email draft (ready for email API integration).
+      </p>
     </section>
   </main>
 
-  <footer>
-    Internal production document • Archive reports after each rehearsal for continuity across departments.
-  </footer>
+  <footer>© <span id="year"></span> Theater Portal · Rehearsal Report</footer>
+
+  <script>
+    const STORAGE_KEY = 'rehearsal_report_fillable_v1';
+
+    const fields = [
+      'report-title', 'show-name', 'report-date', 'stage-manager', 'director',
+      'start-time', 'end-time', 'present', 'absent', 'work-completed',
+      'scenic-notes', 'lighting-notes', 'sound-notes', 'costume-notes',
+      'props-notes', 'general-notes', 'next-plan'
+    ];
+
+    const $ = (id) => document.getElementById(id);
+
+    function esc(v){
+      return String(v == null ? '' : v)
+        .replace(/&/g,'&amp;')
+        .replace(/</g,'&lt;')
+        .replace(/>/g,'&gt;')
+        .replace(/"/g,'&quot;')
+        .replace(/'/g,'&#39;');
+    }
+
+    function getData(){
+      const out = {};
+      fields.forEach(id => out[id] = $(id).value || '');
+      out.updatedAt = new Date().toISOString();
+      return out;
+    }
+
+    function setData(data){
+      fields.forEach(id => {
+        if (Object.prototype.hasOwnProperty.call(data, id)) {
+          $(id).value = data[id] || '';
+        }
+      });
+    }
+
+    function saveLocal(showMessage = true){
+      const data = getData();
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      if (showMessage) setMsg('Saved locally.', 'success');
+    }
+
+    function loadLocal(){
+      try{
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return;
+        const data = JSON.parse(raw);
+        setData(data);
+      }catch(e){
+        console.error(e);
+      }
+    }
+
+    function setMsg(text, type){
+      const el = $('status-msg');
+      el.textContent = text || '';
+      el.className = 'msg ' + (type || '');
+    }
+
+    function buildEmailBody(data){
+      return [
+        `Title: ${data['report-title']}`,
+        `Show: ${data['show-name']}`,
+        `Date: ${data['report-date']}`,
+        `Stage Manager: ${data['stage-manager']}`,
+        `Director: ${data['director']}`,
+        `Start: ${data['start-time']}  End: ${data['end-time']}`,
+        '',
+        'Attendance - Present:',
+        data['present'],
+        '',
+        'Attendance - Absent:',
+        data['absent'],
+        '',
+        'Work Completed:',
+        data['work-completed'],
+        '',
+        'Scenic Notes:',
+        data['scenic-notes'],
+        '',
+        'Lighting Notes:',
+        data['lighting-notes'],
+        '',
+        'Sound Notes:',
+        data['sound-notes'],
+        '',
+        'Costume Notes:',
+        data['costume-notes'],
+        '',
+        'Props Notes:',
+        data['props-notes'],
+        '',
+        'General Notes:',
+        data['general-notes'],
+        '',
+        'Plan for Next Rehearsal:',
+        data['next-plan'],
+        '',
+        `Updated At: ${data.updatedAt || ''}`
+      ].join('\n');
+    }
+
+    // Static-friendly archive: downloads JSON.
+    // Replace this with Google Drive API upload flow + OAuth for real Drive saving.
+    function archiveReport(){
+      const data = getData();
+      const json = JSON.stringify(data, null, 2);
+      const blob = new Blob([json], { type: 'application/json;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      const stamp = new Date().toISOString().replace(/[:.]/g, '-');
+      const safeTitle = (data['report-title'] || 'rehearsal-report').replace(/[^\w\-]+/g, '-');
+      a.href = url;
+      a.download = `${safeTitle}-${stamp}.json`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+      setMsg('Archived as JSON download. (Wire this to Google Drive API for cloud archive.)', 'success');
+    }
+
+    // Static-friendly share: mailto draft.
+    // Replace with backend email service (e.g., SendGrid, Gmail API via server) for one-click send.
+    function shareReport(){
+      const data = getData();
+      const subject = encodeURIComponent(data['report-title'] || 'Rehearsal Report');
+      const body = encodeURIComponent(buildEmailBody(data));
+      window.location.href = `mailto:?subject=${subject}&body=${body}`;
+      setMsg('Opened your email app with a pre-filled draft.', 'success');
+    }
+
+    function bind(){
+      $('btn-save').addEventListener('click', () => saveLocal(true));
+      $('btn-archive').addEventListener('click', archiveReport);
+      $('btn-share').addEventListener('click', shareReport);
+
+      fields.forEach(id => {
+        $(id).addEventListener('input', () => saveLocal(false));
+      });
+    }
+
+    function initDefaults(){
+      $('year').textContent = new Date().getFullYear();
+
+      const params = new URLSearchParams(window.location.search);
+      const show = params.get('show');
+      if (show && !$('show-name').value) $('show-name').value = show;
+
+      if (!$('report-date').value) {
+        const d = new Date();
+        const mm = String(d.getMonth() + 1).padStart(2, '0');
+        const dd = String(d.getDate()).padStart(2, '0');
+        $('report-date').value = `${d.getFullYear()}-${mm}-${dd}`;
+      }
+
+      if (!$('report-title').value) {
+        const date = $('report-date').value || '';
+        const showName = $('show-name').value || 'Show';
+        $('report-title').value = `Rehearsal Report - ${showName} - ${date}`;
+      }
+    }
+
+    function init(){
+      loadLocal();
+      initDefaults();
+      bind();
+      saveLocal(false);
+    }
+
+    init();
+  </script>
 </body>
 </html>
