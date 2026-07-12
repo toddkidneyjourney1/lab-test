@@ -1,1 +1,24 @@
 
+{
+  "project_name": "Show & Admin Management",
+  "admin_portals": [
+    {
+      "name": "Dashboard",
+      "url": "/admin/dashboard"
+    },
+    {
+      "name": "User Management",
+      "url": "/admin/users"
+    }
+  ],
+  "show_portals": [
+    {
+      "show_name": "Example Show A",
+      "portal_url": "/shows/example-a"
+    },
+    {
+      "show_name": "Example Show B",
+      "portal_url": "/shows/example-b"
+    }
+  ]
+}
