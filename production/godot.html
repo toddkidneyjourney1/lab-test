@@ -23,15 +23,11 @@
       justify-content: space-between;
       align-items: center;
       margin-top: 30px;
+      gap: 12px;
+      flex-wrap: wrap;
     }
-    .btn-back {
-      display: inline-block;
-      padding: 10px 20px;
-      background-color: #ccc;
-      color: #000;
-      text-decoration: none;
-      border-radius: 5px;
-      font-weight: bold;
+    .bottom-nav .btn-primary {
+      margin-top: 0;
     }
 
     /* Cast Section */
@@ -109,17 +105,41 @@
       <section class="cast-section">
         <h2>Cast</h2>
         <div class="cast-grid">
-          <div class="cast-card"><img src="../assets/cast/placeholder.jpg" alt="Vladimir" class="cast-photo"><h3>Vladimir</h3><p class="cast-actor">Actor: TBA</p></div>
-          <div class="cast-card"><img src="../assets/cast/placeholder.jpg" alt="Estragon" class="cast-photo"><h3>Estragon</h3><p class="cast-actor">Actor: TBA</p></div>
-          <div class="cast-card"><img src="../assets/cast/placeholder.jpg" alt="Pozzo" class="cast-photo"><h3>Pozzo</h3><p class="cast-actor">Actor: TBA</p></div>
-          <div class="cast-card"><img src="../assets/cast/placeholder.jpg" alt="Lucky" class="cast-photo"><h3>Lucky</h3><p class="cast-actor">Actor: TBA</p></div>
-          <div class="cast-card"><img src="../assets/cast/placeholder.jpg" alt="Boy" class="cast-photo"><h3>Boy</h3><p class="cast-actor">Actor: TBA</p></div>
+          <div class="cast-card">
+            <img src="../assets/cast/placeholder.jpg" alt="Vladimir placeholder photo" class="cast-photo" />
+            <h3>Vladimir</h3>
+            <p class="cast-actor">Actor: TBA</p>
+          </div>
+
+          <div class="cast-card">
+            <img src="../assets/cast/placeholder.jpg" alt="Estragon placeholder photo" class="cast-photo" />
+            <h3>Estragon</h3>
+            <p class="cast-actor">Actor: TBA</p>
+          </div>
+
+          <div class="cast-card">
+            <img src="../assets/cast/placeholder.jpg" alt="Pozzo placeholder photo" class="cast-photo" />
+            <h3>Pozzo</h3>
+            <p class="cast-actor">Actor: TBA</p>
+          </div>
+
+          <div class="cast-card">
+            <img src="../assets/cast/placeholder.jpg" alt="Lucky placeholder photo" class="cast-photo" />
+            <h3>Lucky</h3>
+            <p class="cast-actor">Actor: TBA</p>
+          </div>
+
+          <div class="cast-card">
+            <img src="../assets/cast/placeholder.jpg" alt="Boy placeholder photo" class="cast-photo" />
+            <h3>Boy</h3>
+            <p class="cast-actor">Actor: TBA</p>
+          </div>
         </div>
       </section>
 
       <div class="bottom-nav">
         <a href="#" class="btn-primary">Tickets Coming Soon</a>
-        <a href="../index.html" class="btn-back">Back to The Lab</a>
+        <a href="../index.html" class="btn-primary">Back to Home</a>
       </div>
     </article>
   </main>
