@@ -32,36 +32,174 @@
       display:grid;grid-template-rows:auto 1fr auto;
     }
 
-    /* Header aligned to index-like lab style */
-    header{
+    .nav-toggle{
+      position:absolute;
+      opacity:0;
+      pointer-events:none;
+    }
+
+    .nav-toggle-label{
+      position:fixed;
+      top:1.1rem;
+      right:1rem;
+      width:48px;
+      height:48px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+      z-index:1201;
+      border-radius:12px;
+      background:rgba(7,11,22,.88);
+      border:1px solid rgba(117,149,222,.25);
+      backdrop-filter:blur(10px);
+      box-shadow:var(--glow);
+    }
+
+    .nav-toggle-label span,
+    .nav-toggle-label span::before,
+    .nav-toggle-label span::after{
+      display:block;
+      position:absolute;
+      width:22px;
+      height:2px;
+      background:#e8eeff;
+      border-radius:999px;
+      transition:.25s ease;
+      content:"";
+    }
+
+    .nav-toggle-label span::before{ transform:translateY(-7px); }
+    .nav-toggle-label span::after{ transform:translateY(7px); }
+
+    .nav-toggle:checked + .nav-toggle-label span{
+      background:transparent;
+    }
+    .nav-toggle:checked + .nav-toggle-label span::before{
+      transform:rotate(45deg);
+    }
+    .nav-toggle:checked + .nav-toggle-label span::after{
+      transform:rotate(-45deg);
+    }
+
+    .nav-overlay{
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,.45);
+      opacity:0;
+      pointer-events:none;
+      transition:.25s ease;
+      z-index:1198;
+    }
+
+    .nav-toggle:checked ~ .nav-overlay{
+      opacity:1;
+      pointer-events:auto;
+    }
+
+    .hamburger-menu{
+      position:fixed;
+      top:0;
+      right:0;
+      width:min(320px, 86vw);
+      height:100vh;
+      padding:5.5rem 1.25rem 1.5rem;
+      display:flex;
+      flex-direction:column;
+      gap:.9rem;
+      background:linear-gradient(180deg,rgba(15,22,45,.98),rgba(10,16,34,.98));
+      border-left:1px solid var(--border);
+      box-shadow:-10px 0 30px rgba(0,0,0,.35);
+      transform:translateX(100%);
+      transition:.28s ease;
+      z-index:1200;
+      overflow-y:auto;
+    }
+
+    .nav-toggle:checked ~ .hamburger-menu{
+      transform:translateX(0);
+    }
+
+    .hamburger-menu a,
+    .submenu-title{
+      color:var(--text);
+      text-decoration:none;
+      font-weight:600;
+    }
+
+    .hamburger-menu > a,
+    .submenu{
+      border:1px solid rgba(117,149,222,.18);
+      border-radius:12px;
+      background:rgba(255,255,255,.03);
+      padding:.9rem 1rem;
+    }
+
+    .hamburger-menu > a:hover,
+    .submenu ul li a:hover{
+      color:var(--accent);
+    }
+
+    .submenu{
+      display:grid;
+      gap:.6rem;
+    }
+
+    .submenu-title{
+      font-size:.95rem;
+    }
+
+    .submenu ul{
+      list-style:none;
+      display:grid;
+      gap:.45rem;
+      padding-left:0;
+      margin:0;
+    }
+
+    .submenu ul li a{
+      display:block;
+      color:var(--muted);
+      text-decoration:none;
+      font-weight:500;
+    }
+
+    /* Updated header to match other site pages */
+    .main-header{
       border-bottom:1px solid rgba(117,149,222,.25);
       background:rgba(7,11,22,.78);
       backdrop-filter:blur(10px);
-      position:sticky;top:0;z-index:20;
-    }
-    .topbar{
-      max-width:1280px;margin:0 auto;padding:.85rem 1rem;
-      display:flex;align-items:center;justify-content:space-between;gap:.8rem;flex-wrap:wrap;
-    }
-    .brand{
-      display:flex;align-items:center;gap:.65rem;font-weight:700;letter-spacing:.2px;
-    }
-    .logo{
-      width:36px;height:36px;border-radius:11px;display:grid;place-items:center;
-      background:linear-gradient(135deg,var(--accent),var(--accent2));
-      color:#102047;font-weight:900;font-size:.82rem;
-      box-shadow:0 8px 20px rgba(102,153,255,.35);
-    }
-    .brand span.title{
-      font-size:1rem;
-    }
-    .pill{
-      font-size:.74rem;padding:.25rem .62rem;border-radius:999px;font-weight:700;
-      color:#131a3f;background:linear-gradient(135deg,#bfdcff,#ddd6fe);
-      border:1px solid rgba(255,255,255,.35);
+      position:sticky;
+      top:0;
+      z-index:20;
+      padding:1rem 4.5rem 1rem 1rem;
     }
 
-    .actions{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
+    .main-header .logo{
+      width:auto;
+      height:auto;
+      border-radius:0;
+      display:block;
+      background:none;
+      color:var(--text);
+      box-shadow:none;
+      font-weight:800;
+      font-size:1.45rem;
+      line-height:1;
+      letter-spacing:.04em;
+    }
+
+    .main-header .logo span{
+      color:var(--accent);
+    }
+
+    .main-header .tagline{
+      margin-top:.35rem;
+      font-size:.82rem;
+      color:var(--muted);
+      font-weight:500;
+      letter-spacing:.02em;
+    }
 
     main{
       max-width:1280px;width:100%;margin:0 auto;padding:1rem;
@@ -169,26 +307,38 @@
     }
     @media (max-width:620px){
       .kpis{grid-template-columns:1fr}
+      .main-header{padding-right:4.2rem}
     }
   </style>
 </head>
 <body>
-  <header>
-    <div class="topbar">
-      <div class="brand">
-        <div class="logo">TP</div>
-        <span class="title">Lab Dashboard</span>
-        <span class="pill">ADMIN</span>
-      </div>
-      <div class="actions">
-        <select id="show-selector" aria-label="Select show"></select>
-        <button id="btn-new-show">New Show</button>
-        <button id="btn-export">Export Data</button>
-        <label class="btn" for="import-file" style="margin:0;">Import Data</label>
-        <input id="import-file" type="file" accept="application/json" style="display:none;" />
-        <button id="btn-reset-show" class="btn-danger">Reset Current Show</button>
-        <button id="btn-refresh">Refresh</button>
-      </div>
+  <input type="checkbox" id="nav-toggle" class="nav-toggle">
+  <label for="nav-toggle" class="nav-toggle-label"><span></span></label>
+  <label for="nav-toggle" class="nav-overlay"></label>
+
+  <nav class="hamburger-menu">
+    <a href="about.html">Origin Story</a>
+    <a href="archive25.html">Past Experiments</a>
+    <a href="index.html">Back to the Slab</a>
+    <a href="plan.html">Lab Protocols</a>
+
+    <div class="submenu">
+      <span class="submenu-title">The Portal Landing Pad</span>
+      <ul>
+        <li><a href="cast-portal.html">Subjects</a></li>
+        <li><a href="volunteer-signup.html">Volunteers</a></li>
+        <li><a href="admin-portal.html">Admin</a></li>
+      </ul>
+    </div>
+
+    <a href="support.html">Fuel the Innovation</a>
+    <a href="sponsors.html">Core Collaborators</a>
+  </nav>
+
+  <header class="main-header">
+    <div class="logo">
+      THE <span>LAB</span>
+      <p class="tagline">Intentionally innovative live theater</p>
     </div>
   </header>
 
