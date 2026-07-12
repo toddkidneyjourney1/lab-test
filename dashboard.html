@@ -921,6 +921,32 @@
   const supabaseUrl = https://supabase.com/dashboard/project/izytzrxrgnahyvgwqhgd.co';
 const supabaseKey = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml6eXR6cnhyZ25haHl2Z3dxaGdkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI4OTkwNjMsImV4cCI6MjA5ODQ3NTA2M30.eRJDTZVj122qnzGPQxWWE2gxCmVXuCTukWOkfckRkMk';
 const supabase = supabaseClient.createClient(supabaseUrl, supabaseKey);
+  // ... existing code ...
+
+async function addCastMember(name, role, notes) {
+  // Use the Supabase client you initialized earlier
+  const { data, error } = await supabase
+    .from('theater_data')
+    .insert([
+      { 
+        show_name: 'Waiting for Godot', 
+        category: 'cast',
+        name: name,
+        role_or_type: role,
+        notes: notes 
+      }
+    ]);
+
+  if (error) {
+    console.error('Error adding member:', error);
+    alert('Failed to save to database. Check the console.');
+  } else {
+    console.log('Added successfully!');
+    fetchCastList(); // This must be the function that re-renders your table
+  }
+}
+
+// ... existing code ...
 </script>
 </body>
 </html>
