@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cast Portal | Rehearsal Calendar</title>
+  <title>Cast Portal | Rehearsal Hub</title>
   <link rel="stylesheet" href="style.css" />
   <style>
     :root {
@@ -13,178 +13,277 @@
       --muted: #b5b7c3;
       --accent: #ff3366;
       --border: #2b2d3a;
+      --ok: #35c98a;
+      --warn: #ffcc66;
       --shadow: rgba(0, 0, 0, 0.35);
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
       font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
       background: radial-gradient(circle at top, #191a24 0%, var(--bg) 45%);
       color: var(--text);
+      line-height: 1.45;
       min-height: 100vh;
-      line-height: 1.5;
     }
 
     header {
       border-bottom: 1px solid var(--border);
-      background: rgba(15, 15, 20, 0.85);
+      background: rgba(15, 15, 20, 0.88);
       backdrop-filter: blur(8px);
       position: sticky;
       top: 0;
-      z-index: 20;
+      z-index: 100;
     }
 
     .topbar {
-      max-width: 1100px;
+      max-width: 1200px;
       margin: 0 auto;
       padding: 1rem 1.25rem;
       display: flex;
-      align-items: center;
       justify-content: space-between;
+      align-items: center;
       gap: 1rem;
       flex-wrap: wrap;
     }
 
     .logo {
-      font-weight: 800;
+      font-weight: 900;
       letter-spacing: 0.04em;
-      font-size: 1.1rem;
+      font-size: 1.08rem;
     }
 
-    .logo span {
-      color: var(--accent);
-    }
+    .logo span { color: var(--accent); }
 
     nav {
       display: flex;
-      gap: 0.75rem;
       flex-wrap: wrap;
+      gap: 0.6rem;
     }
 
     nav a {
-      color: var(--text);
       text-decoration: none;
+      color: var(--text);
       border: 1px solid var(--border);
-      padding: 0.45rem 0.7rem;
       border-radius: 10px;
-      font-size: 0.92rem;
+      padding: 0.45rem 0.7rem;
+      font-size: 0.9rem;
       transition: 0.2s ease;
     }
 
     nav a:hover,
     nav a[aria-current="page"] {
       border-color: var(--accent);
-      color: #fff;
       box-shadow: 0 0 0 2px rgba(255, 51, 102, 0.15) inset;
     }
 
     main {
-      max-width: 1100px;
+      max-width: 1200px;
       margin: 0 auto;
-      padding: 2rem 1.25rem 3rem;
+      padding: 1.25rem;
+      display: grid;
+      gap: 1rem;
     }
 
     .intro {
-      background: linear-gradient(180deg, rgba(255, 51, 102, 0.10), rgba(255, 51, 102, 0.03));
+      background: linear-gradient(180deg, rgba(255, 51, 102, 0.11), rgba(255, 51, 102, 0.03));
       border: 1px solid rgba(255, 51, 102, 0.35);
-      border-radius: 16px;
-      padding: 1.25rem;
-      margin-bottom: 1.25rem;
+      border-radius: 14px;
+      padding: 1rem;
     }
 
     .intro h1 {
-      margin: 0 0 0.4rem;
-      font-size: clamp(1.35rem, 2.7vw, 2rem);
-      line-height: 1.2;
+      margin: 0 0 0.35rem;
+      font-size: clamp(1.2rem, 2.5vw, 1.8rem);
     }
 
     .intro p {
       margin: 0;
       color: var(--muted);
+      font-size: 0.95rem;
     }
 
-    .calendar-card {
+    .ticker-wrap {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: #151720;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      min-height: 44px;
+    }
+
+    .ticker-label {
+      background: rgba(255, 51, 102, 0.18);
+      color: #ffdbe6;
+      padding: 0.6rem 0.75rem;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      border-right: 1px solid var(--border);
+      white-space: nowrap;
+    }
+
+    .ticker {
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+      height: 44px;
+    }
+
+    .ticker-track {
+      position: absolute;
+      white-space: nowrap;
+      will-change: transform;
+      animation: ticker-scroll 28s linear infinite;
+      padding-left: 100%;
+      line-height: 44px;
+      color: var(--warn);
+      font-size: 0.92rem;
+    }
+
+    @keyframes ticker-scroll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-100%); }
+    }
+
+    .grid {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: 1fr 1fr;
+      align-items: start;
+    }
+
+    .card {
       background: var(--card);
       border: 1px solid var(--border);
-      border-radius: 16px;
+      border-radius: 14px;
       box-shadow: 0 10px 24px var(--shadow);
       overflow: hidden;
     }
 
-    /* Smaller embed than previous version */
-    .calendar-frame-wrap {
-      position: relative;
-      width: 100%;
-      min-height: 480px;
+    .card h2 {
+      margin: 0;
+      padding: 0.85rem 1rem;
+      font-size: 1rem;
+      border-bottom: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.01);
+    }
+
+    .card-body { padding: 0.9rem 1rem 1rem; }
+
+    /* 2x2 style compact calendar block */
+    .calendar-2x2 {
+      width: min(100%, 520px);
+      aspect-ratio: 2 / 2;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      margin: 0 auto;
       background: #111218;
     }
 
-    .calendar-frame-wrap iframe {
+    .calendar-2x2 iframe {
       width: 100%;
-      height: 480px;
+      height: 100%;
       border: 0;
       display: block;
     }
 
     .calendar-actions {
+      margin-top: 0.75rem;
       display: flex;
-      gap: 0.75rem;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0.9rem 1rem;
-      border-top: 1px solid var(--border);
-      background: rgba(255, 255, 255, 0.01);
-    }
-
-    .calendar-actions p {
-      margin: 0;
-      color: var(--muted);
-      font-size: 0.9rem;
+      justify-content: center;
     }
 
     .button {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
       text-decoration: none;
       color: white;
       background: var(--accent);
       border: 1px solid transparent;
-      padding: 0.55rem 0.85rem;
+      padding: 0.5rem 0.8rem;
       border-radius: 10px;
-      font-weight: 600;
-      font-size: 0.9rem;
+      font-size: 0.88rem;
+      font-weight: 700;
       transition: transform 0.15s ease, filter 0.2s ease;
     }
 
-    .button:hover {
-      transform: translateY(-1px);
-      filter: brightness(1.05);
+    .button:hover { transform: translateY(-1px); filter: brightness(1.05); }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.92rem;
     }
 
-    footer {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 0 1.25rem 2rem;
+    th, td {
+      text-align: left;
+      padding: 0.55rem 0.45rem;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+
+    th {
+      color: #ffdbe6;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .tag {
+      display: inline-block;
+      font-size: 0.74rem;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 0.18rem 0.5rem;
+      color: var(--muted);
+      margin-left: 0.35rem;
+    }
+
+    .status-ok { color: var(--ok); font-weight: 700; }
+    .status-warn { color: var(--warn); font-weight: 700; }
+
+    .call-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 0.55rem;
+    }
+
+    .call-list li {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.6rem 0.7rem;
+      background: rgba(255, 255, 255, 0.01);
+    }
+
+    .call-time {
+      font-weight: 800;
+      color: #ffdbe6;
+      margin-right: 0.4rem;
+    }
+
+    .small-note {
+      margin-top: 0.6rem;
       color: var(--muted);
       font-size: 0.82rem;
     }
 
-    @media (max-width: 700px) {
-      .calendar-frame-wrap,
-      .calendar-frame-wrap iframe {
-        min-height: 420px;
-        height: 420px;
-      }
+    footer {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1.25rem 1.8rem;
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
 
-      nav {
-        width: 100%;
-      }
+    @media (max-width: 920px) {
+      .grid { grid-template-columns: 1fr; }
+      .calendar-2x2 { width: 100%; max-width: 420px; }
     }
   </style>
 </head>
@@ -196,43 +295,134 @@
         <a href="index.html">Back to the Slab</a>
         <a href="about.html">Origin Story</a>
         <a href="cast-portal.html">Portal Landing Pad</a>
-        <a href="cast-bare.html" aria-current="page">Rehearsal Calendar</a>
+        <a href="cast-bare.html" aria-current="page">Rehearsal Hub</a>
       </nav>
     </div>
   </header>
 
   <main>
     <section class="intro" aria-labelledby="page-title">
-      <h1 id="page-title">Cast Rehearsal Calendar</h1>
-      <p>
-        This live calendar updates automatically. Check here for rehearsal blocks, changes, and production-related schedule updates.
-      </p>
+      <h1 id="page-title">Cast Rehearsal Hub</h1>
+      <p>Calendar, contact sheet, call list, and rolling notifications for cast and crew.</p>
     </section>
 
-    <section class="calendar-card" aria-label="Embedded rehearsal calendar">
-      <div class="calendar-frame-wrap">
-        <iframe
-          title="Rehearsal Calendar"
-          src="https://calendar.google.com/calendar/embed?src=ZTdhNTU4ZDU2OWIzMDYxMzRkNDFhMjdhMTc1MjcxZDM2YjczZDY0MWRlZTVhY2Q3MTllNGM3ZGE0NTU0ZjA0MkBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&ctz=America%2FNew_York"
-          loading="lazy"
-          referrerpolicy="no-referrer-when-downgrade">
-        </iframe>
+    <section class="ticker-wrap" aria-label="Notifications">
+      <div class="ticker-label">Notifications</div>
+      <div class="ticker" role="status" aria-live="polite">
+        <div class="ticker-track">
+          Tonight 7:00 PM full cast call • Bring Act 2 props • Vocal warmup starts 6:40 PM • Saturday rehearsal moved to Studio B • Costume measurements due Friday • Confirm attendance in group chat by noon
+        </div>
       </div>
-      <div class="calendar-actions">
-        <p>Having trouble viewing the embed? Open the calendar directly in Google Calendar.</p>
-        <a
-          class="button"
-          href="https://calendar.google.com/calendar/u/0?cid=ZTdhNTU4ZDU2OWIzMDYxMzRkNDFhMjdhMTc1MjcxZDM2YjczZDY0MWRlZTVhY2Q3MTllNGM3ZGE0NTU0ZjA0MkBncm91cC5jYWxlbmRhci5nb29nbGUuY29t"
-          target="_blank"
-          rel="noopener noreferrer">
-          Open in Google Calendar
-        </a>
-      </div>
+    </section>
+
+    <section class="grid">
+      <!-- Left Column -->
+      <article class="card" aria-labelledby="calendar-heading">
+        <h2 id="calendar-heading">Rehearsal Calendar</h2>
+        <div class="card-body">
+          <div class="calendar-2x2">
+            <iframe
+              title="Rehearsal Calendar"
+              src="https://calendar.google.com/calendar/embed?src=ZTdhNTU4ZDU2OWIzMDYxMzRkNDFhMjdhMTc1MjcxZDM2YjczZDY0MWRlZTVhY2Q3MTllNGM3ZGE0NTU0ZjA0MkBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&ctz=America%2FNew_York"
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+          </div>
+          <div class="calendar-actions">
+            <a
+              class="button"
+              href="https://calendar.google.com/calendar/u/0?cid=ZTdhNTU4ZDU2OWIzMDYxMzRkNDFhMjdhMTc1MjcxZDM2YjczZDY0MWRlZTVhY2Q3MTllNGM3ZGE0NTU0ZjA0MkBncm91cC5jYWxlbmRhci5nb29nbGUuY29t"
+              target="_blank"
+              rel="noopener noreferrer">
+              Open Full Calendar
+            </a>
+          </div>
+          <p class="small-note">Tip: If events are missing, verify you are logged into the Google account with rehearsal access.</p>
+        </div>
+      </article>
+
+      <!-- Right Column -->
+      <article class="card" aria-labelledby="call-list-heading">
+        <h2 id="call-list-heading">Today’s Call List</h2>
+        <div class="card-body">
+          <ul class="call-list">
+            <li><span class="call-time">6:00 PM</span> Stage Management + Deck Crew <span class="tag">Preset</span></li>
+            <li><span class="call-time">6:30 PM</span> Ensemble A <span class="tag">Music Review</span></li>
+            <li><span class="call-time">6:45 PM</span> Leads <span class="tag">Scene 4 + 5</span></li>
+            <li><span class="call-time">7:00 PM</span> Full Cast <span class="tag">Act 1 Run</span></li>
+            <li><span class="call-time">8:20 PM</span> Fight Call <span class="tag">Choreo Check</span></li>
+          </ul>
+          <p class="small-note"><span class="status-warn">Reminder:</span> Sign in with stage management when you arrive.</p>
+        </div>
+      </article>
+
+      <!-- Bottom Full Width -->
+      <article class="card" style="grid-column: 1 / -1;" aria-labelledby="cast-list-heading">
+        <h2 id="cast-list-heading">Cast List + Contact Info</h2>
+        <div class="card-body">
+          <table aria-label="Cast contact table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Role</th>
+                <th>Phone</th>
+                <th>Email</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Jordan Miles</td>
+                <td>Director</td>
+                <td>(239) 555-0101</td>
+                <td>jordan.miles@thelab.org</td>
+                <td class="status-ok">Confirmed</td>
+              </tr>
+              <tr>
+                <td>Avery Quinn</td>
+                <td>Stage Manager</td>
+                <td>(239) 555-0102</td>
+                <td>avery.quinn@thelab.org</td>
+                <td class="status-ok">Confirmed</td>
+              </tr>
+              <tr>
+                <td>Riley Carter</td>
+                <td>Lead - Alex</td>
+                <td>(239) 555-0103</td>
+                <td>riley.carter@thelab.org</td>
+                <td class="status-ok">Confirmed</td>
+              </tr>
+              <tr>
+                <td>Sam Rivera</td>
+                <td>Lead - Morgan</td>
+                <td>(239) 555-0104</td>
+                <td>sam.rivera@thelab.org</td>
+                <td class="status-warn">ETA 6:55 PM</td>
+              </tr>
+              <tr>
+                <td>Taylor Brooks</td>
+                <td>Ensemble</td>
+                <td>(239) 555-0105</td>
+                <td>taylor.brooks@thelab.org</td>
+                <td class="status-ok">Confirmed</td>
+              </tr>
+              <tr>
+                <td>Casey Monroe</td>
+                <td>Ensemble</td>
+                <td>(239) 555-0106</td>
+                <td>casey.monroe@thelab.org</td>
+                <td class="status-ok">Confirmed</td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="small-note">Replace placeholder names/contact details with your real cast roster before publishing.</p>
+        </div>
+      </article>
     </section>
   </main>
 
   <footer>
-    If events do not appear, confirm you’re signed into the Google account that has access to the rehearsal calendar.
+    Internal cast portal • Keep contact information private and do not share outside production channels.
   </footer>
 </body>
 </html>
