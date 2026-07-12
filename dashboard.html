@@ -1024,7 +1024,17 @@ async function addContact(name, type, email, phone) {
   } else {
     fetchContacts(); // Refresh list
   }
-}
+}document.getElementById('contact-form').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const name = document.getElementById('contact-name').value.trim();
+  const type = document.getElementById('contact-type').value.trim();
+  const email = document.getElementById('contact-email').value.trim();
+  const phone = document.getElementById('contact-phone').value.trim();
+  
+  if (!name || !type || !email || !phone) return alert('All fields required');
+  addContact(name, type, email, phone);
+  e.target.reset();
+});
 </script>
 </body>
 </html>
