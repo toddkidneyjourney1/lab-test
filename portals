@@ -1,24 +1,65 @@
-
 {
   "project_name": "Show & Admin Management",
   "admin_portals": [
-    {
-      "name": "Dashboard",
-      "url": "/admin/dashboard"
-    },
-    {
-      "name": "User Management",
-      "url": "/admin/users"
-    }
+    { "name": "Global Dashboard", "url": "/admin/dashboard", "access": ["admin", "god"] },
+    { "name": "Global User Management", "url": "/admin/users", "access": ["god"] }
   ],
-  "show_portals": [
+  "shows": [
     {
-      "show_name": "Example Show A",
-      "portal_url": "/shows/example-a"
+      "show_id": "waiting-for-godot",
+      "show_name": "Waiting for Godot",
+      "portals": {
+        "cast": { "url": "/shows/waiting-for-godot/cast", "access": ["cast", "admin", "god"] },
+        "admin": { "url": "/shows/waiting-for-godot/admin", "access": ["admin", "god"] }
+      }
     },
     {
-      "show_name": "Example Show B",
-      "portal_url": "/shows/example-b"
+      "show_id": "the-pillowman",
+      "show_name": "The Pillowman",
+      "portals": {
+        "cast": { "url": "/shows/the-pillowman/cast", "access": ["cast", "admin", "god"] },
+        "admin": { "url": "/shows/the-pillowman/admin", "access": ["admin", "god"] }
+      }
+    },
+    {
+      "show_id": "the-rivals",
+      "show_name": "The Rivals",
+      "portals": {
+        "cast": { "url": "/shows/the-rivals/cast", "access": ["cast", "admin", "god"] },
+        "admin": { "url": "/shows/the-rivals/admin", "access": ["admin", "god"] }
+      }
+    },
+    {
+      "show_id": "bare",
+      "show_name": "Bare: A Pop Opera",
+      "portals": {
+        "cast": { "url": "/shows/bare/cast", "access": ["cast", "admin", "god"] },
+        "admin": { "url": "/shows/bare/admin", "access": ["admin", "god"] }
+      }
+    },
+    {
+      "show_id": "midsummer",
+      "show_name": "A Midsummer Night's Dream",
+      "portals": {
+        "cast": { "url": "/shows/midsummer/cast", "access": ["cast", "admin", "god"] },
+        "admin": { "url": "/shows/midsummer/admin", "access": ["admin", "god"] }
+      }
+    },
+    {
+      "show_id": "god-of-carnage",
+      "show_name": "God of Carnage",
+      "portals": {
+        "cast": { "url": "/shows/god-of-carnage/cast", "access": ["cast", "admin", "god"] },
+        "admin": { "url": "/shows/god-of-carnage/admin", "access": ["admin", "god"] }
+      }
+    },
+    {
+      "show_id": "fences",
+      "show_name": "Fences",
+      "portals": {
+        "cast": { "url": "/shows/fences/cast", "access": ["cast", "admin", "god"] },
+        "admin": { "url": "/shows/fences/admin", "access": ["admin", "god"] }
+      }
     }
   ]
 }
