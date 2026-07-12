@@ -24,32 +24,49 @@
     </main>
 
     <script>
-        // Use the same project URL and Key you used in your dashboard
-        const supabase = supabase.createClient('YOUR_SUPABASE_URL', 'YOUR_SUPABASE_ANON_KEY');
+    // 1. Initialize once safely
+    // Check if it's already defined to avoid the "already been declared" error
+    if (typeof supabase === 'undefined') {
+        const supabaseUrl = 'YOUR_SUPABASE_URL';
+        const supabaseKey = 'YOUR_SUPABASE_ANON_KEY';
+        window.supabase = supabase.createClient(supabaseUrl, supabaseKey);
+    }
 
-        async function loadCast() {
-            const { data, error } = await supabase
-                .from('theater_data')
-                .select('*')
-                .eq('show_id', 'godot') // Only load data for this show
-                .eq('category', 'cast');
+    async function loadCast() {
+        console.log("Attempting to fetch...");
+        
+        // Use window.supabase here if you initialized it above
+        const { data, error } = await window.supabase
+            .from('theater_data')
+            .select('*')
+            .eq('show_id', 'godot')
+            .eq('category', 'cast');
 
-            if (error) {
-                console.error("Error loading cast:", error);
-                return;
-            }
-
-            const container = document.getElementById('cast-list');
-            container.innerHTML = data.map(member => `
-                <div class="cast-card">
-                    <h3>${member.name}</h3>
-                    <p>${member.role}</p>
-                    <small>${member.notes || ''}</small>
-                </div>
-            `).join('');
+        if (error) {
+            console.error("Supabase Error:", error.message);
+            document.getElementById('cast-list').innerHTML = `<p>Error: ${error.message}</p>`;
+            return;
+        }
+        
+        console.log("Data received:", data);
+        const container = document.getElementById('cast-list');
+        
+        if (data.length === 0) {
+            container.innerHTML = '<p>No cast members found for this show.</p>';
+            return;
         }
 
-        loadCast();
-    </script>
+        container.innerHTML = data.map(member => `
+            <div class="cast-card">
+                <h3>${member.name}</h3>
+                <p>${member.role}</p>
+                <small>${member.notes || ''}</small>
+            </div>
+        `).join('');
+    }
+
+    // Run when the page is fully loaded
+    document.addEventListener('DOMContentLoaded', loadCast);
+</script>
 </body>
 </html>
