@@ -107,20 +107,28 @@
     </section>
   </main>
 
-  <script>
-  // Wait for the window to ensure the supabase library is fully loaded
+ <script>
   window.addEventListener('DOMContentLoaded', () => {
-    // Remove 'const' here. Just assign directly to the global variable.
-    supabase = supabase.createClient(
+    // 1. Initialize Supabase (Global access)
+    // Note: Do NOT use 'const' here if the library already defined it
+    window.supabaseClient = supabase.createClient(
       'https://izytzrxrgnahyvgwqhgd.supabase.co', 
       'YOUR_NEW_ROTATED_KEY_HERE'
     );
-    
-    // Now call your init
+
+    // 2. Define all your functions inside this block
+    function loadStore() { /* ... */ }
+    function renderAll() { /* ... */ }
+    function bind() { /* ... */ }
+    function init() {
+       loadStore();
+       bind();
+       renderAll();
+    }
+
+    // 3. Finally, call init()
     init();
   });
-
-  // ... rest of your functions
 </script>
 </body>
 </html>
