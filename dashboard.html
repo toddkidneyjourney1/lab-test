@@ -108,45 +108,19 @@
   </main>
 
   <script>
-    // Initialize Supabase
-    const supabase = supabase.createClient(
+  // Wait for the window to ensure the supabase library is fully loaded
+  window.addEventListener('DOMContentLoaded', () => {
+    // Remove 'const' here. Just assign directly to the global variable.
+    supabase = supabase.createClient(
       'https://izytzrxrgnahyvgwqhgd.supabase.co', 
-      'sb_publishable_wo-PDCkLxkuGLsar5by1Sw_ShjHgZDCE'
+      'YOUR_NEW_ROTATED_KEY_HERE'
     );
-
-    let currentShowId = 'fences'; 
-    let currentData = {};
-
-    async function loadStore() {
-      const { data, error } = await supabase
-        .from('show_data')
-        .select('*')
-        .eq('show_id', currentShowId);
-
-      if (error) return console.error(error);
-      // Map data to the app state and refresh UI
-      currentData = data;
-      renderAll();
-    }
-
-    async function mutate(moduleType, content) {
-      const { data, error } = await supabase
-        .from('show_data')
-        .upsert({ show_id: currentShowId, module_type: moduleType, content: content });
-      
-      if (error) console.error(error);
-      else loadStore(); // Re-fetch to sync
-    }
-
-    // Replace renderAll and other UI logic here...
-    function renderAll() {
-      // ... your existing render logic using 'currentData' ...
-    }
-
-    function init() {
-      loadStore();
-    }
+    
+    // Now call your init
     init();
-  </script>
+  });
+
+  // ... rest of your functions
+</script>
 </body>
 </html>
