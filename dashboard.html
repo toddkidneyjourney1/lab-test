@@ -1,69 +1,175 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Show Admin Dashboard (Lab Style)</title>
   <style>
-    :root{ --bg:#070b16; --panel:#0f162d; --panel-soft:#121c38; --text:#e8eeff; --muted:#9eb0db; --accent:#64b5ff; --accent2:#9b8bff; --border:#2e4277; --ok:#4ade80; --danger:#f87171; --warn:#f59e0b; --glow:0 0 0 1px rgba(120,160,255,.15), 0 12px 34px rgba(0,0,0,.45); }
+    :root{
+      --bg:#070b16;
+      --panel:#0f162d;
+      --panel-soft:#121c38;
+      --text:#e8eeff;
+      --muted:#9eb0db;
+      --accent:#64b5ff;
+      --accent2:#9b8bff;
+      --border:#2e4277;
+      --ok:#4ade80;
+      --danger:#f87171;
+      --warn:#f59e0b;
+      --glow:0 0 0 1px rgba(120,160,255,.15), 0 12px 34px rgba(0,0,0,.45);
+    }
+
     *{box-sizing:border-box;margin:0;padding:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
-    body{ min-height:100vh; color:var(--text); background: radial-gradient(1100px 520px at -8% -18%, rgba(76,130,255,.26) 0%, transparent 58%), radial-gradient(950px 420px at 112% -8%, rgba(176,112,255,.22) 0%, transparent 55%), linear-gradient(180deg,#060913 0%, #080d1b 60%, #060913 100%); display:grid;grid-template-rows:auto 1fr auto; }
-    header{ border-bottom:1px solid rgba(117,149,222,.25); background:rgba(7,11,22,.78); backdrop-filter:blur(10px); position:sticky;top:0;z-index:20; }
-    .topbar{ max-width:1280px;margin:0 auto;padding:.85rem 1rem; display:flex;align-items:center;justify-content:space-between;gap:.8rem;flex-wrap:wrap; }
-    .brand{ display:flex;align-items:center;gap:.65rem;font-weight:700;letter-spacing:.2px; }
-    .logo{ width:36px;height:36px;border-radius:11px;display:grid;place-items:center; background:linear-gradient(135deg,var(--accent),var(--accent2)); color:#102047;font-weight:900;font-size:.82rem; box-shadow:0 8px 20px rgba(102,153,255,.35); }
-    .brand span.title{ font-size:1rem; }
-    .pill{ font-size:.74rem;padding:.25rem .62rem;border-radius:999px;font-weight:700; color:#131a3f;background:linear-gradient(135deg,#bfdcff,#ddd6fe); border:1px solid rgba(255,255,255,.35); }
+
+    body{
+      min-height:100vh;
+      color:var(--text);
+      background:
+        radial-gradient(1100px 520px at -8% -18%, rgba(76,130,255,.26) 0%, transparent 58%),
+        radial-gradient(950px 420px at 112% -8%, rgba(176,112,255,.22) 0%, transparent 55%),
+        linear-gradient(180deg,#060913 0%, #080d1b 60%, #060913 100%);
+      display:grid;grid-template-rows:auto 1fr auto;
+    }
+
+    /* Header aligned to index-like lab style */
+    header{
+      border-bottom:1px solid rgba(117,149,222,.25);
+      background:rgba(7,11,22,.78);
+      backdrop-filter:blur(10px);
+      position:sticky;top:0;z-index:20;
+    }
+    .topbar{
+      max-width:1280px;margin:0 auto;padding:.85rem 1rem;
+      display:flex;align-items:center;justify-content:space-between;gap:.8rem;flex-wrap:wrap;
+    }
+    .brand{
+      display:flex;align-items:center;gap:.65rem;font-weight:700;letter-spacing:.2px;
+    }
+    .logo{
+      width:36px;height:36px;border-radius:11px;display:grid;place-items:center;
+      background:linear-gradient(135deg,var(--accent),var(--accent2));
+      color:#102047;font-weight:900;font-size:.82rem;
+      box-shadow:0 8px 20px rgba(102,153,255,.35);
+    }
+    .brand span.title{
+      font-size:1rem;
+    }
+    .pill{
+      font-size:.74rem;padding:.25rem .62rem;border-radius:999px;font-weight:700;
+      color:#131a3f;background:linear-gradient(135deg,#bfdcff,#ddd6fe);
+      border:1px solid rgba(255,255,255,.35);
+    }
+
     .actions{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
-    main{ max-width:1280px;width:100%;margin:0 auto;padding:1rem; display:grid;grid-template-columns:300px 1fr;gap:1rem; }
-    .sidebar,.panel{ border:1px solid var(--border); border-radius:16px;padding:1rem; background: linear-gradient(180deg,rgba(20,30,58,.9),rgba(12,18,36,.94)); box-shadow:var(--glow); }
+
+    main{
+      max-width:1280px;width:100%;margin:0 auto;padding:1rem;
+      display:grid;grid-template-columns:300px 1fr;gap:1rem;
+    }
+
+    .sidebar,.panel{
+      border:1px solid var(--border);
+      border-radius:16px;padding:1rem;
+      background:
+        linear-gradient(180deg,rgba(20,30,58,.9),rgba(12,18,36,.94));
+      box-shadow:var(--glow);
+    }
+
     .sidebar{position:sticky;top:84px;height:fit-content}
     .nav-title{color:var(--muted);font-size:.78rem;text-transform:uppercase;letter-spacing:.9px;margin-bottom:.52rem}
     .nav-links{display:grid;gap:.45rem}
-    .nav-link{ display:block;padding:.56rem .66rem;border-radius:10px;color:#dce5ff;text-decoration:none;border:1px solid transparent; transition:.16s ease; }
+    .nav-link{
+      display:block;padding:.56rem .66rem;border-radius:10px;color:#dce5ff;text-decoration:none;border:1px solid transparent;
+      transition:.16s ease;
+    }
     .nav-link:hover{background:rgba(100,181,255,.1);border-color:#4a6eb3}
     .nav-link.active{background:rgba(155,139,255,.16);border-color:#5c52a6}
-    .status{ margin-top:.92rem;border:1px dashed #465f9f;border-radius:12px;padding:.66rem;color:#c1cdf0;font-size:.84rem; background:rgba(15,23,47,.45); }
+    .status{
+      margin-top:.92rem;border:1px dashed #465f9f;border-radius:12px;padding:.66rem;color:#c1cdf0;font-size:.84rem;
+      background:rgba(15,23,47,.45);
+    }
     .mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
     .small{font-size:.8rem;color:var(--muted)}
+
     .content{display:grid;gap:1rem}
     .hero{display:grid;grid-template-columns:1.2fr 1fr;gap:1rem}
     .hero h1{font-size:1.26rem;margin-bottom:.38rem;letter-spacing:.2px}
     .sub{color:var(--muted);font-size:.92rem;line-height:1.45}
+
     .kpis{margin-top:.9rem;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.62rem}
-    .kpi{ border:1px solid #3a5194;border-radius:12px;padding:.66rem; background:linear-gradient(180deg,rgba(14,23,47,.8),rgba(10,17,34,.88)); }
+    .kpi{
+      border:1px solid #3a5194;border-radius:12px;padding:.66rem;
+      background:linear-gradient(180deg,rgba(14,23,47,.8),rgba(10,17,34,.88));
+    }
     .kpi .label{font-size:.76rem;color:var(--muted)}
     .kpi .value{font-size:1.03rem;font-weight:700;margin-top:.2rem}
+
     .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
     .section-title{display:flex;align-items:center;justify-content:space-between;gap:.5rem;margin-bottom:.72rem;flex-wrap:wrap}
     .section-title h2{font-size:1rem}
     .stack,.list{display:grid;gap:.55rem}
-    .item{ border:1px solid #3a5194;border-radius:12px;padding:.64rem; background:rgba(12,20,42,.78) }
+    .item{
+      border:1px solid #3a5194;border-radius:12px;padding:.64rem;
+      background:rgba(12,20,42,.78)
+    }
     .item-top{display:flex;justify-content:space-between;gap:.6rem;align-items:center;margin-bottom:.25rem}
     .item-title{font-weight:650;font-size:.93rem}
     .item-meta{font-size:.82rem;color:var(--muted)}
+
     .badge{font-size:.74rem;font-weight:700;padding:.2rem .48rem;border-radius:999px;border:1px solid}
     .b-info{color:#c7d2fe;border-color:#4f46e5;background:rgba(99,102,241,.16)}
     .b-ok{color:#bbf7d0;border-color:#2d7b4a;background:rgba(34,197,94,.15)}
     .b-warn{color:#fde68a;border-color:#946300;background:rgba(245,158,11,.18)}
+
     .table-wrap{overflow:auto;border:1px solid #364b8a;border-radius:12px}
     table{width:100%;border-collapse:collapse;min-width:640px;background:rgba(11,18,38,.78)}
     th,td{padding:.62rem .68rem;border-bottom:1px solid #2e4179;text-align:left;font-size:.86rem;vertical-align:top}
     th{font-size:.78rem;color:#bec9ef;text-transform:uppercase;letter-spacing:.65px;background:rgba(18,29,59,.98)}
     tr:hover td{background:rgba(96,165,250,.06)}
+
     label{font-size:.82rem;color:#c9d4f5;display:block;margin-bottom:.3rem}
-    input,select,textarea{ width:100%;border:1px solid #3c569a;background:#0f1832;color:var(--text); border-radius:10px;padding:.56rem .6rem;font-size:.9rem; }
+    input,select,textarea{
+      width:100%;border:1px solid #3c569a;background:#0f1832;color:var(--text);
+      border-radius:10px;padding:.56rem .6rem;font-size:.9rem;
+    }
     textarea{min-height:96px;resize:vertical}
-    button,.btn{ border:1px solid var(--border); background:linear-gradient(180deg,#152243,#101a34); color:var(--text); border-radius:10px;padding:.52rem .76rem;font-size:.88rem;cursor:pointer;text-decoration:none; transition:.15s ease; }
+    button,.btn{
+      border:1px solid var(--border);
+      background:linear-gradient(180deg,#152243,#101a34);
+      color:var(--text);
+      border-radius:10px;padding:.52rem .76rem;font-size:.88rem;cursor:pointer;text-decoration:none;
+      transition:.15s ease;
+    }
     button:hover,.btn:hover{border-color:#5877c2;background:linear-gradient(180deg,#1a2a54,#122043)}
-    .btn-primary{ border:none;background:linear-gradient(135deg,#64b5ff,#9b8bff); color:#0f1f49;font-weight:700; box-shadow:0 6px 16px rgba(117,163,255,.35); }
+    .btn-primary{
+      border:none;background:linear-gradient(135deg,#64b5ff,#9b8bff);
+      color:#0f1f49;font-weight:700;
+      box-shadow:0 6px 16px rgba(117,163,255,.35);
+    }
     .btn-danger{border:1px solid #7f1d1d;color:#fecaca;background:rgba(248,113,113,.15)}
     .btn-danger:hover{background:rgba(248,113,113,.24)}
+
     .msg{min-height:1.2rem;font-size:.84rem;color:var(--muted)}
     .msg.error{color:var(--danger)}
     .msg.success{color:var(--ok)}
-    footer{ border-top:1px solid rgba(117,149,222,.25); text-align:center;color:var(--muted);font-size:.82rem;padding:.95rem; background:rgba(7,11,22,.78); backdrop-filter:blur(8px); }
+
+    footer{
+      border-top:1px solid rgba(117,149,222,.25);
+      text-align:center;color:var(--muted);font-size:.82rem;padding:.95rem;
+      background:rgba(7,11,22,.78);
+      backdrop-filter:blur(8px);
+    }
+
+    @media (max-width:1020px){
+      main{grid-template-columns:1fr}
+      .sidebar{position:static}
+      .hero,.grid-2{grid-template-columns:1fr}
+      .kpis{grid-template-columns:1fr 1fr}
+    }
+    @media (max-width:620px){
+      .kpis{grid-template-columns:1fr}
+    }
   </style>
 </head>
 <body>
@@ -75,7 +181,12 @@
         <span class="pill">ADMIN</span>
       </div>
       <div class="actions">
-        <select id="show-selector"></select>
+        <select id="show-selector" aria-label="Select show"></select>
+        <button id="btn-new-show">New Show</button>
+        <button id="btn-export">Export Data</button>
+        <label class="btn" for="import-file" style="margin:0;">Import Data</label>
+        <input id="import-file" type="file" accept="application/json" style="display:none;" />
+        <button id="btn-reset-show" class="btn-danger">Reset Current Show</button>
         <button id="btn-refresh">Refresh</button>
       </div>
     </div>
@@ -87,48 +198,531 @@
       <nav class="nav-links">
         <a class="nav-link active" href="#overview">Overview</a>
         <a class="nav-link" href="#cast">Cast List</a>
+        <a class="nav-link" href="#contacts">Contact Info</a>
+        <a class="nav-link" href="#calendar">Calendar</a>
+        <a class="nav-link" href="#ticker">Ticker</a>
+        <a class="nav-link" href="#callsheet">Call Sheet</a>
+        <a class="nav-link" href="#links">Links</a>
       </nav>
-      <div class="status" id="show-status">Loading Database...</div>
+      <div class="status" id="show-status">Show: loading...</div>
+      <div class="status mono" id="show-password-note">Admin key: (blank)</div>
+      <div class="status small">Static mode: data is saved in this browser only. Use Export/Import to move data.</div>
     </aside>
 
     <section class="content">
-      <!-- Your existing sections here... -->
-      <article class="panel" id="overview">
-        <h1 id="show-title">Show Operations</h1>
-        <div class="kpis">
-          <div class="kpi"><div class="label">Cast Members</div><div class="value" id="kpi-cast">0</div></div>
+      <article class="panel hero" id="overview">
+        <div>
+          <h1 id="show-title">Show Operations Center</h1>
+          <p class="sub">Data is isolated per show and stored in localStorage. This works on GitHub Pages/static hosting without a backend.</p>
+          <div class="kpis">
+            <div class="kpi"><div class="label">Cast Members</div><div class="value" id="kpi-cast">0</div></div>
+            <div class="kpi"><div class="label">Contacts</div><div class="value" id="kpi-contacts">0</div></div>
+            <div class="kpi"><div class="label">Calendar Items</div><div class="value" id="kpi-calendar">0</div></div>
+            <div class="kpi"><div class="label">Call Sheet Items</div><div class="value" id="kpi-callsheet">0</div></div>
+          </div>
+        </div>
+        <div>
+          <div class="section-title"><h2>Quick Actions</h2></div>
+          <div class="list">
+            <a class="btn btn-primary" href="#cast">Manage Cast</a>
+            <a class="btn" href="#contacts">Manage Contacts</a>
+            <a class="btn" href="#calendar">Edit Calendar</a>
+            <a class="btn" href="#ticker">Edit Ticker</a>
+            <a class="btn" href="#callsheet">Edit Call Sheet</a>
+            <a class="btn" id="rehearsal-report-link" href="./rehearsal-report.html">Open Rehearsal Report</a>
+            <a class="btn btn-primary" id="rehearsal-portal-link" href="./rehearsal-portal.html">Open Rehearsal Portal</a>
+          </div>
         </div>
       </article>
-      <!-- Ensure IDs match the original HTML structure for the bind() function -->
-      <article class="panel" id="cast">
-        <form id="cast-form"><input id="cast-name" placeholder="Name"><input id="cast-role" placeholder="Role"><button type="submit">Add</button></form>
-        <tbody id="cast-tbody"></tbody>
-      </article>
+
+      <section class="grid-2">
+        <article class="panel" id="cast">
+          <div class="section-title"><h2>Cast List</h2></div>
+          <form id="cast-form" class="stack" novalidate>
+            <div><label for="cast-name">Name</label><input id="cast-name" required /></div>
+            <div><label for="cast-role">Role</label><input id="cast-role" required /></div>
+            <div><label for="cast-notes">Notes</label><input id="cast-notes" /></div>
+            <button class="btn-primary" type="submit">Add Cast Member</button>
+            <p class="msg" id="cast-msg"></p>
+          </form>
+          <div class="table-wrap" style="margin-top:.8rem;">
+            <table>
+              <thead><tr><th>Name</th><th>Role</th><th>Notes</th><th>Action</th></tr></thead>
+              <tbody id="cast-tbody"></tbody>
+            </table>
+          </div>
+        </article>
+
+        <article class="panel" id="contacts">
+          <div class="section-title"><h2>Contact Info</h2></div>
+          <form id="contact-form" class="stack" novalidate>
+            <div><label for="contact-name">Name</label><input id="contact-name" required /></div>
+            <div><label for="contact-type">Type</label><input id="contact-type" placeholder="cast/crew/staff/vendor" required /></div>
+            <div><label for="contact-email">Email</label><input id="contact-email" type="email" required /></div>
+            <div><label for="contact-phone">Phone</label><input id="contact-phone" required /></div>
+            <button class="btn-primary" type="submit">Add Contact</button>
+            <p class="msg" id="contact-msg"></p>
+          </form>
+          <div class="table-wrap" style="margin-top:.8rem;">
+            <table>
+              <thead><tr><th>Name</th><th>Type</th><th>Email</th><th>Phone</th><th>Action</th></tr></thead>
+              <tbody id="contacts-tbody"></tbody>
+            </table>
+          </div>
+        </article>
+      </section>
+
+      <section class="grid-2">
+        <article class="panel" id="calendar">
+          <div class="section-title"><h2>Edit Calendar</h2></div>
+          <form id="calendar-form" class="stack" novalidate>
+            <div><label for="calendar-date">Date</label><input id="calendar-date" type="date" required /></div>
+            <div><label for="calendar-time">Time</label><input id="calendar-time" type="time" required /></div>
+            <div><label for="calendar-title">Title</label><input id="calendar-title" required /></div>
+            <div><label for="calendar-notes">Notes</label><textarea id="calendar-notes"></textarea></div>
+            <button class="btn-primary" type="submit">Add Calendar Event</button>
+            <p class="msg" id="calendar-msg"></p>
+          </form>
+          <div class="list" id="calendar-list" style="margin-top:.8rem;"></div>
+        </article>
+
+        <article class="panel" id="ticker">
+          <div class="section-title"><h2>Edit Ticker</h2></div>
+          <form id="ticker-form" class="stack" novalidate>
+            <div><label for="ticker-input">Ticker Message</label><textarea id="ticker-input" required></textarea></div>
+            <button class="btn-primary" type="submit">Save Ticker</button>
+            <p class="msg" id="ticker-msg"></p>
+          </form>
+          <div class="item" style="margin-top:.8rem;">
+            <div class="item-top"><div class="item-title">Current Ticker</div><span class="badge b-info">Live</span></div>
+            <div class="item-meta" id="ticker-preview">No ticker set.</div>
+          </div>
+        </article>
+      </section>
+
+      <section class="grid-2">
+        <article class="panel" id="callsheet">
+          <div class="section-title"><h2>Edit Call Sheet</h2></div>
+          <form id="callsheet-form" class="stack" novalidate>
+            <div><label for="callsheet-dept">Department</label><input id="callsheet-dept" required /></div>
+            <div><label for="callsheet-time">Call Time</label><input id="callsheet-time" type="time" required /></div>
+            <div><label for="callsheet-task">Task</label><textarea id="callsheet-task" required></textarea></div>
+            <button class="btn-primary" type="submit">Add Call Sheet Item</button>
+            <p class="msg" id="callsheet-msg"></p>
+          </form>
+          <div class="list" id="callsheet-list" style="margin-top:.8rem;"></div>
+        </article>
+
+        <article class="panel" id="links">
+          <div class="section-title"><h2>Show Links</h2></div>
+          <div class="list">
+            <div class="item">
+              <div class="item-top"><div class="item-title">Rehearsal Report</div><span class="badge b-ok">Available</span></div>
+              <div class="item-meta">Opens rehearsal report for selected show.</div>
+              <div style="margin-top:.5rem;">
+                <a id="rehearsal-report-link-2" class="btn btn-primary" href="./rehearsal-report.html">Go to Rehearsal Report</a>
+              </div>
+            </div>
+            <div class="item">
+              <div class="item-top"><div class="item-title">Rehearsal Portal</div><span class="badge b-ok">Available</span></div>
+              <div class="item-meta">Opens the rehearsal portal.</div>
+              <div style="margin-top:.5rem;">
+                <a id="rehearsal-portal-link-2" class="btn btn-primary" href="./rehearsal-portal.html">Go to Rehearsal Portal</a>
+              </div>
+            </div>
+            <div class="item">
+              <div class="item-top"><div class="item-title">Cast Page</div><span class="badge b-info">Per Show</span></div>
+              <div class="item-meta" id="cast-page-label">Not set</div>
+              <div style="margin-top:.5rem;">
+                <a id="cast-page-link" class="btn" href="#">Open Cast Page</a>
+              </div>
+            </div>
+          </div>
+        </article>
+      </section>
     </section>
   </main>
 
- <script>
-  window.addEventListener('DOMContentLoaded', () => {
-    // 1. Initialize Supabase (Global access)
-    // Note: Do NOT use 'const' here if the library already defined it
-    window.supabaseClient = supabase.createClient(
-      'https://izytzrxrgnahyvgwqhgd.supabase.co', 
-      'YOUR_NEW_ROTATED_KEY_HERE'
-    );
+  <footer>© <span id="year"></span> Theater Portal · Lab Dashboard</footer>
 
-    // 2. Define all your functions inside this block
-    function loadStore() { /* ... */ }
-    function renderAll() { /* ... */ }
-    function bind() { /* ... */ }
-    function init() {
-       loadStore();
-       bind();
-       renderAll();
+  <script>
+    const STORAGE_KEY = 'show_admin_dashboard_static_v2';
+
+    const SHOWS = [
+      { id: 'fences', name: 'Fences', password: 'Legacy', castPage: './cast-fences.html' },
+      { id: 'midsummer', name: "A Midsummer Night's Dream", password: '', castPage: './cast-midsummer.html' },
+      { id: 'bare', name: 'Bare', password: '', castPage: './cast-bare.html' },
+      { id: 'godofcarnage', name: 'God of Carnage', password: '', castPage: './cast-godofcarnage.html' },
+      { id: 'rivals', name: 'The Rivals', password: '', castPage: './cast-rivals.html' },
+      { id: 'pillowman', name: 'The Pillowman', password: '', castPage: './cast-pillowman.html' },
+      { id: 'godot', name: 'Waiting for Godot', password: '', castPage: './cast-godot.html' }
+    ];
+
+    const $ = (id) => document.getElementById(id);
+
+    function uuid() {
+      return (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : 'id-' + Math.random().toString(36).slice(2) + Date.now();
     }
 
-    // 3. Finally, call init()
+    function todayISO() {
+      const d = new Date();
+      const mm = String(d.getMonth() + 1).padStart(2, '0');
+      const dd = String(d.getDate()).padStart(2, '0');
+      return d.getFullYear() + '-' + mm + '-' + dd;
+    }
+
+    function esc(v){ return String(v == null ? '' : v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+
+    function defaultShowData(show) {
+      return {
+        id: show.id,
+        name: show.name,
+        password: show.password || '',
+        castPage: show.castPage || '#',
+        cast: [],
+        contacts: [],
+        calendar: [{ id: uuid(), date: todayISO(), time: '18:00', title: 'Rehearsal', notes: '' }],
+        ticker: '',
+        callsheet: []
+      };
+    }
+
+    function initStore() {
+      const base = {
+        selectedShowId: SHOWS[0].id,
+        shows: SHOWS.map(defaultShowData)
+      };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(base));
+      return base;
+    }
+
+    function normalizeStore(parsed) {
+      const out = (parsed && typeof parsed === 'object') ? parsed : {};
+      out.shows = Array.isArray(out.shows) ? out.shows : [];
+
+      SHOWS.forEach(seed => {
+        if (!out.shows.find(s => s.id === seed.id)) out.shows.push(defaultShowData(seed));
+      });
+
+      out.shows = out.shows.map(s => ({
+        id: s.id,
+        name: s.name || (SHOWS.find(x => x.id === s.id)?.name || s.id),
+        password: typeof s.password === 'string' ? s.password : '',
+        castPage: s.castPage || (SHOWS.find(x => x.id === s.id)?.castPage || '#'),
+        cast: Array.isArray(s.cast) ? s.cast : [],
+        contacts: Array.isArray(s.contacts) ? s.contacts : [],
+        calendar: Array.isArray(s.calendar) ? s.calendar : [],
+        ticker: typeof s.ticker === 'string' ? s.ticker : '',
+        callsheet: Array.isArray(s.callsheet) ? s.callsheet : []
+      }));
+
+      if (!out.selectedShowId || !out.shows.find(s => s.id === out.selectedShowId)) {
+        out.selectedShowId = out.shows[0]?.id || SHOWS[0].id;
+      }
+
+      return out;
+    }
+
+    function loadStore() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return initStore();
+        const parsed = JSON.parse(raw);
+        const normalized = normalizeStore(parsed);
+        saveStore(normalized);
+        return normalized;
+      } catch (_) {
+        return initStore();
+      }
+    }
+
+    function saveStore(store) { localStorage.setItem(STORAGE_KEY, JSON.stringify(store)); }
+    function getShow(store) { return store.shows.find(s => s.id === store.selectedShowId) || store.shows[0]; }
+
+    function setMsg(id, text, type) {
+      const el = $(id);
+      el.textContent = text || '';
+      el.className = 'msg' + (type ? ' ' + type : '');
+    }
+
+    function renderSelector() {
+      const store = loadStore();
+      const sel = $('show-selector');
+      sel.innerHTML = '';
+      store.shows.forEach(s => {
+        const o = document.createElement('option');
+        o.value = s.id;
+        o.textContent = s.name;
+        if (s.id === store.selectedShowId) o.selected = true;
+        sel.appendChild(o);
+      });
+    }
+
+    function renderAll() {
+      const store = loadStore();
+      const show = getShow(store);
+
+      $('show-title').textContent = show.name + ' — Operations Center';
+      $('show-status').textContent = 'Current show: ' + show.name;
+      $('show-password-note').textContent = 'Admin key: ' + (show.password || '(blank)');
+      $('kpi-cast').textContent = String(show.cast.length);
+      $('kpi-contacts').textContent = String(show.contacts.length);
+      $('kpi-calendar').textContent = String(show.calendar.length);
+      $('kpi-callsheet').textContent = String(show.callsheet.length);
+      $('ticker-input').value = show.ticker || '';
+      $('ticker-preview').textContent = show.ticker || 'No ticker set.';
+
+      const castHref = show.castPage || '#';
+      $('cast-page-label').textContent = castHref;
+      $('cast-page-link').href = castHref;
+
+      const rr = './rehearsal-report.html?show=' + encodeURIComponent(show.id);
+      $('rehearsal-report-link').href = rr;
+      $('rehearsal-report-link-2').href = rr;
+
+      const castBody = $('cast-tbody');
+      castBody.innerHTML = '';
+      show.cast.forEach(row => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${esc(row.name)}</td><td>${esc(row.role)}</td><td>${esc(row.notes)}</td><td><button class="btn-danger" data-rm-cast="${row.id}">Remove</button></td>`;
+        castBody.appendChild(tr);
+      });
+
+      const contactsBody = $('contacts-tbody');
+      contactsBody.innerHTML = '';
+      show.contacts.forEach(row => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${esc(row.name)}</td><td>${esc(row.type)}</td><td>${esc(row.email)}</td><td>${esc(row.phone)}</td><td><button class="btn-danger" data-rm-contact="${row.id}">Remove</button></td>`;
+        contactsBody.appendChild(tr);
+      });
+
+      const calList = $('calendar-list');
+      calList.innerHTML = '';
+      show.calendar.slice().sort((a,b)=>(a.date+'T'+a.time).localeCompare(b.date+'T'+b.time)).forEach(ev => {
+        const div = document.createElement('div');
+        div.className = 'item';
+        div.innerHTML = `
+          <div class="item-top">
+            <div class="item-title">${esc(ev.title)}</div>
+            <span class="badge b-info">${esc(ev.date)} ${esc(ev.time)}</span>
+          </div>
+          <div class="item-meta">${esc(ev.notes)}</div>
+          <div style="margin-top:.45rem;"><button class="btn-danger" data-rm-cal="${ev.id}">Remove</button></div>
+        `;
+        calList.appendChild(div);
+      });
+
+      const csList = $('callsheet-list');
+      csList.innerHTML = '';
+      show.callsheet.forEach(it => {
+        const div = document.createElement('div');
+        div.className = 'item';
+        div.innerHTML = `
+          <div class="item-top">
+            <div class="item-title">${esc(it.dept)}</div>
+            <span class="badge b-warn">${esc(it.time)}</span>
+          </div>
+          <div class="item-meta">${esc(it.task)}</div>
+          <div style="margin-top:.45rem;"><button class="btn-danger" data-rm-call="${it.id}">Remove</button></div>
+        `;
+        csList.appendChild(div);
+      });
+
+      renderSelector();
+    }
+
+    function mutate(mutator){
+      const store = loadStore();
+      const show = getShow(store);
+      mutator(show, store);
+      saveStore(store);
+      renderAll();
+    }
+
+    function exportData() {
+      const store = loadStore();
+      const json = JSON.stringify(store, null, 2);
+      const blob = new Blob([json], { type: 'application/json;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      const stamp = new Date().toISOString().replace(/[:.]/g, '-');
+      a.href = url;
+      a.download = 'show-dashboard-backup-' + stamp + '.json';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    function importData(file) {
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        try {
+          const parsed = JSON.parse(String(reader.result || '{}'));
+          const normalized = normalizeStore(parsed);
+          saveStore(normalized);
+          renderAll();
+          alert('Import successful.');
+        } catch (e) {
+          alert('Import failed: invalid JSON file.');
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    function resetCurrentShow() {
+      if (!confirm('Reset current show data? This cannot be undone (unless you exported a backup).')) return;
+      mutate((show) => {
+        const seed = SHOWS.find(s => s.id === show.id);
+        const fresh = defaultShowData({
+          id: show.id,
+          name: show.name,
+          password: show.password,
+          castPage: show.castPage || (seed ? seed.castPage : '#')
+        });
+        show.cast = fresh.cast;
+        show.contacts = fresh.contacts;
+        show.calendar = fresh.calendar;
+        show.ticker = fresh.ticker;
+        show.callsheet = fresh.callsheet;
+      });
+    }
+
+    function bind() {
+      $('btn-refresh').addEventListener('click', () => location.reload());
+      $('btn-export').addEventListener('click', exportData);
+      $('btn-reset-show').addEventListener('click', resetCurrentShow);
+
+      $('import-file').addEventListener('change', (e) => {
+        const file = e.target.files && e.target.files[0];
+        importData(file);
+        e.target.value = '';
+      });
+
+      $('show-selector').addEventListener('change', (e) => {
+        const store = loadStore();
+        store.selectedShowId = e.target.value;
+        saveStore(store);
+        renderAll();
+      });
+
+      $('btn-new-show').addEventListener('click', () => {
+        const name = prompt('Enter show name:');
+        if (!name || !name.trim()) return;
+        const castPage = prompt('Enter cast page filename (example: ./cast-newshow.html):', './cast-newshow.html') || '#';
+        const store = loadStore();
+        const id = 'show-' + uuid().slice(0,8);
+        store.shows.push({
+          id, name: name.trim(), password:'', castPage: castPage.trim() || '#',
+          cast:[], contacts:[], calendar:[], ticker:'', callsheet:[]
+        });
+        store.selectedShowId = id;
+        saveStore(store);
+        renderAll();
+      });
+
+      $('cast-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const name = $('cast-name').value.trim();
+        const role = $('cast-role').value.trim();
+        const notes = $('cast-notes').value.trim();
+        if (!name || !role) return setMsg('cast-msg', 'Name and role required.', 'error');
+        mutate(show => show.cast.unshift({ id: uuid(), name, role, notes }));
+        e.target.reset();
+        setMsg('cast-msg', 'Cast member added.', 'success');
+      });
+
+      $('cast-tbody').addEventListener('click', (e) => {
+        const b = e.target.closest('button[data-rm-cast]');
+        if (!b) return;
+        const id = b.getAttribute('data-rm-cast');
+        mutate(show => show.cast = show.cast.filter(x => x.id !== id));
+      });
+
+      $('contact-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const name = $('contact-name').value.trim();
+        const type = $('contact-type').value.trim();
+        const email = $('contact-email').value.trim();
+        const phone = $('contact-phone').value.trim();
+        if (!name || !type || !email || !phone) return setMsg('contact-msg', 'All fields required.', 'error');
+        mutate(show => show.contacts.unshift({ id: uuid(), name, type, email, phone }));
+        e.target.reset();
+        setMsg('contact-msg', 'Contact added.', 'success');
+      });
+
+      $('contacts-tbody').addEventListener('click', (e) => {
+        const b = e.target.closest('button[data-rm-contact]');
+        if (!b) return;
+        const id = b.getAttribute('data-rm-contact');
+        mutate(show => show.contacts = show.contacts.filter(x => x.id !== id));
+      });
+
+      $('calendar-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const date = $('calendar-date').value;
+        const time = $('calendar-time').value;
+        const title = $('calendar-title').value.trim();
+        const notes = $('calendar-notes').value.trim();
+        if (!date || !time || !title) return setMsg('calendar-msg', 'Date, time, title required.', 'error');
+        mutate(show => show.calendar.push({ id: uuid(), date, time, title, notes }));
+        e.target.reset();
+        setMsg('calendar-msg', 'Calendar event added.', 'success');
+      });
+
+      $('calendar-list').addEventListener('click', (e) => {
+        const b = e.target.closest('button[data-rm-cal]');
+        if (!b) return;
+        const id = b.getAttribute('data-rm-cal');
+        mutate(show => show.calendar = show.calendar.filter(x => x.id !== id));
+      });
+
+      $('ticker-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const val = $('ticker-input').value.trim();
+        mutate(show => show.ticker = val);
+        setMsg('ticker-msg', 'Ticker saved.', 'success');
+      });
+
+      $('callsheet-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const dept = $('callsheet-dept').value.trim();
+        const time = $('callsheet-time').value;
+        const task = $('callsheet-task').value.trim();
+        if (!dept || !time || !task) return setMsg('callsheet-msg', 'Department, time, task required.', 'error');
+        mutate(show => show.callsheet.unshift({ id: uuid(), dept, time, task }));
+        e.target.reset();
+        setMsg('callsheet-msg', 'Call sheet item added.', 'success');
+      });
+
+      $('callsheet-list').addEventListener('click', (e) => {
+        const b = e.target.closest('button[data-rm-call]');
+        if (!b) return;
+        const id = b.getAttribute('data-rm-call');
+        mutate(show => show.callsheet = show.callsheet.filter(x => x.id !== id));
+      });
+
+      document.querySelectorAll('a.nav-link[href^="#"]').forEach(a => {
+        a.addEventListener('click', (e) => {
+          const target = document.querySelector(a.getAttribute('href'));
+          if (!target) return;
+          e.preventDefault();
+          document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active'));
+          a.classList.add('active');
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+      });
+    }
+
+    function init(){
+      $('year').textContent = new Date().getFullYear();
+      loadStore();
+      bind();
+      renderAll();
+    }
+
     init();
-  });
-</script>
+  </script>
 </body>
 </html>
