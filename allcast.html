@@ -1,1 +1,374 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>All Cast | Lab Test</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --bg-soft: #111827;
+      --card: #1f2937;
+      --text: #e5e7eb;
+      --muted: #94a3b8;
+      --accent: #38bdf8;
+      --accent-2: #22d3ee;
+      --border: #334155;
+      --shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      height: 100%;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(180deg, var(--bg) 0%, #020617 100%);
+      color: var(--text);
+      line-height: 1.5;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* Header */
+    header {
+      background: rgba(15, 23, 42, 0.95);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(6px);
+    }
+
+    .topbar {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1rem 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .logo {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #fff;
+      text-decoration: none;
+      letter-spacing: 0.5px;
+    }
+
+    .logo span {
+      color: var(--accent);
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: var(--text);
+      padding: 0.55rem 0.85rem;
+      border-radius: 0.5rem;
+      transition: all 0.2s ease;
+      border: 1px solid transparent;
+      font-size: 0.95rem;
+    }
+
+    nav a:hover {
+      color: #fff;
+      border-color: var(--border);
+      background: #0b1220;
+    }
+
+    nav a.active {
+      color: #00131d;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      font-weight: 600;
+    }
+
+    /* Hero */
+    .hero {
+      max-width: 1200px;
+      margin: 2rem auto 1rem;
+      padding: 0 1.25rem;
+      text-align: center;
+    }
+
+    .hero h1 {
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      margin-bottom: 0.75rem;
+      color: #fff;
+    }
+
+    .hero p {
+      color: var(--muted);
+      max-width: 760px;
+      margin: 0 auto;
+      font-size: 1rem;
+    }
+
+    /* Cast Grid */
+    main {
+      flex: 1;
+    }
+
+    .cast-wrap {
+      max-width: 1200px;
+      margin: 1.75rem auto 3rem;
+      padding: 0 1.25rem;
+    }
+
+    .cast-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .cast-card {
+      background: linear-gradient(180deg, #111827 0%, #0b1220 100%);
+      border: 1px solid var(--border);
+      border-radius: 1rem;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .cast-card:hover {
+      transform: translateY(-4px);
+      border-color: #475569;
+    }
+
+    .cast-photo {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+      display: block;
+      background: #0b1220;
+    }
+
+    .cast-content {
+      padding: 1rem;
+    }
+
+    .cast-name {
+      font-size: 1.1rem;
+      color: #fff;
+      margin-bottom: 0.45rem;
+      font-weight: 700;
+    }
+
+    .cast-role {
+      font-size: 0.9rem;
+      color: var(--accent);
+      margin-bottom: 0.65rem;
+      font-weight: 600;
+    }
+
+    .cast-bio {
+      color: var(--muted);
+      font-size: 0.94rem;
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--border);
+      background: rgba(2, 6, 23, 0.95);
+      margin-top: auto;
+    }
+
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1rem 1.25rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a {
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    .footer-links a:hover {
+      color: #fff;
+    }
+
+    @media (max-width: 680px) {
+      .topbar {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      nav ul {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="topbar">
+      <a href="index.html" class="logo">Lab <span>Test</span></a>
+      <nav aria-label="Main menu">
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="allcast.html" class="active">All Cast</a></li>
+          <li><a href="episodes.html">Episodes</a></li>
+          <li><a href="gallery.html">Gallery</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <h1>Meet the Cast</h1>
+      <p>
+        Get to know the cast members. Photos below use placeholders for now —
+        you can replace each image URL with your real cast photos anytime.
+      </p>
+    </section>
+
+    <section class="cast-wrap">
+      <div class="cast-grid">
+        <article class="cast-card">
+          <img
+            class="cast-photo"
+            src="https://via.placeholder.com/640x480?text=Cast+Member+1"
+            alt="Placeholder photo of Cast Member 1"
+          />
+          <div class="cast-content">
+            <h2 class="cast-name">Cast Member 1</h2>
+            <p class="cast-role">Lead Role</p>
+            <p class="cast-bio">
+              Cast Member 1 is a dynamic performer known for bringing depth
+              and intensity to every scene. Their character drives much of the
+              story and keeps audiences fully engaged.
+            </p>
+          </div>
+        </article>
+
+        <article class="cast-card">
+          <img
+            class="cast-photo"
+            src="https://via.placeholder.com/640x480?text=Cast+Member+2"
+            alt="Placeholder photo of Cast Member 2"
+          />
+          <div class="cast-content">
+            <h2 class="cast-name">Cast Member 2</h2>
+            <p class="cast-role">Supporting Role</p>
+            <p class="cast-bio">
+              Cast Member 2 brings heart and humor to the production. Their
+              character is known for memorable moments and meaningful
+              connections with the rest of the ensemble.
+            </p>
+          </div>
+        </article>
+
+        <article class="cast-card">
+          <img
+            class="cast-photo"
+            src="https://via.placeholder.com/640x480?text=Cast+Member+3"
+            alt="Placeholder photo of Cast Member 3"
+          />
+          <div class="cast-content">
+            <h2 class="cast-name">Cast Member 3</h2>
+            <p class="cast-role">Featured Role</p>
+            <p class="cast-bio">
+              Cast Member 3 is recognized for a powerful on-screen presence and
+              emotional range. Their performance adds complexity and balance to
+              the overall cast dynamic.
+            </p>
+          </div>
+        </article>
+
+        <article class="cast-card">
+          <img
+            class="cast-photo"
+            src="https://via.placeholder.com/640x480?text=Cast+Member+4"
+            alt="Placeholder photo of Cast Member 4"
+          />
+          <div class="cast-content">
+            <h2 class="cast-name">Cast Member 4</h2>
+            <p class="cast-role">Recurring Role</p>
+            <p class="cast-bio">
+              Cast Member 4 adds energy and charisma with every appearance.
+              Their role offers key moments that shape important developments
+              throughout the story.
+            </p>
+          </div>
+        </article>
+
+        <article class="cast-card">
+          <img
+            class="cast-photo"
+            src="https://via.placeholder.com/640x480?text=Cast+Member+5"
+            alt="Placeholder photo of Cast Member 5"
+          />
+          <div class="cast-content">
+            <h2 class="cast-name">Cast Member 5</h2>
+            <p class="cast-role">Guest Role</p>
+            <p class="cast-bio">
+              Cast Member 5 delivers a standout guest appearance that leaves a
+              lasting impression. Their storyline introduces fresh perspective
+              and momentum to the series.
+            </p>
+          </div>
+        </article>
+
+        <article class="cast-card">
+          <img
+            class="cast-photo"
+            src="https://via.placeholder.com/640x480?text=Cast+Member+6"
+            alt="Placeholder photo of Cast Member 6"
+          />
+          <div class="cast-content">
+            <h2 class="cast-name">Cast Member 6</h2>
+            <p class="cast-role">Ensemble</p>
+            <p class="cast-bio">
+              Cast Member 6 rounds out the ensemble with consistency and charm.
+              Their interactions help build the world and strengthen the
+              chemistry of the full cast.
+            </p>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <p>&copy; 2026 Lab Test. All rights reserved.</p>
+      <div class="footer-links">
+        <a href="index.html">Home</a>
+        <a href="allcast.html">All Cast</a>
+        <a href="contact.html">Contact</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
