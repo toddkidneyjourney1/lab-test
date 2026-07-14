@@ -277,6 +277,82 @@
             font-size: 1rem;
             padding: 0.5rem 0 0.5rem 1rem;
         }
+
+        /* ── Horizontal footer ── */
+        .site-footer {
+            background: #101010;
+            border-top: 1px solid rgba(255, 51, 102, 0.2);
+            margin-top: 3rem;
+        }
+
+        .footer-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 2.5rem 2rem 2rem;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-block {
+            flex: 1;
+            min-width: 160px;
+        }
+
+        .footer-block h3,
+        .footer-block h4 {
+            margin: 0 0 0.6rem;
+            color: var(--accent);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+        .footer-block p {
+            margin: 0 0 0.4rem;
+            color: #d3d3d3;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .footer-block a {
+            color: var(--accent);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .footer-block a:hover {
+            text-decoration: underline;
+        }
+
+        .social-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 51, 102, 0.1);
+            text-align: center;
+            padding: 0.85rem 1rem 1.2rem;
+            font-size: 0.88rem;
+            color: #888;
+        }
+
+        .footer-bottom p { margin: 0; }
+
+        @media (max-width: 600px) {
+            .footer-container {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -488,9 +564,10 @@
 
     </main>
 
-    <!-- ── Footer (identical to index) ── -->
+    <!-- ── Footer — horizontal layout ── -->
     <footer class="site-footer">
         <div class="footer-container">
+
             <div class="footer-block">
                 <h3>The Laboratory Theater of Florida</h3>
                 <p>1634 Woodford Ave.<br>Fort Myers, FL 33901</p>
@@ -511,6 +588,7 @@
                     <li><a href="#" aria-label="X / Twitter">X / Twitter</a></li>
                 </ul>
             </div>
+
         </div>
 
         <div class="footer-bottom">
