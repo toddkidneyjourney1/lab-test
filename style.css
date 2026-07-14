@@ -43,7 +43,7 @@ body::before {
     0 0,
     0 0;
 
-  opacity: 0.35; /* subtle */
+  opacity: 0.50; /* subtle */
 }
 .main-header {
     display: flex;
