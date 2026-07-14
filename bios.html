@@ -1,40 +1,236 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin - Cast Management</title>
-    <style>
-        body { font-family: sans-serif; max-width: 600px; margin: 2rem auto; padding: 0 1rem; }
-        .form-group { margin-bottom: 1rem; }
-        label { display: block; margin-bottom: 0.5rem; font-weight: bold; }
-        input[type="text"], textarea { width: 100%; padding: 0.5rem; box-sizing: border-box; }
-        button { padding: 0.75rem 1.5rem; background-color: #007bff; color: white; border: none; cursor: pointer; }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lab Admin • Cast Management</title>
+  <style>
+    :root {
+      --bg: #0b1020;
+      --surface: #121a2f;
+      --surface-2: #1a2442;
+      --text: #e8edff;
+      --muted: #b3bfdc;
+      --primary: #63a4ff;
+      --primary-2: #7c4dff;
+      --border: #2b365d;
+      --success: #1db954;
+      --shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+      --radius: 14px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Inter, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(1200px 800px at 10% -10%, #253a7a33, transparent 60%),
+        radial-gradient(1000px 700px at 100% 0%, #7c4dff22, transparent 50%),
+        var(--bg);
+      display: grid;
+      place-items: center;
+      padding: 2rem 1rem;
+    }
+
+    .shell {
+      width: 100%;
+      max-width: 760px;
+    }
+
+    .card {
+      background: linear-gradient(180deg, var(--surface), var(--surface-2));
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .card-header {
+      padding: 1.25rem 1.25rem 0.5rem;
+      border-bottom: 1px solid #2b365d66;
+    }
+
+    .kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.45rem;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--success);
+      box-shadow: 0 0 10px #1db954aa;
+    }
+
+    h2 {
+      margin: 0 0 0.65rem;
+      font-size: clamp(1.25rem, 2vw, 1.65rem);
+      line-height: 1.2;
+    }
+
+    .subtext {
+      margin: 0 0 1rem;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    form {
+      padding: 1.25rem;
+      display: grid;
+      gap: 1rem;
+    }
+
+    .form-group {
+      display: grid;
+      gap: 0.5rem;
+    }
+
+    label {
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: #d9e3ff;
+    }
+
+    input[type="text"],
+    textarea,
+    input[type="file"] {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #0d1429;
+      color: var(--text);
+      padding: 0.72rem 0.8rem;
+      font: inherit;
+      outline: none;
+      transition: border-color 140ms ease, box-shadow 140ms ease, background 140ms ease;
+    }
+
+    textarea {
+      min-height: 150px;
+      resize: vertical;
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+      color: #90a0cc;
+    }
+
+    input[type="text"]:focus,
+    textarea:focus,
+    input[type="file"]:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px #63a4ff30;
+      background: #101937;
+    }
+
+    input[type="file"] {
+      padding: 0.55rem 0.65rem;
+      cursor: pointer;
+    }
+
+    input[type="file"]::file-selector-button {
+      border: 0;
+      border-radius: 8px;
+      background: #24345f;
+      color: #e8edff;
+      padding: 0.45rem 0.75rem;
+      margin-right: 0.65rem;
+      cursor: pointer;
+      transition: background 140ms ease;
+    }
+
+    input[type="file"]::file-selector-button:hover {
+      background: #2f467d;
+    }
+
+    .actions {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 0.25rem;
+    }
+
+    button[type="submit"] {
+      border: none;
+      border-radius: 10px;
+      padding: 0.78rem 1.15rem;
+      color: #fff;
+      font-weight: 700;
+      cursor: pointer;
+      background: linear-gradient(90deg, var(--primary), var(--primary-2));
+      box-shadow: 0 8px 18px #5f7dff55;
+      transition: transform 120ms ease, box-shadow 120ms ease, filter 120ms ease;
+    }
+
+    button[type="submit"]:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 20px #5f7dff66;
+      filter: brightness(1.03);
+    }
+
+    button[type="submit"]:active {
+      transform: translateY(0);
+    }
+
+    @media (max-width: 560px) {
+      .card-header { padding: 1rem 1rem 0.35rem; }
+      form { padding: 1rem; }
+      .actions { justify-content: stretch; }
+      button[type="submit"] { width: 100%; }
+    }
+  </style>
 </head>
 <body>
+  <main class="shell">
+    <section class="card">
+      <header class="card-header">
+        <p class="kicker"><span class="dot"></span>Lab Admin</p>
+        <h2>Upload Cast Member Details</h2>
+        <p class="subtext">Add cast profiles with biography text and a photo.</p>
+      </header>
 
-    <h2>Upload Cast Member Details</h2>
-
-    <form action="/upload-cast" method="POST" enctype="multipart/form-data">
+      <form action="/upload-cast" method="POST" enctype="multipart/form-data">
         <div class="form-group">
-            <label for="name">Cast Member Name:</label>
-            <input type="text" id="name" name="name" required>
+          <label for="name">Cast Member Name</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            placeholder="e.g., Jane Smith"
+            required
+          />
         </div>
 
         <div class="form-group">
-            <label for="bio">Biography:</label>
-            <textarea id="bio" name="bio" rows="6" required></textarea>
+          <label for="bio">Biography</label>
+          <textarea
+            id="bio"
+            name="bio"
+            rows="6"
+            placeholder="Write a short biography..."
+            required
+          ></textarea>
         </div>
 
         <div class="form-group">
-            <label for="photo">Cast Photo:</label>
-            <input type="file" id="photo" name="photo" accept="image/*" required>
+          <label for="photo">Cast Photo</label>
+          <input type="file" id="photo" name="photo" accept="image/*" required />
         </div>
 
-        <button type="submit">Upload Cast Member</button>
-    </form>
-
+        <div class="actions">
+          <button type="submit">Upload Cast Member</button>
+        </div>
+      </form>
+    </section>
+  </main>
 </body>
 </html>
