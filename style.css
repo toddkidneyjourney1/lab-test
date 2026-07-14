@@ -6,6 +6,45 @@
     --accent: #ff3366;
     --gray: #a0a0a0;
 }
+/* Subtle science-style texture on every page, without affecting layout */
+html, body {
+  min-height: 100%;
+}
+
+body {
+  position: relative;
+  isolation: isolate; /* keeps overlay layering predictable */
+}
+
+/* Texture layer */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+
+  /* Layered subtle "sciencey" texture: faint grid + soft radial glows */
+  background:
+    radial-gradient(circle at 15% 20%, rgba(56, 189, 248, 0.08) 0 2px, transparent 3px),
+    radial-gradient(circle at 75% 70%, rgba(34, 211, 238, 0.06) 0 2px, transparent 3px),
+    linear-gradient(rgba(148, 163, 184, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(148, 163, 184, 0.06) 1px, transparent 1px);
+
+  background-size:
+    180px 180px,
+    220px 220px,
+    32px 32px,
+    32px 32px;
+
+  background-position:
+    0 0,
+    40px 60px,
+    0 0,
+    0 0;
+
+  opacity: 0.35; /* subtle */
+}
 .main-header {
     display: flex;
     justify-content: flex-start; /* Forces content to the left */
