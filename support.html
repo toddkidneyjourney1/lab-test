@@ -6,72 +6,157 @@
     <title>Fuel the Innovation | The Laboratory Theater of Florida</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
-    <!-- Hamburger Menu -->
+<body class="support-body">
+    <!-- Mobile Navigation Toggle -->
     <input type="checkbox" id="nav-toggle" class="nav-toggle">
-    <label for="nav-toggle" class="nav-toggle-label">
-        <span></span>
-    </label>
-    
-    <input type="checkbox" id="nav-toggle" class="nav-toggle">
-<label for="nav-toggle" class="nav-toggle-label"><span></span></label>
-<label for="nav-toggle" class="nav-overlay"></label>
 
-<nav class="hamburger-menu">
-    <a href="about.html">Origin Story</a>
-    <a href="archive25.html">Past Experiments</a>
-    <a href="index.html">Back to the Slab</a>
-    <a href="plan.html">Lab Protocols</a>
+    <header class="site-header">
+        <div class="header-inner">
+            <a href="index.html" class="logo" aria-label="Go to homepage">
+                THE <span>LAB</span>
+                <p class="tagline">Intentionally innovative live theater</p>
+            </a>
 
-    <!-- Submenu for Portal Landing Pad -->
-    <div class="submenu">
-        <span class="submenu-title">The Portal Landing Pad</span>
-        <ul>
-            <li><a href="cast-portal.html">Subjects</a></li>
-            <li><a href="volunteer-signup.html">Volunteers</a></li>
-            <li><a href="admin-portal.html">Admin</a></li>
-        </ul>
-    </div>
-
-    <a href="support.html">Fuel the Innovation</a>
-    <a href="sponsors.html">Core Collaborators</a>
-</nav>
-    
-    <header>
-        <div class="logo">
-            THE <span>LAB</span>
-            <p class="tagline">Intentionally innovative live theater</p>
+            <label for="nav-toggle" class="nav-toggle-label" aria-label="Open navigation menu">
+                <span></span>
+            </label>
         </div>
+
+        <label for="nav-toggle" class="nav-overlay" aria-hidden="true"></label>
+
+        <nav class="hamburger-menu" aria-label="Primary">
+            <a href="about.html">Origin Story</a>
+            <a href="archive25.html">Past Experiments</a>
+            <a href="index.html">Back to the Slab</a>
+            <a href="plan.html">Lab Protocols</a>
+
+            <div class="submenu">
+                <span class="submenu-title">The Portal Landing Pad</span>
+                <ul>
+                    <li><a href="cast-portal.html">Subjects</a></li>
+                    <li><a href="volunteer-signup.html">Volunteers</a></li>
+                    <li><a href="admin-portal.html">Admin</a></li>
+                </ul>
+            </div>
+
+            <a href="support.html" aria-current="page">Fuel the Innovation</a>
+            <a href="sponsors.html">Core Collaborators</a>
+        </nav>
     </header>
 
     <main>
+        <!-- Hero -->
+        <section class="support-hero">
+            <div class="support-hero-content">
+                <p class="eyebrow">Support Our Mission</p>
+                <h1>Fuel the creativity that powers live theater in Fort Myers.</h1>
+                <p class="hero-copy">
+                    Your support helps The Laboratory Theater of Florida produce bold, professional,
+                    and innovative performances, while also funding education, outreach, and facility needs.
+                </p>
+
+                <div class="hero-actions">
+                    <a href="https://www.zeffy.com/en-US/donation-form/your-zeffy-link-here" class="button primary">
+                        Donate Now
+                    </a>
+                    <a href="mailto:office@laboratorytheaterflorida.com" class="button secondary">
+                        Talk to Us
+                    </a>
+                </div>
+
+                <div class="support-stats" aria-label="Why your support matters">
+                    <div class="stat-card">
+                        <strong>1</strong>
+                        <span>community-centered theater</span>
+                    </div>
+                    <div class="stat-card">
+                        <strong>3</strong>
+                        <span>ways to make an impact</span>
+                    </div>
+                    <div class="stat-card">
+                        <strong>100%</strong>
+                        <span>mission driven</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="support-hero-panel">
+                <div class="impact-panel">
+                    <h2>Where donations go</h2>
+                    <ul class="impact-list">
+                        <li>Productions and set design</li>
+                        <li>Educational and community programs</li>
+                        <li>Facility improvements and upkeep</li>
+                        <li>Artist and volunteer support</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Support Options -->
         <section class="support-page">
-            <h1>Support The Lab</h1>
-            <p>Your support helps us continue to bring innovative, professional live theater to the Fort Myers community. There are many ways to make a difference!</p>
+            <div class="section-heading">
+                <p class="eyebrow">Ways to Support</p>
+                <h2>Choose the path that fits you best</h2>
+                <p>
+                    Whether you’re able to give financially, promote your business, or donate your time,
+                    every contribution helps keep the stage alive.
+                </p>
+            </div>
 
             <div class="support-grid">
-                <!-- Primary Donation Card -->
-                <div class="support-card featured">
-                    <h2>Make a Donation</h2>
-                    <p>Your tax-deductible contribution directly supports our productions, educational programs, and facility needs.</p>
-                    <a href="https://www.zeffy.com/en-US/donation-form/your-zeffy-link-here" class="button">Donate via Zeffy</a>
-                </div>
+                <article class="support-card featured">
+                    <div class="card-icon" aria-hidden="true">♥</div>
+                    <h3>Make a Donation</h3>
+                    <p>
+                        Your tax-deductible contribution directly supports our productions,
+                        educational programs, and facility needs.
+                    </p>
+                    <a href="https://www.zeffy.com/en-US/donation-form/your-zeffy-link-here" class="button primary">
+                        Donate via Zeffy
+                    </a>
+                </article>
 
-                <!-- Secondary Ways to Help -->
-                <div class="support-card">
+                <article class="support-card">
+                    <div class="card-icon" aria-hidden="true">◎</div>
                     <h3>Sponsor a Show</h3>
-                    <p>Gain visibility for your business while supporting the arts. Reach out to discuss sponsorship opportunities.</p>
-                    <a href="mailto:office@laboratorytheaterflorida.com" class="button secondary">Inquire About Sponsorship</a>
-                </div>
+                    <p>
+                        Gain visibility for your business while supporting the arts.
+                        Reach out to discuss sponsorship opportunities.
+                    </p>
+                    <a href="mailto:office@laboratorytheaterflorida.com" class="button secondary">
+                        Inquire About Sponsorship
+                    </a>
+                </article>
 
-                <div class="support-card">
+                <article class="support-card">
+                    <div class="card-icon" aria-hidden="true">✦</div>
                     <h3>Volunteer</h3>
-                    <p>Give the gift of your time. From ushering to set construction, we need your talent.</p>
-                    <a href="volunteer.html" class="button secondary">View Volunteer Portal</a>
+                    <p>
+                        Give the gift of your time. From ushering to set construction,
+                        we need your talent and enthusiasm.
+                    </p>
+                    <a href="volunteer.html" class="button secondary">
+                        View Volunteer Portal
+                    </a>
+                </article>
+            </div>
+        </section>
+
+        <!-- Social proof / final callout -->
+        <section class="support-callout">
+            <div class="callout-content">
+                <h2>Become part of the story</h2>
+                <p>
+                    The Lab thrives because of people like you — audience members, donors, sponsors,
+                    and volunteers who believe in creative risk and community connection.
+                </p>
+                <div class="callout-actions">
+                    <a href="sponsors.html" class="button secondary">Meet Our Collaborators</a>
+                    <a href="index.html" class="button primary">Return to the Main Stage</a>
                 </div>
             </div>
         </section>
     </main>
-
 </body>
 </html>
