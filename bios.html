@@ -53,6 +53,14 @@
       border-bottom: 1px solid #2b365d66;
     }
 
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
     .kicker {
       display: inline-flex;
       align-items: center;
@@ -70,6 +78,30 @@
       border-radius: 999px;
       background: var(--success);
       box-shadow: 0 0 10px #1db954aa;
+    }
+
+    .header-nav {
+      display: inline-flex;
+      gap: 0.5rem;
+      margin-bottom: 0.45rem;
+    }
+
+    .nav-btn {
+      text-decoration: none;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      padding: 0.45rem 0.7rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #e8edff;
+      background: #182342;
+      transition: background 140ms ease, border-color 140ms ease, transform 120ms ease;
+    }
+
+    .nav-btn:hover {
+      background: #22325d;
+      border-color: #3e4f80;
+      transform: translateY(-1px);
     }
 
     h2 {
@@ -186,6 +218,7 @@
       form { padding: 1rem; }
       .actions { justify-content: stretch; }
       button[type="submit"] { width: 100%; }
+      .header-top { align-items: flex-start; }
     }
   </style>
 </head>
@@ -193,7 +226,14 @@
   <main class="shell">
     <section class="card">
       <header class="card-header">
-        <p class="kicker"><span class="dot"></span>Lab Admin</p>
+        <div class="header-top">
+          <p class="kicker"><span class="dot"></span>Lab Admin</p>
+          <nav class="header-nav" aria-label="Page navigation">
+            <a class="nav-btn" href="home.html">Home</a>
+            <a class="nav-btn" href="allcast.html">All Casts</a>
+          </nav>
+        </div>
+
         <h2>Upload Cast Member Details</h2>
         <p class="subtext">Add cast profiles with biography text and a photo.</p>
       </header>
