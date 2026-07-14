@@ -1,1 +1,40 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Cast Management</title>
+    <style>
+        body { font-family: sans-serif; max-width: 600px; margin: 2rem auto; padding: 0 1rem; }
+        .form-group { margin-bottom: 1rem; }
+        label { display: block; margin-bottom: 0.5rem; font-weight: bold; }
+        input[type="text"], textarea { width: 100%; padding: 0.5rem; box-sizing: border-box; }
+        button { padding: 0.75rem 1.5rem; background-color: #007bff; color: white; border: none; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <h2>Upload Cast Member Details</h2>
+
+    <form action="/upload-cast" method="POST" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="name">Cast Member Name:</label>
+            <input type="text" id="name" name="name" required>
+        </div>
+
+        <div class="form-group">
+            <label for="bio">Biography:</label>
+            <textarea id="bio" name="bio" rows="6" required></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="photo">Cast Photo:</label>
+            <input type="file" id="photo" name="photo" accept="image/*" required>
+        </div>
+
+        <button type="submit">Upload Cast Member</button>
+    </form>
+
+</body>
+</html>
