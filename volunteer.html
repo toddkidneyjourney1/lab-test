@@ -6,73 +6,82 @@
   <title>Volunteer Calendar</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
-    /* Keep your existing styles */
     * { box-sizing: border-box; }
     body { margin:0; background:#0f0f10; color:#f1f1f1; font-family:Arial,sans-serif; }
     .wrap { max-width:1100px; margin:0 auto; padding:16px; }
     .panel { background:#181818; border:1px solid #333; border-radius:12px; padding:14px; }
     .layout { margin-top:12px; display:grid; grid-template-columns:1.25fr .9fr; gap:12px; }
+    .calendar-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
     #calendar-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:6px; min-height:460px; }
     .day { border:1px solid #3a3a3a; border-radius:10px; min-height:92px; background:#121212; padding:6px; }
     .has-show { box-shadow: inset 0 0 0 1px rgba(60,180,95,.55); }
     .day-btn { width:100%; min-height:78px; border:0; background:transparent; color:inherit; text-align:left; cursor:pointer; }
     .pill { display:inline-block; font-size:11px; border-radius:999px; padding:2px 7px; border:1px solid #2b8d48; color:#9fe0b0; }
+    .btn { border:0; border-radius:8px; padding:8px 12px; background:#444; color:#fff; cursor:pointer; }
   </style>
 </head>
 <body>
   <div class="wrap">
-    <div class="panel"><h1>Volunteer Calendar</h1><div id="msg"></div></div>
+    <div class="panel">
+        <div class="calendar-header">
+            <button class="btn" onclick="changeMonth(-1)">Prev</button>
+            <h2 id="month-display">Month</h2>
+            <button class="btn" onclick="changeMonth(1)">Next</button>
+        </div>
+    </div>
     <div class="layout">
       <div class="panel"><div id="calendar-grid"></div></div>
       <div class="panel"><h3 id="detail-title">Select a date</h3><div id="detail-body"></div></div>
     </div>
   </div>
-<script>
+
+  <script>
     const SUPABASE_URL = "https://izytzrxrgnahyvgwqhgd.supabase.co";
-    const SUPABASE_ANON_KEY = "sb_publishable_wo-PDCkLxkuGLsar5by1Sw_ShjHgZDC"; // Ensure this matches!
+    const SUPABASE_ANON_KEY = "sb_publishable_wo-PDCkLxkuGLsar5by1Sw_ShjHgZDC";
     
     let supabaseClient = null;
+    let currentViewDate = new Date();
+    let dbShifts = [];
 
-    // Wait for the library to load fully
-    window.addEventListener('load', () => {
-        // 'window.supabase' is the library; create the client once it's ready
-        if (window.supabase) {
-            supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-            console.log("Supabase Client Ready");
-            loadShifts(); // Call the load function only after init
-        } else {
-            console.error("Supabase library failed to load");
-        }
+    window.addEventListener('load', async () => {
+        supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        await loadShifts();
     });
 
     async function loadShifts() {
-        if (!supabaseClient) return;
-
         const { data, error } = await supabaseClient.from('shifts').select('*');
-        
-        if (error) {
-            console.error("Fetch error:", error);
-            return;
-        }
-        
-        renderCalendar(data);
+        if (error) return console.error(error);
+        dbShifts = data || [];
+        renderCalendar();
     }
 
-    function renderCalendar(shifts) {
+    function renderCalendar() {
         const grid = document.getElementById('calendar-grid');
         grid.innerHTML = '';
-        
-        shifts.forEach(s => {
-            const dateStr = s.start_time.split('T')[0];
+        const year = currentViewDate.getFullYear();
+        const month = currentViewDate.getMonth();
+        document.getElementById('month-display').textContent = currentViewDate.toLocaleDateString(undefined, {month:'long', year:'numeric'});
+
+        const firstDay = new Date(year, month, 1).getDay();
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+        for(let i=0; i<firstDay; i++) grid.appendChild(document.createElement('div'));
+
+        for(let d=1; d<=daysInMonth; d++) {
+            const dateKey = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+            const dayShifts = dbShifts.filter(s => s.start_time.startsWith(dateKey));
+            
             const div = document.createElement('div');
-            div.className = 'day has-show';
-            div.innerHTML = `
-                <button class="day-btn">
-                    <span class="num">${new Date(dateStr).getDate()}</span>
-                    <div class="pill">${s.opportunity_name}</div>
-                </button>
-            `;
+            div.className = `day ${dayShifts.length ? 'has-show' : ''}`;
+            div.innerHTML = `<button class="day-btn"><span class="num">${d}</span>${dayShifts.map(s => `<div class="pill">${s.opportunity_name}</div>`).join('')}</button>`;
             grid.appendChild(div);
-        });
+        }
     }
-</script>
+
+    function changeMonth(delta) {
+        currentViewDate.setMonth(currentViewDate.getMonth() + delta);
+        renderCalendar();
+    }
+  </script>
+</body>
+</html>
