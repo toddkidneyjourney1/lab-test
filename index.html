@@ -40,6 +40,23 @@
             margin-bottom: 1.5rem;
         }
 
+        /* Sticky Season 18 button (center-right) */
+        .season-button-wrap {
+            position: fixed;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 9999;
+            margin: 0;
+            text-align: center;
+        }
+
+        .season-button-wrap .season-button {
+            margin-bottom: 0;
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
+            white-space: nowrap;
+        }
+
         .hero img {
             width: 100%;
             max-width: 560px;
@@ -219,6 +236,15 @@
                 height: 44px;
                 max-height: none;
                 margin-bottom: 0.25rem;
+            }
+
+            .season-button-wrap {
+                right: 0.5rem;
+            }
+
+            .season-button-wrap .season-button {
+                font-size: 0.9rem;
+                padding: 0.6rem 0.9rem;
             }
         }
     </style>
