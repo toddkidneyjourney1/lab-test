@@ -1,2 +1,11 @@
+# Site settings
 title: The Laboratory Theater of Florida
-theme: jekyll-theme-minimal # You can change this to any supported theme
+description: Intentionally innovative live theater
+url: "https://toddkidneyjourney1.github.io"
+baseurl: "/lab-test" # Ensure this matches your repository name
+
+# Build settings
+theme: jekyll-theme-minimal # You can change this to any Jekyll-compatible theme
+markdown: kramdown
+plugins:
+  - jekyll-paginate
