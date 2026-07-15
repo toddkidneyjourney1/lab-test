@@ -1,3 +1,7 @@
+---
+layout: default
+title: Alien Gallery
+---
 <!DOCTYPE html>
 <html lang="en">
 <head>
