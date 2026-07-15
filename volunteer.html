@@ -4,619 +4,66 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Volunteer Calendar</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
+    /* Keep your existing styles */
     * { box-sizing: border-box; }
     body { margin:0; background:#0f0f10; color:#f1f1f1; font-family:Arial,sans-serif; }
     .wrap { max-width:1100px; margin:0 auto; padding:16px; }
     .panel { background:#181818; border:1px solid #333; border-radius:12px; padding:14px; }
-    .row { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
-    .btn { border:0; border-radius:8px; padding:8px 12px; background:#444; color:#fff; cursor:pointer; font-weight:700; }
-    .btn.primary { background:#d72638; }
-    .btn.warn { background:#7a2f2f; }
-    .btn:disabled { opacity:.55; cursor:not-allowed; }
-
     .layout { margin-top:12px; display:grid; grid-template-columns:1.25fr .9fr; gap:12px; }
-    @media (max-width:900px){ .layout{ grid-template-columns:1fr; } }
-
-    .dow, #calendar-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:6px; }
-    .dow { margin-bottom:6px; }
-    .dow div { text-align:center; font-size:12px; color:#aaa; }
-
-    #calendar-grid { min-height:460px; }
+    #calendar-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:6px; min-height:460px; }
     .day { border:1px solid #3a3a3a; border-radius:10px; min-height:92px; background:#121212; padding:6px; }
-    .outside { opacity:.35; }
-    .has-show.open { box-shadow: inset 0 0 0 1px rgba(60,180,95,.55); }
-    .has-show.full { box-shadow: inset 0 0 0 1px rgba(190,65,65,.55); }
-    .selected { outline:2px solid #d72638; }
-
-    .day-btn { width:100%; min-height:78px; border:0; background:transparent; color:inherit; text-align:left; padding:0; cursor:pointer; }
-    .num { display:block; font-size:12px; color:#bbb; margin-bottom:4px; }
-    .pill { display:inline-block; font-size:11px; border-radius:999px; padding:2px 7px; border:1px solid #4a4a4a; margin-bottom:4px; }
-    .pill.open { border-color:#2b8d48; color:#9fe0b0; }
-    .pill.full { border-color:#9b3a3a; color:#efb0b0; }
-    .show-mini { font-size:11px; color:#d1d1d1; line-height:1.2; max-height:2.5em; overflow:hidden; }
-
-    .empty { border:1px dashed #555; border-radius:10px; padding:10px; color:#c7c7c7; background:#131313; }
-    .shift-list { margin-top:10px; display:grid; gap:8px; }
-    .shift-item { border:1px solid #3c3c3c; border-radius:8px; padding:8px; background:#121212; }
-    .muted { color:#b8b8b8; font-size:12px; }
-    .notice { margin-top:8px; font-size:13px; color:#ddd; }
-    .ok { color:#9fe0b0; }
-    .err { color:#efb0b0; }
+    .has-show { box-shadow: inset 0 0 0 1px rgba(60,180,95,.55); }
+    .day-btn { width:100%; min-height:78px; border:0; background:transparent; color:inherit; text-align:left; cursor:pointer; }
+    .pill { display:inline-block; font-size:11px; border-radius:999px; padding:2px 7px; border:1px solid #2b8d48; color:#9fe0b0; }
   </style>
 </head>
 <body>
   <div class="wrap">
-    <div class="panel">
-      <h1 style="margin:0 0 10px;">Volunteer Calendar</h1>
-      <div class="row">
-        <button id="prev-month-btn" class="btn" type="button">Prev</button>
-        <button id="today-month-btn" class="btn" type="button">This Month</button>
-        <button id="next-month-btn" class="btn" type="button">Next</button>
-        <strong id="month-title">Month</strong>
-      </div>
-
-      <div class="row" style="margin-top:8px;">
-        <label for="volunteer-name">Volunteer Name:</label>
-        <input id="volunteer-name" style="padding:8px;border-radius:8px;border:1px solid #444;background:#101010;color:#fff;" />
-        <button id="save-name-btn" class="btn" type="button">Save Name</button>
-        <button id="cancel-mine-btn" class="btn warn" type="button">Cancel My Signups</button>
-      </div>
-
-      <div id="msg" class="notice"></div>
-    </div>
-
+    <div class="panel"><h1>Volunteer Calendar</h1><div id="msg"></div></div>
     <div class="layout">
-      <div class="panel">
-        <div class="dow">
-          <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
-        </div>
-        <div id="calendar-grid"></div>
-      </div>
-
-      <div class="panel">
-        <h3 id="detail-title" style="margin-top:0;">Select a performance date</h3>
-        <div id="detail-body" class="empty">Click a highlighted date.</div>
-      </div>
+      <div class="panel"><div id="calendar-grid"></div></div>
+      <div class="panel"><h3 id="detail-title">Select a date</h3><div id="detail-body"></div></div>
     </div>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    (() => {
-      const SUPABASE_URL = "https://izytzrxrgnahyvgwqhgd.supabase.co";
-      const SUPABASE_ANON_KEY = "sb_publishable_wo-PDCkLxkuGLsar5by1Sw_ShjHgZDC";
-      const TABLE_NAME = "volunteer_shifts";
-      const SHIFT_COUNTS = { box_office: 1, usher: 2, concessions: 1 };
-
-      const MASTER_PERFORMANCES = [
-        { show:"Waiting for Godot", date:"2026-08-20", time:"7:30 PM", tz:"EDT" },
-        { show:"Waiting for Godot", date:"2026-08-21", time:"7:30 PM", tz:"EDT" },
-        { show:"Waiting for Godot", date:"2026-08-22", time:"7:30 PM", tz:"EDT" },
-        { show:"Waiting for Godot", date:"2026-08-23", time:"2:00 PM", tz:"EDT" },
-        { show:"Waiting for Godot", date:"2026-08-27", time:"7:30 PM", tz:"EDT" },
-        { show:"Waiting for Godot", date:"2026-08-28", time:"7:30 PM", tz:"EDT" },
-        { show:"Waiting for Godot", date:"2026-08-29", time:"2:00 PM", tz:"EDT" },
-        { show:"Waiting for Godot", date:"2026-08-30", time:"2:00 PM", tz:"EDT" },
-        { show:"Waiting for Godot", date:"2026-09-03", time:"7:30 PM", tz:"EDT" },
-        { show:"Waiting for Godot", date:"2026-09-04", time:"7:30 PM", tz:"EDT" },
-        { show:"Waiting for Godot", date:"2026-09-05", time:"7:30 PM", tz:"EDT" },
-        { show:"Waiting for Godot", date:"2026-09-06", time:"2:00 PM", tz:"EDT" },
-        { show:"The Pillowman", date:"2026-10-08", time:"7:30 PM", tz:"EDT" },
-        { show:"The Pillowman", date:"2026-10-09", time:"7:30 PM", tz:"EDT" },
-        { show:"The Pillowman", date:"2026-10-10", time:"7:30 PM", tz:"EDT" },
-        { show:"The Pillowman", date:"2026-10-11", time:"2:00 PM", tz:"EDT" },
-        { show:"The Pillowman", date:"2026-10-15", time:"7:30 PM", tz:"EDT" },
-        { show:"The Pillowman", date:"2026-10-16", time:"7:30 PM", tz:"EDT" },
-        { show:"The Pillowman", date:"2026-10-17", time:"2:00 PM", tz:"EDT" },
-        { show:"The Pillowman", date:"2026-10-18", time:"2:00 PM", tz:"EDT" },
-        { show:"The Pillowman", date:"2026-10-22", time:"7:30 PM", tz:"EDT" },
-        { show:"The Pillowman", date:"2026-10-23", time:"7:30 PM", tz:"EDT" },
-        { show:"The Pillowman", date:"2026-10-24", time:"7:30 PM", tz:"EDT" },
-        { show:"The Pillowman", date:"2026-10-25", time:"2:00 PM", tz:"EDT" },
-        { show:"The Rivals", date:"2026-11-12", time:"7:30 PM", tz:"EST" },
-        { show:"The Rivals", date:"2026-11-13", time:"7:30 PM", tz:"EST" },
-        { show:"The Rivals", date:"2026-11-14", time:"7:30 PM", tz:"EST" },
-        { show:"The Rivals", date:"2026-11-15", time:"2:00 PM", tz:"EST" },
-        { show:"The Rivals", date:"2026-11-19", time:"7:30 PM", tz:"EST" },
-        { show:"The Rivals", date:"2026-11-20", time:"7:30 PM", tz:"EST" },
-        { show:"The Rivals", date:"2026-11-21", time:"2:00 PM", tz:"EST" },
-        { show:"The Rivals", date:"2026-11-22", time:"2:00 PM", tz:"EST" },
-        { show:"The Rivals", date:"2026-11-27", time:"7:30 PM", tz:"EST" },
-        { show:"The Rivals", date:"2026-11-28", time:"7:30 PM", tz:"EST" },
-        { show:"The Rivals", date:"2026-11-29", time:"2:00 PM", tz:"EST" },
-        { show:"God of Carnage", date:"2027-01-14", time:"7:30 PM", tz:"EST" },
-        { show:"God of Carnage", date:"2027-01-15", time:"7:30 PM", tz:"EST" },
-        { show:"God of Carnage", date:"2027-01-16", time:"7:30 PM", tz:"EST" },
-        { show:"God of Carnage", date:"2027-01-17", time:"2:00 PM", tz:"EST" },
-        { show:"God of Carnage", date:"2027-01-21", time:"7:30 PM", tz:"EST" },
-        { show:"God of Carnage", date:"2027-01-22", time:"7:30 PM", tz:"EST" },
-        { show:"God of Carnage", date:"2027-01-23", time:"2:00 PM", tz:"EST" },
-        { show:"God of Carnage", date:"2027-01-24", time:"2:00 PM", tz:"EST" },
-        { show:"God of Carnage", date:"2027-01-28", time:"7:30 PM", tz:"EST" },
-        { show:"God of Carnage", date:"2027-01-29", time:"7:30 PM", tz:"EST" },
-        { show:"God of Carnage", date:"2027-01-30", time:"7:30 PM", tz:"EST" },
-        { show:"God of Carnage", date:"2027-01-31", time:"2:00 PM", tz:"EST" },
-        { show:"Bare", date:"2027-02-18", time:"7:30 PM", tz:"EST" },
-        { show:"Bare", date:"2027-02-19", time:"7:30 PM", tz:"EST" },
-        { show:"Bare", date:"2027-02-20", time:"7:30 PM", tz:"EST" },
-        { show:"Bare", date:"2027-02-21", time:"2:00 PM", tz:"EST" },
-        { show:"Bare", date:"2027-02-25", time:"7:30 PM", tz:"EST" },
-        { show:"Bare", date:"2027-02-26", time:"7:30 PM", tz:"EST" },
-        { show:"Bare", date:"2027-02-27", time:"2:00 PM", tz:"EST" },
-        { show:"Bare", date:"2027-02-28", time:"2:00 PM", tz:"EST" },
-        { show:"Bare", date:"2027-03-04", time:"7:30 PM", tz:"EST" },
-        { show:"Bare", date:"2027-03-05", time:"7:30 PM", tz:"EST" },
-        { show:"Bare", date:"2027-03-06", time:"7:30 PM", tz:"EST" },
-        { show:"Bare", date:"2027-03-07", time:"2:00 PM", tz:"EST" },
-        { show:"A Midsummer Night's Dream", date:"2027-03-25", time:"7:30 PM", tz:"EDT" },
-        { show:"A Midsummer Night's Dream", date:"2027-03-26", time:"7:30 PM", tz:"EDT" },
-        { show:"A Midsummer Night's Dream", date:"2027-03-27", time:"7:30 PM", tz:"EDT" },
-        { show:"A Midsummer Night's Dream", date:"2027-03-28", time:"2:00 PM", tz:"EDT" },
-        { show:"A Midsummer Night's Dream", date:"2027-04-01", time:"7:30 PM", tz:"EDT" },
-        { show:"A Midsummer Night's Dream", date:"2027-04-02", time:"7:30 PM", tz:"EDT" },
-        { show:"A Midsummer Night's Dream", date:"2027-04-03", time:"2:00 PM", tz:"EDT" },
-        { show:"A Midsummer Night's Dream", date:"2027-04-04", time:"2:00 PM", tz:"EDT" },
-        { show:"A Midsummer Night's Dream", date:"2027-04-08", time:"7:30 PM", tz:"EDT" },
-        { show:"A Midsummer Night's Dream", date:"2027-04-09", time:"7:30 PM", tz:"EDT" },
-        { show:"A Midsummer Night's Dream", date:"2027-04-10", time:"7:30 PM", tz:"EDT" },
-        { show:"A Midsummer Night's Dream", date:"2027-04-11", time:"2:00 PM", tz:"EDT" },
-        { show:"Fences by August Wilson", date:"2027-04-22", time:"7:30 PM", tz:"EDT" },
-        { show:"Fences by August Wilson", date:"2027-04-23", time:"7:30 PM", tz:"EDT" },
-        { show:"Fences by August Wilson", date:"2027-04-24", time:"7:30 PM", tz:"EDT" },
-        { show:"Fences by August Wilson", date:"2027-04-25", time:"2:00 PM", tz:"EDT" },
-        { show:"Fences by August Wilson", date:"2027-04-29", time:"7:30 PM", tz:"EDT" },
-        { show:"Fences by August Wilson", date:"2027-04-30", time:"7:30 PM", tz:"EDT" },
-        { show:"Fences by August Wilson", date:"2027-05-01", time:"2:00 PM", tz:"EDT" },
-        { show:"Fences by August Wilson", date:"2027-05-02", time:"2:00 PM", tz:"EDT" },
-        { show:"Fences by August Wilson", date:"2027-05-06", time:"7:30 PM", tz:"EDT" },
-        { show:"Fences by August Wilson", date:"2027-05-07", time:"7:30 PM", tz:"EDT" },
-        { show:"Fences by August Wilson", date:"2027-05-08", time:"7:30 PM", tz:"EDT" },
-        { show:"Fences by August Wilson", date:"2027-05-09", time:"2:00 PM", tz:"EDT" }
-      ];
-
-      const PERFORMANCE_DATES = MASTER_PERFORMANCES.map(p => `${p.date} ${p.time}`);
-      const PERF_BY_DATE = Object.fromEntries(MASTER_PERFORMANCES.map(p => [p.date, p]));
-
-      const monthTitleEl = document.getElementById("month-title");
-      const gridEl = document.getElementById("calendar-grid");
-      const detailTitleEl = document.getElementById("detail-title");
-      const detailBodyEl = document.getElementById("detail-body");
-      const msgEl = document.getElementById("msg");
-      const nameInput = document.getElementById("volunteer-name");
-
-      let supabase = null;
-      let visibleMonth = new Date("2026-08-01T00:00:00");
-      let selectedDateKey = null;
-      let volunteerName = (localStorage.getItem("lab_volunteer_name") || "").trim();
-      let schedule = defaultSchedule();
-
-      nameInput.value = volunteerName;
-
-      function setMsg(text, isError = false) {
-        msgEl.className = "notice " + (isError ? "err" : "ok");
-        msgEl.textContent = text;
-      }
-
-      function mmddyyyy(isoDate) {
-        const [y,m,d] = isoDate.split("-");
-        return `${m}-${d}-${y}`;
-      }
-
-      function fmtKey(d) {
-        return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
-      }
-
-      function roleLabel(role) {
-        if (role === "box_office") return "Box Office";
-        if (role === "usher") return "Usher";
-        return "Concessions";
-      }
-
-      function getStartTime(timeText) {
-        const match = String(timeText || "").trim().match(/^(\d{1,2}:\d{2})\s*(AM|PM)$/i);
-        return match ? match[1] : String(timeText || "").trim();
-      }
-
-      function defaultSchedule() {
-        const out = {};
-        for (const p of MASTER_PERFORMANCES) {
-          out[p.date] = {
-            performance_date: `${p.date} ${p.time}`,
-            shift_date: p.date,
-            box_office: [null],
-            usher: [null, null],
-            concessions: [null]
-          };
-        }
-        return out;
-      }
-
-      function countOpenSlots(dateKey) {
-        const d = schedule[dateKey];
-        if (!d) return 0;
-        return [...d.box_office, ...d.usher, ...d.concessions].filter(v => !v).length;
-      }
-
-      function normalizeFromRows(rows) {
-        const fresh = defaultSchedule();
-        for (const r of rows || []) {
-          const key = r.shift_date || (r.performance_date || "").split(" ")[0];
-          if (!fresh[key]) continue;
-          if (!(r.role in fresh[key])) continue;
-          if (typeof r.slot_index !== "number") continue;
-          if (r.slot_index < 0 || r.slot_index >= fresh[key][r.role].length) continue;
-          fresh[key][r.role][r.slot_index] = r.assigned_to ?? null;
-        }
-        return fresh;
-      }
-
-      function initSupabase() {
-        try {
-          if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
-            supabase = null;
-            return false;
-          }
-          supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-            auth: { persistSession: false }
-          });
-          return true;
-        } catch (e) {
-          console.error("Supabase init error:", e);
-          setMsg(`Supabase init error: ${e.message || e}`, true);
-          supabase = null;
-          return false;
-        }
-      }
-
-      async function testSupabaseConnection() {
-        if (!supabase) {
-          setMsg("Supabase is not configured.", true);
-          return false;
-        }
-        try {
-          const { error } = await supabase
-            .from(TABLE_NAME)
-            .select("id", { count: "exact", head: true });
-
-          if (error) {
-            setMsg(`Supabase error: ${error.message}`, true);
-            return false;
-          }
-          return true;
-        } catch (e) {
-          setMsg(`Failed to fetch Supabase: ${e.message || e}`, true);
-          return false;
-        }
-      }
-
-      async function ensureSeedDataExists() {
-        if (!supabase) return;
-        const { data: existing, error: readErr } = await supabase
-          .from(TABLE_NAME)
-          .select("performance_date, shift_date, role, slot_index")
-          .in("performance_date", PERFORMANCE_DATES);
-
-        if (readErr) throw readErr;
-
-        const existingSet = new Set((existing || []).map(r => `${r.performance_date}|${r.role}|${r.slot_index}`));
-        const toInsert = [];
-
-        for (const p of MASTER_PERFORMANCES) {
-          const perfRaw = `${p.date} ${p.time}`;
-          const startTime = getStartTime(p.time);
-          for (const role of Object.keys(SHIFT_COUNTS)) {
-            for (let i = 0; i < SHIFT_COUNTS[role]; i++) {
-              const key = `${perfRaw}|${role}|${i}`;
-              if (!existingSet.has(key)) {
-                toInsert.push({
-                  performance_date: perfRaw,
-                  shift_date: p.date,
-                  start_time: startTime,
-                  role,
-                  shift_name: roleLabel(role),
-                  slot_index: i,
-                  assigned_to: null
-                });
-              }
-            }
-          }
-        }
-
-        if (toInsert.length) {
-          const { error: insErr } = await supabase.from(TABLE_NAME).insert(toInsert);
-          if (insErr) throw insErr;
-        }
-      }
-
-      async function loadFromSupabase() {
-        try {
-          const ok = await testSupabaseConnection();
-          if (!ok) {
-            renderCalendar();
-            renderDetail();
-            return;
-          }
-
-          setMsg("Syncing schedule...");
-          await ensureSeedDataExists();
-
-          const { data, error } = await supabase
-            .from(TABLE_NAME)
-            .select("performance_date, shift_date, role, slot_index, assigned_to")
-            .in("performance_date", PERFORMANCE_DATES);
-
-          if (error) throw error;
-
-          schedule = normalizeFromRows(data || []);
-          setMsg("Schedule updated.");
-        } catch (e) {
-          console.error(e);
-          setMsg(`Load failed: ${e.message || e}`, true);
-        }
-
-        renderCalendar();
-        renderDetail();
-      }
-
-      async function saveSelections(dateKey, selections) {
-        if (!volunteerName) {
-          alert("Please enter and save your volunteer name first.");
-          return;
-        }
-        if (!selections.length) {
-          alert("Select at least one shift.");
-          return;
-        }
-        if (!supabase) {
-          alert("Supabase is not configured.");
-          return;
-        }
-
-        try {
-          const perf = PERF_BY_DATE[dateKey];
-          const perfRaw = `${perf.date} ${perf.time}`;
-
-          for (const item of selections) {
-            const { role, slotIndex } = item;
-            const { data, error } = await supabase
-              .from(TABLE_NAME)
-              .update({
-                assigned_to: volunteerName,
-                shift_name: roleLabel(role)
-              })
-              .eq("performance_date", perfRaw)
-              .eq("shift_date", perf.date)
-              .eq("role", role)
-              .eq("slot_index", slotIndex)
-              .is("assigned_to", null)
-              .select("performance_date");
-
-            if (error) throw error;
-            if (!data || data.length === 0) {
-              setMsg("Some selected slots were just taken. Refreshed list.", true);
-            }
-          }
-
-          await loadFromSupabase();
-          selectedDateKey = dateKey;
-          renderDetail();
-        } catch (e) {
-          console.error(e);
-          alert("Save failed: " + (e.message || e));
-        }
-      }
-
-      async function cancelMySignups() {
-        if (!volunteerName) {
-          alert("Please enter and save your volunteer name first.");
-          return;
-        }
-        if (!supabase) {
-          alert("Supabase is not configured.");
-          return;
-        }
-
-        try {
-          const { data, error } = await supabase
-            .from(TABLE_NAME)
-            .select("performance_date, shift_date, role, slot_index")
-            .eq("assigned_to", volunteerName);
-
-          if (error) throw error;
-          if (!data || data.length === 0) {
-            setMsg("No signups found for your name.");
-            return;
-          }
-
-          for (const row of data) {
-            const { error: upErr } = await supabase
-              .from(TABLE_NAME)
-              .update({ assigned_to: null })
-              .eq("performance_date", row.performance_date)
-              .eq("role", row.role)
-              .eq("slot_index", row.slot_index)
-              .eq("assigned_to", volunteerName);
-
-            if (upErr) throw upErr;
-          }
-
-          setMsg(`Canceled ${data.length} signup(s) for ${volunteerName}.`);
-          await loadFromSupabase();
-        } catch (e) {
-          console.error(e);
-          setMsg(`Cancel failed: ${e.message || e}`, true);
-        }
-      }
-
-      function renderCalendar() {
-        const y = visibleMonth.getFullYear();
-        const m = visibleMonth.getMonth();
-        const first = new Date(y, m, 1);
-        const last = new Date(y, m + 1, 0);
-
-        monthTitleEl.textContent = first.toLocaleString(undefined, { month: "long", year: "numeric" });
-
-        const start = first.getDay();
-        const daysInMonth = last.getDate();
-        const prevLast = new Date(y, m, 0).getDate();
-
-        const cells = [];
-        for (let i = 0; i < start; i++) {
-          cells.push({ d: new Date(y, m - 1, prevLast - start + i + 1), outside: true });
-        }
-        for (let d = 1; d <= daysInMonth; d++) cells.push({ d: new Date(y, m, d), outside: false });
-        while (cells.length < 42) cells.push({ d: new Date(y, m + 1, cells.length - (start + daysInMonth) + 1), outside: true });
-
-        gridEl.innerHTML = "";
-
-        for (const cell of cells) {
-          const key = fmtKey(cell.d);
-          const perf = PERF_BY_DATE[key];
-          const hasShow = !!perf;
-          const open = hasShow ? countOpenSlots(key) : 0;
-          const full = hasShow && open === 0;
-
-          const day = document.createElement("div");
-          day.className = "day";
-          if (cell.outside) day.classList.add("outside");
-          if (hasShow) day.classList.add("has-show");
-          if (hasShow && !full) day.classList.add("open");
-          if (full) day.classList.add("full");
-          if (selectedDateKey === key) day.classList.add("selected");
-
-          const btn = document.createElement("button");
-          btn.type = "button";
-          btn.className = "day-btn";
-          btn.innerHTML = `<span class="num">${cell.d.getDate()}</span>`;
-
-          if (hasShow) {
-            const pill = document.createElement("span");
-            pill.className = "pill " + (full ? "full" : "open");
-            pill.textContent = full ? "Full" : `${open} open`;
-            btn.appendChild(pill);
-
-            const mini = document.createElement("div");
-            mini.className = "show-mini";
-            mini.textContent = perf.show;
-            btn.appendChild(mini);
-
-            btn.addEventListener("click", () => {
-              selectedDateKey = key;
-              renderCalendar();
-              renderDetail();
-            });
-          } else {
-            btn.disabled = true;
-          }
-
-          day.appendChild(btn);
-          gridEl.appendChild(day);
-        }
-      }
-
-      function availableCheckboxHtml(dateKey) {
-        const day = schedule[dateKey];
-        const out = [];
-
-        for (const role of ["box_office", "usher", "concessions"]) {
-          const slots = day[role];
-          for (let i = 0; i < slots.length; i++) {
-            const assigned = slots[i];
-            if (!assigned) {
-              out.push(`
-                <label class="shift-item">
-                  <input type="checkbox" data-role="${role}" data-slot="${i}" />
-                  <strong>${roleLabel(role)} - Slot ${i + 1}</strong>
-                  <div class="muted">Available</div>
-                </label>
-              `);
-            } else {
-              out.push(`
-                <div class="shift-item">
-                  <strong>${roleLabel(role)} - Slot ${i + 1}</strong>
-                  <div class="muted">Taken by ${assigned}</div>
-                </div>
-              `);
-            }
-          }
-        }
-
-        return out.length
-          ? `<div class="shift-list">${out.join("")}</div>`
-          : `<div class="empty">No shifts available for this date.</div>`;
-      }
-
-      function renderDetail() {
-        if (!selectedDateKey || !PERF_BY_DATE[selectedDateKey]) {
-          detailTitleEl.textContent = "Select a performance date";
-          detailBodyEl.className = "empty";
-          detailBodyEl.innerHTML = "Click a highlighted date.";
-          return;
-        }
-
-        const perf = PERF_BY_DATE[selectedDateKey];
-        detailTitleEl.textContent = `${perf.show} — ${mmddyyyy(selectedDateKey)}`;
-
-        detailBodyEl.className = "";
-        detailBodyEl.innerHTML = `
-          <div class="muted">${perf.time} ${perf.tz}</div>
-          ${availableCheckboxHtml(selectedDateKey)}
-          <div class="row" style="margin-top:10px;">
-            <button id="save-shifts-btn" class="btn primary" type="button">Save Selected Shifts</button>
-          </div>
-        `;
-
-        const saveBtn = document.getElementById("save-shifts-btn");
-        saveBtn.addEventListener("click", async () => {
-          const checks = [...detailBodyEl.querySelectorAll("input[type='checkbox']:checked")];
-          const selections = checks.map(c => ({
-            role: c.getAttribute("data-role"),
-            slotIndex: Number(c.getAttribute("data-slot"))
-          }));
-          await saveSelections(selectedDateKey, selections);
-        });
-      }
-
-      document.getElementById("prev-month-btn").addEventListener("click", () => {
-        visibleMonth = new Date(visibleMonth.getFullYear(), visibleMonth.getMonth() - 1, 1);
-        renderCalendar();
-      });
-
-      document.getElementById("next-month-btn").addEventListener("click", () => {
-        visibleMonth = new Date(visibleMonth.getFullYear(), visibleMonth.getMonth() + 1, 1);
-        renderCalendar();
-      });
-
-      document.getElementById("today-month-btn").addEventListener("click", () => {
-        const now = new Date();
-        visibleMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-        renderCalendar();
-      });
-
-      document.getElementById("save-name-btn").addEventListener("click", () => {
-        volunteerName = (nameInput.value || "").trim();
-        localStorage.setItem("lab_volunteer_name", volunteerName);
-        setMsg(volunteerName ? `Name saved: ${volunteerName}` : "Name cleared.");
-      });
-
-      document.getElementById("cancel-mine-btn").addEventListener("click", cancelMySignups);
-
-      gridEl.style.display = "grid";
-      gridEl.style.gridTemplateColumns = "repeat(7,minmax(0,1fr))";
-      gridEl.style.gap = "6px";
-      gridEl.style.minHeight = "460px";
-
+    const SUPABASE_URL = "https://izytzrxrgnahyvgwqhgd.supabase.co";
+    const SUPABASE_ANON_KEY = "sb_publishable_wo-PDCkLxkuGLsar5by1Sw_ShjHgZDC";
+    
+
+    let dbShifts = [];
+
+    async function loadShifts() {
+      // Fetch from Supabase instead of using hardcoded array
+      const { data, error } = await supabase.from('shifts').select('*');
+      if (error) return console.error(error);
+      
+      dbShifts = data;
       renderCalendar();
-      renderDetail();
+    }
 
-      if (initSupabase()) {
-        setMsg("Calendar rendered. Syncing schedule...");
-        loadFromSupabase();
-      } else {
-        setMsg("Calendar rendered, but Supabase failed to initialize.", true);
-      }
-    })();
+    function renderCalendar() {
+      const grid = document.getElementById('calendar-grid');
+      grid.innerHTML = '';
+      
+      // Simplified render: Group shifts by date
+      dbShifts.forEach(s => {
+        const dateStr = s.start_time.split('T')[0];
+        const div = document.createElement('div');
+        div.className = 'day has-show';
+        div.innerHTML = `
+          <button class="day-btn">
+            <span class="num">${new Date(dateStr).getDate()}</span>
+            <div class="pill">${s.opportunity_name}</div>
+          </button>
+        `;
+        grid.appendChild(div);
+      });
+    }
+
+    loadShifts();
   </script>
 </body>
 </html>
