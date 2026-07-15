@@ -1,13 +1,14 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Volunteer Manager</title>
+    <!-- Load Supabase library -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         body { background-color: #121212; color: #e0e0e0; font-family: sans-serif; padding: 20px; }
         .admin-panel { border: 1px solid #333; padding: 20px; margin-bottom: 20px; background: #1e1e1e; }
-        input, select, button { background: #333; color: white; border: 1px solid #555; padding: 8px; margin: 5px 0; }
+        input, button { background: #333; color: white; border: 1px solid #555; padding: 8px; margin: 5px 0; display: block; width: 300px; }
         button { cursor: pointer; background: #444; }
         button:hover { background: #555; }
         #report { margin-top: 20px; padding: 15px; background: #1e1e1e; }
@@ -18,8 +19,11 @@
 
     <div class="admin-panel">
         <h2>Manage Calendar</h2>
-        <input type="date" id="shiftDate">
-        <input type="text" id="oppName" placeholder="Opportunity Name (e.g. Waiting for Godot)">
+        <input type="text" id="oppName" placeholder="Opportunity Name">
+        <label>Start:</label>
+        <input type="datetime-local" id="shiftStart">
+        <label>End:</label>
+        <input type="datetime-local" id="shiftEnd">
         <input type="number" id="shiftSpots" placeholder="Total Spots">
         <button onclick="addOpportunity()">Add/Update Opportunity</button>
         <hr>
@@ -29,27 +33,37 @@
     <div id="report"></div>
 
     <script>
-        // Mock storage - replace with actual backend integration
-        let calendarData = {}; 
+        // Initialize Supabase
+        const supabase = supabase.createClient('https://izytzrxrgnahyvgwqhgd.supabase.co', 'sb_publishable_wo-PDCkLxkuGLsar5by1Sw_ShjHgZDC');
 
-        function addOpportunity() {
-            const date = document.getElementById('shiftDate').value;
+        async function addOpportunity() {
             const opp = document.getElementById('oppName').value;
+            const start = document.getElementById('shiftStart').value;
+            const end = document.getElementById('shiftEnd').value;
             const spots = document.getElementById('shiftSpots').value;
             
-            if(!date || !opp) return alert("Please fill date and name");
+            if(!opp || !start || !end || !spots) return alert("Please fill in all fields");
             
-            calendarData[date] = { name: opp, totalSpots: spots, filled: 0 };
-            alert("Opportunity added to " + date);
+            const { data, error } = await supabase.from('shifts').insert([
+                { opportunity_name: opp, start_time: start, end_time: end, total_spots: spots, filled: 0 }
+            ]);
+
+            if (error) alert("Error: " + error.message);
+            else alert("Shift added successfully!");
         }
 
-        function generateReport() {
+        async function generateReport() {
+            const { data: shifts, error } = await supabase.from('shifts').select('*');
+            
+            if (error) return alert("Error fetching shifts: " + error.message);
+
             let html = "<h3>All Shifts</h3><ul>";
-            for (const [date, data] of Object.entries(calendarData)) {
-                const needs = data.totalSpots - data.filled;
+            shifts.forEach(shift => {
+                const needs = shift.total_spots - shift.filled;
                 const style = needs > 0 ? "class='needs-filling'" : "";
-                html += `<li ${style}>${date}: ${data.name} (${data.filled}/${data.totalSpots} filled) ${needs > 0 ? '- NEEDS FILLED' : ''}</li>`;
-            }
+                const date = new Date(shift.start_time).toLocaleString();
+                html += `<li ${style}>${date}: ${shift.opportunity_name} (${shift.filled}/${shift.total_spots} filled) ${needs > 0 ? '- NEEDS FILLED' : ''}</li>`;
+            });
             html += "</ul>";
             document.getElementById('report').innerHTML = html;
         }
