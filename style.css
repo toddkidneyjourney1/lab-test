@@ -700,3 +700,108 @@ main { max-width: 800px; margin: 0 auto; padding: 0 1rem; }
         text-align: center;
     }
 }
+/* =========================
+   High-Tech Hamburger Menu
+   ========================= */
+
+.hamburger-menu {
+  position: relative;
+  border-left: 2px solid #00ffff;
+  border-top: 1px solid rgba(128, 238, 255, 0.28);
+  border-right: 1px solid rgba(128, 238, 255, 0.18);
+  border-bottom: 1px solid rgba(128, 238, 255, 0.18);
+  box-shadow:
+    0 0 8px rgba(0, 255, 255, 0.22),
+    0 0 18px rgba(0, 180, 255, 0.16),
+    inset 0 0 12px rgba(56, 201, 255, 0.08);
+  background: linear-gradient(180deg, rgba(8, 22, 32, 0.78), rgba(6, 18, 28, 0.68));
+  overflow: hidden;
+}
+
+.hamburger-menu.open::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 12px;
+  top: -14px;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 255, 255, 0),
+    rgba(0, 255, 255, 0.24),
+    rgba(0, 255, 255, 0)
+  );
+  animation: menuScan 900ms ease-out 1;
+}
+
+@keyframes menuScan {
+  0% { top: -14px; opacity: 0; }
+  12% { opacity: 0.9; }
+  100% { top: calc(100% + 14px); opacity: 0; }
+}
+
+.hamburger-menu a {
+  position: relative;
+  display: inline-block;
+  padding-left: 84px; /* room for data-code */
+  color: #dffbff;
+  text-decoration: none;
+  letter-spacing: 0.02em;
+  transition: color 0.1s ease, transform 0.1s ease, text-shadow 0.1s ease;
+}
+
+.hamburger-menu a::before {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: #7b848c;
+  opacity: 0.82;
+}
+
+.hamburger-menu a:nth-of-type(1)::before { content: "DATA-001"; }
+.hamburger-menu a:nth-of-type(2)::before { content: "DATA-002"; }
+.hamburger-menu a:nth-of-type(3)::before { content: "DATA-003"; }
+.hamburger-menu a:nth-of-type(4)::before { content: "DATA-004"; }
+.hamburger-menu a:nth-of-type(5)::before { content: "DATA-005"; }
+.hamburger-menu a:nth-of-type(6)::before { content: "DATA-006"; }
+.hamburger-menu a:nth-of-type(7)::before { content: "DATA-007"; }
+.hamburger-menu a:nth-of-type(8)::before { content: "DATA-008"; }
+.hamburger-menu a:nth-of-type(9)::before { content: "DATA-009"; }
+
+.hamburger-menu a:hover,
+.hamburger-menu a:focus-visible {
+  color: #8ef7ff;
+  transform: translateX(1px);
+  text-shadow:
+    1px 0 rgba(255, 70, 180, 0.38),
+    -1px 0 rgba(0, 255, 255, 0.62);
+  animation: glitchShift 100ms steps(2, end) 1;
+  outline: none;
+}
+
+.hamburger-menu a:hover::after,
+.hamburger-menu a:focus-visible::after {
+  content: " [ ]";
+  color: #63f5ff;
+  margin-left: 6px;
+  letter-spacing: 0.1em;
+}
+
+.hamburger-menu a:hover::before,
+.hamburger-menu a:focus-visible::before {
+  color: #9aa3ab;
+  text-shadow: 0 0 4px rgba(0, 255, 255, 0.18);
+}
+
+@keyframes glitchShift {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(1px); }
+  50% { transform: translateX(-1px); }
+  75% { transform: translateX(1px); }
+  100% { transform: translateX(0); }
+}
