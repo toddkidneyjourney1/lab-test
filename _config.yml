@@ -9,3 +9,7 @@ theme: jekyll-theme-minimal # You can change this to any Jekyll-compatible theme
 markdown: kramdown
 plugins:
   - jekyll-paginate
+collections:
+  gallery:
+    output: true
+    permalink: /:collection/:path/
