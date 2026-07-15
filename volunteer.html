@@ -27,43 +27,52 @@
       <div class="panel"><h3 id="detail-title">Select a date</h3><div id="detail-body"></div></div>
     </div>
   </div>
-
-  <script>
+<script>
     const SUPABASE_URL = "https://izytzrxrgnahyvgwqhgd.supabase.co";
-    const SUPABASE_ANON_KEY = "sb_publishable_wo-PDCkLxkuGLsar5by1Sw_ShjHgZDC";
+    const SUPABASE_ANON_KEY = "sb_publishable_wo-PDCkLxkuGLsar5by1Sw_ShjHgZDC"; // Ensure this matches!
     
+    let supabaseClient = null;
 
-    let dbShifts = [];
+    // Wait for the library to load fully
+    window.addEventListener('load', () => {
+        // 'window.supabase' is the library; create the client once it's ready
+        if (window.supabase) {
+            supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+            console.log("Supabase Client Ready");
+            loadShifts(); // Call the load function only after init
+        } else {
+            console.error("Supabase library failed to load");
+        }
+    });
 
     async function loadShifts() {
-      // Fetch from Supabase instead of using hardcoded array
-      const { data, error } = await supabase.from('shifts').select('*');
-      if (error) return console.error(error);
-      
-      dbShifts = data;
-      renderCalendar();
+        if (!supabaseClient) return;
+
+        const { data, error } = await supabaseClient.from('shifts').select('*');
+        
+        if (error) {
+            console.error("Fetch error:", error);
+            return;
+        }
+        
+        renderCalendar(data);
     }
 
-    function renderCalendar() {
-      const grid = document.getElementById('calendar-grid');
-      grid.innerHTML = '';
-      
-      // Simplified render: Group shifts by date
-      dbShifts.forEach(s => {
-        const dateStr = s.start_time.split('T')[0];
-        const div = document.createElement('div');
-        div.className = 'day has-show';
-        div.innerHTML = `
-          <button class="day-btn">
-            <span class="num">${new Date(dateStr).getDate()}</span>
-            <div class="pill">${s.opportunity_name}</div>
-          </button>
-        `;
-        grid.appendChild(div);
-      });
+    function renderCalendar(shifts) {
+        const grid = document.getElementById('calendar-grid');
+        grid.innerHTML = '';
+        
+        shifts.forEach(s => {
+            const dateStr = s.start_time.split('T')[0];
+            const div = document.createElement('div');
+            div.className = 'day has-show';
+            div.innerHTML = `
+                <button class="day-btn">
+                    <span class="num">${new Date(dateStr).getDate()}</span>
+                    <div class="pill">${s.opportunity_name}</div>
+                </button>
+            `;
+            grid.appendChild(div);
+        });
     }
-
-    loadShifts();
-  </script>
-</body>
-</html>
+</script>
