@@ -1,70 +1,562 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sticky Sci-Fi CTA</title>
-  <style>
-    body {
-      margin: 0;
-      min-height: 200vh; /* demo scroll */
-      background: #0a0f14; /* dark theme */
-      color: #e6f7ff;
-      font-family: Arial, sans-serif;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Laboratory Theater of Florida</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .hero {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 2rem;
+            align-items: center;
+            padding: 3rem 0 2rem;
+        }
 
-    .sticky-cta {
-      position: fixed;
-      right: 1rem;
-      bottom: 1rem;
-      z-index: 9999;
+        .hero-content {
+            max-width: 620px;
+        }
 
-      display: inline-block;
-      padding: 0.85rem 1.1rem;
-      border-radius: 10px;
-      border: 1px solid #63f5ff;
-      background: linear-gradient(135deg, #042029 0%, #063847 100%);
-      color: #eaffff;
-      text-decoration: none;
-      font-weight: 700;
-      letter-spacing: 0.02em;
+        .hero-content .tag {
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
 
-      box-shadow:
-        0 0 10px rgba(74, 238, 255, 0.45),
-        0 0 20px rgba(74, 238, 255, 0.25),
-        inset 0 0 10px rgba(74, 238, 255, 0.12);
-      animation: holoPulse 2.2s ease-in-out infinite;
-      transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
-    }
+        .hero-content h1 {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            line-height: 0.95;
+            margin-bottom: 1rem;
+        }
 
-    .sticky-cta:hover,
-    .sticky-cta:focus-visible {
-      transform: scale(1.05);
-      background: linear-gradient(135deg, #063241 0%, #0a4f64 100%);
-      box-shadow:
-        0 0 14px rgba(74, 238, 255, 0.75),
-        0 0 30px rgba(74, 238, 255, 0.5),
-        inset 0 0 12px rgba(74, 238, 255, 0.2);
-      outline: none;
-    }
+        .hero-content p {
+            font-size: 1.1rem;
+            max-width: 55ch;
+            margin-bottom: 1rem;
+        }
 
-    @keyframes holoPulse {
-      0%, 100% {
-        box-shadow:
-          0 0 10px rgba(74, 238, 255, 0.45),
-          0 0 20px rgba(74, 238, 255, 0.25),
-          inset 0 0 10px rgba(74, 238, 255, 0.12);
-      }
-      50% {
-        box-shadow:
-          0 0 12px rgba(74, 238, 255, 0.6),
-          0 0 24px rgba(74, 238, 255, 0.35),
-          inset 0 0 11px rgba(74, 238, 255, 0.16);
-      }
-    }
-  </style>
+        .season-button {
+            display: inline-block;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Sticky Season 18 button (lower-right) */
+        .season-button-wrap {
+            position: fixed;
+            right: 1rem;
+            bottom: 1rem;
+            z-index: 9999;
+            margin: 0;
+            text-align: center;
+        }
+
+        .season-button-wrap .season-button {
+            margin-bottom: 0;
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
+            white-space: nowrap;
+            position: relative; /* anchor for tooltip */
+        }
+
+        /* Tooltip bubble */
+        .season-button-wrap .season-button::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            left: 50%;
+            bottom: calc(100% + 10px); /* just above button */
+            transform: translateX(-50%);
+            background: rgba(8, 12, 16, 0.96);
+            color: #7dffb3;
+            border: 1px solid #2ee6a6;
+            border-radius: 8px;
+            padding: 0.5rem 0.7rem;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 0.78rem;
+            letter-spacing: 0.03em;
+            white-space: nowrap;
+            box-shadow: 0 8px 22px rgba(0, 0, 0, 0.35);
+
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 180ms ease, transform 180ms ease, visibility 180ms ease;
+
+            pointer-events: none; /* do not block click-through */
+            z-index: 10000;
+        }
+
+        /* Tooltip pointer */
+        .season-button-wrap .season-button::before {
+            content: "";
+            position: absolute;
+            left: 50%;
+            bottom: calc(100% + 4px);
+            transform: translateX(-50%);
+            border: 6px solid transparent;
+            border-top-color: #2ee6a6;
+
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 180ms ease, transform 180ms ease, visibility 180ms ease;
+
+            pointer-events: none; /* do not block click-through */
+            z-index: 10000;
+        }
+
+        /* Hover/focus reveal */
+        .season-button-wrap .season-button:hover::after,
+        .season-button-wrap .season-button:focus-visible::after {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(-2px);
+            animation: tooltipType 1.3s steps(28, end) 1;
+        }
+
+        .season-button-wrap .season-button:hover::before,
+        .season-button-wrap .season-button:focus-visible::before {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(-2px);
+        }
+
+        /* Typewriter/glitch hybrid animation */
+        @keyframes tooltipType {
+            0% {
+                clip-path: inset(0 100% 0 0);
+                text-shadow: 1px 0 #00ffd0, -1px 0 #ff2e88;
+                filter: brightness(1.25);
+            }
+            35% {
+                text-shadow: -1px 0 #00ffd0, 1px 0 #ff2e88;
+            }
+            70% {
+                text-shadow: 1px 0 #00ffd0, -1px 0 #ff2e88;
+            }
+            100% {
+                clip-path: inset(0 0 0 0);
+                text-shadow: none;
+                filter: brightness(1);
+            }
+        }
+
+        .hero img {
+            width: 100%;
+            max-width: 560px;
+            justify-self: end;
+            border-radius: 18px;
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.28);
+        }
+
+        .cast-section {
+            margin-top: 3rem;
+            padding: 2rem 0 3rem;
+        }
+
+        .cast-section h2 {
+            margin-bottom: 1.25rem;
+        }
+
+        /* Force four cast cards in one horizontal row on desktop */
+        .cast-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 1rem;
+            align-items: start;
+        }
+
+        .cast-member {
+            background: #151515;
+            border: 1px solid #2c2c2c;
+            border-radius: 14px;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        /* 1 inch square photos */
+        .cast-member img {
+            width: 1in;
+            height: 1in;
+            object-fit: cover;
+            border-radius: 8px;
+            display: block;
+            margin: 0 auto 0.65rem;
+        }
+
+        .cast-member h3 {
+            margin-bottom: 0.35rem;
+            font-size: 1rem;
+            line-height: 1.2;
+        }
+
+        .role {
+            color: #ff5c8a;
+            margin: 0;
+            font-size: 0.95rem;
+        }
+
+        .shows-section {
+            padding: 3rem 0 4rem;
+        }
+
+        .shows-section h2 {
+            margin-bottom: 0.75rem;
+        }
+
+        .show-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .show-item {
+            background: #151515;
+            border: 1px solid #2c2c2c;
+            border-radius: 16px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem;
+            min-height: 110px;
+        }
+
+        .show-item img {
+            width: min(280px, 38vw);
+            min-width: 140px;
+            height: 72px;
+            object-fit: contain;
+            object-position: center;
+            border-radius: 8px;
+            flex-shrink: 0;
+            display: block;
+            margin: 0;
+        }
+
+        .show-item-content {
+            padding: 0.25rem 0.5rem;
+            flex: 1;
+        }
+
+        .show-item h3 {
+            margin-bottom: 0.35rem;
+        }
+
+        .show-item p {
+            color: #d2d2d2;
+            margin-bottom: 0.65rem;
+        }
+
+        .show-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        .show-links a {
+            text-decoration: none;
+        }
+
+        .site-footer {
+            margin-top: 3rem;
+            background: #101010;
+            border-top: 1px solid #2c2c2c;
+            color: #e6e6e6;
+        }
+
+        .footer-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 2rem 1rem 1.25rem;
+            display: grid;
+            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        }
+
+        .footer-block h3,
+        .footer-block h4 {
+            margin: 0 0 0.75rem;
+            color: #fff;
+        }
+
+        .footer-block p {
+            margin: 0 0 0.75rem;
+            line-height: 1.5;
+            color: #d3d3d3;
+        }
+
+        .footer-block a {
+            color: #ff5c8a;
+            text-decoration: none;
+        }
+
+        .footer-block a:hover {
+            text-decoration: underline;
+        }
+
+        .social-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .social-links li + li {
+            margin-top: 0.4rem;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #2c2c2c;
+            text-align: center;
+            padding: 0.85rem 1rem 1.2rem;
+            font-size: 0.92rem;
+            color: #b8b8b8;
+        }
+
+        @media (max-width: 900px) {
+            .hero {
+                grid-template-columns: 1fr;
+            }
+
+            .hero img {
+                max-width: min(100%, 680px);
+                justify-self: start;
+            }
+
+            /* 2x2 layout on tablet */
+            .cast-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .show-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .show-item img {
+                width: 100%;
+                height: 44px;
+                max-height: none;
+                margin-bottom: 0.25rem;
+            }
+
+            .season-button-wrap {
+                right: 0.5rem;
+                bottom: 0.5rem;
+            }
+
+            .season-button-wrap .season-button {
+                font-size: 0.9rem;
+                padding: 0.6rem 0.9rem;
+            }
+        }
+
+        @media (max-width: 560px) {
+            /* 1 column on small phones */
+            .cast-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body>
-  <a href="#" class="sticky-cta">Initialize Protocol</a>
+    <input type="checkbox" id="nav-toggle" class="nav-toggle">
+    <label for="nav-toggle" class="nav-toggle-label"><span></span></label>
+    <label for="nav-toggle" class="nav-overlay"></label>
+
+    <nav class="hamburger-menu">
+        <a href="about.html">Origin Story</a>
+        <a href="archive25.html">Past Experiments</a>
+        <a href="index.html">Back to the Slab</a>
+        <a href="plan.html">Lab Protocols</a>
+
+        <!-- Submenu for Portal Landing Pad -->
+        <div class="submenu">
+            <span class="submenu-title">The Portal Landing Pad</span>
+            <ul>
+                <li><a href="cast-portal.html">Subjects</a></li>
+                <li><a href="volunteer.html">Volunteers</a></li>
+                <li><a href="dashboard.html">Admin</a></li>
+                <li class="submenu">
+                    <span class="submenu-title">coming soon</span>
+                    <ul>
+                        <li><a href="volunteer-signup.html">Volunteer Signup</a></li>
+                        <li><a href="bios.html">subject data</a></li>
+                        <li><a href="audition-portal.html">Auditions</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+        <a href="support.html">Fuel the Innovation</a>
+        <a href="sponsors.html">Core Collaborators</a>
+    </nav>
+
+    <header>
+        <div class="logo">
+            THE <span>LAB</span>
+            <p class="tagline">Intentionally innovative live theater</p>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="hero-content">
+                <span class="tag">Our Current Experiment</span>
+                <h1>Waiting for Godot</h1>
+                <p>On a barren road, two men wait for a mysterious figure who never arrives.</p>
+                <a href="https://www.purplepass.com/events/375339-waiting-for-godot-aug-20th-2026" class="btn-primary">Secure Your Seat</a>
+            </div>
+            <img src="assets/godot.jpg" alt="Waiting for Godot production poster">
+        </section>
+
+        <div class="season-button-wrap" style="text-align:center; margin: 0 0 2rem;">
+            <a href="https://www.purplepass.com/events/380468-season-18-passes-jun-25th-2026" class="btn-primary season-button" data-tooltip="Status: Ready for Input">Get full Season Access</a>
+        </div>
+
+        <section class="cast-section">
+            <h2>The Test Subjects</h2>
+            <div class="cast-grid">
+                <div class="cast-member">
+                    <img src="assets/henry.jpg" alt="Henry Cavill as Vladimir">
+                    <h3>Henry Cavill</h3>
+                    <p class="role">Vladimir</p>
+                </div>
+                <div class="cast-member">
+                    <img src="assets/henry.jpg" alt="Henry Cavill as Estragon">
+                    <h3>Henry Cavill</h3>
+                    <p class="role">Estragon</p>
+                </div>
+                <div class="cast-member">
+                    <img src="assets/henry.jpg" alt="Henry Cavill as Pozzo">
+                    <h3>Henry Cavill</h3>
+                    <p class="role">Pozzo</p>
+                </div>
+                <div class="cast-member">
+                    <img src="assets/henry.jpg" alt="Henry Cavill as Lucky">
+                    <h3>Henry Cavill</h3>
+                    <p class="role">Lucky</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="shows-section">
+            <h2>Back to the Slab</h2>
+            <p>Explore our current and upcoming productions. Select a show to view details or ticketing.</p>
+            <div class="show-list">
+                <article class="show-item">
+                    <img src="assets/godot.jpg" alt="Waiting for Godot">
+                    <div class="show-item-content">
+                        <h3>Waiting for Godot</h3>
+                        <p>Two men wait for someone who may never arrive.</p>
+                        <div class="show-links">
+                            <a href="production/godot.html" class="button">Details</a>
+                            <a href="https://www.purplepass.com/events/375339-waiting-for-godot-aug-20th-2026" class="btn-primary">Secure Your Seat</a>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="show-item">
+                    <img src="assets/pillowman.jpg" alt="The Pillowman">
+                    <div class="show-item-content">
+                        <h3>The Pillowman</h3>
+                        <p>A darkly compelling story about art, truth, and stories told under pressure.</p>
+                        <div class="show-links">
+                            <a href="production/pillowman.html" class="button">Details</a>
+                            <a href="https://www.purplepass.com/events/376583-the-pillowman-oct-8th-2026" class="btn-primary">Secure Your Seat</a>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="show-item">
+                    <img src="assets/rivals.jpg" alt="The Rivals">
+                    <div class="show-item-content">
+                        <h3>The Rivals</h3>
+                        <p>A lively comedy of mistaken identity, manners, and romance.</p>
+                        <div class="show-links">
+                            <a href="production/rivals.html" class="button">Details</a>
+                            <a href="https://www.purplepass.com/events/377382-the-rivals-nov-12th-2026" class="btn-primary">Secure Your Seat</a>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="show-item">
+                    <img src="assets/bare.jpg" alt="Bare: A Pop Opera">
+                    <div class="show-item-content">
+                        <h3>Bare: A Pop Opera</h3>
+                        <p>A powerful coming-of-age story set in a Catholic boarding school.</p>
+                        <div class="show-links">
+                            <a href="production/bare.html" class="button">Details</a>
+                            <a href="https://www.purplepass.com/events/376631-bare-feb-18th-2027" class="btn-primary">Secure Your Seat</a>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="show-item">
+                    <img src="assets/midsummer.jpg" alt="A Midsummer Night's Dream">
+                    <div class="show-item-content">
+                        <h3>A Midsummer Night's Dream</h3>
+                        <p>A magical Shakespeare comedy filled with lovers, fairies, and theatrical mischief.</p>
+                        <div class="show-links">
+                            <a href="production/shakespeare.html" class="button">Details</a>
+                            <a href="https://www.purplepass.com/events/376902-a-midsummer-night-s-dream-mar-25th-2027" class="btn-primary">Secure Your Seat</a>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="show-item">
+                    <img src="assets/godofcarnage.jpg" alt="God of Carnage">
+                    <div class="show-item-content">
+                        <h3>God of Carnage</h3>
+                        <p>A tense and razor-sharp comedy about civility, conflict, and control.</p>
+                        <div class="show-links">
+                            <a href="production/god.html" class="button">Details</a>
+                            <a href="https://www.purplepass.com/events/376618-god-of-carnage-jan-14th-2027" class="btn-primary">Secure Your Seat</a>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="show-item">
+                    <img src="assets/fences.jpg" alt="Fences">
+                    <div class="show-item-content">
+                        <h3>Fences</h3>
+                        <p>A moving drama about family, responsibility, and the limits we inherit.</p>
+                        <div class="show-links">
+                            <a href="production/fences.html" class="button">Details</a>
+                            <a href="https://www.purplepass.com/events/376655-fences-by-august-wilson-apr-22nd-2027" class="btn-primary">Secure Your Seat</a>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-container">
+            <div class="footer-block">
+                <h3>The Laboratory Theater of Florida</h3>
+                <p>1634 Woodford Ave.<br>Fort Myers, FL 33901</p>
+                <p><a href="tel:+12392912905">(239) 291-2905</a></p>
+            </div>
+
+            <div class="footer-block">
+                <h4>Mailing Address</h4>
+                <p>P.O. Box 334<br>Fort Myers, FL 33902</p>
+            </div>
+
+            <div class="footer-block">
+                <h4>Follow Us</h4>
+                <ul class="social-links">
+                    <li><a href="https://www.facebook.com/LabTheaterFL" aria-label="Facebook (placeholder)">Facebook</a></li>
+                    <li><a href="https://www.instagram.com/labtheaterfl" aria-label="Instagram (placeholder)">Instagram</a></li>
+                   
+                    <li><a href="https://x.com/LabTheaterFL" aria-label="X / Twitter (placeholder)">X / Twitter</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2026 The Laboratory Theater of Florida. All rights reserved.</p>
+        </div>
+    </footer>
 </body>
 </html>
