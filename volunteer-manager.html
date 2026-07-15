@@ -34,48 +34,63 @@
     <div id="report"></div>
 
     <script>
-    // 1. Declare these ONCE globally
+    // 1. Declare configuration constants
     const SUPABASE_URL = "https://izytzrxrgnahyvgwqhgd.supabase.co";
-    const SUPABASE_ANON_KEY = "sb_publishable_wo-PDCkLxkuGLsar5by1Sw_ShjHgZDC"; 
+    const SUPABASE_ANON_KEY = "sb_publishable_wo-PDCkLxkuGLsar5by1Sw_ShjHgZDC";
+    
+    // 2. Initialize the client safely
+    // Note: We use a different variable name 'supabaseClient' to avoid 
+    // potential conflicts with the library namespace
+    let supabaseClient = null;
 
+    // Wait for the library to be fully loaded
+    window.addEventListener('load', () => {
+        if (window.supabase) {
+            supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+            console.log("Supabase initialized successfully");
+        } else {
+            console.error("Supabase library not found");
+        }
+    });
 
-    // 2. These functions are now globally accessible to your buttons
     async function addOpportunity() {
+        if (!supabaseClient) {
+            alert("Supabase is still initializing, please wait a second and try again.");
+            return;
+        }
+
         const opp = document.getElementById('oppName').value;
         const start = document.getElementById('shiftStart').value;
         const end = document.getElementById('shiftEnd').value;
         const spots = document.getElementById('shiftSpots').value;
         
-        if(!opp || !start || !end || !spots) {
-            alert("Please fill in all fields");
-            return;
-        }
+        if(!opp || !start || !end || !spots) return alert("Please fill in all fields");
         
-        const { data, error } = await supabase.from('shifts').insert([
-            { 
-                opportunity_name: opp, 
-                start_time: start, 
-                end_time: end, 
-                total_spots: parseInt(spots), 
-                filled: 0 
-            }
-        ]);
+        try {
+            const { data, error } = await supabaseClient.from('shifts').insert([
+                { 
+                    opportunity_name: opp, 
+                    start_time: start, 
+                    end_time: end, 
+                    total_spots: parseInt(spots), 
+                    filled: 0 
+                }
+            ]);
 
-        if (error) {
-            alert("Error: " + error.message);
-            console.error(error);
-        } else {
+            if (error) throw error;
             alert("Shift added successfully!");
+        } catch (err) {
+            alert("Error: " + err.message);
+            console.error(err);
         }
     }
 
     async function generateReport() {
-        const { data: shifts, error } = await supabase.from('shifts').select('*');
+        if (!supabaseClient) return alert("Supabase not ready.");
+
+        const { data: shifts, error } = await supabaseClient.from('shifts').select('*');
         
-        if (error) {
-            alert("Error fetching shifts: " + error.message);
-            return;
-        }
+        if (error) return alert("Error: " + error.message);
 
         let html = "<h3>All Shifts</h3><ul>";
         shifts.forEach(shift => {
@@ -88,4 +103,3 @@
         document.getElementById('report').innerHTML = html;
     }
 </script>
-</html>
