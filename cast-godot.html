@@ -8,23 +8,140 @@
     <!-- Load Supabase Client -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        /* Keep your existing CSS */
-        .cast-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1.5rem; padding: 2rem; }
-        .cast-card { background: #1a1b22; padding: 1rem; border-radius: 8px; text-align: center; border: 1px solid #2b2d3a; }
+        body {
+            background: linear-gradient(135deg, #0f0f1e 0%, #1a1b22 100%);
+            color: #e0e0e0;
+            font-family: 'Georgia', serif;
+        }
+
+        .header-section {
+            text-align: center;
+            padding: 2rem;
+            border-bottom: 2px solid #2b2d3a;
+            margin-bottom: 2rem;
+        }
+
+        .header-section h1 {
+            font-size: 2.5rem;
+            color: #ffd700;
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .show-info {
+            max-width: 800px;
+            margin: 1rem auto;
+            padding: 1.5rem;
+            background: #1a1b22;
+            border-left: 4px solid #ffd700;
+            border-radius: 4px;
+        }
+
+        .show-info p {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #b0b0b0;
+            margin: 0.5rem 0;
+        }
+
+        .cast-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .cast-card {
+            background: linear-gradient(135deg, #1a1b22 0%, #252730 100%);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 2px solid #2b2d3a;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .cast-card:hover {
+            border-color: #ffd700;
+            box-shadow: 0 8px 12px rgba(255, 215, 0, 0.2);
+            transform: translateY(-4px);
+        }
+
+        .cast-card h3 {
+            color: #ffd700;
+            font-size: 1.3rem;
+            margin: 0 0 0.5rem 0;
+        }
+
+        .cast-card .role {
+            color: #ff6b6b;
+            font-style: italic;
+            font-size: 1rem;
+            margin: 0.5rem 0 1rem 0;
+        }
+
+        .cast-card .description {
+            color: #b0b0b0;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin: 0.5rem 0;
+        }
+
+        .cast-card .actor {
+            color: #a0a0a0;
+            font-size: 0.85rem;
+            margin-top: 0.8rem;
+            padding-top: 0.8rem;
+            border-top: 1px solid #2b2d3a;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            font-size: 1.1rem;
+            color: #b0b0b0;
+        }
+
+        .error {
+            background: #2a1a1a;
+            border-left: 4px solid #ff6b6b;
+            padding: 1.5rem;
+            border-radius: 4px;
+            color: #ff9999;
+            margin: 2rem;
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 2rem;
+            color: #b0b0b0;
+            font-size: 1.1rem;
+        }
     </style>
 </head>
 <body>
-
     <main>
-        <h1>Cast Members</h1>
+        <div class="header-section">
+            <h1>Waiting for Godot</h1>
+            <p style="color: #b0b0b0; margin: 0.5rem 0;">Cast Rehearsal Hub</p>
+        </div>
+
+        <div class="show-info">
+            <p><strong>By Samuel Beckett</strong></p>
+            <p>A tragicomedy in two acts. Two men wait for someone named Godot who never arrives. Themes of hope, despair, friendship, and the human condition unfold on a barren road with a single tree.</p>
+            <p><em>"Nothing to be done."</em></p>
+        </div>
+
         <div id="cast-list" class="cast-container">
             <!-- Data will be injected here -->
-            <p>Loading cast data...</p>
+            <p class="loading">Loading cast data...</p>
         </div>
     </main>
 
     <script>
-    // 1. Initialize with a unique variable name (e.g., 'sbClient')
+    // Initialize Supabase Client
     let sbClient;
 
     if (typeof sbClient === 'undefined') {
@@ -34,38 +151,46 @@
     }
 
     async function loadCast() {
-        console.log("Attempting to fetch...");
+        console.log("Attempting to fetch Waiting for Godot cast data...");
         
-        // 2. Use your unique client variable here
         const { data, error } = await sbClient
             .from('theater_data')
             .select('*')
             .eq('show_id', 'godot')
-            .eq('category', 'cast');
+            .eq('category', 'cast')
+            .order('role', { ascending: true });
 
         if (error) {
             console.error("Supabase Error:", error.message);
-            document.getElementById('cast-list').innerHTML = `<p>Error: ${error.message}</p>`;
+            document.getElementById('cast-list').innerHTML = `
+                <div class="error">
+                    <strong>Error Loading Cast Data</strong><br>
+                    ${error.message}<br>
+                    <small>Please check your connection and try again.</small>
+                </div>
+            `;
             return;
         }
         
-        console.log("Data received:", data);
+        console.log("Cast data received:", data);
         const container = document.getElementById('cast-list');
         
         if (!data || data.length === 0) {
-            container.innerHTML = '<p>No cast members found for this show.</p>';
+            container.innerHTML = '<div class="no-data"><p>No cast members found for Waiting for Godot.</p></div>';
             return;
         }
 
         container.innerHTML = data.map(member => `
             <div class="cast-card">
-                <h3>${member.name}</h3>
-                <p>${member.role}</p>
-                <small>${member.notes || ''}</small>
+                <h3>${member.character_name || member.name || 'Unknown Character'}</h3>
+                <p class="role">${member.role || 'Cast Member'}</p>
+                <p class="description">${member.character_description || member.notes || 'A character in the play'}</p>
+                ${member.actor_name ? `<p class="actor"><strong>Actor:</strong> ${member.actor_name}</p>` : ''}
             </div>
         `).join('');
     }
 
     document.addEventListener('DOMContentLoaded', loadCast);
-</script>
+    </script>
+</body>
 </html>
