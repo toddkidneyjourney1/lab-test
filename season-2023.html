@@ -1,1 +1,87 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alien Gallery | The Laboratory Theater of Florida</title>
+    <style>
+        /* Base Styles */
+        body { margin: 0; font-family: sans-serif; background-color: #1a1a1a; color: #fff; }
+
+        /* Left-aligned Header */
+        .main-header {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            padding: 1rem 2rem;
+            background-color: #1a1a1a;
+            border-bottom: 1px solid #333;
+        }
+        .logo { font-size: 1.5rem; font-weight: bold; margin-right: auto; }
+        .logo a { color: #fff; text-decoration: none; }
+        .logo span { color: #ff3366; }
+
+        /* Masonry-style Grid for variable sizes */
+        .photo-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-auto-rows: 250px;
+            grid-auto-flow: dense;
+            gap: 15px;
+            padding: 20px;
+        }
+        .photo-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 8px;
+            transition: transform 0.3s ease;
+        }
+        .photo-item:hover { transform: scale(1.02); }
+        .photo-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Variable sizes */
+        .wide { grid-column: span 2; }
+        .tall { grid-row: span 2; }
+
+        /* Hamburger Nav (Simplified) */
+        .nav-toggle-label { cursor: pointer; color: #ff3366; font-size: 1.5rem; }
+    </style>
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="logo">
+            <a href="index.html"><span>THE</span> LAB</a>
+        </div>
+        <label class="nav-toggle-label">☰</label>
+    </header>
+
+    <main>
+        <div class="photo-gallery">
+
+            <!-- Group 2 -->
+            <div class="photo-item wide"><img src="assets/imgi_116_2017-2018-Season-Header.png" alt="2017-2018 Season Header"></div>
+            <div class="photo-item"><img src="assets/imgi_123_ChrysalisAward.jpg" alt="Chrysalis Award"></div>
+            <div class="photo-item tall"><img src="assets/imgi_124_Charlotte_980x720.png" alt="Charlotte"></div>
+            <div class="photo-item"><img src="assets/imgi_125_Evil_DEAD-980x720-1.png" alt="Evil Dead"></div>
+            <div class="photo-item wide"><img src="assets/imgi_126_Play_980x720.png" alt="Play"></div>
+            <div class="photo-item"><img src="assets/imgi_127_Tropics_Web980x720.png" alt="Tropics"></div>
+            <div class="photo-item tall"><img src="assets/imgi_128_Hedwig_Web-980x720-1.png" alt="Hedwig"></div>
+            <div class="photo-item"><img src="assets/imgi_129_Christmas-980x720-1.jpg" alt="Christmas"></div>
+            <div class="photo-item wide"><img src="assets/imgi_242_IMG_4675.png" alt="Production Image 242"></div>
+            <div class="photo-item"><img src="assets/imgi_255_Christmas-Eve-Elizabeth-Mora.png" alt="Christmas Eve - Elizabeth Mora"></div>
+            <div class="photo-item tall"><img src="assets/imgi_370_IMG_0244-scaled.jpg" alt="Production Image 370"></div>
+            <div class="photo-item"><img src="assets/imgi_383_slide5-scaled.jpg" alt="Slide 5"></div>
+            <div class="photo-item wide"><img src="assets/imgi_386_Katharine-and-Cal-02-300x196-1.jpg" alt="Katharine and Cal"></div>
+            <div class="photo-item"><img src="assets/imgi_391_Cal-and-Will-02-300x243-1.jpg" alt="Cal and Will"></div>
+            <div class="photo-item tall"><img src="assets/imgi_394_talk_back.jpg" alt="Talk Back"></div>
+        </div>
+    </main>
+
+</body>
+</html>
