@@ -1,55 +1,417 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Waiting for Godot | Cast Rehearsal Hub</title>
-    <link rel="stylesheet" href="style.css" />
-    <!-- Load Supabase Client -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <style>
-        /* Keep your existing CSS */
-        .cast-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1.5rem; padding: 2rem; }
-        .cast-card { background: #1a1b22; padding: 1rem; border-radius: 8px; text-align: center; border: 1px solid #2b2d3a; }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Waiting for Godot | Cast Rehearsal Hub</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    :root {
+      --bg: #0f0f14;
+      --card: #1a1b22;
+      --text: #f5f5f7;
+      --muted: #b5b7c3;
+      --accent: #ff3366;
+      --border: #2b2d3a;
+      --ok: #35c98a;
+      --warn: #ffcc66;
+      --shadow: rgba(0, 0, 0, 0.35);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      background: radial-gradient(circle at top, #191a24 0%, var(--bg) 45%);
+      color: var(--text);
+      line-height: 1.45;
+      min-height: 100vh;
+    }
+
+    header {
+      border-bottom: 1px solid var(--border);
+      background: rgba(15, 15, 20, 0.88);
+      backdrop-filter: blur(8px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .topbar {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1rem 1.25rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .logo {
+      font-weight: 900;
+      letter-spacing: 0.04em;
+      font-size: 1.08rem;
+    }
+
+    .logo span { color: var(--accent); }
+
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.45rem 0.7rem;
+      font-size: 0.9rem;
+      transition: 0.2s ease;
+    }
+
+    nav a:hover,
+    nav a[aria-current="page"] {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px rgba(255, 51, 102, 0.15) inset;
+    }
+
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1.25rem;
+      display: grid;
+      gap: 1rem;
+    }
+
+    .intro {
+      background: linear-gradient(180deg, rgba(255, 51, 102, 0.11), rgba(255, 51, 102, 0.03));
+      border: 1px solid rgba(255, 51, 102, 0.35);
+      border-radius: 14px;
+      padding: 1rem;
+    }
+
+    .intro h1 {
+      margin: 0 0 0.35rem;
+      font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+    }
+
+    .intro p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .ticker-wrap {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: #151720;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      min-height: 44px;
+    }
+
+    .ticker-label {
+      background: rgba(255, 51, 102, 0.18);
+      color: #ffdbe6;
+      padding: 0.6rem 0.75rem;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      border-right: 1px solid var(--border);
+      white-space: nowrap;
+    }
+
+    .ticker {
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+      height: 44px;
+    }
+
+    .ticker-track {
+      position: absolute;
+      white-space: nowrap;
+      will-change: transform;
+      animation: ticker-scroll 28s linear infinite;
+      padding-left: 100%;
+      line-height: 44px;
+      color: var(--warn);
+      font-size: 0.92rem;
+    }
+
+    @keyframes ticker-scroll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-100%); }
+    }
+
+    .grid {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: 1fr 1fr;
+      align-items: start;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      box-shadow: 0 10px 24px var(--shadow);
+      overflow: hidden;
+    }
+
+    .card h2 {
+      margin: 0;
+      padding: 0.85rem 1rem;
+      font-size: 1rem;
+      border-bottom: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.01);
+    }
+
+    .card-body { padding: 0.9rem 1rem 1rem; }
+
+    .calendar-2x2 {
+      width: min(100%, 520px);
+      aspect-ratio: 2 / 2;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      margin: 0 auto;
+      background: #111218;
+    }
+
+    .calendar-2x2 iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display: block;
+    }
+
+    .calendar-actions {
+      margin-top: 0.75rem;
+      display: flex;
+      justify-content: center;
+    }
+
+    .button {
+      text-decoration: none;
+      color: white;
+      background: var(--accent);
+      border: 1px solid transparent;
+      padding: 0.5rem 0.8rem;
+      border-radius: 10px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      transition: transform 0.15s ease, filter 0.2s ease;
+    }
+
+    .button:hover { transform: translateY(-1px); filter: brightness(1.05); }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 0.55rem 0.45rem;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+
+    th {
+      color: #ffdbe6;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .tag {
+      display: inline-block;
+      font-size: 0.74rem;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 0.18rem 0.5rem;
+      color: var(--muted);
+      margin-left: 0.35rem;
+    }
+
+    .status-ok { color: var(--ok); font-weight: 700; }
+    .status-warn { color: var(--warn); font-weight: 700; }
+
+    .call-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 0.55rem;
+    }
+
+    .call-list li {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.6rem 0.7rem;
+      background: rgba(255, 255, 255, 0.01);
+    }
+
+    .call-time {
+      font-weight: 800;
+      color: #ffdbe6;
+      margin-right: 0.4rem;
+    }
+
+    .small-note {
+      margin-top: 0.6rem;
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+
+    footer {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1.25rem 1.8rem;
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+
+    @media (max-width: 920px) {
+      .grid { grid-template-columns: 1fr; }
+      .calendar-2x2 { width: 100%; max-width: 420px; }
+    }
+  </style>
 </head>
 <body>
+  <header>
+    <div class="topbar">
+      <div class="logo">THE <span>LAB</span></div>
+      <nav aria-label="Primary">
+        <a href="index.html">Back to the Slab</a>
+        <a href="about.html">Origin Story</a>
+        <a href="cast-portal.html">Portal Landing Pad</a>
+        <a href="cast-godot.html" aria-current="page">Godot Hub</a>
+      </nav>
+    </div>
+  </header>
 
-    <main>
-        <h1>Cast Members</h1>
-        <div id="cast-list" class="cast-container">
-            <!-- Data will be injected here -->
-            <p>Loading cast data...</p>
+  <main>
+    <section class="intro" aria-labelledby="page-title">
+      <h1 id="page-title">Waiting for Godot Rehearsal Hub</h1>
+      <p>Calendar, contact sheet, call list, and rolling notifications for cast and crew.</p>
+    </section>
+
+    <section class="ticker-wrap" aria-label="Notifications">
+      <div class="ticker-label">Notifications</div>
+      <div class="ticker" role="status" aria-live="polite">
+        <div class="ticker-track">
+          Tonight 7:00 PM full cast call • Bring bowler hats and rehearsal canes • Act I pacing notes before run • Break at 8:05 PM • Confirm attendance in group chat by noon
         </div>
-    </main>
+      </div>
+    </section>
 
-    <script>
-        // Use the same project URL and Key you used in your dashboard
-        const supabase = supabase.createClient('YOUR_SUPABASE_URL', 'YOUR_SUPABASE_ANON_KEY');
+    <section class="grid">
+      <article class="card" aria-labelledby="calendar-heading">
+        <h2 id="calendar-heading">Rehearsal Calendar</h2>
+        <div class="card-body">
+          <div class="calendar-2x2">
+            <iframe
+              title="Rehearsal Calendar"
+              src="https://calendar.google.com/calendar/embed?src=ZTdhNTU4ZDU2OWIzMDYxMzRkNDFhMjdhMTc1MjcxZDM2YjczZDY0MWRlZTVhY2Q3MTllNGM3ZGE0NTU0ZjA0MkBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&ctz=America%2FNew_York"
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+          </div>
+          <div class="calendar-actions">
+            <a
+              class="button"
+              href="https://calendar.google.com/calendar/u/0?cid=ZTdhNTU4ZDU2OWIzMDYxMzRkNDFhMjdhMTc1MjcxZDM2YjczZDY0MWRlZTVhY2Q3MTllNGM3ZGE0NTU0ZjA0MkBncm91cC5jYWxlbmRhci5nb29nbGUuY29t"
+              target="_blank"
+              rel="noopener noreferrer">
+              Open Full Calendar
+            </a>
+          </div>
+          <p class="small-note">Tip: If events are missing, verify you are logged into the Google account with rehearsal access.</p>
+        </div>
+      </article>
 
-        async function loadCast() {
-            const { data, error } = await supabase
-                .from('theater_data')
-                .select('*')
-                .eq('show_id', 'godot') // Only load data for this show
-                .eq('category', 'cast');
+      <article class="card" aria-labelledby="call-list-heading">
+        <h2 id="call-list-heading">Today’s Call List</h2>
+        <div class="card-body">
+          <ul class="call-list">
+            <li><span class="call-time">6:00 PM</span> Stage Management + Deck Crew <span class="tag">Preset</span></li>
+            <li><span class="call-time">6:30 PM</span> Vladimir & Estragon <span class="tag">Act I Beats</span></li>
+            <li><span class="call-time">6:45 PM</span> Pozzo & Lucky <span class="tag">Entrance Timing</span></li>
+            <li><span class="call-time">7:00 PM</span> Full Cast <span class="tag">Act I Run</span></li>
+            <li><span class="call-time">8:20 PM</span> Notes + Reset <span class="tag">Director</span></li>
+          </ul>
+          <p class="small-note"><span class="status-warn">Reminder:</span> Sign in with stage management when you arrive.</p>
+        </div>
+      </article>
 
-            if (error) {
-                console.error("Error loading cast:", error);
-                return;
-            }
+      <article class="card" style="grid-column: 1 / -1;" aria-labelledby="cast-list-heading">
+        <h2 id="cast-list-heading">Cast List + Contact Info</h2>
+        <div class="card-body">
+          <table aria-label="Cast contact table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Role</th>
+                <th>Phone</th>
+                <th>Email</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Riley Carter</td>
+                <td>Vladimir</td>
+                <td>(239) 555-0121</td>
+                <td>riley.carter@thelab.org</td>
+                <td class="status-ok">Confirmed</td>
+              </tr>
+              <tr>
+                <td>Sam Rivera</td>
+                <td>Estragon</td>
+                <td>(239) 555-0122</td>
+                <td>sam.rivera@thelab.org</td>
+                <td class="status-ok">Confirmed</td>
+              </tr>
+              <tr>
+                <td>Taylor Brooks</td>
+                <td>Pozzo</td>
+                <td>(239) 555-0123</td>
+                <td>taylor.brooks@thelab.org</td>
+                <td class="status-ok">Confirmed</td>
+              </tr>
+              <tr>
+                <td>Casey Monroe</td>
+                <td>Lucky</td>
+                <td>(239) 555-0124</td>
+                <td>casey.monroe@thelab.org</td>
+                <td class="status-warn">ETA 6:50 PM</td>
+              </tr>
+              <tr>
+                <td>Avery Quinn</td>
+                <td>Stage Manager</td>
+                <td>(239) 555-0125</td>
+                <td>avery.quinn@thelab.org</td>
+                <td class="status-ok">Confirmed</td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="small-note">Replace placeholder contact details with your live Godot roster before publishing.</p>
+        </div>
+      </article>
+    </section>
+  </main>
 
-            const container = document.getElementById('cast-list');
-            container.innerHTML = data.map(member => `
-                <div class="cast-card">
-                    <h3>${member.name}</h3>
-                    <p>${member.role}</p>
-                    <small>${member.notes || ''}</small>
-                </div>
-            `).join('');
-        }
-
-        loadCast();
-    </script>
+  <footer>
+    Internal cast portal • Keep contact information private and do not share outside production channels.
+  </footer>
 </body>
 </html>
