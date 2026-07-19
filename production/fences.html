@@ -10,23 +10,26 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 16px;
+      gap: 12px;
       flex-wrap: wrap;
     }
 
     .logo {
       flex: 1 1 auto;
-      min-width: 220px;
+      min-width: 180px;
     }
 
     /* Top nav links as red buttons */
     .top-nav {
       display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
+      flex-wrap: nowrap; /* keep all buttons on one line */
+      gap: 6px;
       justify-content: center;
       align-items: center;
       flex: 2 1 auto;
+      min-width: 0;
+      overflow-x: auto; /* fallback on narrow screens */
+      -webkit-overflow-scrolling: touch;
     }
 
     .top-nav a {
@@ -34,13 +37,14 @@
       background: #c62828;
       color: #fff;
       text-decoration: none;
-      padding: 6px 10px;
+      padding: 5px 8px;
       border-radius: 6px;
       font-weight: 600;
-      font-size: 0.82rem;
-      line-height: 1.1;
+      font-size: 0.70rem;  /* smaller text so all fit in one line */
+      line-height: 1.05;
       white-space: nowrap;
       transition: background 0.2s ease, transform 0.15s ease;
+      flex: 0 0 auto;
     }
 
     .top-nav a:hover {
@@ -54,13 +58,14 @@
       background: #c62828;
       color: #fff;
       text-decoration: none;
-      padding: 8px 12px;
+      padding: 6px 10px;
       border-radius: 6px;
       font-weight: 700;
-      font-size: 0.85rem;
+      font-size: 0.75rem;
       white-space: nowrap;
       margin-left: auto;
       transition: background 0.2s ease, transform 0.15s ease;
+      flex: 0 0 auto;
     }
 
     .home-btn:hover {
@@ -142,6 +147,7 @@
 
       .top-nav {
         flex: 1 1 100%;
+        justify-content: flex-start;
       }
 
       .home-btn {
@@ -171,12 +177,12 @@
   <main>
     <article class="production-details">
       <h1>Fences</h1>
-      <p class="meta">TBD</p>
+      <p class="meta">April 27- May 9</p>
       <img src="../assets/fences.jpg" alt="Fences" class="feature-img" />
       <div class="content">
         <p>by August Wilson</p>
         <p>
-          August Wilson’s Fences is a powerful drama about Troy Maxson, a sanitation worker in 1950s Pittsburgh. Haunted by past injustices and his own failed dreams, Troy struggles to connect with his family, ultimately creating emotional barriers—or "fences"—between himself, his wife, and his son.
+          August Wilson’s Fences is a powerful drama about Troy Maxson, a sanitation worker in 1950s Pittsburgh. Haunted by past injustices and his own failed dreams, Troy struggles to connect with [...]
         </p>
       </div>
 
