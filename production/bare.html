@@ -6,53 +6,29 @@
   <title>Bare: A Pop Opera | The Lab Theater</title>
   <link rel="stylesheet" href="../style.css" />
   <style>
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .nav-link {
-      text-align: right;
-    }
-    .btn-primary {
-      display: inline-block;
-      margin-top: 20px;
-    }
-    .bottom-nav {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: 30px;
-    }
-    .btn-back {
-      display: inline-block;
-      padding: 10px 20px;
-      background-color: #ccc;
-      color: #000;
-      text-decoration: none;
-      border-radius: 5px;
-      font-weight: bold;
-    }
-
-    /* Cast Section */
+    /* Page-specific only */
     .cast-section {
       margin-top: 3rem;
       padding-top: 2rem;
       border-top: 2px solid #444;
     }
+
     .cast-section h2 {
       margin-bottom: 1.25rem;
       text-transform: uppercase;
       letter-spacing: 0.04em;
     }
+
     .cast-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
       gap: 1.25rem;
     }
+
     .cast-card {
       text-align: center;
     }
+
     .cast-photo {
       width: 100%;
       max-width: 170px;
@@ -62,240 +38,60 @@
       margin-bottom: 0.6rem;
       background: #ddd;
     }
+
     .cast-card h3 {
       margin: 0.2rem 0;
       font-size: 1rem;
     }
+
     .cast-actor {
       margin: 0;
       font-size: 0.92rem;
       opacity: 0.85;
     }
+
+    .bottom-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      margin-top: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-back {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #ccc;
+      color: #000;
+      text-decoration: none;
+      border-radius: 5px;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
   <header>
-    <div class="logo">THE <span>LAB</span>
-      <p class="tagline">Intentionally innovative live theater</p>
-     <!-- ===== CSS: add to <head> inside <style> or in style.css ===== -->
-<style>
-/* Hamburger toggle */
-.nav-toggle {
-    display: none;
-}
-
-.nav-toggle-label {
-    position: fixed;
-    top: 1rem;
-    right: 1rem;
-    z-index: 10001;
-    width: 44px;
-    height: 44px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    background: #101010;
-    border: 1px solid #2c2c2c;
-    border-radius: 10px;
-    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.28);
-}
-
-.nav-toggle-label span,
-.nav-toggle-label span::before,
-.nav-toggle-label span::after {
-    display: block;
-    position: absolute;
-    width: 22px;
-    height: 2px;
-    background: #ffffff;
-    transition: transform 0.25s ease, opacity 0.25s ease;
-    content: "";
-}
-
-.nav-toggle-label span::before {
-    transform: translateY(-7px);
-}
-
-.nav-toggle-label span::after {
-    transform: translateY(7px);
-}
-
-.nav-toggle:checked + .nav-toggle-label span {
-    background: transparent;
-}
-
-.nav-toggle:checked + .nav-toggle-label span::before {
-    transform: rotate(45deg);
-}
-
-.nav-toggle:checked + .nav-toggle-label span::after {
-    transform: rotate(-45deg);
-}
-
-.nav-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.45);
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.25s ease, visibility 0.25s ease;
-    z-index: 9998;
-}
-
-.nav-toggle:checked ~ .nav-overlay {
-    opacity: 1;
-    visibility: visible;
-}
-
-.hamburger-menu {
-    position: fixed;
-    top: 0;
-    right: 0;
-    width: min(320px, 85vw);
-    height: 100vh;
-    overflow-y: auto;
-    background: #111111;
-    border-left: 1px solid #2c2c2c;
-    box-shadow: -12px 0 28px rgba(0, 0, 0, 0.35);
-    padding: 5rem 1.25rem 2rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.85rem;
-    transform: translateX(100%);
-    transition: transform 0.28s ease;
-    z-index: 9999;
-}
-
-.nav-toggle:checked ~ .hamburger-menu {
-    transform: translateX(0);
-}
-
-.hamburger-menu a {
-    color: #ffffff;
-    text-decoration: none;
-    padding: 0.65rem 0.75rem;
-    border-radius: 10px;
-    background: #181818;
-    border: 1px solid #2a2a2a;
-    transition: background 0.2s ease, border-color 0.2s ease;
-}
-
-.hamburger-menu a:hover {
-    background: #202020;
-    border-color: #3a3a3a;
-}
-
-.submenu {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-}
-
-.submenu-title {
-    color: #ff5c8a;
-    font-weight: 700;
-    padding: 0.4rem 0.2rem 0;
-}
-
-.submenu ul {
-    list-style: none;
-    margin: 0;
-    padding-left: 0.75rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-}
-
-header {
-    padding: 1.5rem 1rem 1rem;
-}
-
-.logo {
-    font-size: 2rem;
-    font-weight: 800;
-    letter-spacing: 0.08em;
-    color: #ffffff;
-}
-
-.logo span {
-    color: #ff5c8a;
-}
-
-.tagline {
-    margin-top: 0.35rem;
-    font-size: 0.95rem;
-    color: #cfcfcf;
-    letter-spacing: normal;
-}
-
-@media (max-width: 768px) {
-    .nav-toggle-label {
-        top: 0.75rem;
-        right: 0.75rem;
-        width: 42px;
-        height: 42px;
-    }
-
-    .hamburger-menu {
-        width: min(300px, 88vw);
-        padding-top: 4.75rem;
-    }
-
-    .logo {
-        font-size: 1.6rem;
-        padding-right: 3.5rem;
-    }
-}
-</style>
-
-<!-- ===== HTML: add near top of <body> ===== -->
-<input type="checkbox" id="nav-toggle" class="nav-toggle">
-<label for="nav-toggle" class="nav-toggle-label"><span></span></label>
-<label for="nav-toggle" class="nav-overlay"></label>
-
-<nav class="hamburger-menu">
-    <a href="about.html">Origin Story</a>
-    <a href="archive25.html">Past Experiments</a>
-    <a href="index.html">Back to the Slab</a>
-    <a href="plan.html">Lab Protocols</a>
-
-    <div class="submenu">
-        <span class="submenu-title">The Portal Landing Pad</span>
-        <ul>
-            <li><a href="cast-portal.html">Subjects</a></li>
-            <li><a href="volunteer.html">Volunteers</a></li>
-            <li><a href="dashboard.html">Admin</a></li>
-            <li class="submenu">
-                <span class="submenu-title">coming soon</span>
-                <ul>
-                    <li><a href="volunteer-signup.html">Volunteer Signup</a></li>
-                    <li><a href="bios.html">subject data</a></li>
-                    <li><a href="audition-portal.html">Auditions</a></li>
-                </ul>
-            </li>
-        </ul>
-    </div>
-
-    <a href="support.html">Fuel the Innovation</a>
-    <a href="sponsors.html">Core Collaborators</a>
-</nav>
-
-<header>
     <div class="logo">
-        THE <span>LAB</span>
-        <p class="tagline">Intentionally innovative live theater</p>
+      THE <span>LAB</span>
+      <p class="tagline">Intentionally innovative live theater</p>
     </div>
-</header>
+    <div class="nav-link">
+      <a href="../index.html" class="btn-back">Back to The Lab</a>
+    </div>
+  </header>
+
   <main>
     <article class="production-details">
       <h1>Bare: A Pop Opera</h1>
       <p class="meta">February 18 – March 7, 2027</p>
+
       <img src="../assets/bare.jpg" alt="Bare: A Pop Opera" class="feature-img" />
+
       <div class="content">
-        <p>Music by Damon Intrabartlo, Lyrics by Jon Hartmere, Book by Jon Hartmere & Damon Intrabartlo</p>
+        <p>Music by Damon Intrabartlo, Lyrics by Jon Hartmere, Book by Jon Hartmere &amp; Damon Intrabartlo</p>
         <p>
-          Experience the raw, electrifying energy of Bare, a powerful rock musical that peels back the
+          Experience the raw, electrifying energy of <em>Bare</em>, a powerful rock musical that peels back the
           layers of life at a private Catholic boarding school. As a group of students navigate identity,
           faith, love, and acceptance, hidden desires and painful truths rise to the surface in this
           emotionally charged coming-of-age story.
@@ -305,21 +101,63 @@ header {
       <section class="cast-section">
         <h2>Cast</h2>
         <div class="cast-grid">
-          <div class="cast-card"><img src="../assets/cast/placeholder.JPG" alt="Jason McConnell" class="cast-photo"><h3>Jason McConnell</h3><p class="cast-actor">Actor: TBA</p></div>
-          <div class="cast-card"><img src="../assets/cast/placeholder.JPG" alt="Peter Simmonds" class="cast-photo"><h3>Peter Simmonds</h3><p class="cast-actor">Actor: TBA</p></div>
-          <div class="cast-card"><img src="../assets/cast/placeholder.JPG" alt="Ivy Robinson" class="cast-photo"><h3>Ivy Robinson</h3><p class="cast-actor">Actor: TBA</p></div>
-          <div class="cast-card"><img src="../assets/cast/placeholder.JPG" alt="Nadia McConnell" class="cast-photo"><h3>Nadia McConnell</h3><p class="cast-actor">Actor: TBA</p></div>
-          <div class="cast-card"><img src="../assets/cast/placeholder.JPG" alt="Matthew (Matt) Lloyd" class="cast-photo"><h3>Matthew (Matt) Lloyd</h3><p class="cast-actor">Actor: TBA</p></div>
-          <div class="cast-card"><img src="../assets/cast/placeholder.JPG" alt="Lucas Carter" class="cast-photo"><h3>Lucas Carter</h3><p class="cast-actor">Actor: TBA</p></div>
-          <div class="cast-card"><img src="../assets/cast/placeholder.JPG" alt="Tanya Garrett" class="cast-photo"><h3>Tanya Garrett</h3><p class="cast-actor">Actor: TBA</p></div>
-          <div class="cast-card"><img src="../assets/cast/placeholder.JPG" alt="Sister Chantelle" class="cast-photo"><h3>Sister Chantelle</h3><p class="cast-actor">Actor: TBA</p></div>
-          <div class="cast-card"><img src="../assets/cast/placeholder.JPG" alt="Claire Simmonds" class="cast-photo"><h3>Claire Simmonds</h3><p class="cast-actor">Actor: TBA</p></div>
-          <div class="cast-card"><img src="../assets/cast/placeholder.JPG" alt="Father" class="cast-photo"><h3>Father</h3><p class="cast-actor">Actor: TBA</p></div>
+          <div class="cast-card">
+            <img src="../assets/cast/placeholder.JPG" alt="Jason McConnell" class="cast-photo" />
+            <h3>Jason McConnell</h3>
+            <p class="cast-actor">Actor: TBA</p>
+          </div>
+          <div class="cast-card">
+            <img src="../assets/cast/placeholder.JPG" alt="Peter Simmonds" class="cast-photo" />
+            <h3>Peter Simmonds</h3>
+            <p class="cast-actor">Actor: TBA</p>
+          </div>
+          <div class="cast-card">
+            <img src="../assets/cast/placeholder.JPG" alt="Ivy Robinson" class="cast-photo" />
+            <h3>Ivy Robinson</h3>
+            <p class="cast-actor">Actor: TBA</p>
+          </div>
+          <div class="cast-card">
+            <img src="../assets/cast/placeholder.JPG" alt="Nadia McConnell" class="cast-photo" />
+            <h3>Nadia McConnell</h3>
+            <p class="cast-actor">Actor: TBA</p>
+          </div>
+          <div class="cast-card">
+            <img src="../assets/cast/placeholder.JPG" alt="Matthew (Matt) Lloyd" class="cast-photo" />
+            <h3>Matthew (Matt) Lloyd</h3>
+            <p class="cast-actor">Actor: TBA</p>
+          </div>
+          <div class="cast-card">
+            <img src="../assets/cast/placeholder.JPG" alt="Lucas Carter" class="cast-photo" />
+            <h3>Lucas Carter</h3>
+            <p class="cast-actor">Actor: TBA</p>
+          </div>
+          <div class="cast-card">
+            <img src="../assets/cast/placeholder.JPG" alt="Tanya Garrett" class="cast-photo" />
+            <h3>Tanya Garrett</h3>
+            <p class="cast-actor">Actor: TBA</p>
+          </div>
+          <div class="cast-card">
+            <img src="../assets/cast/placeholder.JPG" alt="Sister Chantelle" class="cast-photo" />
+            <h3>Sister Chantelle</h3>
+            <p class="cast-actor">Actor: TBA</p>
+          </div>
+          <div class="cast-card">
+            <img src="../assets/cast/placeholder.JPG" alt="Claire Simmonds" class="cast-photo" />
+            <h3>Claire Simmonds</h3>
+            <p class="cast-actor">Actor: TBA</p>
+          </div>
+          <div class="cast-card">
+            <img src="../assets/cast/placeholder.JPG" alt="Father" class="cast-photo" />
+            <h3>Father</h3>
+            <p class="cast-actor">Actor: TBA</p>
+          </div>
         </div>
       </section>
 
       <div class="bottom-nav">
-        <a href="https://www.purplepass.com/events/376631-bare-feb-18th-2027" class="btn-primary">Hold on to your seat</a>
+        <a href="https://www.purplepass.com/events/376631-bare-feb-18th-2027" class="btn-primary">
+          Hold on to your seat
+        </a>
         <a href="../index.html" class="btn-back">Back to The Lab</a>
       </div>
     </article>
