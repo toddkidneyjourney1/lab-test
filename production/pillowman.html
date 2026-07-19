@@ -3,72 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>God of Carnage | The Lab Theater</title>
+  <title>The Pillowman | The Lab Theater</title>
   <link rel="stylesheet" href="../style.css" />
   <style>
     header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 16px;
-      flex-wrap: wrap;
     }
-
-    .logo {
-      flex: 1 1 auto;
-      min-width: 220px;
+    .nav-link {
+      text-align: right;
     }
-
-    /* Top nav links as red buttons */
-    .top-nav {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      justify-content: center;
-      align-items: center;
-      flex: 2 1 auto;
-    }
-
-    .top-nav a {
-      display: inline-block;
-      background: #c62828;
-      color: #fff;
-      text-decoration: none;
-      padding: 8px 14px;
-      border-radius: 6px;
-      font-weight: 600;
-      transition: background 0.2s ease, transform 0.15s ease;
-    }
-
-    .top-nav a:hover {
-      background: #a61f1f;
-      transform: translateY(-1px);
-    }
-
-    /* Home button on right */
-    .home-btn {
-      display: inline-block;
-      background: #c62828;
-      color: #fff;
-      text-decoration: none;
-      padding: 10px 16px;
-      border-radius: 6px;
-      font-weight: 700;
-      white-space: nowrap;
-      margin-left: auto;
-      transition: background 0.2s ease, transform 0.15s ease;
-    }
-
-    .home-btn:hover {
-      background: #a61f1f;
-      transform: translateY(-1px);
-    }
-
     .btn-primary {
       display: inline-block;
       margin-top: 20px;
     }
-
     .bottom-nav {
       display: flex;
       justify-content: space-between;
@@ -77,7 +26,6 @@
       gap: 12px;
       flex-wrap: wrap;
     }
-
     .bottom-nav .btn-primary {
       margin-top: 0;
     }
@@ -88,23 +36,19 @@
       padding-top: 2rem;
       border-top: 2px solid #444;
     }
-
     .cast-section h2 {
       margin-bottom: 1.25rem;
       text-transform: uppercase;
       letter-spacing: 0.04em;
     }
-
     .cast-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
       gap: 1.25rem;
     }
-
     .cast-card {
       text-align: center;
     }
-
     .cast-photo {
       width: 100%;
       max-width: 170px;
@@ -114,35 +58,14 @@
       margin-bottom: 0.6rem;
       background: #ddd;
     }
-
     .cast-card h3 {
       margin: 0.2rem 0;
       font-size: 1rem;
     }
-
     .cast-actor {
       margin: 0;
       font-size: 0.92rem;
       opacity: 0.85;
-    }
-
-    @media (max-width: 900px) {
-      header {
-        justify-content: center;
-      }
-
-      .logo {
-        text-align: center;
-        flex: 1 1 100%;
-      }
-
-      .top-nav {
-        flex: 1 1 100%;
-      }
-
-      .home-btn {
-        margin-left: 0;
-      }
     }
   </style>
 </head>
@@ -150,48 +73,69 @@
   <header>
     <div class="logo">THE <span>LAB</span>
       <p class="tagline">Intentionally innovative live theater</p>
+      <input type="checkbox" id="nav-toggle" class="nav-toggle" />
+      <label for="nav-toggle" class="nav-toggle-label">
+        <span></span>
+      </label>
+
+      <nav class="hamburger-menu">
+        <a href="../index.html">Home</a>
+        <a href="fences.html">Fences</a>
+        <a href="bare.html">Bare</a>
+        <a href="god-of-carnage.html">God of Carnage</a>
+        <a href="godot.html">Waiting for Godot</a>
+        <a href="pillowman.html">The Pillowman</a>
+      </nav>
     </div>
-
-    <nav class="top-nav">
-      <a href="fences.html">Fences</a>
-      <a href="bare.html">Bare</a>
-      <a href="godot.html">Waiting for Godot</a>
-      <a href="bare.html">Bare</a>
-      <a href="rivals.html">The Rivals</a>
-      <a href="shakespeare.html">A Midsummer Night's Dream</a>
-    </nav>
-
-    <a href="../index.html" class="home-btn">Home</a>
   </header>
 
   <main>
     <article class="production-details">
-      <h1>God of Carnage</h1>
+      <h1>The Pillowman</h1>
       <p class="meta">TBD</p>
-      <img src="../assets/godofcarnage.jpg" alt="God of Carnage" class="feature-img" />
+      <img src="../assets/pillowman.jpg" alt="The Pillowman" class="feature-img" />
       <div class="content">
-        <p>by Yasmina Reza</p>
+        <p>by Martin McDonagh</p>
         <p>
-          What begins as a polite meeting between two sets of parents quickly unravels into chaos.
-          Sharp, hilarious, and brutally honest, <em>God of Carnage</em> exposes the thin veneer of
-          civility when conflict, ego, and resentment take over.
+          In a police state, a writer is interrogated about the disturbing content of his short stories
+          and their possible connection to a series of crimes. Darkly comic and deeply unsettling,
+          <em>The Pillowman</em> examines censorship, storytelling, trauma, and the consequences of art.
         </p>
       </div>
 
       <section class="cast-section">
         <h2>Cast</h2>
         <div class="cast-grid">
-          <div class="cast-card"><img src="../assets/cast/placeholder.jpg" alt="Veronica Novak" class="cast-photo"><h3>Veronica Novak</h3><p class="cast-actor">Actor: TBA</p></div>
-          <div class="cast-card"><img src="../assets/cast/placeholder.jpg" alt="Michael Novak" class="cast-photo"><h3>Michael Novak</h3><p class="cast-actor">Actor: TBA</p></div>
-          <div class="cast-card"><img src="../assets/cast/placeholder.jpg" alt="Annette Raleigh" class="cast-photo"><h3>Annette Raleigh</h3><p class="cast-actor">Actor: TBA</p></div>
-          <div class="cast-card"><img src="../assets/cast/placeholder.jpg" alt="Alan Raleigh" class="cast-photo"><h3>Alan Raleigh</h3><p class="cast-actor">Actor: TBA</p></div>
+          <div class="cast-card">
+            <img src="../assets/cast/placeholder.jpg" alt="Katurian K. Katurian placeholder photo" class="cast-photo" />
+            <h3>Katurian K. Katurian</h3>
+            <p class="cast-actor">Actor: TBA</p>
+          </div>
+
+          <div class="cast-card">
+            <img src="../assets/cast/placeholder.jpg" alt="Michal placeholder photo" class="cast-photo" />
+            <h3>Michal</h3>
+            <p class="cast-actor">Actor: TBA</p>
+          </div>
+
+          <div class="cast-card">
+            <img src="../assets/cast/placeholder.jpg" alt="Tupolski placeholder photo" class="cast-photo" />
+            <h3>Tupolski</h3>
+            <p class="cast-actor">Actor: TBA</p>
+          </div>
+
+          <div class="cast-card">
+            <img src="../assets/cast/placeholder.jpg" alt="Ariel placeholder photo" class="cast-photo" />
+            <h3>Ariel</h3>
+            <p class="cast-actor">Actor: TBA</p>
+          </div>
         </div>
       </section>
 
       <div class="bottom-nav">
-        <a href="https://www.purplepass.com/events/376618-god-of-carnage-jan-14th-2027" class="btn-primary">Hold on to your seat</a>
-        <a href="../index.html" class="btn-primary">Back to Home</a>
-      </div>
+  <a href="https://www.purplepass.com/events/376583-the-pillowman-oct-8th-2026" class="btn-primary">Hold on to your seat</a>
+  <a href="../index.html" class="btn-primary">Back to Home</a>
+</div>
     </article>
   </main>
 </body>
