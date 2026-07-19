@@ -1,111 +1,167 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Core Collaborators | THE LAB</title>
-    <link rel="stylesheet" href="style.css">
-    <style>
-        .sponsor-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 2rem;
-            padding: 2rem;
-            align-items: center;
-        }
-
-        .sponsor-card {
-            background: var(--card-bg);
-            padding: 1.5rem;
-            border-radius: 12px;
-            text-align: center;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            border: 1px solid #333;
-        }
-
-        .sponsor-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 10px 20px rgba(255, 51, 102, 0.2);
-            border-color: var(--accent);
-        }
-
-        .sponsor-card img {
-            max-width: 100%;
-            height: auto;
-            max-height: 100px;
-            filter: grayscale(100%);
-            transition: filter 0.3s ease;
-        }
-
-        .sponsor-card:hover img {
-            filter: grayscale(0%);
-        }
-
-        .page-intro {
-            text-align: center;
-            margin: 0 2rem 1rem;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Waiting for Godot | The Lab Theater</title>
+  <link rel="stylesheet" href="../style.css" />
+  <style>
+    header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      position: relative;
+    }
+    .home-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      padding: 8px 12px;
+      background: #8B0000;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 5px;
+      font-size: 0.85rem;
+    }
+    .experiment-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      padding: 12px 20px;
+      background: #8B0000;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 5px;
+      font-weight: bold;
+      z-index: 1000;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    }
+    .logo {
+      text-align: center;
+      margin-bottom: 15px;
+    }
+    .top-nav {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .top-nav a {
+      padding: 8px 12px;
+      background: #8B0000;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 5px;
+      font-size: 0.85rem;
+    }
+    .btn-primary {
+      display: inline-block;
+      margin-top: 20px;
+      background-color: #8B0000;
+      color: #fff;
+      padding: 10px 20px;
+      text-decoration: none;
+      border-radius: 5px;
+    }
+    .bottom-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 30px;
+    }
+    .btn-back {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #8B0000;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 5px;
+      font-weight: bold;
+    }
+    .cast-section {
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 2px solid #444;
+    }
+    .cast-section h2 {
+      margin-bottom: 1.25rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .cast-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 1.25rem;
+    }
+    .cast-card {
+      text-align: center;
+    }
+    .cast-photo {
+      width: 100%;
+      max-width: 170px;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-bottom: 0.6rem;
+      background: #ddd;
+    }
+    .cast-card h3 {
+      margin: 0.2rem 0;
+      font-size: 1rem;
+    }
+    .cast-actor {
+      margin: 0;
+      font-size: 0.92rem;
+      opacity: 0.85;
+    }
+  </style>
 </head>
 <body>
-    <header>
-        <div class="logo">
-            THE <span>LAB</span>
-            <p class="tagline">Intentionally innovative live theater</p>
-        </div>
+  <header>
+    <a href="../index.html" class="home-btn">Home</a>
+    <div class="logo">THE <span>LAB</span>
+      <p class="tagline">Intentionally innovative live theater</p>
+    </div>
+    <nav class="top-nav">
+      <a href="bare.html">Bare</a>
+      <a href="fences.html">Fences</a>
+      <a href="god.html">God of Carnage</a>
+      <a href="pillowman.html">The Pillowman</a>
+      <a href="rivals.html">The Rivals</a>
+      <a href="shakespeare.html">A Midsummer Night's Dream</a>
+    </nav>
+  </header>
+  
+  <a href="mailto:president@laboratorytheaterflorida.com" class="experiment-btn">Experiment with us</a>
 
-        <!-- Hamburger Menu -->
-        <div class="hamburger-container">
-            <input type="checkbox" id="nav-toggle" class="nav-toggle">
-            <label for="nav-toggle" class="nav-toggle-label"><span></span></label>
-            <label for="nav-toggle" class="nav-overlay"></label>
-
-            <nav class="hamburger-menu">
-                <a href="about.html">Origin Story</a>
-                <a href="archive25.html">Past Experiments</a>
-                <a href="index.html">Back to the Slab</a>
-                <a href="plan.html">Lab Protocols</a>
-
-                <!-- Submenu for Portal Landing Pad -->
-                <div class="submenu">
-                    <span class="submenu-title">The Portal Landing Pad</span>
-                    <ul>
-                         <li><a href="cast-portal.html">Subjects</a></li>
-            <li><a href="volunteer-signup.html">Volunteers</a></li>
-            <li><a href="admin-portal.html">Admin</a></li>
-            <li><a href="audition-portal.html">Auditions</a></li>/a></li>
-                    </ul>
-                </div>
-
-                <a href="support.html">Fuel the Innovation</a>
-                <a href="sponsors.html" aria-current="page">Core Collaborators</a>
-            </nav>
-        </div>
-
-        <h1>Our Core Collaborators</h1>
-    </header>
-
-    <main>
-        <p class="page-intro">
-            We are incredibly grateful to the local businesses and individuals who make our productions possible.
+  <main>
+    <article class="production-details">
+      <h1>Waiting for Godot</h1>
+      <p class="meta">Dates: TBA</p>
+      <img src="../assets/godot.jpg" alt="Waiting for Godot" class="feature-img" />
+      <div class="content">
+        <p>By Samuel Beckett</p>
+        <p>
+          Waiting for Godot follows two characters, Vladimir and Estragon, who engage in a variety of 
+          discussions and encounters while awaiting the titular Godot, who never arrives.
         </p>
+      </div>
 
-        <section class="sponsor-grid" aria-label="Sponsor list">
-            <div class="sponsor-card"><h3>Lee County Visitor and Convention Bureau</h3></div>
-            <div class="sponsor-card"><h3>LGBT Fund</h3></div>
-            <div class="sponsor-card"><h3>Allegretti Foundation</h3></div>
-            <div class="sponsor-card"><h3>City of Fort Myers</h3></div>
-            <div class="sponsor-card"><h3>SWFL Community Foundation</h3></div>
-            <div class="sponsor-card"><h3>Janet &amp; Bruce Bunch</h3></div>
-            <div class="sponsor-card"><h3>Art Zupko</h3></div>
-            <div class="sponsor-card"><h3>The Bireley Family Foundation</h3></div>
-            <div class="sponsor-card"><h3>Arlene Foreman</h3></div>
-            <div class="sponsor-card"><h3>The North Law Firm</h3></div>
-            <div class="sponsor-card"><h3>Emily Eason</h3></div>
-            <div class="sponsor-card"><h3>Fort Myers Rotary Club</h3></div>
-            <div class="sponsor-card"><h3>Marlene &amp; Darrell Smith</h3></div>
-            <div class="sponsor-card"><h3>JoAnn Reece &amp; Robert Hilliard</h3></div>
-        </section>
-    </main>
+      <section class="cast-section">
+        <h2>Cast</h2>
+        <div class="cast-grid">
+          <div class="cast-card"><img src="../assets/cast/placeholder.JPG" alt="Vladimir" class="cast-photo"><h3>Vladimir</h3><p class="cast-actor">Actor: TBA</p></div>
+          <div class="cast-card"><img src="../assets/cast/placeholder.JPG" alt="Estragon" class="cast-photo"><h3>Estragon</h3><p class="cast-actor">Actor: TBA</p></div>
+        </div>
+      </section>
+
+      <div class="bottom-nav">
+        <a href="#" class="btn-primary">Hold on to your seat</a>
+        <a href="../index.html" class="btn-back">Back to The Lab</a>
+      </div>
+    </article>
+  </main>
 </body>
 </html>
