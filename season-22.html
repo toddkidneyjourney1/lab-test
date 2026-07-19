@@ -1,1 +1,82 @@
 
+v
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alien Gallery | The Laboratory Theater of Florida</title>
+    <style>
+        /* Base Styles */
+        body { margin: 0; font-family: sans-serif; background-color: #1a1a1a; color: #fff; }
+
+        /* Left-aligned Header */
+        .main-header {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            padding: 1rem 2rem;
+            background-color: #1a1a1a;
+            border-bottom: 1px solid #333;
+        }
+        .logo { font-size: 1.5rem; font-weight: bold; margin-right: auto; }
+        .logo a { color: #fff; text-decoration: none; }
+        .logo span { color: #ff3366; }
+
+        /* Masonry-style Grid for variable sizes */
+        .photo-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-auto-rows: 250px;
+            grid-auto-flow: dense;
+            gap: 15px;
+            padding: 20px;
+        }
+        .photo-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 8px;
+            transition: transform 0.3s ease;
+        }
+        .photo-item:hover { transform: scale(1.02); }
+        .photo-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Variable sizes */
+        .wide { grid-column: span 2; }
+        .tall { grid-row: span 2; }
+
+        /* Hamburger Nav (Simplified) */
+        .nav-toggle-label { cursor: pointer; color: #ff3366; font-size: 1.5rem; }
+    </style>
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="logo">
+            <a href="index.html"><span>THE</span> LAB</a>
+        </div>
+        <label class="nav-toggle-label">☰</label>
+    </header>
+
+  <main>
+    <div class="photo-gallery">
+        <div class="photo-item wide"><img src="assets/mgi_15_She-Kills-Monsters_-Young-Adventurers-Edition.png" alt="She Kills Monsters"></div>
+        <div class="photo-item"><img src="assets/imgi_16_IMG_0834.jpg" alt="Production Image 16"></div>
+        <div class="photo-item tall"><img src="assets/imgi_20_POTUS.png" alt="POTUS"></div>
+        <div class="photo-item"><img src="assets/imgi_23_Noises-Off-graphic-1.png" alt="Noises Off"></div>
+        <div class="photo-item wide"><img src="assets/imgi_25_IMG_5050.png" alt="Production Image 25"></div>
+        <div class="photo-item"><img src="assets/imgi_26_IMG_5032.png" alt="Production Image 26"></div>
+        <div class="photo-item tall"><img src="assets/imgi_48_Stew-Mockup-1-1-1.png" alt="Stew Mockup"></div>
+        <div class="photo-item"><img src="assets/imgi_49_Ride-the-Cyclone.png" alt="Ride the Cyclone"></div>
+        <div class="photo-item wide"><img src="assets/imgi_50_Crocodile-Fever-Graphic.png" alt="Crocodile Fever"></div>
+        <div class="photo-item"><img src="assets/imgi_5_Resized-Hamlet.png" alt="Hamlet"></div>
+        <div class="photo-item tall"><img src="assets/imgi_7_IMG_7323.png" alt="Production Image 7"></div>
+    </div>
+</main>
+
+</body>
+</html>
