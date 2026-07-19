@@ -10,14 +10,72 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 12px;
+      flex-wrap: nowrap; /* keep everything on one line */
     }
-    .nav-link {
-      text-align: right;
+
+    .logo {
+      flex: 0 0 auto;
+      min-width: 180px;
+      white-space: nowrap;
     }
+
+    /* Top nav links as compact red buttons */
+    .top-nav {
+      display: flex;
+      flex-wrap: nowrap; /* keep buttons on one line */
+      gap: 6px;
+      justify-content: center;
+      align-items: center;
+      flex: 1 1 auto;
+      min-width: 0;
+      overflow-x: auto; /* safety for very small screens */
+    }
+
+    .top-nav a {
+      display: inline-block;
+      background: #c62828;
+      color: #fff;
+      text-decoration: none;
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 0.82rem; /* smaller font to fit all buttons */
+      line-height: 1.1;
+      white-space: nowrap;
+      transition: background 0.2s ease, transform 0.15s ease;
+    }
+
+    .top-nav a:hover {
+      background: #a61f1f;
+      transform: translateY(-1px);
+    }
+
+    /* Home button on right */
+    .home-btn {
+      display: inline-block;
+      background: #c62828;
+      color: #fff;
+      text-decoration: none;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      white-space: nowrap;
+      transition: background 0.2s ease, transform 0.15s ease;
+      flex: 0 0 auto;
+    }
+
+    .home-btn:hover {
+      background: #a61f1f;
+      transform: translateY(-1px);
+    }
+
     .btn-primary {
       display: inline-block;
       margin-top: 20px;
     }
+
     .bottom-nav {
       display: flex;
       justify-content: space-between;
@@ -26,6 +84,7 @@
       gap: 12px;
       flex-wrap: wrap;
     }
+
     .bottom-nav .btn-primary {
       margin-top: 0;
     }
@@ -36,19 +95,23 @@
       padding-top: 2rem;
       border-top: 2px solid #444;
     }
+
     .cast-section h2 {
       margin-bottom: 1.25rem;
       text-transform: uppercase;
       letter-spacing: 0.04em;
     }
+
     .cast-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
       gap: 1.25rem;
     }
+
     .cast-card {
       text-align: center;
     }
+
     .cast-photo {
       width: 100%;
       max-width: 170px;
@@ -58,31 +121,54 @@
       margin-bottom: 0.6rem;
       background: #ddd;
     }
+
     .cast-card h3 {
       margin: 0.2rem 0;
       font-size: 1rem;
     }
+
     .cast-actor {
       margin: 0;
       font-size: 0.92rem;
       opacity: 0.85;
     }
+
+    @media (max-width: 900px) {
+      header {
+        gap: 8px;
+      }
+
+      .logo {
+        min-width: 140px;
+      }
+
+      .top-nav a {
+        font-size: 0.76rem;
+        padding: 5px 8px;
+      }
+
+      .home-btn {
+        font-size: 0.78rem;
+        padding: 7px 10px;
+      }
+    }
   </style>
 </head>
 <body>
-   <header>
-    <a href="../index.html" class="home-btn">Home</a>
+  <header>
     <div class="logo">THE <span>LAB</span>
       <p class="tagline">Intentionally innovative live theater</p>
     </div>
+
     <nav class="top-nav">
       <a href="fences.html">Fences</a>
-      <a href="god.html">God of Carnage</a>
-      <a href="godot.html">Waiting for Godot</a>
       <a href="bare.html">Bare</a>
+      <a href="godot.html">Waiting for Godot</a>
       <a href="rivals.html">The Rivals</a>
       <a href="shakespeare.html">A Midsummer Night's Dream</a>
     </nav>
+
+    <a href="../index.html" class="home-btn">Home</a>
   </header>
 
   <main>
@@ -93,45 +179,26 @@
       <div class="content">
         <p>by Martin McDonagh</p>
         <p>
-          In a police state, a writer is interrogated about the disturbing content of his short stories
-          and their possible connection to a series of crimes. Darkly comic and deeply unsettling,
-          <em>The Pillowman</em> examines censorship, storytelling, trauma, and the consequences of art.
+          In a shadowy police state, a writer is interrogated when his dark short stories begin to
+          resemble a string of unsettling crimes. Gripping, provocative, and darkly funny,
+          <em>The Pillowman</em> explores storytelling, cruelty, and the cost of survival.
         </p>
       </div>
 
       <section class="cast-section">
         <h2>Cast</h2>
         <div class="cast-grid">
-          <div class="cast-card">
-            <img src="../assets/cast/placeholder.jpg" alt="Katurian K. Katurian placeholder photo" class="cast-photo" />
-            <h3>Katurian K. Katurian</h3>
-            <p class="cast-actor">Actor: TBA</p>
-          </div>
-
-          <div class="cast-card">
-            <img src="../assets/cast/placeholder.jpg" alt="Michal placeholder photo" class="cast-photo" />
-            <h3>Michal</h3>
-            <p class="cast-actor">Actor: TBA</p>
-          </div>
-
-          <div class="cast-card">
-            <img src="../assets/cast/placeholder.jpg" alt="Tupolski placeholder photo" class="cast-photo" />
-            <h3>Tupolski</h3>
-            <p class="cast-actor">Actor: TBA</p>
-          </div>
-
-          <div class="cast-card">
-            <img src="../assets/cast/placeholder.jpg" alt="Ariel placeholder photo" class="cast-photo" />
-            <h3>Ariel</h3>
-            <p class="cast-actor">Actor: TBA</p>
-          </div>
+          <div class="cast-card"><img src="../assets/cast/placeholder.jpg" alt="Katurian K. Katurian" class="cast-photo"><h3>Katurian K. Katurian</h3><p class="cast-actor">Actor: TBA</p></div>
+          <div class="cast-card"><img src="../assets/cast/placeholder.jpg" alt="Michal" class="cast-photo"><h3>Michal</h3><p class="cast-actor">Actor: TBA</p></div>
+          <div class="cast-card"><img src="../assets/cast/placeholder.jpg" alt="Tupolski" class="cast-photo"><h3>Tupolski</h3><p class="cast-actor">Actor: TBA</p></div>
+          <div class="cast-card"><img src="../assets/cast/placeholder.jpg" alt="Ariel" class="cast-photo"><h3>Ariel</h3><p class="cast-actor">Actor: TBA</p></div>
         </div>
       </section>
 
       <div class="bottom-nav">
-  <a href="https://www.purplepass.com/events/376583-the-pillowman-oct-8th-2026" class="btn-primary">Hold on to your seat</a>
-  <a href="../index.html" class="btn-primary">Back to Home</a>
-</div>
+        <a href="https://www.purplepass.com/events/376620-the-pillowman-jan-21st-2027" class="btn-primary">Reserve your seat</a>
+        <a href="../index.html" class="btn-primary">Back to Home</a>
+      </div>
     </article>
   </main>
 </body>
