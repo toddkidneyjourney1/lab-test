@@ -3,88 +3,115 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Waiting for Godot | The Lab Theater</title>
+  <title>Bare | The Lab Theater</title>
   <link rel="stylesheet" href="../style.css" />
   <style>
     header {
       display: flex;
-      flex-direction: column;
+      justify-content: space-between;
       align-items: center;
-      padding: 20px;
-      position: relative;
+      gap: 12px;
+      flex-wrap: nowrap; /* keep everything on one line */
     }
-    .home-btn {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      padding: 8px 12px;
-      background: #8B0000;
-      color: #fff;
-      text-decoration: none;
-      border-radius: 5px;
-      font-size: 0.85rem;
-    }
+
     .logo {
-      text-align: center;
-      margin-bottom: 15px;
+      flex: 0 0 auto;
+      min-width: 180px;
+      white-space: nowrap;
     }
+
+    /* Top nav links as compact red buttons */
     .top-nav {
       display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
+      flex-wrap: nowrap; /* keep buttons on one line */
+      gap: 6px;
       justify-content: center;
-      margin-bottom: 20px;
+      align-items: center;
+      flex: 1 1 auto;
+      min-width: 0;
+      overflow-x: auto; /* safety for very small screens */
     }
+
     .top-nav a {
-      padding: 8px 12px;
-      background: #8B0000;
+      display: inline-block;
+      background: #c62828;
       color: #fff;
       text-decoration: none;
-      border-radius: 5px;
-      font-size: 0.85rem;
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 0.82rem; /* smaller font to fit all buttons */
+      line-height: 1.1;
+      white-space: nowrap;
+      transition: background 0.2s ease, transform 0.15s ease;
     }
+
+    .top-nav a:hover {
+      background: #a61f1f;
+      transform: translateY(-1px);
+    }
+
+    /* Home button on right */
+    .home-btn {
+      display: inline-block;
+      background: #c62828;
+      color: #fff;
+      text-decoration: none;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      white-space: nowrap;
+      transition: background 0.2s ease, transform 0.15s ease;
+      flex: 0 0 auto;
+    }
+
+    .home-btn:hover {
+      background: #a61f1f;
+      transform: translateY(-1px);
+    }
+
     .btn-primary {
       display: inline-block;
       margin-top: 20px;
-      background-color: #8B0000;
-      color: #fff;
-      padding: 10px 20px;
-      text-decoration: none;
-      border-radius: 5px;
     }
+
     .bottom-nav {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-top: 30px;
+      gap: 12px;
+      flex-wrap: wrap;
     }
-    .btn-back {
-      display: inline-block;
-      padding: 10px 20px;
-      background-color: #8B0000;
-      color: #fff;
-      text-decoration: none;
-      border-radius: 5px;
-      font-weight: bold;
+
+    .bottom-nav .btn-primary {
+      margin-top: 0;
     }
+
+    /* Cast Section */
     .cast-section {
       margin-top: 3rem;
       padding-top: 2rem;
       border-top: 2px solid #444;
     }
+
     .cast-section h2 {
       margin-bottom: 1.25rem;
       text-transform: uppercase;
       letter-spacing: 0.04em;
     }
+
     .cast-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
       gap: 1.25rem;
     }
+
     .cast-card {
       text-align: center;
     }
+
     .cast-photo {
       width: 100%;
       max-width: 170px;
@@ -94,66 +121,84 @@
       margin-bottom: 0.6rem;
       background: #ddd;
     }
+
     .cast-card h3 {
       margin: 0.2rem 0;
       font-size: 1rem;
     }
+
     .cast-actor {
       margin: 0;
       font-size: 0.92rem;
       opacity: 0.85;
     }
+
+    @media (max-width: 900px) {
+      header {
+        gap: 8px;
+      }
+
+      .logo {
+        min-width: 140px;
+      }
+
+      .top-nav a {
+        font-size: 0.76rem;
+        padding: 5px 8px;
+      }
+
+      .home-btn {
+        font-size: 0.78rem;
+        padding: 7px 10px;
+      }
+    }
   </style>
 </head>
 <body>
   <header>
-    <a href="../index.html" class="home-btn">Home</a>
     <div class="logo">THE <span>LAB</span>
       <p class="tagline">Intentionally innovative live theater</p>
     </div>
+
     <nav class="top-nav">
       <a href="fences.html">Fences</a>
-      <a href="god.html">God of Carnage</a>
+      <a href="bare.html">Bare</a>
       <a href="godot.html">Waiting for Godot</a>
-      <a href="pillowman.html">The Pillowman</a>
       <a href="rivals.html">The Rivals</a>
-      <a href="shakespeare.html">A Midsummer Night's Dream</a>
+      <a href="oillowman.html">The Pillowman</a>
     </nav>
+
+    <a href="../index.html" class="home-btn">Home</a>
   </header>
+
   <main>
     <article class="production-details">
-      <h1>Waiting for Godot</h1>
-      <p class="meta">February 18 – March 7, 2027</p>
-      <img src="../assets/bare.jpg" alt="Waiting for Godot" class="feature-img" />
+      <h1>Bare</h1>
+      <p class="meta">TBD</p>
+      <img src="../assets/bare.jpg" alt="Bare" class="feature-img" />
       <div class="content">
-        <p>Music by Damon Intrabartlo, Lyrics by Jon Hartmere, Book by Jon Hartmere & Damon Intrabartlo</p>
+        <p>Music by Damon Intrabartolo | Lyrics by Jon Hartmere</p>
         <p>
-          Experience the raw, electrifying energy of Waiting for Godot, a powerful rock musical that peels back the
-          layers of life at a private Catholic boarding school. As a group of students navigate identity,
-          faith, love, and acceptance, hidden desires and painful truths rise to the surface in this
-          emotionally charged coming-of-age story.
+          Set in a Catholic boarding school, <em>Bare</em> follows a group of students navigating
+          faith, identity, friendship, and first love under the weight of expectation. Raw,
+          contemporary, and emotionally charged, this pop-rock musical explores what it means
+          to be seen for who you truly are.
         </p>
       </div>
 
       <section class="cast-section">
         <h2>Cast</h2>
         <div class="cast-grid">
-          <div class="cast-card"><img src="../assets/cast/placeholder.JPG" alt="Jason McConnell" class="cast-photo"><h3>Jason McConnell</h3><p class="cast-actor">Actor: TBA</p></div>
-          <div class="cast-card"><img src="../assets/cast/placeholder.JPG" alt="Peter Simmonds" class="cast-photo"><h3>Peter Simmonds</h3><p class="cast-actor">Actor: TBA</p></div>
-          <div class="cast-card"><img src="../assets/cast/placeholder.JPG" alt="Ivy Robinson" class="cast-photo"><h3>Ivy Robinson</h3><p class="cast-actor">Actor: TBA</p></div>
-          <div class="cast-card"><img src="../assets/cast/placeholder.JPG" alt="Nadia McConnell" class="cast-photo"><h3>Nadia McConnell</h3><p class="cast-actor">Actor: TBA</p></div>
-          <div class="cast-card"><img src="../assets/cast/placeholder.JPG" alt="Matthew (Matt) Lloyd" class="cast-photo"><h3>Matthew (Matt) Lloyd</h3><p class="cast-actor">Actor: TBA</p></div>
-          <div class="cast-card"><img src="../assets/cast/placeholder.JPG" alt="Lucas Carter" class="cast-photo"><h3>Lucas Carter</h3><p class="cast-actor">Actor: TBA</p></div>
-          <div class="cast-card"><img src="../assets/cast/placeholder.JPG" alt="Tanya Garrett" class="cast-photo"><h3>Tanya Garrett</h3><p class="cast-actor">Actor: TBA</p></div>
-          <div class="cast-card"><img src="../assets/cast/placeholder.JPG" alt="Sister Chantelle" class="cast-photo"><h3>Sister Chantelle</h3><p class="cast-actor">Actor: TBA</p></div>
-          <div class="cast-card"><img src="../assets/cast/placeholder.JPG" alt="Claire Simmonds" class="cast-photo"><h3>Claire Simmonds</h3><p class="cast-actor">Actor: TBA</p></div>
-          <div class="cast-card"><img src="../assets/cast/placeholder.JPG" alt="Father" class="cast-photo"><h3>Father</h3><p class="cast-actor">Actor: TBA</p></div>
+          <div class="cast-card"><img src="../assets/cast/placeholder.jpg" alt="Peter" class="cast-photo"><h3>Peter</h3><p class="cast-actor">Actor: TBA</p></div>
+          <div class="cast-card"><img src="../assets/cast/placeholder.jpg" alt="Jason" class="cast-photo"><h3>Jason</h3><p class="cast-actor">Actor: TBA</p></div>
+          <div class="cast-card"><img src="../assets/cast/placeholder.jpg" alt="Ivy" class="cast-photo"><h3>Ivy</h3><p class="cast-actor">Actor: TBA</p></div>
+          <div class="cast-card"><img src="../assets/cast/placeholder.jpg" alt="Nadia" class="cast-photo"><h3>Nadia</h3><p class="cast-actor">Actor: TBA</p></div>
         </div>
       </section>
 
       <div class="bottom-nav">
-        <a href="https://www.purplepass.com/events/376631-bare-feb-18th-2027" class="btn-primary">Hold on to your seat</a>
-        <a href="../index.html" class="btn-back">Back to The Lab</a>
+        <a href="#" class="btn-primary">Reserve your seat</a>
+        <a href="../index.html" class="btn-primary">Back to Home</a>
       </div>
     </article>
   </main>
