@@ -8,7 +8,125 @@
   <style>
     header {
       display: flex;
+      justify-content: space-between;<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>God of Carnage | The Lab Theater</title>
+  <link rel="stylesheet" href="../style.css" />
+  <style>
+    header {
+      display: flex;
       justify-content: space-between;
+      align-items: center;
+    }
+    .nav-link {
+      text-align: right;
+    }
+    .btn-primary {
+      display: inline-block;
+      margin-top: 20px;
+    }
+    .bottom-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 30px;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .bottom-nav .btn-primary {
+      margin-top: 0;
+    }
+
+    /* Cast Section */
+    .cast-section {
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 2px solid #444;
+    }
+    .cast-section h2 {
+      margin-bottom: 1.25rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .cast-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 1.25rem;
+    }
+    .cast-card {
+      text-align: center;
+    }
+    .cast-photo {
+      width: 100%;
+      max-width: 170px;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-bottom: 0.6rem;
+      background: #ddd;
+    }
+    .cast-card h3 {
+      margin: 0.2rem 0;
+      font-size: 1rem;
+    }
+    .cast-actor {
+      margin: 0;
+      font-size: 0.92rem;
+      opacity: 0.85;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="../index.html" class="home-btn">Home</a>
+    <div class="logo">THE <span>LAB</span>
+      <p class="tagline">Intentionally innovative live theater</p>
+    </div>
+    <nav class="top-nav">
+      <a href="fences.html">Fences</a>
+      <a href="god.html">God of Carnage</a>
+      <a href="godot.html">Waiting for Godot</a>
+      <a href="pillowman.html">The Pillowman</a>
+      <a href="rivals.html">The Rivals</a>
+      <a href="shakespeare.html">A Midsummer Night's Dream</a>
+    </nav>
+  </header>
+
+  <main>
+    <article class="production-details">
+      <h1>God of Carnage</h1>
+      <p class="meta">TBD</p>
+      <img src="../assets/godofcarnage.jpg" alt="God of Carnage" class="feature-img" />
+      <div class="content">
+        <p>by Yasmina Reza</p>
+        <p>
+          What begins as a polite meeting between two sets of parents quickly unravels into chaos.
+          Sharp, hilarious, and brutally honest, <em>God of Carnage</em> exposes the thin veneer of
+          civility when conflict, ego, and resentment take over.
+        </p>
+      </div>
+
+      <section class="cast-section">
+        <h2>Cast</h2>
+        <div class="cast-grid">
+          <div class="cast-card"><img src="../assets/cast/placeholder.jpg" alt="Veronica Novak" class="cast-photo"><h3>Veronica Novak</h3><p class="cast-actor">Actor: TBA</p></div>
+          <div class="cast-card"><img src="../assets/cast/placeholder.jpg" alt="Michael Novak" class="cast-photo"><h3>Michael Novak</h3><p class="cast-actor">Actor: TBA</p></div>
+          <div class="cast-card"><img src="../assets/cast/placeholder.jpg" alt="Annette Raleigh" class="cast-photo"><h3>Annette Raleigh</h3><p class="cast-actor">Actor: TBA</p></div>
+          <div class="cast-card"><img src="../assets/cast/placeholder.jpg" alt="Alan Raleigh" class="cast-photo"><h3>Alan Raleigh</h3><p class="cast-actor">Actor: TBA</p></div>
+        </div>
+      </section>
+
+      <div class="bottom-nav">
+        <a href="https://www.purplepass.com/events/376618-god-of-carnage-jan-14th-2027" class="btn-primary">Hold on to your seat</a>
+        <a href="../index.html" class="btn-primary">Back to Home</a>
+      </div>
+    </article>
+  </main>
+</body>
+</html>
       align-items: center;
     }
     .nav-link {
