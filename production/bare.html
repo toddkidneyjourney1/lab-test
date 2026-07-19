@@ -11,6 +11,18 @@
       flex-direction: column;
       align-items: center;
       padding: 20px;
+      position: relative;
+    }
+    .home-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      padding: 8px 12px;
+      background: #8B0000;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 5px;
+      font-size: 0.85rem;
     }
     .logo {
       text-align: center;
@@ -25,16 +37,20 @@
     }
     .top-nav a {
       padding: 8px 12px;
-      background: #181818;
+      background: #8B0000;
       color: #fff;
       text-decoration: none;
-      border: 1px solid #2a2a2a;
       border-radius: 5px;
       font-size: 0.85rem;
     }
     .btn-primary {
       display: inline-block;
       margin-top: 20px;
+      background-color: #8B0000;
+      color: #fff;
+      padding: 10px 20px;
+      text-decoration: none;
+      border-radius: 5px;
     }
     .bottom-nav {
       display: flex;
@@ -45,8 +61,8 @@
     .btn-back {
       display: inline-block;
       padding: 10px 20px;
-      background-color: #ccc;
-      color: #000;
+      background-color: #8B0000;
+      color: #fff;
       text-decoration: none;
       border-radius: 5px;
       font-weight: bold;
@@ -91,17 +107,17 @@
 </head>
 <body>
   <header>
+    <a href="../index.html" class="home-btn">Home</a>
     <div class="logo">THE <span>LAB</span>
       <p class="tagline">Intentionally innovative live theater</p>
     </div>
     <nav class="top-nav">
-      
       <a href="fences.html">Fences</a>
       <a href="god.html">God of Carnage</a>
       <a href="godot.html">Waiting for Godot</a>
       <a href="pillowman.html">The Pillowman</a>
       <a href="rivals.html">The Rivals</a>
-   <a href="shakespeare.html">A Midsummer NIght;s Dream</a>
+      <a href="shakespeare.html">A Midsummer Night's Dream</a>
     </nav>
   </header>
   <main>
