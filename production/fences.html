@@ -88,6 +88,39 @@
       margin-top: 0;
     }
 
+    /* Sticky Hold On To Your Seat button */
+    .sticky-seat-button {
+      position: fixed;
+      right: 1rem;
+      bottom: 1rem;
+      z-index: 9999;
+      margin: 0;
+      white-space: nowrap;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
+    }
+
+    .collab-line {
+      margin-top: 0.4rem;
+      margin-bottom: 1rem;
+      font-size: 0.95rem;
+      letter-spacing: 0.02em;
+      color: #d8d8d8;
+    }
+
+    .collab-line a {
+      color: #ff5c8a;
+      font-weight: 700;
+      text-decoration: none;
+      border-bottom: 1px dashed rgba(255, 92, 138, 0.7);
+      padding-bottom: 1px;
+      transition: color 0.2s ease, border-color 0.2s ease;
+    }
+
+    .collab-line a:hover {
+      color: #ff86a8;
+      border-bottom-color: #ff86a8;
+    }
+
     /* Cast Section */
     .cast-section {
       margin-top: 3rem;
@@ -132,17 +165,6 @@
       opacity: 0.85;
     }
 
-    /* Sticky Hold On To Your Seat button */
-    .sticky-seat-button {
-      position: fixed;
-      right: 1rem;
-      bottom: 1rem;
-      z-index: 9999;
-      margin: 0;
-      white-space: nowrap;
-      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
-    }
-
     @media (max-width: 900px) {
       .top-nav a {
         font-size: 0.76rem;
@@ -178,6 +200,10 @@
       <h1 style="margin-bottom: 0;">Fences</h1>
 <p style="font-size: 0.9em; color: #888; margin-top: 5px;">Sponsored by TBA</p>
       <p class="meta">April 27 - May 9</p>
+      <p class="collab-line">
+        In collaboration with
+        <a href="https://theatreconspiracyfl.com/" target="_blank" rel="noopener noreferrer">Theater Conspiracy</a>
+      </p>
       <img src="../assets/fences.jpg" alt="Fences" class="feature-img" />
       <div class="content">
         <p>by August Wilson</p>
