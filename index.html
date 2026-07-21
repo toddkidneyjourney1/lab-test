@@ -356,17 +356,6 @@
                 grid-template-columns: 1fr;
             }
         }
-        <style>
-  /* ... all your existing styles remain here ... */
-
-  .hover-sponsor-logo {
-    transition: transform 0.3s ease;
-  }
-
-  .plate-hover-content:hover .hover-sponsor-logo {
-    transform: scale(1.2);
-  }
-</style>
     </style>
 </head>
 <body>
@@ -568,6 +557,13 @@
   max-height: 45px;
   max-width: 80%;
   object-fit: contain;
+  transform: scale(1);
+  transform-origin: center;
+  transition: transform 0.3s ease;
+}
+
+.steel-rivet-plate:hover .hover-sponsor-logo {
+  transform: scale(4);
 }
 
 .hover-sponsor-text {
