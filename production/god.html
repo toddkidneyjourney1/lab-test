@@ -8,25 +8,25 @@
   <style>
     header {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
+      flex-direction: column;
+      align-items: flex-start;
       gap: 16px;
-      flex-wrap: wrap;
+      position: relative;
     }
 
     .logo {
-      flex: 1 1 auto;
-      min-width: 220px;
+      text-align: left;
+      white-space: nowrap;
     }
 
-    /* Top nav links as red buttons */
+    /* Top nav links as red buttons centered under the tagline */
     .top-nav {
       display: flex;
       flex-wrap: wrap;
-      gap: 10px;
+      gap: 8px;
       justify-content: center;
       align-items: center;
-      flex: 2 1 auto;
+      width: 100%;
     }
 
     .top-nav a {
@@ -34,10 +34,10 @@
       background: #c62828;
       color: #fff;
       text-decoration: none;
-      padding: 6px 10px;
+      padding: 5px 8px;
       border-radius: 6px;
       font-weight: 600;
-      font-size: 0.82rem;
+      font-size: 0.72rem;
       line-height: 1.1;
       white-space: nowrap;
       transition: background 0.2s ease, transform 0.15s ease;
@@ -59,7 +59,9 @@
       font-weight: 700;
       font-size: 0.85rem;
       white-space: nowrap;
-      margin-left: auto;
+      position: absolute;
+      top: 10px;
+      right: 10px;
       transition: background 0.2s ease, transform 0.15s ease;
     }
 
@@ -131,27 +133,23 @@
     }
 
     @media (max-width: 900px) {
-      header {
-        justify-content: center;
-      }
-
-      .logo {
-        text-align: center;
-        flex: 1 1 100%;
-      }
-
-      .top-nav {
-        flex: 1 1 100%;
+      .top-nav a {
+        font-size: 0.76rem;
+        padding: 5px 8px;
       }
 
       .home-btn {
-        margin-left: 0;
+        font-size: 0.78rem;
+        padding: 5px 8px;
+        top: 5px;
+        right: 5px;
       }
     }
   </style>
 </head>
 <body>
   <header>
+    <a href="../index.html" class="home-btn">Home</a>
     <div class="logo">THE <span>LAB</span>
       <p class="tagline">Intentionally innovative live theater</p>
     </div>
@@ -162,35 +160,33 @@
     .then(response => response.text())
     .then(data => { document.getElementById('main-nav').innerHTML = data; });
 </script>
-
-    <a href="../index.html" class="home-btn">Home</a>
   </header>
 
   <main>
     <article class="production-details">
-     <h1 style="margin-bottom: 0;">Carnage of God</h1>
-<p style="font-size: 0.9em; color: #888; margin-top: 5px;">Sponsored by TBA</p>
-      <p class="meta">January 14 - January 31</p>
-      <img src="../assets/godofcarnage.jpg" alt="God of Carnage" class="feature-img" />
+      <h1 style="margin-bottom: 0;">God of Carnage</h1>
+      <p style="font-size: 0.9em; color: #888; margin-top: 5px;">Sponsored by TBA</p>
+      <p class="meta">January 14 - Januart 31</p>
+      <img src="../assets/god.jpg" alt="God of Carnage" class="feature-img" />
       <div class="content">
-        <p>by Yasmina Reza</p>
+        <p>By Yasmina Reza<br>Translated by Christopher Hampton</p>
         <p>
-         A tense and darkly comedic play about two sets of parents who meet to discuss a playground altercation between their sons, only for the civil conversation to rapidly devolve into chaotic, immature bickering and uncomfortable truths.
+          <em>God of Carnage</em> relates a comedy of manners without the manners. Two sets of parents meet up to deal with the unruly behavior of their sons. As the evening proceeds, the civilised veneer chips away and the parents become increasingly childish, resulting in a hilariously chaotic meltdown.
         </p>
       </div>
 
       <section class="cast-section">
         <h2>Cast</h2>
         <div class="cast-grid">
+          <div class="cast-card"><img src="../assets/cast/placeholder.jpg" alt="Annette Raleigh" class="cast-photo"><h3>Annette Raleigh</h3><p class="cast-actor">Actor: TBA</p></div>
+          <div class="cast-card"><img src="../assets/cast/placeholder.jpg" alt="Alain Raleigh" class="cast-photo"><h3>Alain Raleigh</h3><p class="cast-actor">Actor: TBA</p></div>
           <div class="cast-card"><img src="../assets/cast/placeholder.jpg" alt="Veronica Novak" class="cast-photo"><h3>Veronica Novak</h3><p class="cast-actor">Actor: TBA</p></div>
           <div class="cast-card"><img src="../assets/cast/placeholder.jpg" alt="Michael Novak" class="cast-photo"><h3>Michael Novak</h3><p class="cast-actor">Actor: TBA</p></div>
-          <div class="cast-card"><img src="../assets/cast/placeholder.jpg" alt="Annette Raleigh" class="cast-photo"><h3>Annette Raleigh</h3><p class="cast-actor">Actor: TBA</p></div>
-          <div class="cast-card"><img src="../assets/cast/placeholder.jpg" alt="Alan Raleigh" class="cast-photo"><h3>Alan Raleigh</h3><p class="cast-actor">Actor: TBA</p></div>
         </div>
       </section>
 
       <div class="bottom-nav">
-        <a href="https://www.purplepass.com/events/376618-god-of-carnage-jan-14th-2027" class="btn-primary">Hold on to your seat</a>
+        <a href="#" class="btn-primary">Reserve your seat</a>
         <a href="../index.html" class="btn-primary">Back to Home</a>
       </div>
     </article>
