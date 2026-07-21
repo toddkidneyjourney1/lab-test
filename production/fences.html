@@ -3,30 +3,30 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Fences | The Lab Theater</title>
+  <title>A Midsummer Night's Dream | The Lab Theater</title>
   <link rel="stylesheet" href="../style.css" />
   <style>
     header {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
+      flex-direction: column;
+      align-items: flex-start;
       gap: 16px;
-      flex-wrap: wrap;
+      position: relative;
     }
 
     .logo {
-      flex: 1 1 auto;
-      min-width: 220px;
+      text-align: left;
+      white-space: nowrap;
     }
 
-    /* Top nav links as red buttons */
+    /* Top nav links wrapped for mobile visibility and centered under the tagline */
     .top-nav {
       display: flex;
       flex-wrap: wrap;
-      gap: 8px;
+      gap: 6px;
       justify-content: center;
       align-items: center;
-      flex: 2 1 auto;
+      width: 100%;
     }
 
     .top-nav a {
@@ -34,10 +34,10 @@
       background: #c62828;
       color: #fff;
       text-decoration: none;
-      padding: 5px 8px;
+      padding: 6px 10px;
       border-radius: 6px;
       font-weight: 600;
-      font-size: 0.72rem;
+      font-size: 0.82rem;
       line-height: 1.1;
       white-space: nowrap;
       transition: background 0.2s ease, transform 0.15s ease;
@@ -48,7 +48,7 @@
       transform: translateY(-1px);
     }
 
-    /* Home button on right */
+    /* Home button positioned neatly on mobile */
     .home-btn {
       display: inline-block;
       background: #c62828;
@@ -59,8 +59,10 @@
       font-weight: 700;
       font-size: 0.85rem;
       white-space: nowrap;
-      margin-left: auto;
       transition: background 0.2s ease, transform 0.15s ease;
+      position: absolute;
+      top: 10px;
+      right: 10px;
     }
 
     .home-btn:hover {
@@ -71,6 +73,11 @@
     .btn-primary {
       display: inline-block;
       margin-top: 20px;
+      background-color: #8B0000;
+      color: #fff;
+      padding: 10px 20px;
+      text-decoration: none;
+      border-radius: 5px;
     }
 
     .bottom-nav {
@@ -131,27 +138,23 @@
     }
 
     @media (max-width: 900px) {
-      header {
-        justify-content: center;
-      }
-
-      .logo {
-        text-align: center;
-        flex: 1 1 100%;
-      }
-
-      .top-nav {
-        flex: 1 1 100%;
+      .top-nav a {
+        font-size: 0.76rem;
+        padding: 5px 8px;
       }
 
       .home-btn {
-        margin-left: 0;
+        font-size: 0.78rem;
+        padding: 5px 8px;
+        top: 5px;
+        right: 5px;
       }
     }
   </style>
 </head>
 <body>
   <header>
+    <a href="../index.html" class="home-btn">Home</a>
     <div class="logo">THE <span>LAB</span>
       <p class="tagline">Intentionally innovative live theater</p>
     </div>
@@ -162,35 +165,35 @@
     .then(response => response.text())
     .then(data => { document.getElementById('main-nav').innerHTML = data; });
 </script>
-
-    <a href="../index.html" class="home-btn">Home</a>
   </header>
 
   <main>
     <article class="production-details">
-      <h1 style="margin-bottom: 0;">Fences</h1>
-<p style="font-size: 0.9em; color: #888; margin-top: 5px;">Sponsored by TBA</p>
-      <p class="meta">April 27 - May 9</p>
-      <img src="../assets/fences.jpg" alt="Fences" class="feature-img" />
+      <h1 style="margin-bottom: 0;">A Midsummer Night's Dream</h1>
+      <p style="font-size: 0.9em; color: #888; margin-top: 5px;">Sponsored by TBA</p>
+      <p class="meta">March 25 - April 11 </p>
+      <img src="../assets/midsummer.jpg" alt="A Midsummer Night's Dream" class="feature-img" />
       <div class="content">
-        <p>by August Wilson</p>
+        <p>by William Shakespeare</p>
         <p>
-          August Wilson’s Fences is a powerful drama about Troy Maxson, a sanitation worker in 1950s Pittsburgh. Haunted by past injustices and his own failed dreams, Troy struggles to connect with his family while trying to define his place in a world that has often denied him opportunity. At the center of the play is Troy’s relationship with his wife Rose and his son Cory, as generational tensions, pride, love, and disappointment collide in deeply human ways. Rich with emotional intensity and poetic realism, Fences explores race, responsibility, fatherhood, and the pursuit of dignity in mid-century America.
+          In an enchanted forest outside Athens, lovers lose their way, fairies meddle with magic,
+          and a troupe of actors stumbles into unexpected hilarity. Romantic, mischievous, and full
+          of wonder, <em>A Midsummer Night’s Dream</em> is a joyful celebration of love and imagination.
         </p>
       </div>
 
       <section class="cast-section">
         <h2>Cast</h2>
         <div class="cast-grid">
-          <div class="cast-card"><img src="../assets/cast/placeholder.jpg" alt="Troy Maxson" class="cast-photo"><h3>Troy Maxson</h3><p class="cast-actor">Actor: TBA</p></div>
-          <div class="cast-card"><img src="../assets/cast/placeholder.jpg" alt="Rose Maxson" class="cast-photo"><h3>Rose Maxson</h3><p class="cast-actor">Actor: TBA</p></div>
-          <div class="cast-card"><img src="../assets/cast/placeholder.jpg" alt="Cory Maxson" class="cast-photo"><h3>Cory Maxson</h3><p class="cast-actor">Actor: TBA</p></div>
-          <div class="cast-card"><img src="../assets/cast/placeholder.jpg" alt="Jim Bono" class="cast-photo"><h3>Jim Bono</h3><p class="cast-actor">Actor: TBA</p></div>
+          <div class="cast-card"><img src="../assets/cast/placeholder.jpg" alt="Puck" class="cast-photo"><h3>Puck</h3><p class="cast-actor">Actor: TBA</p></div>
+          <div class="cast-card"><img src="../assets/cast/placeholder.jpg" alt="Oberon" class="cast-photo"><h3>Oberon</h3><p class="cast-actor">Actor: TBA</p></div>
+          <div class="cast-card"><img src="../assets/cast/placeholder.jpg" alt="Titania" class="cast-photo"><h3>Titania</h3><p class="cast-actor">Actor: TBA</p></div>
+          <div class="cast-card"><img src="../assets/cast/placeholder.jpg" alt="Bottom" class="cast-photo"><h3>Bottom</h3><p class="cast-actor">Actor: TBA</p></div>
         </div>
       </section>
 
       <div class="bottom-nav">
-        <a href="#" class="btn-primary">Hold on to your seat</a>
+        <a href="https://www.purplepass.com/events/376621-a-midsummer-nights-dream-feb-4th-2027" class="btn-primary">Reserve your seat</a>
         <a href="../index.html" class="btn-primary">Back to Home</a>
       </div>
     </article>
