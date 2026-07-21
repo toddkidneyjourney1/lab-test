@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>In Collaboration | The Lab Theater</title>
+  <title>The Rivals | The Lab Theater</title>
   <link rel="stylesheet" href="../style.css" />
   <style>
     header {
@@ -15,7 +15,7 @@
     }
 
     .logo {
-      text-align: left;
+      text-align: center;
       white-space: nowrap;
     }
 
@@ -93,15 +93,15 @@
       margin-top: 0;
     }
 
-    /* Collaboration link styling */
-    .collab-link {
-      color: #c62828;
-      text-decoration: underline;
-      font-weight: 600;
-    }
-
-    .collab-link:hover {
-      color: #a61f1f;
+    /* Sticky Hold On To Your Seat button */
+    .sticky-seat-button {
+      position: fixed;
+      right: 1rem;
+      bottom: 1rem;
+      z-index: 9999;
+      margin: 0;
+      white-space: nowrap;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
     }
 
     /* Cast Section */
@@ -169,8 +169,7 @@
     <div class="logo">THE <span>LAB</span>
       <p class="tagline">Intentionally innovative live theater</p>
     </div>
-
-   <nav class="top-nav" id="main-nav"></nav>
+<nav class="top-nav" id="main-nav"></nav>
 <script>
   fetch('../nav.html')
     .then(response => response.text())
@@ -182,28 +181,31 @@
     <article class="production-details">
       <h1 style="margin-bottom: 0;">The Rivals</h1>
       <p style="font-size: 0.9em; color: #888; margin-top: 5px;">Sponsored by TBA</p>
-      <p class="meta">November 12 - November 29</p>
-      <img src="../assets/rivals.jpg" alt="In Collaboration" class="feature-img" />
+      <p class="meta">Dates: November 12 - November 29</p>
+      <img src="../assets/rivals.jpg" alt="The Rivals" class="feature-img" />
       <div class="content">
-        <p>In collaboration with <a href="https://theatreconspiracyfl.com/" target="_blank" class="collab-link">Theater Conspiracy</a></p>
+        <p>By Richard Brinsley Sheridan</p>
         <p>
-          The Rivals is a classic comedy of manners by Richard Brinsley Sheridan, full of mistaken identities, romantic entanglements, and the wonderfully eccentric Mrs. Malaprop, whose unique grasp of the English language creates endless hilarity.
+          <em>The Rivals</em> is a lively comedy of manners featuring romantic confusion, witty wordplay, and mistaken identities. Set in Bath, it follows Lydia Languish and her suitors through mischief, duels, and social satire, culminating in delightful theatrical chaos.
         </p>
       </div>
 
       <section class="cast-section">
         <h2>Cast</h2>
         <div class="cast-grid">
-          <div class="cast-card"><img src="../assets/cast/placeholder.jpg" alt="Performer 1" class="cast-photo"><h3>Role 1</h3><p class="cast-actor">Actor: TBA</p></div>
-          <div class="cast-card"><img src="../assets/cast/placeholder.jpg" alt="Performer 2" class="cast-photo"><h3>Role 2</h3><p class="cast-actor">Actor: TBA</p></div>
+          <div class="cast-card"><img src="../assets/cast/placeholder.jpg" alt="Lydia Languish" class="cast-photo"><h3>Lydia Languish</h3><p class="cast-actor">Actor: TBA</p></div>
+          <div class="cast-card"><img src="../assets/cast/placeholder.jpg" alt="Captain Jack Absolute" class="cast-photo"><h3>Captain Jack Absolute</h3><p class="cast-actor">Actor: TBA</p></div>
+          <div class="cast-card"><img src="../assets/cast/placeholder.jpg" alt="Mrs. Malaprop" class="cast-photo"><h3>Mrs. Malaprop</h3><p class="cast-actor">Actor: TBA</p></div>
+          <div class="cast-card"><img src="../assets/cast/placeholder.jpg" alt="Sir Anthony Absolute" class="cast-photo"><h3>Sir Anthony Absolute</h3><p class="cast-actor">Actor: TBA</p></div>
         </div>
       </section>
 
       <div class="bottom-nav">
-        <a href="#" class="btn-primary">Hold on to your seat</a>
         <a href="../index.html" class="btn-primary">Back to Home</a>
       </div>
     </article>
   </main>
+
+  <a href="https://www.purplepass.com/events/377382-the-rivals-nov-12th-2026" class="btn-primary sticky-seat-button">Hold on to your seat</a>
 </body>
 </html>
