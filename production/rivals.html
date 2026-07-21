@@ -104,6 +104,28 @@
       box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
     }
 
+    .collab-line {
+      margin-top: 0.4rem;
+      margin-bottom: 1rem;
+      font-size: 0.95rem;
+      letter-spacing: 0.02em;
+      color: #d8d8d8;
+    }
+
+    .collab-line a {
+      color: #ff5c8a;
+      font-weight: 700;
+      text-decoration: none;
+      border-bottom: 1px dashed rgba(255, 92, 138, 0.7);
+      padding-bottom: 1px;
+      transition: color 0.2s ease, border-color 0.2s ease;
+    }
+
+    .collab-line a:hover {
+      color: #ff86a8;
+      border-bottom-color: #ff86a8;
+    }
+
     /* Cast Section */
     .cast-section {
       margin-top: 3rem;
@@ -182,7 +204,10 @@
       <h1 style="margin-bottom: 0;">The Rivals</h1>
       <p style="font-size: 0.9em; color: #888; margin-top: 5px;">Sponsored by TBA</p>
       <p class="meta">Dates: November 12 - November 29</p>
-      <p>in collaboration with <a href="https://theatreconspiracyfl.com/">Theater Conspiracy</a></p>
+      <p class="collab-line">
+        In collaboration with
+        <a href="https://theatreconspiracyfl.com/" target="_blank" rel="noopener noreferrer">Theater Conspiracy</a>
+      </p>
       <img src="../assets/rivals.jpg" alt="The Rivals" class="feature-img" />
       <div class="content">
         <p>By Richard Brinsley Sheridan</p>
