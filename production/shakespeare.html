@@ -93,6 +93,29 @@
       margin-top: 0;
     }
 
+    /* Sticky Hold On To Your Seat button */
+    .sticky-seat-button {
+      position: fixed;
+      right: 1rem;
+      bottom: 1rem;
+      z-index: 9999;
+      margin: 0;
+      white-space: nowrap;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
+      background: #c62828;
+      color: #fff;
+      border-radius: 9999px;
+      padding: 10px 18px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+    }
+
+    .sticky-seat-button:hover {
+      background: #a61f1f;
+    }
+
     /* Cast Section */
     .cast-section {
       margin-top: 3rem;
@@ -193,10 +216,11 @@
       </section>
 
       <div class="bottom-nav">
-        <a href="https://www.purplepass.com/events/376621-a-midsummer-nights-dream-feb-4th-2027" class="btn-primary">Hold on to your seat</a>
         <a href="../index.html" class="btn-primary">Back to Home</a>
       </div>
     </article>
   </main>
+
+  <a href="https://www.purplepass.com/events/376621-a-midsummer-nights-dream-feb-4th-2027" class="btn-primary sticky-seat-button">Hold on to your seat</a>
 </body>
 </html>
