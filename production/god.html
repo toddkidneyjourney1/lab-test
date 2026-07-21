@@ -132,6 +132,17 @@
       opacity: 0.85;
     }
 
+    /* Sticky Hold On To Your Seat button */
+    .sticky-seat-button {
+      position: fixed;
+      right: 1rem;
+      bottom: 1rem;
+      z-index: 9999;
+      margin: 0;
+      white-space: nowrap;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
+    }
+
     @media (max-width: 900px) {
       .top-nav a {
         font-size: 0.76rem;
@@ -186,10 +197,11 @@
       </section>
 
       <div class="bottom-nav">
-        <a href="#" class="btn-primary">Hold on to your seat</a>
         <a href="../index.html" class="btn-primary">Back to Home</a>
       </div>
     </article>
   </main>
+
+  <a href="https://www.purplepass.com/events/376618-god-of-carnage-jan-14th-2027" class="btn-primary sticky-seat-button">Hold on to your seat</a>
 </body>
 </html>
