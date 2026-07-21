@@ -158,15 +158,12 @@
     <div class="logo">THE <span>LAB</span>
       <p class="tagline">Intentionally innovative live theater</p>
     </div>
-
-    <nav class="top-nav">
-      <a href="fences.html">Fences</a>
-      <a href="bare.html">Bare</a>
-      <a href="shakespeare.html">A Midsummer Night's Dream</a>
-      <a href="godot.html">Waiting for Godot</a>
-      <a href="rivals.html">The Rivals</a>
-      <a href="god.html">God of Carnage</a>
-    </nav>
+<nav class="top-nav" id="main-nav"></nav>
+<script>
+  fetch('../nav.html')
+    .then(response => response.text())
+    .then(data => { document.getElementById('main-nav').innerHTML = data; });
+</script>
   </header>
 
   <main>
