@@ -9,7 +9,213 @@
     header {
       display: flex;hold
       flex-direction: column;
+      align-items: flex-start;<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>God of Carnage | The Lab Theater</title>
+  <link rel="stylesheet" href="../style.css" />
+  <style>
+    header {
+      display: flex;
+      flex-direction: column;
       align-items: flex-start;
+      gap: 16px;
+      position: relative;
+    }
+
+    .logo {
+      text-align: left;
+      white-space: nowrap;
+    }
+
+   .top-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-top: 12px;
+}
+
+    .top-nav a {
+      display: inline-block;
+      background: #c62828;
+      color: #fff;
+      text-decoration: none;
+      padding: 5px 8px;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 0.72rem;
+      line-height: 1.1;
+      white-space: nowrap;
+      transition: background 0.2s ease, transform 0.15s ease;
+    }
+
+    .top-nav a:hover {
+      background: #a61f1f;
+      transform: translateY(-1px);
+    }
+
+    /* Home button on right */
+    .home-btn {
+      display: inline-block;
+      background: #c62828;
+      color: #fff;
+      text-decoration: none;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      white-space: nowrap;
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      transition: background 0.2s ease, transform 0.15s ease;
+    }
+
+    .home-btn:hover {
+      background: #a61f1f;
+      transform: translateY(-1px);
+    }
+
+    .btn-primary {
+      display: inline-block;
+      margin-top: 20px;
+    }
+
+    .bottom-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 30px;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .bottom-nav .btn-primary {
+      margin-top: 0;
+    }
+
+    /* Cast Section */
+    .cast-section {
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 2px solid #444;
+    }
+
+    .cast-section h2 {
+      margin-bottom: 1.25rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .cast-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .cast-card {
+      text-align: center;
+    }
+
+    .cast-photo {
+      width: 100%;
+      max-width: 170px;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-bottom: 0.6rem;
+      background: #ddd;
+    }
+
+    .cast-card h3 {
+      margin: 0.2rem 0;
+      font-size: 1rem;
+    }
+
+    .cast-actor {
+      margin: 0;
+      font-size: 0.92rem;
+      opacity: 0.85;
+    }
+
+    /* Sticky Hold On To Your Seat button */
+    .sticky-seat-button {
+      position: fixed;
+      right: 1rem;
+      bottom: 1rem;
+      z-index: 9999;
+      margin: 0;
+      white-space: nowrap;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
+    }
+
+    @media (max-width: 900px) {
+      .top-nav a {
+        font-size: 0.76rem;
+        padding: 5px 8px;
+      }
+
+      .home-btn {
+        font-size: 0.78rem;
+        padding: 5px 8px;
+        top: 5px;
+        right: 5px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="../index.html" class="home-btn">Home</a>
+    <div class="logo">THE <span>LAB</span>
+      <p class="tagline">Intentionally innovative live theater</p>
+    </div>
+  </header>
+
+  <nav class="top-nav" id="main-nav"></nav>
+<script>
+  fetch('../nav.html')
+    .then(response => response.text())
+    .then(data => { document.getElementById('main-nav').innerHTML = data; });
+</script>
+
+  <main>
+    <article class="production-details">
+      <h1 style="margin-bottom: 0;">God of Carnage</h1>
+      <p style="font-size: 0.9em; color: #888; margin-top: 5px;">Sponsored by TBA</p>
+      <p class="meta">January 14 - January 31</p>
+      <img src="../assets/godofcarnage.jpg" alt="God of Carnage" class="feature-img" />
+      <div class="content">
+        <p>By Yasmina Reza<br>Translated by Christopher Hampton</p>
+        <p>
+          <em>God of Carnage</em> relates a comedy of manners without the manners. Two sets of parents meet up to deal with the unruly behavior of their sons. As the evening proceeds, the civilised veneer chips away and the parents become increasingly childish, resulting in a hilariously chaotic meltdown.
+        </p>
+      </div>
+
+      <section class="cast-section">
+        <h2>Cast</h2>
+        <div class="cast-grid">
+          <div class="cast-card"><img src="../assets/cast/placeholder.jpg" alt="Annette Raleigh" class="cast-photo"><h3>Annette Raleigh</h3><p class="cast-actor">Actor: TBA</p></div>
+          <div class="cast-card"><img src="../assets/cast/placeholder.jpg" alt="Alain Raleigh" class="cast-photo"><h3>Alain Raleigh</h3><p class="cast-actor">Actor: TBA</p></div>
+          <div class="cast-card"><img src="../assets/cast/placeholder.jpg" alt="Veronica Novak" class="cast-photo"><h3>Veronica Novak</h3><p class="cast-actor">Actor: TBA</p></div>
+          <div class="cast-card"><img src="../assets/cast/placeholder.jpg" alt="Michael Novak" class="cast-photo"><h3>Michael Novak</h3><p class="cast-actor">Actor: TBA</p></div>
+        </div>
+      </section>
+
+      <div class="bottom-nav">
+        <a href="../index.html" class="btn-primary">Back to Home</a>
+      </div>
+    </article>
+  </main>
+
+  <a href="https://www.purplepass.com/events/376618-god-of-carnage-jan-14th-2027" class="btn-primary sticky-seat-button">Hold on to your seat</a>
+</body>
+</html>
       gap: 16px;
       position: relative;
     }
