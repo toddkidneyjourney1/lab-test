@@ -8,28 +8,25 @@
   <style>
     header {
       display: flex;
-      justify-content: space-between;
+      flex-direction: column;
       align-items: center;
       gap: 12px;
-      flex-wrap: nowrap; /* keep everything on one line */
+      position: relative;
     }
 
     .logo {
-      flex: 0 0 auto;
-      min-width: 180px;
+      text-align: center;
       white-space: nowrap;
     }
 
-    /* Top nav links as compact red buttons */
+    /* Top nav links wrapped for mobile visibility */
     .top-nav {
       display: flex;
-      flex-wrap: nowrap; /* keep buttons on one line */
+      flex-wrap: wrap;
       gap: 6px;
       justify-content: center;
       align-items: center;
-      flex: 1 1 auto;
-      min-width: 0;
-      overflow-x: auto; /* safety for very small screens */
+      width: 100%;
     }
 
     .top-nav a {
@@ -40,7 +37,7 @@
       padding: 6px 10px;
       border-radius: 6px;
       font-weight: 600;
-      font-size: 0.82rem; /* smaller font to fit all buttons */
+      font-size: 0.82rem;
       line-height: 1.1;
       white-space: nowrap;
       transition: background 0.2s ease, transform 0.15s ease;
@@ -51,7 +48,7 @@
       transform: translateY(-1px);
     }
 
-    /* Home button on right */
+    /* Home button positioned neatly on mobile */
     .home-btn {
       display: inline-block;
       background: #c62828;
@@ -63,7 +60,9 @@
       font-size: 0.85rem;
       white-space: nowrap;
       transition: background 0.2s ease, transform 0.15s ease;
-      flex: 0 0 auto;
+      position: absolute;
+      top: 10px;
+      right: 10px;
     }
 
     .home-btn:hover {
@@ -74,6 +73,11 @@
     .btn-primary {
       display: inline-block;
       margin-top: 20px;
+      background-color: #8B0000;
+      color: #fff;
+      padding: 10px 20px;
+      text-decoration: none;
+      border-radius: 5px;
     }
 
     .bottom-nav {
@@ -134,14 +138,6 @@
     }
 
     @media (max-width: 900px) {
-      header {
-        gap: 8px;
-      }
-
-      .logo {
-        min-width: 140px;
-      }
-
       .top-nav a {
         font-size: 0.76rem;
         padding: 5px 8px;
@@ -149,42 +145,40 @@
 
       .home-btn {
         font-size: 0.78rem;
-        padding: 7px 10px;
+        padding: 5px 8px;
+        top: 5px;
+        right: 5px;
       }
     }
   </style>
 </head>
 <body>
   <header>
+    <a href="../index.html" class="home-btn">Home</a>
     <div class="logo">THE <span>LAB</span>
       <p class="tagline">Intentionally innovative live theater</p>
     </div>
 
     <nav class="top-nav">
       <a href="fences.html">Fences</a>
-      <a href="bare.html">Bare</a>
+      <a href="shakespeare.html">A Midsummer Night's Dream</a>
       <a href="godot.html">Waiting for Godot</a>
       <a href="rivals.html">The Rivals</a>
+      <a href="pillowman.html">The Pillowman</a>
       <a href="god.html">God of Carnage</a>
-      <a href="oillowman.html">The Pillowman</a>
     </nav>
-
-    <a href="../index.html" class="home-btn">Home</a>
   </header>
 
   <main>
     <article class="production-details">
-      <<h1 style="margin-bottom: 0;">Bare</h1>
-<p style="font-size: 0.9em; color: #888; margin-top: 5px;">Sponsored by TBA</p>
-      <p class="meta">Feburary 18- March 7 </p>
+      <h1 style="margin-bottom: 0;">Bare</h1>
+      <p style="font-size: 0.9em; color: #888; margin-top: 5px;">Sponsored by TBA</p>
+      <p class="meta">Dates: TBA</p>
       <img src="../assets/bare.jpg" alt="Bare" class="feature-img" />
       <div class="content">
-        <p>Music by Damon Intrabartolo | Lyrics by Jon Hartmere</p>
+        <p>Book by Jon Hartmere and Damon Intrabartolo<br>Music by Damon Intrabartolo<br>Lyrics by Jon Hartmere</p>
         <p>
-          Set in a Catholic boarding school, <em>Bare</em> follows a group of students navigating
-          faith, identity, friendship, and first love under the weight of expectation. Raw,
-          contemporary, and emotionally charged, this pop-rock musical explores what it means
-          to be seen for who you truly are.
+          <em>Bare</em> is an electrifying and emotionally raw rock musical that explores the lives of students at a private Catholic boarding school. As they navigate the complexities of identity, faith, love, and acceptance, the story reveals the hidden desires, painful secrets, and pressures of adolescence, ultimately culminating in a powerful, tragic, and resonant coming-of-age experience.
         </p>
       </div>
 
@@ -194,12 +188,12 @@
           <div class="cast-card"><img src="../assets/cast/placeholder.jpg" alt="Peter" class="cast-photo"><h3>Peter</h3><p class="cast-actor">Actor: TBA</p></div>
           <div class="cast-card"><img src="../assets/cast/placeholder.jpg" alt="Jason" class="cast-photo"><h3>Jason</h3><p class="cast-actor">Actor: TBA</p></div>
           <div class="cast-card"><img src="../assets/cast/placeholder.jpg" alt="Ivy" class="cast-photo"><h3>Ivy</h3><p class="cast-actor">Actor: TBA</p></div>
-          <div class="cast-card"><img src="../assets/cast/placeholder.jpg" alt="Nadia" class="cast-photo"><h3>Nadia</h3><p class="cast-actor">Actor: TBA</p></div>
+          <div class="cast-card"><img src="../assets/cast/placeholder.jpg" alt="Nadya" class="cast-photo"><h3>Nadya</h3><p class="cast-actor">Actor: TBA</p></div>
         </div>
       </section>
 
       <div class="bottom-nav">
-        <a href="#" class="btn-primary">Hold on to your seat</a>
+        <a href="#" class="btn-primary">Reserve your seat</a>
         <a href="../index.html" class="btn-primary">Back to Home</a>
       </div>
     </article>
