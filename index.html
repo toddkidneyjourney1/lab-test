@@ -439,6 +439,144 @@
                 </div>
             </div>
         </section>
+        <div class="steel-rivet-plate">
+  <div class="stencil-corner top-left">SEC-18</div>
+  <div class="stencil-corner top-right">LAB-SPEC</div>
+  
+  <div class="plate-default-content">
+    Season 18 fueled by the support of The Bireley Family Foundation
+  </div>
+  <div class="plate-hover-content">
+    <img src="assets/bff.JPG" alt="The Bireley Family Foundation" class="hover-sponsor-logo">
+    <span class="hover-sponsor-text">Season 18 Sponsor</span>
+  </div>
+
+  <div class="stencil-corner bottom-left">AUTH-01</div>
+  <div class="stencil-corner bottom-right">REV-B</div>
+</div>
+
+<style>
+.steel-rivet-plate {
+  position: relative;
+  background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 50%, #222 100%);
+  border: 2px solid #4a4a4a;
+  border-radius: 6px;
+  padding: 35px 50px;
+  max-width: 600px;
+  margin: 25px auto;
+  text-align: center;
+  overflow: hidden;
+  box-shadow: inset 0 2px 5px rgba(255,255,255,0.08), 0 6px 15px rgba(0,0,0,0.5);
+}
+
+/* Stenciled Corner Markings */
+.stencil-corner {
+  position: absolute;
+  font-family: monospace;
+  font-size: 0.6rem;
+  letter-spacing: 1.5px;
+  color: rgba(255, 255, 255, 0.25);
+  text-transform: uppercase;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.stencil-corner.top-left { top: 6px; left: 24px; }
+.stencil-corner.top-right { top: 6px; right: 24px; }
+.stencil-corner.bottom-left { bottom: 6px; left: 24px; }
+.stencil-corner.bottom-right { bottom: 6px; right: 24px; }
+
+/* Two Hex Bolts on Left End */
+.steel-rivet-plate::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 12px;
+  width: 10px;
+  background: 
+    radial-gradient(circle at center, #aaa 35%, #222 40%, #111 70%);
+  background-size: 10px 10px;
+  background-repeat: no-repeat;
+  background-position: center 10px, center calc(100% - 10px);
+  box-shadow: inset 0 1px 1px rgba(255,255,255,0.3);
+  z-index: 2;
+}
+
+/* Two Hex Bolts on Right End */
+.steel-rivet-plate::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 12px;
+  width: 10px;
+  background: 
+    radial-gradient(circle at center, #aaa 35%, #222 40%, #111 70%);
+  background-size: 10px 10px;
+  background-repeat: no-repeat;
+  background-position: center 10px, center calc(100% - 10px);
+  box-shadow: inset 0 1px 1px rgba(255,255,255,0.3);
+  z-index: 2;
+}
+
+/* Default Text Content */
+.plate-default-content {
+  font-family: monospace;
+  font-size: 0.95rem;
+  letter-spacing: 1px;
+  color: #d0d0d0;
+  text-transform: uppercase;
+  font-weight: bold;
+  transition: opacity 0.3s ease;
+  position: relative;
+  z-index: 3;
+}
+
+/* Hover Content Layer */
+.plate-hover-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(18, 18, 18, 0.95);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 4;
+  padding: 15px;
+  box-sizing: border-box;
+}
+
+.hover-sponsor-logo {
+  max-height: 45px;
+  max-width: 80%;
+  object-fit: contain;
+}
+
+.hover-sponsor-text {
+  font-family: monospace;
+  font-size: 1rem;
+  letter-spacing: 2px;
+  color: #ff3366;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+/* Hover States */
+.steel-rivet-plate:hover .plate-default-content {
+  opacity: 0;
+}
+
+.steel-rivet-plate:hover .plate-hover-content {
+  opacity: 1;
+}
+</style>
 
         <section class="shows-section">
             <h2>Back to the Slab</h2>
