@@ -443,6 +443,62 @@
         <section class="shows-section">
             <h2>Back to the Slab</h2>
             <p>Explore our current and upcoming productions. Select a show to view details or ticketing.</p>
+            <!-- HTML Structure -->
+<div class="marquee-sponsor-banner">
+  <div class="marquee-lights"></div>
+  <img src="Bireley foundation.jpg" alt="Bireley Foundation Sponsor" class="sponsor-logo">
+  <div class="marquee-lights"></div>
+</div>
+
+<!-- CSS Styling -->
+<style>
+.marquee-sponsor-banner {
+  position: relative;
+  background-color: #111;
+  border: 4px solid #ffcc00;
+  border-radius: 12px;
+  padding: 15px 25px;
+  text-align: center;
+  max-width: 600px;
+  margin: 20px auto;
+  box-shadow: 0 0 15px rgba(255, 204, 0, 0.4);
+}
+
+.sponsor-logo {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+/* Marquee Light Border Effect */
+.marquee-lights {
+  position: absolute;
+  top: -6px;
+  left: -6px;
+  right: -6px;
+  bottom: -6px;
+  border: 4px dashed transparent;
+  border-radius: 14px;
+  background: linear-gradient(90deg, #ffcc00 50%, transparent 50%) repeat-x,
+              linear-gradient(90deg, #ffcc00 50%, transparent 50%) repeat-x,
+              linear-gradient(0deg, #ffcc00 50%, transparent 50%) repeat-y,
+              linear-gradient(0deg, #ffcc00 50%, transparent 50%) repeat-y;
+  background-size: 20px 4px, 20px 4px, 4px 20px, 4px 20px;
+  background-position: 0 0, 0 100%, 0 0, 100% 0;
+  animation: light-chase 1s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes light-chase {
+  0% {
+    background-position: 0 0, 0 100%, 0 0, 100% 0;
+  }
+  100% {
+    background-position: 20px 0, -20px 100%, 0 -20px, 100% 20px;
+  }
+}
+</style>
             <div class="show-list">
                 <article class="show-item">
                     <img src="assets/godot.jpg" alt="Waiting for Godot">
