@@ -1,185 +1,123 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Fuel the Innovation | The Laboratory Theater of Florida</title>
-  <link rel="stylesheet" href="style.css" />
-  <style>
-    /* Page-specific support layout */
-    .support-simple {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 2.5rem 1rem 3rem;
-    }
-
-    .support-heading {
-      text-align: center;
-      margin-bottom: 2rem;
-    }
-
-    .support-heading .eyebrow {
-      color: #ff6b6b;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      font-size: 0.78rem;
-      margin-bottom: 0.65rem;
-    }
-
-    .support-heading h1 {
-      margin: 0 0 0.75rem;
-      font-size: clamp(1.6rem, 4vw, 2.4rem);
-      line-height: 1.15;
-      color: #fff;
-    }
-
-    .support-heading p {
-      margin: 0 auto;
-      max-width: 760px;
-      color: #d5d5d5;
-      line-height: 1.65;
-    }
-
-    .support-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 1rem;
-      margin-top: 1.5rem;
-    }
-
-    .support-card {
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 14px;
-      padding: 1.25rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.8rem;
-    }
-
-    .support-card h2 {
-      margin: 0;
-      color: #fff;
-      font-size: 1.18rem;
-    }
-
-    .support-card p {
-      margin: 0;
-      color: #d6d6d6;
-      line-height: 1.55;
-      flex-grow: 1;
-    }
-
-    .support-btn {
-      display: inline-block;
-      background: #c62828;
-      color: #fff;
-      text-decoration: none;
-      padding: 0.7rem 1rem;
-      border-radius: 8px;
-      font-weight: 700;
-      text-align: center;
-      transition: background 0.2s ease, transform 0.15s ease;
-    }
-
-    .support-btn:hover {
-      background: #a61f1f;
-      transform: translateY(-1px);
-    }
-
-    .support-footer-note {
-      text-align: center;
-      margin-top: 1.75rem;
-      color: #bdbdbd;
-      font-size: 0.95rem;
-    }
-
-    .support-footer-note a {
-      color: #ff8a8a;
-      text-decoration: none;
-      border-bottom: 1px dashed rgba(255, 138, 138, 0.8);
-    }
-
-    .support-footer-note a:hover {
-      color: #ffb1b1;
-      border-bottom-color: #ffb1b1;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fuel the Innovation | The Laboratory Theater of Florida</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body class="support-body">
-  <!-- Hamburger Menu -->
-  <input type="checkbox" id="nav-toggle" class="nav-toggle" />
-  <label for="nav-toggle" class="nav-toggle-label"><span></span></label>
-  <label for="nav-toggle" class="nav-overlay"></label>
+    <!-- Hamburger Menu -->
+    <input type="checkbox" id="nav-toggle" class="nav-toggle">
+    <label for="nav-toggle" class="nav-toggle-label"><span></span></label>
+    <label for="nav-toggle" class="nav-overlay"></label>
 
-  <nav class="hamburger-menu">
-    <a href="about.html">Origin Story</a>
-    <a href="archive25.html">Past Experiments</a>
-    <a href="index.html">Back to the Slab</a>
-    <a href="plan.html">Lab Protocols</a>
+    <nav class="hamburger-menu">
+        <a href="about.html">Origin Story</a>
+        <a href="archive25.html">Past Experiments</a>
+        <a href="index.html">Back to the Slab</a>
+        <a href="plan.html">Lab Protocols</a>
 
-    <div class="submenu">
-      <span class="submenu-title">The Portal Landing Pad</span>
-      <ul>
-        <li><a href="cast-portal.html">Subjects</a></li>
-        <li><a href="volunteer-signup.html">Volunteers</a></li>
-        <li><a href="admin-portal.html">Admin</a></li>
-        <li><a href="audition-portal.html">Auditions</a></li>
-      </ul>
-    </div>
+        <!-- Submenu for Portal Landing Pad -->
+        <div class="submenu">
+            <span class="submenu-title">The Portal Landing Pad</span>
+            <ul>
+                <li><a href="cast-portal.html">Subjects</a></li>
+                <li><a href="volunteer-signup.html">Volunteers</a></li>
+                <li><a href="admin-portal.html">Admin</a></li>
+                <li><a href="audition-portal.html">Auditions</a></li>
+            </ul>
+        </div>
 
-    <a href="support.html">Fuel the Innovation</a>
-    <a href="sponsors.html">Core Collaborators</a>
-  </nav>
+        <a href="support.html">Fuel the Innovation</a>
+        <a href="sponsors.html">Core Collaborators</a>
+    </nav>
+    
+    <!-- Header -->
+    <header class="main-header">
+        <div class="logo">
+            THE <span>LAB</span>
+            <p class="tagline">Intentionally innovative live theater</p>
+        </div>
+    </header>
 
-  <!-- Header -->
-  <header class="main-header">
-    <div class="logo">
-      THE <span>LAB</span>
-      <p class="tagline">Intentionally innovative live theater</p>
-    </div>
-  </header>
+    <main>
+        <!-- Hero & Support Options Combined -->
+        <section class="support-page">
+            <div class="section-heading">
+                <p class="eyebrow">Support Our Mission</p>
+                <h1>Fuel the creativity that powers live theater.</h1>
+                <p>
+                    Whether you give financially, become a member, sponsor a show, or donate your time,
+                    every contribution helps keep bold, innovative art alive in Fort Myers.
+                </p>
+            </div>
 
-  <main class="support-simple">
-    <section class="support-heading">
-      <p class="eyebrow">Support Our Mission</p>
-      <h1>Fuel the creativity that powers live theater.</h1>
-      <p>
-        Every gift helps us produce bold work, support artists, and keep adventurous theater alive in Fort Myers.
-      </p>
-    </section>
+            <div class="support-grid">
+                <article class="support-card featured">
+                    <div class="card-icon" aria-hidden="true">♥</div>
+                    <h3>Make a Donation</h3>
+                    <p>
+                        Your tax-deductible contribution directly supports our productions,
+                        educational programs, and facility needs.
+                    </p>
+                    <a href="https://zeffy.com/en-US/donation-form/raise-the-curtain" class="button primary">
+                        Donate via Zeffy
+                    </a>
+                </article>
 
-    <section class="support-grid">
-      <article class="support-card">
-        <h2>Donate or Become a Member</h2>
-        <p>
-          Support The Laboratory Theater of Florida directly through our official Zeffy organization page.
-        </p>
-        <a
-          href="https://www.zeffy.com/en-US/organizations/the-laboratory-theater-of-florida-inc"
-          class="support-btn"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Support on Zeffy
-        </a>
-      </article>
+                <article class="support-card featured">
+                    <div class="card-icon" aria-hidden="true">★</div>
+                    <h3>Become a Member</h3>
+                    <p>
+                        Join our community of supporters for the season and enjoy exclusive benefits
+                        while powering the lab.
+                    </p>
+                    <a href="https://www.zeffy.com/en-US/ticketing/the-laboratory-theater-memberships-2025-2026-season" class="button primary">
+                        Get a Membership
+                    </a>
+                </article>
 
-      <article class="support-card">
-        <h2>Sponsorship & Partnerships</h2>
-        <p>
-          Want to sponsor a production or discuss partnership opportunities? We’d love to connect.
-        </p>
-        <a href="mailto:president@laboratorytheaterflorida.com" class="support-btn">
-          Email Us
-        </a>
-      </article>
-    </section>
+                <article class="support-card">
+                    <div class="card-icon" aria-hidden="true">◎</div>
+                    <h3>Sponsor a Show</h3>
+                    <p>
+                        Gain visibility for your business while supporting the arts.
+                        Reach out to discuss partnership opportunities.
+                    </p>
+                    <a href="mailto:president@laboratorytheaterflorida.com" class="button secondary">
+                        Inquire About Sponsorship
+                    </a>
+                </article>
 
-    <p class="support-footer-note">
-      Looking for current supporters? <a href="sponsors.html">Meet our collaborators</a>.
-    </p>
-  </main>
+                <article class="support-card">
+                    <div class="card-icon" aria-hidden="true">✦</div>
+                    <h3>Volunteer</h3>
+                    <p>
+                        Give the gift of your time. From ushering to set construction,
+                        we need your talent and enthusiasm.
+                    </p>
+                    <a href="volunteer.html" class="button secondary">
+                        View Volunteer Portal
+                    </a>
+                </article>
+            </div>
+        </section>
+
+        <!-- Social proof / final callout -->
+        <section class="support-callout">
+            <div class="callout-content">
+                <h2>Become part of the story</h2>
+                <p>
+                    The Lab thrives because of people like you — audience members, donors, sponsors,
+                    and volunteers who believe in creative risk and community connection.
+                </p>
+                <div class="callout-actions">
+                    <a href="sponsors.html" class="button secondary">Meet Our Collaborators</a>
+                    <a href="index.html" class="button primary">Return to the Main Stage</a>
+                </div>
+            </div>
+        </section>
+    </main>
 </body>
 </html>
