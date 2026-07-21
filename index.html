@@ -439,6 +439,124 @@
                 </div>
             </div>
         </section>
+        <div class="steel-rivet-plate">
+  <div class="plate-default-content">
+    Season 18 Fueled by the support of The Bireley Family Foundation
+  </div>
+  <div class="plate-hover-content">
+    <img src="bff.JPG" alt="The Bireley Family Foundation" class="hover-sponsor-logo">
+    <span class="hover-sponsor-text">Season 18 Sponsor</span>
+  </div>
+</div>
+
+<style>
+.steel-rivet-plate {
+  position: relative;
+  background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 50%, #222 100%);
+  border: 2px solid #4a4a4a;
+  border-radius: 6px;
+  padding: 30px 40px;
+  max-width: 600px;
+  margin: 25px auto;
+  text-align: center;
+  overflow: hidden;
+  box-shadow: inset 0 2px 5px rgba(255,255,255,0.08), 0 6px 15px rgba(0,0,0,0.5);
+}
+
+/* 6 Rivets: 4 corners + 2 centers of long sides */
+.steel-rivet-plate::before,
+.steel-rivet-plate::after {
+  content: "";
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  background: radial-gradient(circle at 30% 30%, #888, #222);
+  border-radius: 50%;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.8), inset 0 1px 1px rgba(255,255,255,0.4);
+  z-index: 4;
+}
+
+/* Top-left & Top-right */
+.steel-rivet-plate::before {
+  top: 8px;
+  left: 8px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.8), inset 0 1px 1px rgba(255,255,255,0.4), calc(600px - 26px) 0 0 radial-gradient(circle at 30% 30%, #888, #222); /* handles top-right roughly, or use individual pseudo-elements below */
+}
+
+/* Individual Rivet Positioning using Box-Shadow trick or multi-elements */
+.steel-rivet-plate {
+  box-shadow: 
+    inset 0 2px 5px rgba(255,255,255,0.08), 
+    0 6px 15px rgba(0,0,0,0.5),
+    /* Top Left */
+    inset 10px 10px 0 -6px #555,
+    /* Top Right */
+    inset -10px 10px 0 -6px #555,
+    /* Bottom Left */
+    inset 10px -10px 0 -6px #555,
+    /* Bottom Right */
+    inset -10px -10px 0 -6px #555,
+    /* Top Center */
+    inset 0 10px 0 -6px #555,
+    /* Bottom Center */
+    inset 0 -10px 0 -6px #555;
+}
+
+/* Default Text Content */
+.plate-default-content {
+  font-family: monospace;
+  font-size: 0.95rem;
+  letter-spacing: 1px;
+  color: #d0d0d0;
+  text-transform: uppercase;
+  font-weight: bold;
+  transition: opacity 0.3s ease;
+}
+
+/* Hover Content Layer */
+.plate-hover-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(18, 18, 18, 0.95);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 3;
+  padding: 15px;
+  box-sizing: border-box;
+}
+
+.hover-sponsor-logo {
+  max-height: 45px;
+  max-width: 80%;
+  object-fit: contain;
+}
+
+.hover-sponsor-text {
+  font-family: monospace;
+  font-size: 1rem;
+  letter-spacing: 2px;
+  color: #ff3366;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+/* Hover States */
+.steel-rivet-plate:hover .plate-default-content {
+  opacity: 0;
+}
+
+.steel-rivet-plate:hover .plate-hover-content {
+  opacity: 1;
+}
+</style>
 
         <section class="shows-section">
             <h2>Back to the Slab</h2>
