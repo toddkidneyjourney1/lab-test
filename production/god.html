@@ -156,14 +156,12 @@
       <p class="tagline">Intentionally innovative live theater</p>
     </div>
 
-    <nav class="top-nav">
-      <a href="fences.html">Fences</a>
-      <a href="bare.html">Bare</a>
-      <a href="godot.html">Waiting for Godot</a>
-      <a href="pillowman.html">The Pillowman</a>
-      <a href="rivals.html">The Rivals</a>
-      <a href="shakespeare.html">A Midsummer Night's Dream</a>
-    </nav>
+    <nav class="top-nav" id="main-nav"></nav>
+<script>
+  fetch('../nav.html')
+    .then(response => response.text())
+    .then(data => { document.getElementById('main-nav').innerHTML = data; });
+</script>
 
     <a href="../index.html" class="home-btn">Home</a>
   </header>
