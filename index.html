@@ -441,6 +441,92 @@
         </section>
 
         <section class="shows-section">
+            <div class="rivet-sponsor">
+  <img src="bbf.jpg" alt="Bireley Foundation Sponsor" class="sponsor-logo">
+  <div class="sponsor-overlay">
+    <span class="sponsor-text">Gratefully Sponsored By</span>
+  </div>
+</div>
+
+<style>
+.rivet-sponsor {
+  position: relative;
+  background: #181818;
+  border: 2px solid #3a3a3a;
+  border-radius: 4px;
+  padding: 24px;
+  max-width: 600px;
+  margin: 20px auto;
+  text-align: center;
+  overflow: hidden;
+  box-shadow: inset 0 2px 4px rgba(255,255,255,0.05), 0 4px 8px rgba(0,0,0,0.4);
+}
+
+/* Simulated Corner Rivets */
+.rivet-sponsor::before,
+.rivet-sponsor::after {
+  content: "";
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: #555;
+  border-radius: 50%;
+  box-shadow: inset 0 1px 2px #222;
+  z-index: 2;
+}
+
+.rivet-sponsor::before {
+  top: 8px;
+  left: 8px;
+}
+
+.rivet-sponsor::after {
+  bottom: 8px;
+  right: 8px;
+}
+
+.sponsor-logo {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  transition: opacity 0.3s ease;
+}
+
+/* Hover Overlay Styles */
+.sponsor-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(18, 18, 18, 0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 3;
+}
+
+.sponsor-text {
+  font-family: monospace;
+  font-size: 1.1rem;
+  letter-spacing: 2px;
+  color: #ff3366;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+/* Trigger the hover effect */
+.rivet-sponsor:hover .sponsor-overlay {
+  opacity: 1;
+}
+
+.rivet-sponsor:hover .sponsor-logo {
+  opacity: 0.3;
+}
+</style>
             <h2>Back to the Slab</h2>
             <p>Explore our current and upcoming productions. Select a show to view details or ticketing.</p>
             <!-- HTML Structure -->
