@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,164 +14,134 @@
             padding: 2rem 0;
         }
         .merch-card {
-            background: #151515;
-            border: 1px solid #2c2c2c;
-            border-radius: 14px;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 8px;
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            text-align: center;
+            transition: transform 0.2s ease;
         }
-        .merch-image-container {
-            position: relative;
-            background: #222;
+        .merch-card:hover {
+            transform: translateY(-4px);
+        }
+        .merch-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            background: #252525;
+        }
+        .merch-info {
             padding: 1.5rem;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 260px;
-        }
-        .merch-image-container img.mockup-base {
-            max-width: 100%;
-            height: 220px;
-            object-fit: contain;
-        }
-        .overlay-logo {
-            position: absolute;
-            max-width: 80px;
-            height: auto;
-            opacity: 0.9;
-        }
-        .overlay-text {
-            position: absolute;
-            color: #fff;
-            font-family: monospace;
-            font-size: 0.75rem;
-            background: rgba(0,0,0,0.6);
-            padding: 2px 6px;
-            border-radius: 4px;
-        }
-        .merch-content {
-            padding: 1.5rem;
-            flex: 1;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
+            flex-grow: 1;
         }
-        .merch-content h3 {
+        .merch-title {
+            font-size: 1.25rem;
+            font-weight: bold;
             color: #fff;
             margin-bottom: 0.5rem;
-            font-size: 1.2rem;
         }
-        .merch-content p {
-            color: #b8b8b8;
+        .merch-price {
+            font-size: 1.1rem;
+            color: #E53935;
+            margin-bottom: 1rem;
+        }
+        .merch-description {
+            color: #b0b0b0;
             font-size: 0.95rem;
-            margin-bottom: 1.25rem;
+            margin-bottom: 1.5rem;
+            flex-grow: 1;
         }
-        .tag-pod {
+        .pod-badge {
             display: inline-block;
-            background: #2c2c2c;
-            color: #ff5c8a;
+            background: #333;
+            color: #ccc;
             font-size: 0.75rem;
-            padding: 0.2rem 0.6rem;
+            padding: 0.25rem 0.5rem;
             border-radius: 4px;
-            margin-bottom: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+            align-self: flex-start;
         }
     </style>
 </head>
 <body>
-    <header class="site-header" style="background: #101010; border-bottom: 1px solid #2c2c2c; padding: 1rem 0;">
-        <div class="container" style="max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 1rem;">
-            <h1 class="logo" style="color: #fff; font-size: 1.5rem; margin: 0;">THE <span style="color: #E53935;">LAB</span></h1>
-            <nav class="main-nav" style="display: flex; gap: 1.5rem;">
-                <a href="index.html" style="color: #e6e6e6; text-decoration: none;">Back to the Slab</a>
-                <a href="about.html" style="color: #e6e6e6; text-decoration: none;">Origin Story</a>
-                <a href="support.html" style="color: #e6e6e6; text-decoration: none;">Fuel the Innovation</a>
-                <a href="merch.html" style="color: #E53935; text-decoration: none; font-weight: bold;">Merch</a>
+
+    <!-- Header / Navigation integration -->
+    <header class="site-header">
+        <div class="container">
+            <h1 class="logo">THE LAB</h1>
+            <!-- Standard nav items matching site style -->
+            <nav class="main-nav">
+                <a href="index.html">Back to the Slab</a>
+                <a href="about.html">Origin Story</a>
+                <a href="support.html">Fuel the Innovation</a>
+                <a href="mech.html" class="active">Merch</a>
             </nav>
         </div>
     </header>
 
-    <main style="max-width: 1100px; margin: 0 auto; padding: 2rem 1rem;">
-        <section style="text-align: center; margin-bottom: 2rem;">
-            <h2 style="color: #fff; font-size: 2.2rem; margin-bottom: 0.5rem;">THE LAB EXPERIMENTAL MERCH</h2>
-            <p style="color: #b8b8b8; font-size: 1.1rem;">Official print-on-demand gear custom-printed for supporters of innovative live theater.</p>
+    <main class="container py-5">
+        <section class="text-center mb-5">
+            <h2 class="display-4 text-white">THE LAB EXPERIMENTAL MERCH</h2>
+            <p class="lead text-muted">Official print-on-demand gear custom-printed for supporters of innovative live theater.</p>
         </section>
 
         <div class="merch-grid">
-            <!-- Classic Logo Tee -->
+            <!-- Item 1 -->
             <div class="merch-card">
-                <div class="merch-image-container">
-                    <img src="assets/tshirt.png" alt="Black T-Shirt Mockup" class="mockup-base">
-                    <img src="assets/logo.png" alt="The Lab Logo" class="overlay-logo" style="top: 42%;">
-                </div>
-                <div class="merch-content">
-                    <div>
-                        <span class="tag-pod">Print-on-Demand</span>
-                        <h3>The Lab Classic Logo Tee</h3>
-                        <p>Ultra-soft cotton tee featuring the iconic Lab emblem on the chest.</p>
-                    </div>
-                    <a href="#" class="btn-primary" style="padding: 0.6rem 1rem; border-radius: 6px; color: #fff; text-decoration: none; display: block;">Secure Item</a>
+                <div class="merch-image"></div>
+                <div class="merch-info">
+                    <span class="pod-badge">Print-on-Demand</span>
+                    <h3 class="merch-title">The Lab Classic Logo Tee</h3>
+                    <div class="merch-price">$28.00</div>
+                    <p class="merch-description">Premium heavyweight cotton crewneck featuring the iconic Lab branding. Custom printed on order.</p>
+                    <a href="#" class="btn btn-primary" style="background-color: #E53935; color: white; padding: 0.75rem; text-align: center; text-decoration: none; border-radius: 4px; font-weight: bold;">Customize & Buy</a>
                 </div>
             </div>
 
-            <!-- Godot Tour Hoodie -->
+            <!-- Item 2 -->
             <div class="merch-card">
-                <div class="merch-image-container">
-                    <img src="assets/hoodie.png" alt="Dark Hoodie Mockup" class="mockup-base">
-                    <img src="assets/godot.jpg" alt="Waiting for Godot Artwork" class="overlay-logo" style="max-width: 90px; top: 38%; border-radius: 4px;">
-                </div>
-                <div class="merch-content">
-                    <div>
-                        <span class="tag-pod">Print-on-Demand</span>
-                        <h3>"Waiting for Godot" Tour Hoodie</h3>
-                        <p>Heavyweight comfort blend featuring featured artwork from our current production.</p>
-                    </div>
-                    <a href="#" class="btn-primary" style="padding: 0.6rem 1rem; border-radius: 6px; color: #fff; text-decoration: none; display: block;">Secure Item</a>
+                <div class="merch-image"></div>
+                <div class="merch-info">
+                    <span class="pod-badge">Print-on-Demand</span>
+                    <h3 class="merch-title">"Waiting for Godot" Tour Hoodie</h3>
+                    <div class="merch-price">$45.00</div>
+                    <p class="merch-description">Cozy fleece hoodie celebrating our Season 18 opening experiment. Available in multiple experimental colors.</p>
+                    <a href="#" class="btn btn-primary" style="background-color: #E53935; color: white; padding: 0.75rem; text-align: center; text-decoration: none; border-radius: 4px; font-weight: bold;">Customize & Buy</a>
                 </div>
             </div>
 
-            <!-- Lab Tote Bag -->
+            <!-- Item 3 -->
             <div class="merch-card">
-                <div class="merch-image-container">
-                    <img src="assets/tote.png" alt="Canvas Tote Mockup" class="mockup-base">
-                    <img src="assets/logo.png" alt="The Lab Logo" class="overlay-logo" style="top: 45%;">
-                </div>
-                <div class="merch-content">
-                    <div>
-                        <span class="tag-pod">Print-on-Demand</span>
-                        <h3>The Lab Canvas Tote</h3>
-                        <p>Durable everyday tote bag stamped with the Lab logo for carrying scripts and essentials.</p>
-                    </div>
-                    <a href="#" class="btn-primary" style="padding: 0.6rem 1rem; border-radius: 6px; color: #fff; text-decoration: none; display: block;">Secure Item</a>
+                <div class="merch-image"></div>
+                <div class="merch-info">
+                    <span class="pod-badge">Print-on-Demand</span>
+                    <h3 class="merch-title">Intentionally Innovative Mug</h3>
+                    <div class="merch-price">$18.00</div>
+                    <p class="merch-description">11oz ceramic mug for your rehearsal fuel, morning coffee, or late-night script annotations.</p>
+                    <a href="#" class="btn btn-primary" style="background-color: #E53935; color: white; padding: 0.75rem; text-align: center; text-decoration: none; border-radius: 4px; font-weight: bold;">Customize & Buy</a>
                 </div>
             </div>
 
-            <!-- Innovative Mug -->
+            <!-- Item 4 -->
             <div class="merch-card">
-                <div class="merch-image-container">
-                    <img src="assets/mug.png" alt="Ceramic Mug Mockup" class="mockup-base">
-                    <div style="position: absolute; top: 40%; display: flex; flex-direction: column; align-items: center; gap: 4px;">
-                        <img src="assets/logo.png" alt="The Lab Logo" style="max-width: 45px;">
-                        <span class="overlay-text" style="position: static; font-size: 0.6rem; letter-spacing: 0.05em;">Intentionally Innovative</span>
-                    </div>
-                </div>
-                <div class="merch-content">
-                    <div>
-                        <span class="tag-pod">Print-on-Demand</span>
-                        <h3>Intentionally Innovative Mug</h3>
-                        <p>11oz ceramic mug featuring the Lab logo and our guiding design philosophy.</p>
-                    </div>
-                    <a href="#" class="btn-primary" style="padding: 0.6rem 1rem; border-radius: 6px; color: #fff; text-decoration: none; display: block;">Secure Item</a>
+                <div class="merch-image"></div>
+                <div class="merch-info">
+                    <span class="pod-badge">Print-on-Demand</span>
+                    <h3 class="merch-title">The Lab Canvas Tote Bag</h3>
+                    <div class="merch-price">$22.00</div>
+                    <p class="merch-description">Durable eco-friendly cotton canvas tote bag sized perfectly for scripts, books, and daily essentials.</p>
+                    <a href="#" class="btn btn-primary" style="background-color: #E53935; color: white; padding: 0.75rem; text-align: center; text-decoration: none; border-radius: 4px; font-weight: bold;">Customize & Buy</a>
                 </div>
             </div>
         </div>
     </main>
 
-    <footer class="site-footer" style="margin-top: 3rem; background: #101010; border-top: 1px solid #2c2c2c; color: #e6e6e6; text-align: center; padding: 1.5rem 0;">
-        <p style="color: #b8b8b8; font-size: 0.92rem; margin: 0;">&copy; 2026 The Laboratory Theater of Florida. All rights reserved.</p>
+    <footer class="site-footer mt-5 py-4 text-center text-muted border-top border-dark">
+        <p>&copy; 2026 The Laboratory Theater of Florida. All rights reserved.</p>
     </footer>
+
 </body>
 </html>
