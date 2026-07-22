@@ -14,14 +14,14 @@
             padding: 3rem 0 2rem; 
         } 
         .hero-content {
-            max-width: 620px; 
+            max-width: 520px; 
         } 
         .hero-content .tag {
             display: inline-block; 
             margin-bottom: 1rem; 
         } 
         .hero-content h1 {
-            font-size: clamp(2rem, 4.5vw, 3.4rem); 
+            font-size: clamp(1.75rem, 3.5vw, 2.75rem); 
             line-height: 1.05; 
             margin-bottom: 1rem; 
         } 
@@ -104,10 +104,12 @@
         } 
         .hero img {
             width: 100%; 
-            max-width: 680px; 
+            max-width: 100%; 
+            height: auto;
             justify-self: end; 
-            border-radius: 18px; 
+            border-radius: 14px; 
             box-shadow: 0 18px 40px rgba(0, 0, 0, 0.28); 
+            display: block;
         } 
         .cast-section {
             margin-top: 3rem; 
@@ -251,7 +253,7 @@
         } 
         @media (max-width: 900px) {
             .hero {grid-template-columns: 1fr; } 
-            .hero img {max-width: min(100%, 680px); justify-self: start; } 
+            .hero img {max-width: 100%; justify-self: start; } 
             .cast-grid {grid-template-columns: repeat(2, minmax(0, 1fr)); } 
         } 
         @media (max-width: 768px) {
@@ -306,7 +308,7 @@
                 <span class="tag">Our Current Experiment</span> 
                 <h1>Waiting for Godot</h1> 
                 <p>On a barren road, two men wait for a mysterious figure who never arrives.</p> 
-                <a href="https://www.purplepass.com/events/375339-waiting-for-godot-aug-20th-2026" class="btn-primary">Secure Your Seat</a> 
+                <a href="url?id=13" class="btn-primary">Secure Your Seat</a> 
             </div> 
             <img src="assets/godot.jpg" alt="Waiting for Godot production poster"> 
         </section> 
@@ -338,6 +340,117 @@
                 </div> 
             </div> 
         </section> 
+
+        <section class="shows-section"> 
+            <h2>The Full Season Lineup</h2> 
+            <div class="show-list"> 
+                <div class="show-item"> 
+                    <img src="assets/godot.jpg" alt="Waiting for Godot"> 
+                    <div class="show-item-content"> 
+                        <h3>Waiting for Godot</h3> 
+                        <p>On a barren road, two men wait for a mysterious figure who never arrives.</p> 
+                        <div class="show-links"> 
+                            <a href="https://toddkidneyjourney1.github.io/lab-test/production/godot.html" class="button">Production Page</a> 
+                            <a href="https://toddkidneyjourney1.github.io/lab-test/playbill_godot.html" class="button">Open Playbill: Waiting for Godot</a> 
+                        </div> 
+                    </div> 
+                </div> 
+
+                <div class="show-item"> 
+                    <img src="assets/pillowman.jpg" alt="The Pillowman"> 
+                    <div class="show-item-content"> 
+                        <h3>The Pillowman</h3> 
+                        <p>A darkly compelling story about art, truth, and stories told under pressure.</p> 
+                        <div class="show-links"> 
+                            <a href="https://toddkidneyjourney1.github.io/lab-test/production/pillowman.html" class="button">Production Page</a> 
+                            <a href="https://toddkidneyjourney1.github.io/lab-test/playbill_pillowman.html" class="button">Open Playbill: The Pillowman</a> 
+                        </div> 
+                    </div> 
+                </div> 
+
+                <div class="show-item"> 
+                    <img src="assets/rivals.jpg" alt="The Rivals"> 
+                    <div class="show-item-content"> 
+                        <h3>The Rivals</h3> 
+                        <p>A lively comedy of mistaken identity, manners, and romance.</p> 
+                        <div class="show-links"> 
+                            <a href="https://toddkidneyjourney1.github.io/lab-test/production/rivals.html" class="button">Production Page</a> 
+                            <a href="https://toddkidneyjourney1.github.io/lab-test/playbill_rivals.html" class="button">Open Playbill: The Rivals</a> 
+                        </div> 
+                    </div> 
+                </div> 
+
+                <div class="show-item"> 
+                    <img src="assets/god.jpg" alt="God of Carnage"> 
+                    <div class="show-item-content"> 
+                        <h3>God of Carnage</h3> 
+                        <p>A tense and razor-sharp comedy about civility, conflict, and control.</p> 
+                        <div class="show-links"> 
+                            <a href="https://toddkidneyjourney1.github.io/lab-test/production/god.html" class="button">Production Page</a> 
+                            <a href="https://toddkidneyjourney1.github.io/lab-test/playbill_god.html" class="button">Open Playbill: God of Carnage</a> 
+                        </div> 
+                    </div> 
+                </div> 
+
+                <div class="show-item"> 
+                    <img src="assets/bare.jpg" alt="Bare: A Pop Opera"> 
+                    <div class="show-item-content"> 
+                        <h3>Bare: A Pop Opera</h3> 
+                        <p>A powerful coming-of-age story set in a Catholic boarding school.</p> 
+                        <div class="show-links"> 
+                            <a href="https://toddkidneyjourney1.github.io/lab-test/production/bare.html" class="button">Production Page</a> 
+                            <a href="https://toddkidneyjourney1.github.io/lab-test/playbill_bare.html" class="button">Open Playbill: Bare: A Pop Opera</a> 
+                        </div> 
+                    </div> 
+                </div> 
+
+                <div class="show-item"> 
+                    <img src="assets/shakespeare.jpg" alt="A Midsummer Night's Dream"> 
+                    <div class="show-item-content"> 
+                        <h3>A Midsummer Night's Dream</h3> 
+                        <p>A magical Shakespeare comedy filled with lovers, fairies, and theatrical mischief.</p> 
+                        <div class="show-links"> 
+                            <a href="https://toddkidneyjourney1.github.io/lab-test/production/shakespeare.html" class="button">Production Page</a> 
+                            <a href="https://toddkidneyjourney1.github.io/lab-test/playbill_shakespeare.html" class="button">Open Playbill: A Midsummer Night's Dream</a> 
+                        </div> 
+                    </div> 
+                </div> 
+
+                <div class="show-item"> 
+                    <img src="assets/fences.jpg" alt="Fences"> 
+                    <div class="show-item-content"> 
+                        <h3>Fences</h3> 
+                        <p>A moving drama about family, responsibility, and the limits we inherit.</p> 
+                        <div class="show-links"> 
+                            <a href="https://toddkidneyjourney1.github.io/lab-test/production/fences.html" class="button">Production Page</a> 
+                            <a href="https://toddkidneyjourney1.github.io/lab-test/playbill_fences.html" class="button">Open Playbill: Fences</a> 
+                        </div> 
+                    </div> 
+                </div> 
+            </div> 
+        </section> 
+
+        <section class="sponsor-section" style="padding: 2rem 0; text-align: center;"> 
+            <h2>Season Sponsors</h2> 
+            <p style="color: #d2d2d2; max-width: 600px; margin: 0.5rem auto 0;">Special thanks to our generous community partners and core collaborators supporting live, innovative theatre.</p> 
+        </section> 
     </main> 
+
+    <footer class="site-footer"> 
+        <div class="footer-container"> 
+            <div class="footer-block"> 
+                <h3>The Laboratory Theater of Florida</h3> 
+                <p>Intentionally innovative live theater staging gripping contemporary works.</p> 
+            </div> 
+            <div class="footer-block"> 
+                <h4>Quick Links</h4> 
+                <p><a href="playbill.html">Season Playbills</a></p> 
+                <p><a href="support.html">Fuel the Innovation</a></p> 
+            </div> 
+        </div> 
+        <div class="footer-bottom"> 
+            <p>&copy; 2026 The Laboratory Theater of Florida. All rights reserved.</p> 
+        </div> 
+    </footer> 
 </body> 
 </html>
