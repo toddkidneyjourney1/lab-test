@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Lab - Season Playbills</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .playbill-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 2rem 0;
+        }
+        .playbill-card {
+            background: #151515;
+            border: 1px solid #2c2c2c;
+            border-radius: 14px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+        .playbill-card:hover {
+            transform: translateY(-4px);
+            border-color: #E53935;
+        }
+        .playbill-img-link {
+            display: block;
+            overflow: hidden;
+        }
+        .playbill-image {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+        .playbill-card:hover .playbill-image {
+            transform: scale(1.03);
+        }
+        .playbill-info {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+        .playbill-title {
+            font-size: 1.35rem;
+            font-weight: bold;
+            color: #fff;
+            margin-bottom: 0.5rem;
+        }
+        .playbill-desc {
+            color: #d2d2d2;
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+            flex-grow: 1;
+            line-height: 1.4;
+        }
+        .btn-primary, .button {
+            background-color: #E53935 !important;
+            border-color: #E53935 !important;
+            color: #fff !important;
+            text-align: center;
+            text-decoration: none;
+            padding: 0.75rem 1rem;
+            border-radius: 6px;
+            font-weight: bold;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="site-header" style="background: #101010; border-bottom: 1px solid #2c2c2c; padding: 1rem 0;">
+        <div class="container" style="max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 1rem;">
+            <h1 class="logo" style="color: #fff; font-size: 1.5rem; margin: 0;">THE <span style="color: #E53935;">LAB</span></h1>
+            <nav class="main-nav" style="display: flex; gap: 1.5rem;">
+                <a href="index.html" style="color: #e6e6e6; text-decoration: none;">Back to the Slab</a>
+                <a href="about.html" style="color: #e6e6e6; text-decoration: none;">Origin Story</a>
+                <a href="support.html" style="color: #e6e6e6; text-decoration: none;">Fuel the Innovation</a>
+                <a href="playbills.html" style="color: #E53935; text-decoration: none; font-weight: bold;">Playbills</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container" style="max-width: 1100px; margin: 0 auto; padding: 3rem 1rem;">
+        <section class="text-center" style="margin-bottom: 2.5rem; text-align: center;">
+            <h2 style="font-size: clamp(2rem, 4vw, 3rem); color: #fff; margin-bottom: 0.5rem;">Season Playbills</h2>
+            <p style="color: #b8b8b8; font-size: 1.1rem;">Digital programs featuring cast lists, director's notes, bios, sponsor profiles, and more.</p>
+        </section>
+
+        <div class="playbill-grid">
+            <!-- Show 1: Waiting for Godot -->
+            <div class="playbill-card">
+                <a href="production/godot.html" class="playbill-img-link">
+                    <img src="assets/godot.jpg" alt="Waiting for Godot" class="playbill-image">
+                </a>
+                <div class="playbill-info">
+                    <h3 class="playbill-title">Waiting for Godot</h3>
+                    <p class="playbill-desc">On a barren road, two men wait for a mysterious figure who never arrives.</p>
+                    <a href="production/godot.html" class="button">Open Playbill</a>
+                </div>
+            </div>
+
+            <!-- Show 2: The Pillowman -->
+            <div class="playbill-card">
+                <a href="production/pillowman.html" class="playbill-img-link">
+                    <img src="assets/pillowman.jpg" alt="The Pillowman" class="playbill-image">
+                </a>
+                <div class="playbill-info">
+                    <h3 class="playbill-title">The Pillowman</h3>
+                    <p class="playbill-desc">A darkly compelling story about art, truth, and stories told under pressure.</p>
+                    <a href="production/pillowman.html" class="button">Open Playbill</a>
+                </div>
+            </div>
+
+            <!-- Show 3: The Rivals -->
+            <div class="playbill-card">
+                <a href="production/rivals.html" class="playbill-img-link">
+                    <img src="assets/rivals.jpg" alt="The Rivals" class="playbill-image">
+                </a>
+                <div class="playbill-info">
+                    <h3 class="playbill-title">The Rivals</h3>
+                    <p class="playbill-desc">A lively comedy of mistaken identity, manners, and romance.</p>
+                    <a href="production/rivals.html" class="button">Open Playbill</a>
+                </div>
+            </div>
+
+            <!-- Show 4: God of Carnage -->
+            <div class="playbill-card">
+                <a href="production/god.html" class="playbill-img-link">
+                    <img src="assets/godofcarnage.jpg" alt="God of Carnage" class="playbill-image">
+                </a>
+                <div class="playbill-info">
+                    <h3 class="playbill-title">God of Carnage</h3>
+                    <p class="playbill-desc">A tense and razor-sharp comedy about civility, conflict, and control.</p>
+                    <a href="production/god.html" class="button">Open Playbill</a>
+                </div>
+            </div>
+
+            <!-- Show 5: Bare: A Pop Opera -->
+            <div class="playbill-card">
+                <a href="production/bare.html" class="playbill-img-link">
+                    <img src="assets/bare.jpg" alt="Bare: A Pop Opera" class="playbill-image">
+                </a>
+                <div class="playbill-info">
+                    <h3 class="playbill-title">Bare: A Pop Opera</h3>
+                    <p class="playbill-desc">A powerful coming-of-age story set in a Catholic boarding school.</p>
+                    <a href="production/bare.html" class="button">Open Playbill</a>
+                </div>
+            </div>
+
+            <!-- Show 6: A Midsummer Night's Dream -->
+            <div class="playbill-card">
+                <a href="production/shakespeare.html" class="playbill-img-link">
+                    <img src="assets/midsummer.jpg" alt="A Midsummer Night's Dream" class="playbill-image">
+                </a>
+                <div class="playbill-info">
+                    <h3 class="playbill-title">A Midsummer Night's Dream</h3>
+                    <p class="playbill-desc">A magical Shakespeare comedy filled with lovers, fairies, and theatrical mischief.</p>
+                    <a href="production/shakespeare.html" class="button">Open Playbill</a>
+                </div>
+            </div>
+
+            <!-- Show 7: Fences -->
+            <div class="playbill-card">
+                <a href="production/fences.html" class="playbill-img-link">
+                    <img src="assets/fences.jpg" alt="Fences" class="playbill-image">
+                </a>
+                <div class="playbill-info">
+                    <h3 class="playbill-title">Fences</h3>
+                    <p class="playbill-desc">A moving drama about family, responsibility, and the limits we inherit.</p>
+                    <a href="production/fences.html" class="button">Open Playbill</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="site-footer" style="margin-top: 3rem; background: #101010; border-top: 1px solid #2c2c2c; color: #e6e6e6; text-align: center; padding: 1.5rem 0;">
+        <p style="color: #b8b8b8; font-size: 0.92rem; margin: 0;">&copy; 2026 The Laboratory Theater of Florida. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>
