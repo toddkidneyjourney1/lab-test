@@ -1,1 +1,147 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Lab - Merchandise Store</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .merch-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            padding: 2rem 0;
+        }
+        .merch-card {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.2s ease;
+        }
+        .merch-card:hover {
+            transform: translateY(-4px);
+        }
+        .merch-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            background: #252525;
+        }
+        .merch-info {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+        .merch-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #fff;
+            margin-bottom: 0.5rem;
+        }
+        .merch-price {
+            font-size: 1.1rem;
+            color: #E53935;
+            margin-bottom: 1rem;
+        }
+        .merch-description {
+            color: #b0b0b0;
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+            flex-grow: 1;
+        }
+        .pod-badge {
+            display: inline-block;
+            background: #333;
+            color: #ccc;
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+            align-self: flex-start;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header / Navigation integration -->
+    <header class="site-header">
+        <div class="container">
+            <h1 class="logo">THE LAB</h1>
+            <!-- Standard nav items matching site style -->
+            <nav class="main-nav">
+                <a href="index.html">Back to the Slab</a>
+                <a href="about.html">Origin Story</a>
+                <a href="support.html">Fuel the Innovation</a>
+                <a href="mech.html" class="active">Merch</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container py-5">
+        <section class="text-center mb-5">
+            <h2 class="display-4 text-white">THE LAB EXPERIMENTAL MERCH</h2>
+            <p class="lead text-muted">Official print-on-demand gear custom-printed for supporters of innovative live theater.</p>
+        </section>
+
+        <div class="merch-grid">
+            <!-- Item 1 -->
+            <div class="merch-card">
+                <div class="merch-image"></div>
+                <div class="merch-info">
+                    <span class="pod-badge">Print-on-Demand</span>
+                    <h3 class="merch-title">The Lab Classic Logo Tee</h3>
+                    <div class="merch-price">$28.00</div>
+                    <p class="merch-description">Premium heavyweight cotton crewneck featuring the iconic Lab branding. Custom printed on order.</p>
+                    <a href="#" class="btn btn-primary" style="background-color: #E53935; color: white; padding: 0.75rem; text-align: center; text-decoration: none; border-radius: 4px; font-weight: bold;">Customize & Buy</a>
+                </div>
+            </div>
+
+            <!-- Item 2 -->
+            <div class="merch-card">
+                <div class="merch-image"></div>
+                <div class="merch-info">
+                    <span class="pod-badge">Print-on-Demand</span>
+                    <h3 class="merch-title">"Waiting for Godot" Tour Hoodie</h3>
+                    <div class="merch-price">$45.00</div>
+                    <p class="merch-description">Cozy fleece hoodie celebrating our Season 18 opening experiment. Available in multiple experimental colors.</p>
+                    <a href="#" class="btn btn-primary" style="background-color: #E53935; color: white; padding: 0.75rem; text-align: center; text-decoration: none; border-radius: 4px; font-weight: bold;">Customize & Buy</a>
+                </div>
+            </div>
+
+            <!-- Item 3 -->
+            <div class="merch-card">
+                <div class="merch-image"></div>
+                <div class="merch-info">
+                    <span class="pod-badge">Print-on-Demand</span>
+                    <h3 class="merch-title">Intentionally Innovative Mug</h3>
+                    <div class="merch-price">$18.00</div>
+                    <p class="merch-description">11oz ceramic mug for your rehearsal fuel, morning coffee, or late-night script annotations.</p>
+                    <a href="#" class="btn btn-primary" style="background-color: #E53935; color: white; padding: 0.75rem; text-align: center; text-decoration: none; border-radius: 4px; font-weight: bold;">Customize & Buy</a>
+                </div>
+            </div>
+
+            <!-- Item 4 -->
+            <div class="merch-card">
+                <div class="merch-image"></div>
+                <div class="merch-info">
+                    <span class="pod-badge">Print-on-Demand</span>
+                    <h3 class="merch-title">The Lab Canvas Tote Bag</h3>
+                    <div class="merch-price">$22.00</div>
+                    <p class="merch-description">Durable eco-friendly cotton canvas tote bag sized perfectly for scripts, books, and daily essentials.</p>
+                    <a href="#" class="btn btn-primary" style="background-color: #E53935; color: white; padding: 0.75rem; text-align: center; text-decoration: none; border-radius: 4px; font-weight: bold;">Customize & Buy</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="site-footer mt-5 py-4 text-center text-muted border-top border-dark">
+        <p>&copy; 2026 The Laboratory Theater of Florida. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>
