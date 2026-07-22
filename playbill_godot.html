@@ -1,0 +1,64 @@
+<!-- playbill_godot.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Lab - Waiting for Godot Playbill</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .playbill-container { max-width: 800px; margin: 0 auto; padding: 2rem 1rem; }
+        .hero-banner { text-align: center; background: #151515; border: 1px solid #2c2c2c; border-radius: 14px; padding: 2rem; margin-bottom: 2rem; }
+        .hero-banner img { max-height: 400px; width: 100%; object-fit: contain; margin-bottom: 1.5rem; }
+        .playbill-section { background: #151515; border: 1px solid #2c2c2c; border-radius: 14px; padding: 2rem; margin-bottom: 2rem; }
+        .playbill-section h2 { color: #E53935; border-bottom: 2px solid #2c2c2c; padding-bottom: 0.5rem; margin-bottom: 1.5rem; font-size: 1.5rem; }
+        .bio-item, .cast-item { margin-bottom: 1.25rem; }
+        .bio-item h4, .cast-item h4 { color: #fff; margin-bottom: 0.25rem; }
+        .bio-item p, .cast-item p { color: #b8b8b8; font-size: 0.95rem; line-height: 1.4; }
+        .ads-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+        .ad-card { background: #222; border: 1px dashed #444; padding: 1.5rem; text-align: center; border-radius: 8px; color: #888; }
+    </style>
+</head>
+<body>
+    <header class="site-header" style="background: #101010; border-bottom: 1px solid #2c2c2c; padding: 1rem 0;">
+        <div class="container" style="max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 1rem;">
+            <h1 class="logo" style="color: #fff; font-size: 1.5rem; margin: 0;">THE <span style="color: #E53935;">LAB</span></h1>
+            <nav class="main-nav" style="display: flex; gap: 1.5rem;">
+                <a href="index.html" style="color: #e6e6e6; text-decoration: none;">Back to the Slab</a>
+                <a href="playbill.html" style="color: #E53935; text-decoration: none; font-weight: bold;">Playbills</a>
+            </nav>
+        </div>
+    </header>
+    <main class="playbill-container">
+        <div class="hero-banner">
+            <img src="assets/godot.jpg" alt="Waiting for Godot Poster">
+            <h1 style="color: #fff; font-size: 2.2rem; margin-bottom: 0.5rem;">Waiting for Godot</h1>
+            <p style="color: #b8b8b8; font-size: 1.1rem;">Written by Samuel Beckett | Directed by Annette Trossbach</p>
+        </div>
+        <section class="playbill-section">
+            <h2>Production Sponsors</h2>
+            <p style="color: #d2d2d2; line-height: 1.5;">Boutique Theatre Fund & Southwest Florida Cultural Council.</p>
+        </section>
+        <section class="playbill-section">
+            <h2>Director's Notes</h2>
+            <p style="color: #d2d2d2; line-height: 1.6;">Staging Beckett in a laboratory space forces us to look at the existential loop of waiting as a scientific trial without an endpoint.</p>
+        </section>
+        <section class="playbill-section">
+            <h2>Cast & Crew</h2>
+            <div class="cast-item"><h4>Vladimir</h4><p>Played by Steven Coe</p></div>
+            <div class="cast-item"><h4>Estragon</h4><p>Played by TJ Albertson</p></div>
+        </section>
+        <section class="playbill-section">
+            <h2>Who's Who (Bios)</h2>
+            <div class="bio-item"><h4>Steven Coe</h4><p>Thrilled to return to The Lab stage for this classic absurdist masterpiece.</p></div>
+        </section>
+        <section class="playbill-section">
+            <h2>Community Advertisers</h2>
+            <div class="ads-grid"><div class="ad-card">Artisan Coffee Co.</div><div class="ad-card">River District Framing</div></div>
+        </section>
+    </main>
+    <footer class="site-footer" style="margin-top: 3rem; background: #101010; border-top: 1px solid #2c2c2c; color: #e6e6e6; text-align: center; padding: 1.5rem 0;">
+        <p style="color: #b8b8b8; font-size: 0.92rem; margin: 0;">&copy; 2026 The Laboratory Theater of Florida. All rights reserved.</p>
+    </footer>
+</body>
+</html>
