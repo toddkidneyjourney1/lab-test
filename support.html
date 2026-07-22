@@ -6,7 +6,7 @@
   <title>Fuel the Innovation | The Laboratory Theater of Florida</title>
   <link rel="stylesheet" href="style.css" />
   <style>
-    /* Page-specific layout refresh while preserving global site style */
+    /* Support page polish, aligned with the existing site aesthetic */
     .support-page {
       max-width: 1100px;
       margin: 0 auto;
@@ -22,22 +22,25 @@
     .section-heading .eyebrow {
       letter-spacing: 0.08em;
       text-transform: uppercase;
-      opacity: 0.85;
+      opacity: 0.82;
       margin-bottom: 0.35rem;
+      color: #6b7280;
+      font-weight: 600;
     }
 
     .section-heading h1 {
       margin: 0 0 0.75rem;
       line-height: 1.15;
+      color: #1f2937;
     }
 
     .section-heading p {
       margin: 0;
-      line-height: 1.6;
-      opacity: 0.95;
+      line-height: 1.65;
+      color: #4b5563;
     }
 
-    /* True 3-card grid */
+    /* Three-card grid */
     .support-grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -46,11 +49,11 @@
     }
 
     .support-card {
-      background: #ffffff;
-      border: 1px solid rgba(0, 0, 0, 0.08);
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
       border-radius: 16px;
       padding: 1.25rem 1.1rem 1.2rem;
-      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
       display: flex;
       flex-direction: column;
       min-height: 100%;
@@ -63,49 +66,50 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      background: rgba(187, 31, 43, 0.1);
-      color: #bb1f2b;
+      background: #fee2e2;
+      color: #b91c1c;
       font-size: 1.2rem;
       margin-bottom: 0.8rem;
     }
 
     .support-card h3 {
       margin: 0 0 0.45rem;
-      font-size: 1.18rem;
+      font-size: 1.15rem;
       line-height: 1.25;
+      color: #111827;
     }
 
     .support-card p {
       margin: 0 0 1rem;
-      line-height: 1.55;
-      opacity: 0.92;
+      line-height: 1.58;
+      color: #4b5563;
       flex-grow: 1;
     }
 
-    /* Red pill button requirement */
+    /* Red pill button */
     .support-card .button.red-pill {
       display: inline-flex;
       align-items: center;
       justify-content: center;
       text-decoration: none;
-      background: #bb1f2b;
+      background: #b91c1c;
       color: #ffffff;
-      border: 2px solid #bb1f2b;
+      border: 2px solid #b91c1c;
       border-radius: 999px;
-      padding: 0.62rem 1.1rem;
+      padding: 0.6rem 1.15rem;
       font-weight: 700;
       letter-spacing: 0.01em;
       transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
-      box-shadow: 0 8px 18px rgba(187, 31, 43, 0.25);
+      box-shadow: 0 8px 18px rgba(185, 28, 28, 0.22);
       width: fit-content;
     }
 
     .support-card .button.red-pill:hover,
     .support-card .button.red-pill:focus-visible {
-      background: #a71924;
-      border-color: #a71924;
+      background: #991b1b;
+      border-color: #991b1b;
       transform: translateY(-1px);
-      box-shadow: 0 10px 20px rgba(167, 25, 36, 0.28);
+      box-shadow: 0 10px 20px rgba(153, 27, 27, 0.24);
       outline: none;
     }
 
@@ -118,17 +122,19 @@
     .callout-content {
       border-radius: 16px;
       padding: 1.3rem 1.1rem;
-      background: rgba(255, 255, 255, 0.78);
-      border: 1px solid rgba(0, 0, 0, 0.08);
+      background: #f3f4f6;
+      border: 1px solid #e5e7eb;
     }
 
     .callout-content h2 {
       margin: 0 0 0.45rem;
+      color: #1f2937;
     }
 
     .callout-content p {
       margin: 0;
-      line-height: 1.6;
+      line-height: 1.62;
+      color: #4b5563;
     }
 
     @media (max-width: 980px) {
@@ -189,40 +195,51 @@
         <p class="eyebrow">Support Our Mission</p>
         <h1>Fuel the creativity that powers live theater.</h1>
         <p>
-          Choose one of three ways to support The Laboratory Theater.
-          Every gift helps us produce daring work for the Fort Myers community.
+          Support The Laboratory Theater by donating, volunteering your time,
+          or sponsoring a show. Every contribution strengthens bold, local art.
         </p>
       </div>
 
       <div class="support-grid">
         <article class="support-card">
           <div class="card-icon" aria-hidden="true">♥</div>
-          <h3>Make a Donation</h3>
+          <h3>Donate Through Zeffy</h3>
           <p>
-            Give a direct, tax-deductible contribution that supports productions,
-            education initiatives, and essential facility needs.
+            Make a direct contribution to The Laboratory Theater of Florida through
+            our Zeffy organization page.
           </p>
-          <a href="#" class="button red-pill">Donate</a>
+          <a
+            href="https://www.zeffy.com/en-US/organizations/the-laboratory-theater-of-florida-inc"
+            class="button red-pill"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Donate on Zeffy
+          </a>
         </article>
 
         <article class="support-card">
-          <div class="card-icon" aria-hidden="true">★</div>
-          <h3>Become a Member</h3>
+          <div class="card-icon" aria-hidden="true">✦</div>
+          <h3>Volunteer With Us</h3>
           <p>
-            Join our season supporter community and receive member benefits while
-            helping sustain innovative, local theater year-round.
+            From front-of-house support to behind-the-scenes build days, your time
+            and talent help bring productions to life.
           </p>
-          <a href="#" class="button red-pill">Join Membership</a>
+          <a href="volunteer.html" class="button red-pill">
+            Volunteer
+          </a>
         </article>
 
         <article class="support-card">
           <div class="card-icon" aria-hidden="true">◎</div>
           <h3>Sponsor a Show</h3>
           <p>
-            Sponsor a production to connect your brand with bold creative work and
-            visible community impact through the performing arts.
+            Partner with The Lab and support innovative theater while connecting
+            your business with our community.
           </p>
-          <a href="#" class="button red-pill">Sponsor</a>
+          <a href="mailto:president@laboratorytheaterflorida.com" class="button red-pill">
+            Email to Sponsor
+          </a>
         </article>
       </div>
     </section>
@@ -231,8 +248,8 @@
       <div class="callout-content">
         <h2>Become part of the story</h2>
         <p>
-          The Lab thrives because of people like you—donors, members, sponsors, and
-          audiences who believe in creative risk and community connection.
+          The Lab thrives because of people like you—donors, volunteers, sponsors,
+          and audiences who believe in creative risk and community connection.
         </p>
       </div>
     </section>
